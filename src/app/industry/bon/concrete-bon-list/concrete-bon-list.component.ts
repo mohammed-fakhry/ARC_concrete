@@ -102,25 +102,32 @@ export class ConcreteBonListComponent implements OnInit {
         ...new Set(unrecordedBons.map((bon) => bon.concreteCustomer_id)),
       ];
 
+      const dateIds = [...new Set(unrecordedBons.map((bon) => bon.date))];
+
       // console.log(dates);
 
       for (let i = 0; i < customerIds.length; i++) {
-        const rowInfo = unrecordedBons.find(
-          (bon) => bon.concreteCustomer_id == customerIds[i]
-        );
+        for (let dIndx = 0; dIndx < dateIds.length; dIndx++) {
+          const rowInfo = unrecordedBons.find(
+            (bon) =>
+              bon.concreteCustomer_id == customerIds[i] &&
+              bon.date == dateIds[dIndx]
+          );
 
-        if (rowInfo) {
-          const row = {
-            date: rowInfo.date ?? '',
-            customerName: rowInfo.concreteCustomer_name ?? '',
-            customerId: rowInfo.concreteCustomer_id ?? '',
-            qty: unrecordedBons.filter(
-              (bon) => bon.concreteCustomer_id == customerIds[i]
-            ).length,
-          };
-          result = [...result, row];
+          if (rowInfo) {
+            const row = {
+              date: rowInfo.date ?? '',
+              customerName: rowInfo.concreteCustomer_name ?? '',
+              customerId: rowInfo.concreteCustomer_id ?? '',
+              qty: unrecordedBons.filter(
+                (bon) =>
+                  bon.concreteCustomer_id == customerIds[i] &&
+                  bon.date == dateIds[dIndx]
+              ).length,
+            };
+            result = [...result, row];
+          }
         }
-
       }
     }
 

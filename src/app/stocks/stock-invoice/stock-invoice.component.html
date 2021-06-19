@@ -362,7 +362,8 @@
                 <div class="form-inline secondaryBadge borderLsecondary">
                   <div class="px-2 textPrimary">ق.مضافة %</div>
                   <input type="number" name="addtaxes" class="form-control my-1 ml-1 textPrimary" style="width: 80px;"
-                    [(ngModel)]="stockInvoice.addtaxes" (ngModelChange)="calcTaxes()">
+                    [(ngModel)]="stockInvoice.addtaxes" (ngModelChange)="calcTaxes()" id="addtaxes1"
+                    (click)="selectText('addtaxes',1)">
                 </div>
               </td>
             </tr>

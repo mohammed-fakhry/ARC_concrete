@@ -754,7 +754,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result == 'addNew') {
-        if (this.id) {
+        if (this.id && this.addByBon.date) {
           this._router.navigate(['/ConcreteReceipt']);
         } else {
           this.onStart();

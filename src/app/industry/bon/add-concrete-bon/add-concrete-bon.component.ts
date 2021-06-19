@@ -89,6 +89,7 @@ export class AddConcreteBonComponent implements OnInit {
 
   startForm() {
     this.concreteBon = new ConcreteBon();
+    this.truckInfo = new Truck();
 
     if (this.id) {
       this._concrete
@@ -96,11 +97,16 @@ export class AddConcreteBonComponent implements OnInit {
         .subscribe((data: ConcreteBon[]) => {
           this.concreteBon = data[0];
           this._glopal.loading = false;
+
+          this.truckInfo =
+            this.truckList.find(
+              (truck) => truck.id == this.concreteBon.truckId
+            ) ?? new Truck();
         });
     } else {
       this.concreteBon.date = this._mainService.makeDate(new Date(Date.now()));
       this.concreteBon.time = this._mainService.makeTime(new Date(Date.now()));
-      this.concreteBon.madeBy = this._auth.uName.realName
+      this.concreteBon.madeBy = this._auth.uName.realName;
       this._glopal.loading = false;
     }
   }
@@ -213,14 +219,14 @@ export class AddConcreteBonComponent implements OnInit {
   };
 
   recordTruckOrder() {
-    const truckOrder: TruckOrder = {
+    let truckOrder: TruckOrder = {
       orderId: null,
-      truckId: '7',
+      truckId: this.truckInfo.id,
       truckName: '',
-      truckCapacity: 1,
+      truckCapacity: this.truckInfo.capacity,
       truckModel: '',
-      orderType: 'سيارة خرسانة',
-      truckType: 'سيارة',
+      orderType: this.truckInfo.owner,
+      truckType: this.truckInfo.truckType,
       loadingType: 'متر',
       truckCustomerId: '1',
       truckCustomerName: '',
@@ -235,21 +241,23 @@ export class AddConcreteBonComponent implements OnInit {
       madeBy: this.concreteBon.madeBy,
     };
 
-    /* if (!transeId)
-      this._truckService.updateTruckOrder(truckOrder, 'transId').subscribe();
-    else */
-    this._truckService.postTruckOrder(truckOrder).subscribe();
+    /* if (this.id) {
+      truckOrder.orderId = this.id;
+      this._truckService.updateTruckOrder(truckOrder, 'id').subscribe();
+    } else */ this._truckService.postTruckOrder(truckOrder).subscribe();
   }
 
   recordConcreteBon() {
-    if (this.id)
-      this._concrete
-        .updateConcreteBon(this.concreteBon)
-        .subscribe(() => this.openDialog());
-    else
-      this._concrete
-        .postConcreteBon(this.concreteBon)
-        .subscribe(() => this.openDialog());
+    if (this.id) {
+      this._concrete.updateConcreteBon(this.concreteBon).subscribe(() => {
+        this.openDialog();
+      });
+      this.recordTruckOrder();
+    } else
+      this._concrete.postConcreteBon(this.concreteBon).subscribe(() => {
+        this.openDialog();
+        this.recordTruckOrder();
+      });
   }
 
   onSubmit(concreteReceiptForm: NgForm) {
