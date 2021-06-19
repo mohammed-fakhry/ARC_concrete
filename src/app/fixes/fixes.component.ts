@@ -25,7 +25,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    "ALTER TABLE `concretereceipt` ADD `recordedByBon` INT(1) NOT NULL DEFAULT '0' AFTER `madeBy`",
+    "ALTER TABLE `concretebon` ADD `customerProject` VARCHAR(100) NOT NULL AFTER `concreteCustomer_id`",
   ];
 
   constructor(

@@ -33,6 +33,7 @@ export class AddConcreteReceiptComponent implements OnInit {
   addByBon!: {
     date: string | null;
     customerId: string | null;
+    customerProject: string | null;
   };
 
   productList: Product[] = [];
@@ -100,6 +101,8 @@ export class AddConcreteReceiptComponent implements OnInit {
     this.addByBon = {
       date: this.activeRoute.snapshot.paramMap.get('date'),
       customerId: this.activeRoute.snapshot.paramMap.get('customerId'),
+      customerProject:
+        this.activeRoute.snapshot.paramMap.get('customerProject'),
     };
 
     this.productList = [];
@@ -142,8 +145,16 @@ export class AddConcreteReceiptComponent implements OnInit {
 
         const stockInfo = this.stockList[0];
 
-        if (this.addByBon.customerId && this.addByBon.date) {
-          this.fillByBons(this.addByBon.date, this.addByBon.customerId);
+        if (
+          this.addByBon.customerId &&
+          this.addByBon.date &&
+          this.addByBon.customerProject
+        ) {
+          this.fillByBons(
+            this.addByBon.date,
+            this.addByBon.customerId,
+            this.addByBon.customerProject
+          );
         } else if (this.id) {
           this.fillToEdit();
         } else {
@@ -167,9 +178,14 @@ export class AddConcreteReceiptComponent implements OnInit {
       });
   }
 
-  fillByBons(date: string, customerId: string) {
+  fillByBons(date: string, customerId: string, customerProject: string) {
     this.concreteReceipt = new ConcreteReceipt();
-    this.concreteListByBon(date, customerId)
+
+    if (customerProject != '0') {
+      this.concreteReceipt.customerProject = customerProject;
+    }
+
+    this.concreteListByBon(date, customerId, customerProject)
       .then((data: ConcreteBon[]) => {
         this.concreteBons = data;
 
@@ -183,6 +199,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
         const stockInfo = this.stockList[0];
 
+        this.concreteReceipt.date_time = `${date}T23:59`;
         // customerInfo
         this.concreteReceipt.concreteCustomer_name = this.customerInfo.fullName;
         this.concreteReceipt.concreteCustomer_id = this.customerInfo.id;
@@ -222,6 +239,42 @@ export class AddConcreteReceiptComponent implements OnInit {
 
       this.calcTotal(i);
       this.calcMaterial(i);
+
+      if (i == concretNames.length - 1) {
+        const pumps = bons
+          .filter((bon) => !bon.pump.includes('ثابت'))
+          .map((bon) => {
+            return {
+              name: bon.pump,
+              qty: bon.concreteQty,
+            };
+          });
+
+        const PumpsNames = [...new Set(pumps.map((pump) => pump.name))];
+
+        for (let indx = 0; indx < PumpsNames.length; indx++) {
+          const concreteArr = pumps.filter(
+            (pump) => pump.name == PumpsNames[indx]
+          );
+
+          const qty = concreteArr
+            .map((pump) => pump.qty)
+            .reduce((a, b) => a + b, 0);
+
+          this.addRow();
+
+          this.concreteReceipt.receiptDetails[
+            indx + i + 1
+          ].concreteName = `${PumpsNames[indx]}`;
+
+          this.productNameChanged(indx + i + 1);
+
+          this.concreteReceipt.receiptDetails[indx + i + 1].concreteQty = qty;
+
+          this.calcTotal(indx + i + 1);
+          this.calcMaterial(indx + i + 1);
+        }
+      }
     }
   }
 
@@ -276,7 +329,96 @@ export class AddConcreteReceiptComponent implements OnInit {
 
       if (arTotal) this.concreteReceipt.totalInAr = arTotal;
 
+      if (this.concreteReceipt.recordedByBon) this.getReceiptElements();
+
       this._glopal.loading = false;
+    });
+  }
+
+  concreteElements: {
+    concrete: string;
+    element: string;
+    qty: number;
+    pump: string;
+  }[] = [];
+
+  elementLoading: boolean = false;
+
+  getReceiptElements() {
+    this.concreteElements = [];
+
+    this.elementLoading = true;
+    this.getBonsByReceiptId().then((data: ConcreteBon[]) => {
+      const concretes = [...new Set(data.map((d) => d.concreteName))];
+      const elements = [...new Set(data.map((d) => d.notes))];
+      const pumps = [...new Set(data.map((d) => d.pump))];
+
+      for (let i = 0; i < concretes.length; i++) {
+        for (let nI = 0; nI < elements.length; nI++) {
+          for (let nP = 0; nP < pumps.length; nP++) {
+            const rowInfo = data.find(
+              (d) =>
+                d.concreteName == concretes[i] &&
+                d.notes == elements[nI] &&
+                d.pump == pumps[nP]
+            );
+
+            if (rowInfo) {
+              const row = {
+                concrete: rowInfo.concreteName,
+                element: rowInfo.notes,
+                pump: rowInfo.pump,
+                qty: data
+                  .filter(
+                    (d) =>
+                      d.concreteName == concretes[i] &&
+                      d.notes == elements[nI] &&
+                      d.pump == pumps[nP]
+                  )
+                  .map((d) => d.concreteQty)
+                  .reduce((a, b) => a + b, 0),
+              };
+
+              this.concreteElements = [...this.concreteElements, row];
+            }
+          }
+        }
+      }
+
+      /* for (let i = 0; i < concretes.length; i++) {
+        for (let nI = 0; nI < elements.length; nI++) {
+          for (let nP = 0; nI < pumps.length; nP++) {
+            const rowInfo = data.find(
+              (d) =>
+                d.concreteName == concretes[i] &&
+                d.notes == elements[nI] &&
+                d.pump == pumps[nP]
+            );
+
+            if (rowInfo) {
+
+              console.log(rowInfo)
+              const row = {
+                concrete: rowInfo.concreteName,
+                element: rowInfo.notes,
+                pump: rowInfo.pump,
+                qty: data
+                  .filter(
+                    (d) =>
+                      d.concreteName == concretes[i] &&
+                      d.notes == elements[nI] &&
+                      d.pump == pumps[nP]
+                  )
+                  .map((d) => d.concreteQty)
+                  .reduce((a, b) => a + b, 0),
+              };
+
+              this.concreteElements = [...this.concreteElements, row];
+            }
+          }
+        }
+      } */
+      this.elementLoading = false;
     });
   }
 
@@ -291,10 +433,25 @@ export class AddConcreteReceiptComponent implements OnInit {
     });
   }
 
-  concreteListByBon(date: string, customerId: string): Promise<ConcreteBon[]> {
+  getBonsByReceiptId(): Promise<ConcreteBon[]> {
+    return new Promise((res) => {
+      if (this.id)
+        this._concrete
+          .concreteBonsByReceiptId(this.id)
+          .subscribe((data: ConcreteBon[]) => {
+            res(data);
+          });
+    });
+  }
+
+  concreteListByBon(
+    date: string,
+    customerId: string,
+    customerProject: string
+  ): Promise<ConcreteBon[]> {
     return new Promise((res) => {
       this._concrete
-        .concreteListByBon(date, customerId)
+        .concreteListByBon(date, customerId, customerProject)
         .subscribe((data: ConcreteBon[]) => res(data));
     });
   }

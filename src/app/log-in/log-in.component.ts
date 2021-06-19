@@ -78,7 +78,6 @@ export class LogInComponent implements OnInit {
       .getUser(this.formData.val.uName, this.formData.val.uAuth)
       .subscribe(
         (data: UserData[]) => {
-
           /* if (data.length > 0) {
             this._auth.isAuth = true;
             this._glopal.loading = false;
@@ -131,6 +130,8 @@ export class LogInComponent implements OnInit {
             this._router
               .navigate(['/Home'])
               .then(() => this._mainService.setNotification());
+
+            this._auth.backUp();
           } else {
             this.formData.valid = {
               cond: false,

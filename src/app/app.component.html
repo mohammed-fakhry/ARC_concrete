@@ -36,7 +36,7 @@
   <span class="example-spacer"></span>
 
   <div class="form-inline">
-    <a mat-button [routerLink]="'/LogIn'" class="textBold btnToDanger printX" matTooltip="تسجيل الخروج">
+    <a mat-button (click)="out()" class="textBold btnToDanger printX" matTooltip="تسجيل الخروج">
       <div class="m-auto">
         {{ _auth.uName?.realName }}
         <i class="fa fa-sign-out fa-lg"></i>
@@ -117,6 +117,13 @@
             </div>
 
             <a mat-list-item routerLink="/Safe" (click)="opened = !opened">الخزنة</a>
+
+            <!-- <mat-divider></mat-divider>
+
+            <a mat-list-item (click)="opened = !opened">
+              <i class="fa fa-exclamation pt-1 pl-2 textBold"></i>
+              تعليمات
+            </a> -->
           </mat-nav-list>
         </mat-expansion-panel>
 

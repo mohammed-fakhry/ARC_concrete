@@ -55,7 +55,7 @@ export class AppComponent {
 
     if (this._glopal.check) this._mainService.setNotification();
 
-    this.mainUrl = this.currentUrl()
+    this.mainUrl = this.currentUrl();
   }
 
   currentUrl(): string {
@@ -65,9 +65,11 @@ export class AppComponent {
   }
 
   out() {
-    sessionStorage.removeItem('y');
-    sessionStorage.removeItem('n');
-    this._router.navigate(['/LogIn']);
+    this._glopal.loading = true;
+    this._auth.backUp().subscribe(() => {
+      this._glopal.loading = false;
+      this._router.navigate(['/LogIn']);
+    });
   }
 
   openSearchDialog = (cond: string) => {

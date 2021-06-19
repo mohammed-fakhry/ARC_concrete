@@ -130,9 +130,15 @@ export class ConcreteService {
     return this.http.get<ConcreteBon[]>(`${this.url}concreteBonList.php`);
   }
 
-  concreteListByBon(date: string, customerId: string) {
+  concreteListByBon(date: string, customerId: string, customerProject: string) {
     return this.http.get<ConcreteBon[]>(
-      `${this.url}concreteBonList.php?date=${date}&customerId=${customerId}`
+      `${this.url}concreteBonList.php?date=${date}&customerId=${customerId}&customerProject=${customerProject}`
+    );
+  }
+
+  concreteBonsByReceiptId(concreteReceipt_id: string) {
+    return this.http.get<ConcreteBon[]>(
+      `${this.url}concreteBonList.php?concreteReceipt_id=${concreteReceipt_id}`
     );
   }
 

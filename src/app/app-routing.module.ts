@@ -139,7 +139,7 @@ const routes: Routes = [
   // ConcreteReceipt
   { path: 'ConcreteReceipt', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
   { path: 'UpdateConcreteReceipt/:id', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
-  { path: 'AddConcreteBYBon/:date/:customerId', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
+  { path: 'AddConcreteBYBon/:date/:customerId/:customerProject', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
   { path: 'concreteReceiptList', component: ConcreteReceiptListComponent, canActivate: [MasterGuard] },
   // ConcreteBone
   { path: 'AddConcreteBon', component: AddConcreteBonComponent, canActivate: [MasterGuard] },

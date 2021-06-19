@@ -25,6 +25,8 @@ export class AddConcreteBonComponent implements OnInit {
   id!: string | null;
 
   concreteList: Concrete[] = [];
+  pumpsList: Concrete[] = [];
+
   customerList: ConcreteCustomer[] = [];
   truckList: Truck[] = [];
 
@@ -77,7 +79,13 @@ export class AddConcreteBonComponent implements OnInit {
         trucks: data[2],
       };
 
-      this.concreteList = result.concretes;
+      this.concreteList = result.concretes.filter(
+        (concrete: any) => !concrete.name.includes('مضخ')
+      );
+
+      this.pumpsList = result.concretes.filter((concrete: any) =>
+        concrete.name.includes('مضخ')
+      );
       this.customerList = result.customers;
       this.truckList = result.trucks.filter(
         (truck: Truck) => truck.truckType == 'خلاطة'
@@ -232,7 +240,7 @@ export class AddConcreteBonComponent implements OnInit {
       truckCustomerName: '',
       LoadTimes: this.concreteBon.concreteQty,
       totalQty: 0,
-      price: 5.5,
+      price: this.truckInfo.metrPrice,
       totalVal: 0,
       date_time: `${this.concreteBon.date}T${this.concreteBon.time}`,
       notes: `بون خرسانة رقم (${this.concreteBon.bonManualNum})`,

@@ -2,6 +2,7 @@ export class ConcreteBon {
   bonId!: string | null;
   concreteCustomer_id!: string | null;
   concreteCustomer_name: string = '';
+  customerProject: string = '';
   bonManualNum: string = '';
   concreteId!: string | null;
   concreteName: string = '';

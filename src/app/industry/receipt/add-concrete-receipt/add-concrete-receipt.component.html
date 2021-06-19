@@ -158,8 +158,8 @@
                 <div class="px-2 textPrimary">ق.مضافة %</div>
 
                 <input type="number" name="totalDiscound" class="form-control my-1 ml-1 textPrimary"
-                  style="width: 60px;" [(ngModel)]="concreteReceipt.totalDiscound" id="totalDiscound1" (click)="_mainService.selectText('totalDiscound',1)"
-                  (ngModelChange)="calcTotalDiscound()">
+                  style="width: 60px;" [(ngModel)]="concreteReceipt.totalDiscound" id="totalDiscound1"
+                  (click)="_mainService.selectText('totalDiscound',1)" (ngModelChange)="calcTotalDiscound()">
 
                 <div>
                   <button [disabled]="id" mat-flat-button color="accent" [matMenuTriggerFor]="menu" type="button">
@@ -219,27 +219,52 @@
           </div>
         </form>
 
-      </div>
+        <div class="printThis mt-3">
+          <div class="py-2 border text-center">
+            <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
+              {{concreteReceipt.totalInAr}}
+            </div>
+          </div>
+          <mat-divider class="my-3"></mat-divider>
+          <div class="row mt-5">
+            <div class="col text-center">
+              اعداد
+            </div>
 
-      <div class="printThis">
-        <div class="py-2 border text-center">
-          <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
-            {{concreteReceipt.totalInAr}}
+            <div class="col text-center">
+              المراجعة
+            </div>
+
+            <div class="col text-center">
+              يعتمد
+            </div>
           </div>
         </div>
-        <mat-divider class="my-3"></mat-divider>
-        <div class="row mt-5">
-          <div class="col text-center">
-            اعداد
-          </div>
 
-          <div class="col text-center">
-            المراجعة
-          </div>
+      </div>
 
-          <div class="col text-center">
-            يعتمد
-          </div>
+      <div class="box mt-3 px-2" *ngIf="concreteReceipt.recordedByBon">
+        <mat-progress-bar mode="indeterminate" *ngIf="elementLoading"></mat-progress-bar>
+        <div class="cardHeader py-3">بيان تفصيلى</div>
+        <div class="panel-body panel-flex-table standTable">
+          <table class="flex-table table table-hover theadBorderPrimary">
+            <thead class="textPrimary">
+              <tr>
+                <th>الجهد و المحتوى</th>
+                <th style="flex: .5;">الكمية</th>
+                <th>العنصر</th>
+                <th>طريقة الصب</th>
+              </tr>
+            </thead>
+            <tbody class="tableBody">
+              <tr *ngFor="let element of concreteElements">
+                <td>{{element.concrete}}</td>
+                <td style="flex: .5;">{{element.qty}}</td>
+                <td>{{element.element}}</td>
+                <td>{{element.pump}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 

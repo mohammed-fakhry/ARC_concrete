@@ -22,6 +22,7 @@ export class ConcreteBonListComponent implements OnInit {
     details: {
       date: string;
       customerName: string;
+      customerProject: string;
       customerId: string;
       qty: number;
     }[];
@@ -89,10 +90,17 @@ export class ConcreteBonListComponent implements OnInit {
 
   creatunrecordedBonsArr(
     unrecordedBons: ConcreteBon[]
-  ): { date: string; customerName: string; customerId: string; qty: number }[] {
+  ): {
+    date: string;
+    customerName: string;
+    customerProject: string;
+    customerId: string;
+    qty: number;
+  }[] {
     let result: {
       date: string;
       customerName: string;
+      customerProject: string;
       customerId: string;
       qty: number;
     }[] = [];
@@ -104,28 +112,36 @@ export class ConcreteBonListComponent implements OnInit {
 
       const dateIds = [...new Set(unrecordedBons.map((bon) => bon.date))];
 
-      // console.log(dates);
+      const projectNames = [
+        ...new Set(unrecordedBons.map((bon) => bon.customerProject)),
+      ];
+
 
       for (let i = 0; i < customerIds.length; i++) {
         for (let dIndx = 0; dIndx < dateIds.length; dIndx++) {
-          const rowInfo = unrecordedBons.find(
-            (bon) =>
-              bon.concreteCustomer_id == customerIds[i] &&
-              bon.date == dateIds[dIndx]
-          );
+          for (let pIndx = 0; pIndx < projectNames.length; pIndx++) {
+            const rowInfo = unrecordedBons.find(
+              (bon) =>
+                bon.concreteCustomer_id == customerIds[i] &&
+                bon.date == dateIds[dIndx] &&
+                bon.customerProject == projectNames[pIndx]
+            );
 
-          if (rowInfo) {
-            const row = {
-              date: rowInfo.date ?? '',
-              customerName: rowInfo.concreteCustomer_name ?? '',
-              customerId: rowInfo.concreteCustomer_id ?? '',
-              qty: unrecordedBons.filter(
-                (bon) =>
-                  bon.concreteCustomer_id == customerIds[i] &&
-                  bon.date == dateIds[dIndx]
-              ).length,
-            };
-            result = [...result, row];
+            if (rowInfo) {
+              const row = {
+                date: rowInfo.date ?? '',
+                customerName: `${rowInfo.concreteCustomer_name}` ?? '',
+                customerProject: projectNames[pIndx],
+                customerId: rowInfo.concreteCustomer_id ?? '',
+                qty: unrecordedBons.filter(
+                  (bon) =>
+                    bon.concreteCustomer_id == customerIds[i] &&
+                    bon.date == dateIds[dIndx] &&
+                    bon.customerProject == projectNames[pIndx]
+                ).length,
+              };
+              result = [...result, row];
+            }
           }
         }
       }

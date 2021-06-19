@@ -29,6 +29,7 @@
                     </mat-error>
                     <datalist id="truckList">
                       <option *ngFor="let truck of truckList" value="{{truck.name}}">
+                        {{truck.name}} | {{truck.number}}
                       </option>
                     </datalist>
                   </mat-form-field>
