@@ -1,0 +1,287 @@
+<div class="mainContainer">
+  <div class="row">
+
+    <div class="col-lg-3 col-md-12 mb-3">
+
+      <div class="printX mb-3 stickyBox" style="z-index: 0; opacity: .85;">
+        <img class="sideLogo" src="assets/logos/clients.webp" alt="">
+      </div>
+
+      <mat-card *ngIf="uncompleted" class="headerBox py-4 mb-3">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span class="dash-widget-icon dangerBadge">
+              <i class="fa fa-ban"></i>
+            </span>
+          </div>
+          <mat-card-title class="text-dark">
+            {{uncompleted ? "يرجى استكمال البيانات" : ""}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h4 class="textDanger">
+              يمكن ان يؤدى نقص البيانات الى اظهار نتائج لا تتطابق الواقع
+            </h4>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+          <button [disabled]="isFiltered" mat-raised-button color="warn" (click)="filterList('filterUncomplete')">
+            تحديث البيانات
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <div class="form-inline"
+        *ngIf="counts?.activeCustomers?.onUs?.count > 0 || counts?.activeCustomers?.toUs?.count > 0">
+        <h3 class="textPrimary">
+          <span>
+            <i class="fa fa-users my-auto pl-2"></i>
+          </span>
+          عملاء نشطين
+        </h3>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-12" *ngIf="counts?.activeCustomers?.toUs?.count > 0">
+          <mat-card class="box mb-3 counts" id="{{counts?.activeCustomers?.toUs?.id}}"
+            [class.borderRight-alert]="counts?.activeCustomers?.toUs?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-2">
+                <span class="dash-widget-small textBtn headerDeepBlueBg"
+                  (click)="counts?.activeCustomers?.toUs?.filter()">
+                  <i class="fa fa-filter headerDeepBlue iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerDeepBlue">
+                {{counts?.activeCustomers?.toUs?.title}}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3>{{counts?.activeCustomers?.toUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <h4 class="textLarge headerDeepBlue">
+                {{counts?.activeCustomers?.toUs?.uncompletedCond > 0 ? "-" : counts?.activeCustomers?.toUs?.total |
+                number:'1.0-2'}}
+                <span>{{counts?.activeCustomers?.toUs?.uncompletedCond ? 'يرجى استكمال البيانات' : 'جنيه'}}</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-6 col-md-12" *ngIf="counts?.activeCustomers?.onUs?.count > 0">
+          <mat-card class="box mb-3 counts" id="{{counts?.activeCustomers?.onUs?.id}}"
+            [class.borderRight-alert]="counts?.activeCustomers?.onUs?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-2">
+                <span class="dash-widget-small textBtn headerPinkBg" (click)="counts?.activeCustomers?.onUs?.filter()">
+                  <i class="fa fa-filter headerPink iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerPink">
+                {{counts?.activeCustomers?.onUs?.title}}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3>{{counts?.activeCustomers?.onUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <h4 class="textLarge headerPink">
+                {{counts?.activeCustomers?.onUs?.uncompletedCond ? '-' : counts?.activeCustomers?.onUs?.total |
+                number:'1.0-2'}}
+                <span>{{counts?.activeCustomers?.onUs?.uncompletedCond ? 'يرجى استكمال البيانات' : 'جنيه'}}</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <mat-divider *ngIf="(counts?.activeCustomers?.onUs?.count > 0 || counts?.activeCustomers?.toUs?.count > 0)"
+        class="my-3">
+      </mat-divider>
+
+      <div class="form-inline" [class.d-none]="searchFor == 'ActiveCollectible'">
+        <h3 class="textPrimary">
+          <span>
+            <i class="fa fa-users my-auto pl-2"></i>
+          </span>
+          اجمالى العملاء
+        </h3>
+      </div>
+
+      <div class="row" [class.d-none]="searchFor == 'ActiveCollectible'">
+        <div class="col-lg-6 col-md-12" *ngIf="counts?.allCustomers?.toUs?.count > 0">
+          <mat-card class="box mb-3 counts" id="{{counts?.allCustomers?.toUs?.id}}"
+            [class.borderRight-alert]="counts?.allCustomers?.toUs?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-2">
+                <span class="dash-widget-small textBtn textSecondaryBg" (click)="counts?.allCustomers?.toUs?.filter()">
+                  <i class="fa fa-filter textSecondary iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="textSecondary">
+                {{counts?.allCustomers.toUs.title}}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3>{{counts?.allCustomers?.toUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="textLarge textSecondary">
+                {{counts?.allCustomers?.toUs?.uncompletedCond > 0 ? "-" : counts?.allCustomers?.toUs?.total |
+                number:'1.0-2'}}
+                <span>{{counts?.allCustomers?.toUs?.uncompletedCond ? 'يرجى استكمال البيانات' : 'جنيه'}}</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-6 col-md-12" *ngIf="counts?.allCustomers?.onUs?.count > 0">
+          <mat-card class="box mb-3 counts" id="{{counts?.allCustomers?.onUs?.id}}"
+            [class.borderRight-alert]="counts?.allCustomers?.onUs?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-2">
+                <span class="dash-widget-small textBtn headerPinkBg" (click)="counts?.allCustomers?.onUs?.filter()">
+                  <i class="fa fa-filter headerPink iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerPink">
+                {{counts?.allCustomers.onUs.title}}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3>{{counts?.allCustomers?.onUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="textLarge headerPink">
+                {{counts?.allCustomers?.onUs?.uncompletedCond > 0 ? "-" : counts?.allCustomers?.onUs?.total |
+                number:'1.0-2'}}
+                <span>{{counts?.allCustomers?.onUs?.uncompletedCond ? 'يرجى استكمال البيانات' : 'جنيه'}}</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9 col-md-12 mb-3">
+      <div class="box pt-3 stickyBox" id="customerListTable">
+
+        <!-- header -->
+        <div class="d-flex justify-content-between px-3 printX">
+          <!-- search -->
+          <div class="form-inline">
+            <mat-form-field class="searchForm" style="width: 500px;">
+              <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+            </mat-form-field>
+
+            <div class="mr-2">
+              <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+                <i class="fa fa-filter"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item [disabled]="isFiltered" (click)="filterList('filterUncomplete')"
+                  style="text-align: right;">فرز حسابات غير
+                  كاملة</button>
+                <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
+                  style="text-align: right;">اظهار الكل</button>
+              </mat-menu>
+            </div>
+          </div>
+          <!-- side buttons -->
+          <div class="my-auto">
+            <a mat-flat-button color="accent" routerLink="/addCustomer" matTooltipPosition="above"
+              matTooltip="اضافة مورد | مستهلك">
+              <i class="fa fa-plus fa-lg pt-1 textBold"></i>
+            </a>
+            <button mat-stroked-button color="primary" (click)="printDocument()"><i class="fa fa-print"></i></button>
+          </div>
+        </div>
+
+        <!-- table -->
+        <div class="example-container">
+          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+            <ng-container matColumnDef="customerName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                [class.borderAround-danger]="row.uncompletedCond > 0"
+                routerLink="/customerInformation/{{row.customerId}}">
+                {{row.customerName}}
+                <!-- <i *ngIf="row.uncompletedCond > 0" class="fa fa-lock pr-3"></i> -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="customerRemain">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى الحساب</th>
+              <td mat-cell *matCellDef="let row" [class.textDanger]="row.customerRemain < 0">
+                {{row.uncompletedCond == 0 ? (row.customerRemain | number:'1.0-2') : '-'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="customerAdd">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="thCenter">عنوان</th>
+              <td mat-cell *matCellDef="let row">
+                {{row.customerAdd}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastResevedReciept">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ايصال استلام</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="{{(row.lastResevedReciept | dateInDays).class}}">
+                  {{(row.lastResevedReciept | dateInDays).messege}}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="lastPaidReciept">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ايصال صرف</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="{{(row.lastPaidReciept | dateInDays).class}}">
+                  {{(row.lastPaidReciept | dateInDays).messege}}
+                </span>
+              </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="lastSoldInvoice">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>فاتورة بيع</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="{{(row.lastSoldInvoice | dateInDays).class}}">
+                  {{(row.lastSoldInvoice | dateInDays).messege}}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="lastBoughtInvoice">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>فاتورة شراء</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="{{(row.lastBoughtInvoice | dateInDays).class}}">
+                  {{(row.lastBoughtInvoice | dateInDays).messege}}
+                </span>
+              </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                style="text-align: right; font-size: medium;">
+                تعديل</th>
+              <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue " *matCellDef="let row"
+                routerLink="/addCustomer/{{row.customerId}}"><i class="fa fa-pencil underLine"></i></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+            </tr>
+
+          </table>
+        </div>
+
+        <!-- paginator -->
+        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+          [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+        </mat-paginator>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>

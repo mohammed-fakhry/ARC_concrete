@@ -1,0 +1,207 @@
+<div class="mainContainer">
+
+  <div class="row stickyBox">
+
+    <div class="col-xl-4 col-lg-6 mb-3">
+      <mat-card class="box headerBox" [class.borderRight-alert]="customerInfo.uncompletedCond > 0">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;"
+              routerLink="/addCustomer/{{customerInfo.customerId}}">
+              <i class="fa fa-user iconBtn textSecondary"></i>
+            </span>
+          </div>
+          <mat-card-title class="textSecondary">
+            {{customerInfo.customerName}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h3 class="homeSubtitle"
+              [class.textDanger]="customerInfo.customerRemain < 0 || customerInfo.uncompletedCond > 0">
+              {{(customerInfo.uncompletedCond > 0) ? 'برجاء استكمال بيانات الحساب' : customerInfo.customerRemain |
+              number:'1.0-2'}}
+            </h3>
+            <!-- <button [disabled]="isFiltered" mat-raised-button color="accent"
+              (click)="filterList('filterUncomplete')"></button> -->
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h4 class="homeSubtitle textSecondary">
+            {{customerInfo.customerAdd}}
+          </h4>
+        </mat-card-content>
+        <mat-card-actions>
+          <button *ngIf="customerInfo.uncompletedCond > 0" [disabled]="isFiltered" mat-raised-button color="warn"
+            (click)="filterList('filterUncomplete')">
+            تحديث البيانات
+          </button>
+          <button mat-button routerLink="/CustomerList">العملاء</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- <div class="col-xl-4 col-lg-6 mb-3">
+      <div>
+        <div class="panel-body panel-flex-table standTable">
+          <table class="flex-table table table-hover">
+            <thead class="textSecondaryBg textSecondary">
+              <tr>
+                <th style="flex: 2;">بحث عن</th>
+                <th>دائن</th>
+                <th>مدين</th>
+                <th>صافى</th>
+              </tr>
+            </thead>
+            <tbody class="tableBody">
+              <tr>
+                <td style="flex: 2;" [class.marked]="searchTxt">{{searchTxt ? searchTxt : 'الكل'}}</td>
+                <td class="textDanger">{{searchResult.onUs | number:'1.0-2'}}</td>
+                <td>{{searchResult.toUs | number:'1.0-2'}}</td>
+                <td class="textSecondaryBg textBold" [class.textDanger]="(searchResult.toUs -searchResult.onUs) < 0">
+                  {{(searchResult.toUs -searchResult.onUs) | number:'1.0-2'}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+
+  <div class="box stickyBox" id="customerInformationTable">
+    <div class="mat-elevation-z0 mt-3">
+      <div class="d-flex justify-content-between px-3">
+        <div class="form-inline printX">
+          <mat-form-field class="searchForm" style="width: 500px;">
+            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+          </mat-form-field>
+          <div class="mr-2">
+            <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+              <i class="fa fa-filter"></i>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+                بالتاريخ</button>
+              <button mat-menu-item [disabled]="isFiltered" (click)="filterList('filterUncomplete')"
+                style="text-align: right;">فرز حسابات غير
+                كاملة</button>
+              <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
+                style="text-align: right;">اظهار الكل</button>
+            </mat-menu>
+          </div>
+        </div>
+
+        <div *ngIf="searchDate.from" class="my-auto">
+          <span class="px-3">من تاريخ | {{searchDate.from}}</span>
+          <span class="px-3">الى تاريخ | {{searchDate.to}}</span>
+        </div>
+        <!-- <div class="my-auto">
+          <h3 class="textBold textPrimary ml-2 my-auto" [class.textDanger]="customerInfo.customerRemain < 0">صافى
+            الحساب |
+            {{customerInfo?.customerRemain | number:'1.0-2'}}</h3>
+        </div> -->
+        <div class="my-auto">
+          <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+            matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
+            [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
+            ميزان
+            |
+            {{calcArr.total | number:'1.0-2'}}</button>
+          <button mat-flat-button color="accent" class="mx-1" (click)="printDocument()"><i
+              class="fa fa-print"></i></button>
+          <button mat-flat-button color="warn" (click)="addDiscound()" matTooltip="خصم من الحساب"
+            matTooltipPosition="above" matTooltipClass="dangerBadge borderLdanger">
+            <i class="fa fa-lg fa-tags my-auto"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="example-container">
+        <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{row.id}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="date_time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+            <td mat-cell *matCellDef="let row" [class.borderAround-danger]="row.uncompleted">
+              {{row.date_time}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="recieptType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
+            <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+              [class.textDanger]="(row.recieptType.includes('صرف') || row.recieptType.includes('بيع'))"
+              [class.marked]="row.recieptType.includes(searchTxt) && searchTxt"
+              (click)="gotoReceipt(row.recieptType, row.receiptId)">
+              {{row.recieptType}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="receiptDetail">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
+            <td mat-cell *matCellDef="let row"
+              [class.textDanger]="row.recieptType.includes('صرف') || row.recieptType.includes('بيع')"
+              [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt">
+              {{row.receiptDetail}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="minVal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>دائن</th>
+            <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="minVal{{i}}" class="markVal"
+              (click)="markToCalc(row.minVal * -1,i,'minVal')"
+              [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
+              [class.borderRight-success]="(row.discound > 0 && row.minVal > 0)"
+              [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'secondaryBadge borderLsecondary' : ''"
+              matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
+              [matTooltipDisabled]="row.addtaxes == 0 || row.minVal < 0">
+              <i *ngIf="row.minVal > 0" class="fa fa-arrow-down textGreen"></i>
+              {{row.minVal | number:'1.0-2'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="addVal">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>مدين</th>
+            <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="addVal{{i}}" class="markVal"
+              (click)="markToCalc(row.addVal,i,'addVal')"
+              [class.marked]="row.addVal.toString().includes(searchTxt) && searchTxt"
+              [class.borderRight-success]="row.discound > 0 && row.addVal > 0"
+              [ngClass]="(row.addtaxes > 0 && row.addVal > 0) ? 'secondaryBadge borderLsecondary' : ''"
+              matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
+              [matTooltipDisabled]="row.addtaxes == 0 || row.addVal < 0">
+              <i *ngIf="row.addVal > 0" class="fa fa-arrow-up textDanger"></i>
+              {{row.addVal | number:'1.0-2'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="balance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
+            <td mat-cell *matCellDef="let row" [class.textDanger]="row.balance < 0"
+              [class.marked]="row.balance.toString().includes(searchTxt) && searchTxt"
+              class="textBtn tBtn-danger pl-2 tdBorder" (click)="discoundThis(row.balance, row.date)">
+              {{row.balance | number:'1.0-2'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات</th>
+            <td mat-cell *matCellDef="let row" [class.marked]="row.note?.includes(searchTxt) && searchTxt">
+              {{row.note}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+          </tr>
+
+        </table>
+      </div>
+
+      <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+        [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+      </mat-paginator>
+
+    </div>
+  </div>
+</div>

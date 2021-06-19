@@ -1,0 +1,92 @@
+<div class="mainContainer mt-3">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="box mt-3">
+        <div class="panel-body panel-flex-table">
+          <table class="flex-table table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">التاريخ</th>
+                <th>1</th>
+                <th>2</th>
+                <th></th>
+                <th>3</th>
+                <th></th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th *ngFor="let person of personNames">{{person}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let list of dataList">
+                <td>{{list.date}}</td>
+                <td *ngFor="let person of list.persons; let i = index">
+                  <mat-slide-toggle name="clients{{i}}" [(ngModel)]="person.checked" color="primary">
+                  </mat-slide-toggle>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- <table class="flex-table table table-hover">
+            <thead class="secondaryBadge">
+              <tr>
+                <th>التاريخ</th>
+                <th>1</th>
+                <th>2</th>
+                <th></th>
+                <th>3</th>
+                <th></th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>على</th>
+                <th>الجن</th>
+                <th>عمر</th>
+                <th>فوزى</th>
+                <th>حسين</th>
+                <th>اسلام</th>
+                <th>ملك</th>
+                <th>الجن</th>
+                <th>حسين</th>
+                <th>فوزى</th>
+                <th>ادهم</th>
+                <th>على</th>
+                <th>عمر</th>
+              </tr>
+            </thead>
+            <tbody class="tableBody">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+
+    </div>
+  </div>
+</div>

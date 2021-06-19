@@ -1,0 +1,12 @@
+/* mat-card,
+mat-card-content {
+    direction: ltr;
+} */
+
+* {
+  direction: ltr !important;
+}
+
+matInput {
+  text-align: left !important;
+}

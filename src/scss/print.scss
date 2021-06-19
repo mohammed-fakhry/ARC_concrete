@@ -1,0 +1,108 @@
+.datePrint {
+  display: none;
+}
+
+@media print {
+  tbody {
+    overflow-y: hidden !important;
+  }
+
+  mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    margin-top: 0 !important;
+    height: 100% !important;
+  }
+
+  mat-sidenav-content {
+    margin-top: 0 !important;
+  }
+
+  #printHeader, .printThis {
+    display: block !important;
+  }
+
+  tr,
+  td,
+  th {
+    height: fit-content !important;
+  }
+
+  th {
+    page-break-before: avoid !important;
+    page-break-inside: avoid;
+    color: black !important;
+  }
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody,
+  .inpTable,
+  .invoiceTable {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  button:not(.mat-sort-header-button) {
+    display: none !important;
+  }
+
+  .navHeader {
+    color: black !important;
+  }
+
+  .printX,
+  .fa-print,
+  .HideCol,
+  .theNav,
+  .datePrint,
+  .btn {
+    display: none !important;
+  }
+
+  .inpCard {
+    border: none;
+    tbody .form-control {
+      border: none;
+    }
+  }
+
+  .box:not(.headerBox) {
+    // page-break-after: always;
+    border: none !important;
+  }
+
+  .mainContainer,
+  .box {
+    margin-top: 0 !important;
+  }
+}
+
+@media print and (width: 21cm) and (height: 29.7cm) {
+  @page {
+    margin: 3cm;
+  }
+}
+
+/* style sheet for "letter" printing */
+@media print and (width: 8.5in) and (height: 11in) {
+  @page {
+    margin: 1in;
+  }
+}
+
+/* A4 Landscape*/
+/* @page {
+ size: A4 landscape;
+ margin: 10%;
+} */

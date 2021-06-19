@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-7 col-md-12">
+      <div class="box mb-3">
+        <div class="d-flex justify-content-between px-3">
+
+          <mat-form-field class="searchForm" style="width: 400px;">
+            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+          </mat-form-field>
+          <div class="my-auto">
+            <button mat-stroked-button color="primary" routerLink="/AddConcrete" matTooltip="اضافة خرسانة">
+              <i class="fa fa-plus fa-lg pt-1 textBold"></i></button>
+          </div>
+        </div>
+
+        <!-- table -->
+        <div class="example-container">
+          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+              <td mat-cell *matCellDef="let row">{{row.name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                style="text-align: right; font-size: medium;">
+                تعديل</th>
+              <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue" *matCellDef="let row"
+                routerLink="/UpdateConcrete/{{row.id}}"><i class="fa fa-pencil underLine"></i></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+            </tr>
+
+          </table>
+        </div>
+
+        <!-- paginator -->
+        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+          [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+        </mat-paginator>
+      </div>
+    </div>
+
+    <div class="col-lg-5 col-md-12 printX">
+      <img class="sideLogo" src="assets/logos/concrete.png" alt="">
+    </div>
+  </div>
+</div>

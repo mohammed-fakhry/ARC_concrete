@@ -1,0 +1,184 @@
+<div class="mainContainer mt-3">
+
+  <div class="row">
+    <div class="col-lg-10 col-md-12">
+
+      <div class="box p-4" [class.borderRight-alert]="truckOrder.orderType == 'سيارة خارجية'">
+        <form (ngSubmit)="onSubmit(truckOrderForm)" #truckOrderForm="ngForm">
+          <div class="d-flex justify-content-between">
+
+
+            <div class="form-inline">
+
+              <div class="px-3 infoCard"
+                [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'">
+                <h1 class="my-3">{{truckOrder.truckId ? truckOrder.orderType : ''}}</h1>
+              </div>
+
+              <div class="infoCard px-3 mr-3"
+                [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'dangerBadge borderLdanger' : 'secondaryBadge borderLsecondary'">
+                <h2 class="my-3 textBold">اجمالى | {{truckOrder.totalVal | number: '1.0-2'}}</h2>
+              </div>
+
+            </div>
+
+            <div class="infoCard boxShadow px-3"
+              [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'">
+              <h2 class="my-3 textBold">{{orderCondition}}</h2>
+            </div>
+          </div>
+
+          <mat-divider class="my-3"></mat-divider>
+
+          <div class="form-inline">
+            <mat-form-field style="width: 250px;" class="ml-2">
+              <mat-label>تاريخ الايصال</mat-label>
+              <input matInput [disabled]="dateExpires" type="datetime-local" name="date_time"
+                [(ngModel)]="truckOrder.date_time" id="date_time">
+            </mat-form-field>
+
+            <mat-form-field style="padding-top: 3px;">
+              <mat-label>نوع التشغيل</mat-label>
+              <mat-select required #loadingType name="loadingType" [(ngModel)]="truckOrder.loadingType"
+                (ngModelChange)="loadingTypeChanged()" id="loadingType">
+                <mat-option value="ساعة">
+                  ساعة
+                </mat-option>
+                <mat-option value="متر">
+                  متر
+                </mat-option>
+                <mat-option value="يومية">
+                  يومية
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+
+          <div class="row">
+            <div class="col-lg-8 col-md-12">
+              <table class="my-3" cellspacing="0">
+                <div class="textSecondary">بيانات السيارة</div>
+                <tr>
+                  <td style="width: 5%;" class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input disabled matInput placeholder="كود" #truckId name="truckId"
+                        [(ngModel)]="truckOrder.truckId">
+                    </mat-form-field>
+                  </td>
+
+                  <td style="width: 40%;" class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="اسم السيارة" #truckName name="truckName" required
+                        [(ngModel)]="truckOrder.truckName" list="truckList" (change)="truckNameChanged(truckOrderForm)">
+                      <datalist id="truckList">
+                        <option *ngFor="let truck of truckList" value="{{truck.name}}">
+                        </option>
+                      </datalist>
+
+                      <mat-error>ادخل اسم صحيح</mat-error>
+                    </mat-form-field>
+                  </td>
+
+                  <td class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input disabled matInput placeholder="{{truckOrder.loadingType}}" #truckCapacity
+                        name="truckCapacity" [(ngModel)]="truckOrder.truckCapacity">
+                    </mat-form-field>
+                  </td>
+
+                  <td class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput type="number"
+                        placeholder="{{truckOrder.loadingType == 'متر' ? 'عدد النقلات' : truckOrder.loadingType == 'يومية' ? 'عدد اليوميات' : 'عدد الساعات'}}" #LoadTimes
+                        name="LoadTimes" [(ngModel)]="truckOrder.LoadTimes" (ngModelChange)="calcTotal()">
+                    </mat-form-field>
+                  </td>
+
+                  <td class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput type="number"
+                        placeholder="{{truckOrder.loadingType == 'متر' ? 'سعر المتر' : truckOrder.loadingType == 'يومية' ? 'سعر اليوم' : 'سعر الساعة'}}" #price
+                        name="price" [(ngModel)]="truckOrder.price" (ngModelChange)="calcTotal()">
+                    </mat-form-field>
+                  </td>
+
+                  <td class="pt-1" *ngIf="truckOrder.loadingType == 'متر'">
+                    <div class="box w-100 px-5 py-1 noHover textPrimary">
+                      <p class="textSmall">ج.امتار</p>
+                      <div class="textBold">{{totalMeters | number: '1.0-2'}}</div>
+                    </div>
+                    <!-- <mat-form-field class="mr-2 lightBg borderLdark px-2 pt-2">
+                     <input disabled matInput placeholder="اجمالى امتار" name="totalMeters" class="textBold" [(ngModel)]="totalMeters">
+                   </mat-form-field> -->
+                  </td>
+
+                </tr>
+
+                <div class="textSecondary mt-3">بيانات العميل</div>
+
+                <tr>
+                  <td style="width: 5%;" class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input disabled matInput placeholder="كود" #truckId name="truckId"
+                        [(ngModel)]="truckOrder.truckId">
+                    </mat-form-field>
+                  </td>
+
+                  <td colspan="2" class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="اسم العميل" #truckCustomerName name="truckCustomerName" required
+                        [(ngModel)]="truckOrder.truckCustomerName" list="truckCustomerList"
+                        (change)="truckCustomerNameChanged(truckOrderForm)">
+                      <datalist id="truckCustomerList">
+                        <option *ngFor="let customer of truckCustomerList" value="{{customer.fullName}}">
+                        </option>
+                      </datalist>
+
+                      <mat-error>ادخل اسم صحيح</mat-error>
+                    </mat-form-field>
+                  </td>
+
+                  <td class="pt-3" colspan="3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="ملاحظات" #notes name="notes" [(ngModel)]="truckOrder.notes">
+                    </mat-form-field>
+                  </td>
+
+                </tr>
+              </table>
+            </div>
+
+          </div>
+
+          <mat-divider class="mt-4 mb-3"></mat-divider>
+
+          <div class="d-flex justify-content-between">
+            <button [disabled]="truckOrder.stockTransactionDetailsId > '1' || dateExpires" mat-flat-button
+              color="primary" type="submit">
+              {{id ? 'تعديل' : 'تسجيل'}}
+            </button>
+
+            <!-- [class.borderRight-alert]="stockInvoice.isUpdated"  [class.borderRight-alert]="stockInvoice.isUpdated" (click)="toEditReport()" [class.textBtn]="_auth?.check.prem && stockInvoice.isUpdated"-->
+
+            <div class="form-inline">
+              <button *ngIf="truckOrder.stockTransactionId > '1'" mat-stroked-button class="ml-3"
+                routerLink="/StockInvoice/{{truckOrder.stockTransactionId}}">
+                فاتورة المخزن رقم ( {{truckOrder.stockTransactionId}} )
+              </button>
+              <h3 class="my-auto ml-3 py-1 infoCard lightBg">
+                مُدخل البيانات | <span class="textPrimary">{{truckOrder.madeBy}}</span>
+              </h3>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-hide printX">
+      <img class="sideLogo" src="assets/logos/truckOrder.png" alt="">
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,278 @@
+<div class="mainContainer">
+
+  <div class="row">
+    <div class="col-lg-10 col-md-12">
+      <div class="box p-4 mb-3" [class.borderRight-alert]="safeReciept.receiptKind == 'ايصال صرف نقدية'">
+        <form (ngSubmit)="onSubmit(addSafeReciept)" #addSafeReciept="ngForm">
+
+          <div class="d-flex justify-content-between">
+            <div class="form-inline">
+              <mat-form-field style="width: 250px;">
+                <mat-label>نوع الايصال</mat-label>
+                <mat-select required #receiptKind name="receiptKind" [(ngModel)]="safeReciept.receiptKind"
+                  id="receiptKind">
+                  <mat-option value="ايصال استلام نقدية" (click)="receiptKindChanged(addSafeReciept)">
+                    ايصال استلام نقدية
+                  </mat-option>
+                  <mat-option value="ايصال صرف نقدية" (click)="receiptKindChanged(addSafeReciept)">
+                    ايصال صرف نقدية
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="safeReciept.receiptKind === 'ايصال صرف نقدية'" class="mr-3">
+                <button mat-button type="button" [matMenuTriggerFor]="accMenue">ترحيل الى...</button>
+                <mat-menu #accMenue="matMenu">
+                  <button *ngFor="let acc of accList" mat-menu-item type="button"
+                    (click)="toAcc(acc)">{{acc.AccName}}</button>
+                </mat-menu>
+                <!-- <button mat-button color="primary" type="button" (click)="toAcc('المصاريف')">مصاريف</button>
+                <button mat-button color="primary" type="button" (click)="toAcc('عمال')">عمال</button> -->
+              </div>
+            </div>
+            <div class="infoCard boxShadow px-3"
+              [ngClass]="safeReciept.receiptKind == 'ايصال صرف نقدية' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'">
+              <div class="my-3 textBold">{{recieptCondition}}</div>
+            </div>
+          </div>
+
+          <mat-divider class="my-3"></mat-divider>
+
+          <mat-form-field style="width: 250px;">
+            <mat-label>تاريخ الايصال</mat-label>
+            <input matInput [disabled]="dateExpires" type="datetime-local" name="date_time" [(ngModel)]="safeReciept.date_time" id="date_time">
+          </mat-form-field>
+
+          <table class="example-full-width my-3" cellspacing="0" class="col-lg-8 col-sm-12">
+            <tr>
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <mat-label>استلام من خزنة</mat-label>
+                  <mat-select required #fstSafeName name="fstSafeName" [(ngModel)]="safeReciept.safeName"
+                    (ngModelChange)="safeChanged('first')">
+                    <mat-option *ngFor="let safe of safeList" value="{{safe.safeName}}">
+                      {{safe.safeName}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>يجب اختيار خزنة</mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="textBold p-2 text-center infoCard blueBadge textBtn" id="saferecieptVal"
+                  routerLink="/SafeInformation/{{safeReciept.safeId}}" matTooltip="حركة الخزنة"
+                  matTooltipPosition="before" matTooltipClass="secondaryBg">
+                  {{safeReciept.currentSafeVal | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+          </table>
+
+          <div class="form-inline my-3"
+            [ngClass]="safeReciept.receiptKind == 'ايصال صرف نقدية' ? 'borderYdanger' : 'borderYprimary'">
+            <div class="textBold ml-3">نوع الحساب</div>
+            <mat-form-field>
+              <mat-select required #transactionAccKind name="transactionAccKind"
+                [(ngModel)]="safeReciept.transactionAccKind" (ngModelChange)="tranceAccChanged()">
+                <mat-option value="عميل">
+                  عميل
+                </mat-option>
+                <mat-option value="حساب">
+                  حساب
+                </mat-option>
+                <mat-option value="عميل خرسانة">
+                  عميل خرسانة
+                </mat-option>
+                <mat-option value="عميل معدات">
+                  عميل معدات
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- outdent -->
+            <div class="infoCard mr-5"
+              [ngClass]="safeReciept.receiptKind == 'ايصال استلام نقدية' ? 'darkBadge borderLdark' : 'dangerBadge borderLdanger'">
+              <i [ngClass]="safeReciept.transactionAccKind === 'حساب' ? 'fa-outdent' : 'fa-id-badge'"
+                class="fa fa-lg py-2"></i>
+            </div>
+          </div>
+
+          <table class="example-full-width my-3" cellspacing="0" class="col-lg-8 col-sm-12">
+            <!-- if Customer -->
+            <tr *ngIf="safeReciept.transactionAccKind == 'عميل'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم العميل" list="customerList" class="mdb-autocomplete" #customerName
+                    name="customerName" [(ngModel)]="safeReciept.customerName"
+                    (change)="customerNameChanged(addSafeReciept)" required>
+                  <datalist id="customerList">
+                    <option *ngFor="let customer of customerList" value="{{customer.customerName}}">
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.customerName.cond">
+                    {{inputValid.customerName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.customerName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.currentCustomerVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+            <!-- if concreteCustomer -->
+            <tr *ngIf="safeReciept.transactionAccKind == 'عميل خرسانة'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم عميل الخرسانة" list="concreteCustomerList" class="mdb-autocomplete"
+                    #concreteCustomerName name="concreteCustomerName" [(ngModel)]="safeReciept.concreteCustomerName"
+                    (change)="concreteCustomerNameChanged(addSafeReciept)" required>
+                  <datalist id="concreteCustomerList">
+                    <option *ngFor="let concreteCustomer of concreteCustomerList" value="{{concreteCustomer.fullName}}">
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.concreteCustomerName.cond">
+                    {{inputValid.concreteCustomerName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.concreteCustomerName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.concreteCustomerVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+            <!-- if trckCustomer -->
+            <tr *ngIf="safeReciept.transactionAccKind == 'عميل معدات'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم عميل المُعدات" list="truckCustomerList" class="mdb-autocomplete"
+                    #truckCustomerName name="truckCustomerName" [(ngModel)]="safeReciept.truckCustomerName"
+                    (change)="truckCustomerNameChanged(addSafeReciept)" required>
+                  <datalist id="truckCustomerList">
+                    <option *ngFor="let truckCustomer of truckCustomerList" value="{{truckCustomer.fullName}}">
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.truckCustomerName.cond">
+                    {{inputValid.truckCustomerName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.truckCustomerName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.concreteCustomerVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+            <!-- if Acc -->
+            <tr *ngIf="safeReciept.transactionAccKind == 'حساب'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم الحساب" list="accList" class="mdb-autocomplete" #AccName
+                    name="AccName" [(ngModel)]="safeReciept.AccName" (change)="accNameChanged(addSafeReciept)" required>
+                  <datalist id="accList">
+                    <option *ngFor="let acc of accList" value="{{acc.AccName}}">
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.AccName.cond">
+                    {{inputValid.AccName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.AccName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.currentAccVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+          </table>
+
+          <mat-divider class="my-3"></mat-divider>
+
+          <table class="example-full-width my-3" cellspacing="0" class="col-lg-8 col-sm-12">
+            <tr>
+              <td style="width: 30%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
+                    [(ngModel)]="safeReciept.receiptVal" (ngModelChange)="receiptValChanged(addSafeReciept)" required>
+                  <mat-error *ngIf="!inputValid.receiptVal.cond">
+                    {{inputValid.receiptVal.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width" cellspacing="0">
+                  <input matInput placeholder="ملاحظات" name="notes" [(ngModel)]="safeReciept.recieptNote">
+                  <mat-hint align="end">{{safeReciept?.recieptNote?.length || 0}} / 200</mat-hint>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+          <table *ngIf="safeReciept.transactionAccKind === 'حساب' && !id" class="example-full-width my-3"
+            cellspacing="0" class="col-lg-8 col-sm-12">
+            <tr *ngFor="let otherVals of otherRecieptVals; let i = index">
+              <td style="width: 30%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="قيمة الايصال ({{i +1}})" type="number" name="receiptVal{{i}}"
+                    [(ngModel)]="otherVals.val" (ngModelChange)="otherReceiptValChanged(otherVals.val)" required>
+                  <!-- <mat-error *ngIf="!inputValid.receiptVal.cond">
+                    {{inputValid.receiptVal.msg}}
+                  </mat-error> -->
+                </mat-form-field>
+              </td>
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width" cellspacing="0">
+                  <input matInput placeholder="ملاحظات ({{i +1}})" name="notes{{i}}" [(ngModel)]="otherVals.note">
+                  <mat-hint align="end">{{otherVals?.note?.length || 0}} / 200</mat-hint>
+                </mat-form-field>
+              </td>
+            </tr>
+            <td *ngIf="otherRecieptVals.length < 10">
+              <button mat-stroked-button color="accent" type="button" (click)="addOtherReceiptVal()">+</button>
+            </td>
+          </table>
+
+          <mat-divider class="my-3"></mat-divider>
+          <div class="d-flex justify-content-between">
+            <button [disabled]="_glopal.loading" mat-raised-button color="primary" type="submit">{{submitBtn}}</button>
+            <div class="form-inline">
+              <h3 class="my-auto ml-3 py-1 infoCard lightBg" (click)="toEditReport()"
+                [class.textBtn]="_auth?.check.prem && safeReciept.isUpdated"
+                [class.borderRight-alert]="safeReciept.isUpdated">
+                مُدخل البيانات | <span class="textDark">{{safeReciept.madeBy}}</span>
+              </h3>
+              <button *ngIf="id" type="button" mat-stroked-button color="warn" (click)="openDelDialog()" mat-button>
+                حذف الايصال
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-2 col-md-12 printX">
+      <div class="container text-center">
+        <img class="sideLogo"
+          src="assets/logos/safeReciept-Logo{{safeReciept.receiptKind == 'ايصال صرف نقدية' ? '-min' : ''}}.png"
+          style="max-width: 75%;">
+      </div>
+      <div *ngIf="!id" class="box mt-3">
+
+        <div class="text-center pb-2">{{safeReciept.safeName}}</div>
+        <div class="infoCard text-center mx-auto textBold py-3"
+          [ngClass]="valsRemain.safeRemain >= 0 ? 'blueBadge borderLblue' : 'dangerBadge borderLdanger'"
+          style="width: 80%; font-size: larger;">
+          {{valsRemain.safeRemain | number:'1.0-2'}}
+        </div>
+
+        <div *ngIf="safeReciept.AccName || safeReciept.customerName || safeReciept.concreteCustomerName">
+          <div class="text-center pt-3 pb-2">
+            {{safeReciept.AccName
+            ? safeReciept.AccName
+            : (safeReciept.customerName ? safeReciept.customerName :
+            (safeReciept.concreteCustomerName ? safeReciept.concreteCustomerName : safeReciept.truckCustomerName))}}
+          </div>
+          <div class="infoCard text-center mx-auto textBold py-3"
+            [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"
+            style="width: 80%; font-size: larger;">
+            {{valsRemain.otherValRemain | number:'1.0-2'}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

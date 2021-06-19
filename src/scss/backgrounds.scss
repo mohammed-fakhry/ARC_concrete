@@ -1,0 +1,223 @@
+@import "varibals.scss";
+
+.mainBg {
+  background-color: $mainBackground;
+}
+
+.darkBg {
+  background-color: $darkBg;
+  color: white;
+}
+
+.primaryBg {
+  background-color: $primaryBg;
+  color: white;
+}
+
+.lightGray-bg {
+  background-color: whitesmoke;
+}
+
+.lightBg {
+  //color: black;
+  background-color: $lightBg;
+}
+
+.secondaryBg {
+  color: white;
+  background-color: $secondaryBg;
+}
+
+.successBg {
+  background-color: $success;
+  color: black;
+}
+
+.whiteBg {
+  background-color: white;
+}
+
+.smokeBg {
+  //color: black;
+  background-color: rgb(228, 228, 228);
+}
+
+.darkGrayBg {
+  background-color: rgb(190, 190, 190);
+  color: black;
+}
+
+.blueBg {
+  background-color: $blue;
+}
+
+.yellowBg {
+  background-color: $Yellow;
+}
+
+.greenBg {
+  background-color: $Green;
+}
+
+.purpleBg {
+  background-color: $Purple;
+}
+
+.orangeBg {
+  background-color: $Orange;
+}
+
+.hintBg {
+  background-color: #1d6bacb4;
+  color: white;
+}
+
+.dangerBg {
+  background-color: $dangerBg;
+  color: white;
+}
+
+.textSecondaryBg {
+  background-color: $textSecondaryBg;
+}
+
+.textDangerBg {
+ background-color: $textDangerBg;
+}
+
+.headerBlue {
+  color: $headerBlue;
+}
+
+.headerBlueBg {
+  background-color: $headerBlueBg;
+}
+
+.headerDeepBlue{
+  color: $headerDeepBlue;
+}
+
+.headerDeepBlueBg {
+  background-color: $headerDeepBlueBg;
+}
+
+.alertDanger {
+  background-color: $alertBg;
+}
+
+.headerPink {
+  color: $headerPink;
+}
+
+.headerPinkBg {
+  background-color: $headerPinkBg;
+}
+
+.headerBrown {
+  color: $headerBrown;
+}
+
+.headerBrownBg {
+  background-color: $headerBrownBg;
+}
+
+.badge {
+  border-radius: $boxRadios;
+  display: inline-block;
+  font-size: 13px;
+  min-width: 75px;
+  padding: 4px 12px;
+  text-align: center;
+}
+
+.secondaryBadge {
+  color: $secondaryBg;
+  background-color: $textSecondaryBg;
+}
+
+.borderLsecondary {
+  border-right: 5px solid $secondaryBg;
+  padding-right: 1rem;
+}
+
+.borderLblue {
+  border-right: 5px solid $primaryBg;
+  padding-right: 1rem;
+}
+
+.borderLdanger {
+  border-right: 5px solid $dangerBg;
+  padding-right: 1rem;
+}
+
+.borderLdark {
+  border-right: 5px solid $darkBg;
+  padding-right: 1rem;
+}
+
+.borderLgreen {
+  border-right: 5px solid $greenBadge;
+  padding-right: 1rem;
+}
+
+/* .borderLsecondary-td {
+  border-right: 1px solid $secondaryBg;
+  padding-right: 1rem;
+}
+
+.borderLblue-td {
+  border-right: 1px solid $primaryBg;
+  padding-right: 1rem;
+}
+
+.borderLdanger-td {
+  border-right: 1px solid $dangerBg;
+  padding-right: 1rem;
+}
+
+.borderLdark-td {
+  border-right: 1px solid $darkBg;
+  padding-right: 1rem;
+}
+
+.borderLgreen-td {
+  border-right: 1px solid $greenBadge;
+  padding-right: 1rem;
+} */
+
+.blueBadge {
+  color: $primaryBg;
+  background-color: $textPrimaryBg;
+}
+
+.lightBlueBadge {
+  color: $blue;
+  background-color: $blueBadgeBg;
+}
+
+.darkBadge {
+  color: $darkBg;
+  background-color: $textDarkBg;
+}
+
+.greenBadge {
+  color: $greenBadge;
+  background-color: $greenBadgeBg;
+}
+
+.yellowBadge {
+  color: $yellowBadge;
+  background-color: $yellowBadgeBg;
+}
+
+.dangerBadge {
+  color: $dangerBadge;
+  background-color: $dangerBadgeBg;
+}
+
+.dangerRate {
+  //background-color: $dangerBg;
+  color: $dangerBg;
+  border-right: solid 2px $dangerBg;
+  font-weight: bolder;
+}

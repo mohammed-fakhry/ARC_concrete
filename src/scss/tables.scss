@@ -1,0 +1,454 @@
+.tableBody {
+  overflow-y: auto;
+  height: 450px;
+}
+
+// scrolltable
+.box,
+.mat-expansion-panel-body {
+  .panel-body {
+    height: 820px;
+    padding: 0px;
+    @media (max-width: $maxMediam) {
+      /* overflow-x: scroll !important; */
+      height: 100% !important;
+    }
+    table.flex-table {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      /* .navHeader {
+        position: sticky;
+        top: 57px;
+      } */
+      thead,
+      tbody {
+        display: block;
+      }
+      thead {
+        //margin to align correctly to scrollbar in table body
+        margin-right: 0px;
+      }
+      tbody {
+        flex: 1; //variable height
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-bottom: 15px;
+        .btn-outline-danger:hover {
+          background-color: $dangerBg !important;
+        }
+        .tBtn-dark:not(:disabled):not(.disabled):hover {
+          background-color: #1d6bacb4; //144d7bb4;
+          color: white;
+          border: none;
+        }
+        .tBtn-dark :disabled {
+          background-color: whitesmoke;
+          color: black;
+        }
+      }
+      tr {
+        width: 100%;
+        display: flex;
+        td,
+        th {
+          display: block;
+          padding: 5px;
+          flex: 1;
+          text-align: center;
+          align-items: center;
+          height: 100% !important;
+          @media (max-width: $maxMediam) {
+            height: 100% !important;
+            //flex: none!important;
+          }
+        }
+        th {
+          height: fit-content; //35px;
+          border: none;
+        }
+        /* td {
+          border-top: 1px solid rgba(128, 128, 128, 0.20);
+        } */
+      }
+    }
+
+    table.flex-widths {
+      &.flex-table-aligned {
+        thead > tr {
+          overflow-y: scroll;
+          // overflow-x: hidden;
+        }
+      }
+      tr {
+        td,
+        th {
+          &:nth-child(2) {
+            flex: 3;
+          }
+          &:nth-child(4) {
+            flex: 2;
+          }
+        }
+      }
+    }
+  }
+}
+
+.table-sm th {
+  padding: 10px 5px;
+}
+
+.tableWithHeader {
+  height: 740px;
+}
+
+.rowTableCard {
+  padding-top: 10px;
+  color: black;
+  background-color: #f1f1f1; //rgb(228, 228, 228); //f8f9fa
+  border-radius: 5px;
+  box-shadow: $shadow;
+}
+
+.standTable {
+  height: 100% !important;
+}
+
+.inpTable {
+  /* height: 100% !important; */
+
+  tbody tr {
+    height: fit-content !important;
+  }
+
+  thead {
+    /* tr {
+      border-bottom: 1px solid $secondaryBg;
+    } */
+    th:not(.thCenter) {
+      padding-right: 1rem !important;
+    }
+    th:not(.primaryBg) {
+      color: $primaryBg;
+    }
+  }
+
+  td {
+    //border: none !important;
+    height: fit-content !important;
+  }
+  tbody {
+    scrollbar-width: thin;
+    overflow: auto !important;
+    scrollbar-color: $secondaryBg whitesmoke;
+    //height: fit-content !important;
+  }
+}
+
+.invoiceTable {
+  thead: {
+    border-top: solid 2px $primaryBg;
+  }
+}
+
+.tableBody::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+
+.tableBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tableBody::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 2px solid whitesmoke;
+  border-radius: 5px;
+}
+
+.tBtn-dark:not(:disabled):not(.disabled):not(:active):hover {
+  border-radius: 2px;
+  background-color: $headerDeepBlue; //#1d6cace0; //#1d6bacb4;
+  color: white;
+  border: none;
+}
+
+.tBtn-dark:disabled {
+  background-color: whitesmoke;
+  color: black;
+}
+
+.tBtn-dark:active {
+  background-color: $secondaryBg;
+  color: white;
+  font-size: small;
+}
+
+.tBtn-danger:hover {
+  background-color: $dangerBg;
+  color: white;
+  // font-size: small;
+}
+
+.tBtn-danger:active {
+  background-color: $secondaryBg;
+  color: white;
+  font-size: small;
+}
+
+.hintBtn {
+  //background-color: #1d6bacb4;
+  background-color: #1d6bacb4;
+  color: white;
+  font-weight: bold;
+}
+
+.hintBtn:hover {
+  color: white;
+  background-color: $primaryBg;
+}
+
+.trImg {
+  height: 30px;
+  // border-radius: 50%;
+  box-shadow: $elevationZ;
+}
+
+/* hintBtn:disabled {
+  background-color: whitesmoke;
+  color: black;
+} */
+
+tbody:not(.inpTable) {
+  tr:not(.noHover):hover {
+    background-color: rgba(0, 0, 0, 0.075);
+  }
+}
+
+/* material Table */
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding: 8px !important;
+  padding-right: 1rem !important;
+}
+
+.mat-header-cell:not(.headerPink) {
+  color: white !important;
+}
+
+tr.mat-header-row {
+  height: fit-content !important;
+  padding: 10px !important;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.example-container::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+.example-container {
+  scrollbar-width: thin;
+  overflow: auto !important;
+  scrollbar-color: $secondaryBg whitesmoke;
+}
+.example-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.example-container::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 2px solid whitesmoke;
+  border-radius: 5px;
+}
+
+.mat-paginator {
+  direction: ltr !important;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+.tdBorder_left {
+  border-left: solid 1px rgba(0, 0, 0, 0.12) !important;
+}
+
+.tdBorder_right {
+  border-right: solid 1px rgba(0, 0, 0, 0.12);
+}
+
+.tdborder_top {
+  border-top: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+.tdBorder {
+  border-left: solid 1px rgba(0, 0, 0, 0.12);
+  border-right: solid 1px rgba(0, 0, 0, 0.12);
+}
+
+.theadBorderPrimary {
+  thead {
+    border-top: solid 2px $primaryBg;
+  }
+}
+
+tr {
+  .theadBorderPrimary {
+    border-top: solid 2px $primaryBg;
+  }
+}
+
+.theadBorderDanger {
+  thead {
+    border-top: solid 2px $dangerBg;
+  }
+}
+
+.invoiceTable {
+  thead {
+    padding-top: 0.75rem;
+    // padding-bottom: .75rem;
+  }
+
+  tr {
+    th:not(.thCenter) {
+      text-align: right !important;
+    }
+  }
+
+  th:not(.primaryBg) {
+    color: $primaryBg;
+    font-weight: bold;
+  }
+  .mat-form-field,
+  .mat-form-field-infix {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-top: none !important;
+    border-top-width: 0;
+    border-top-style: none !important;
+    border-top-color: transparent;
+  }
+}
+
+.form-control:disabled {
+  background-color: $lightBg;
+}
+/* Ready Table
+<div class="box mt-3">
+    <div class="panel-body panel-flex-table">
+        <table class="flex-table table table-hover">
+            <thead class="navHeader">
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="tableBody">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+*/
+
+/* listTable
+  <div class="box stickyBox">
+
+    <div class="d-flex justify-content-between px-3">
+
+      <mat-form-field class="searchForm" style="width: 400px;">
+        <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+      </mat-form-field>
+      <div class="my-auto">
+        <button mat-stroked-button color="primary" routerLink="/AddConcreteBon" matTooltip="اضافة بون خرسانة">
+          <i class="fa fa-plus fa-lg pt-1 textBold"></i></button>
+      </div>
+    </div>
+
+    <!-- table class="textBtn tBtn-dark pl-2" -->
+    <div class="example-container">
+
+      <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+          <td mat-cell *matCellDef="let row">{{row.date}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+          <td mat-cell *matCellDef="let row"
+          [class.marked]="row.name.includes(searchTxt) && searchTxt">
+            {{row.name}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+        </tr>
+
+      </table>
+    </div>
+
+    <!-- paginator -->
+    <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+      [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+    </mat-paginator>
+
+  </div>
+</div>
+
+
+*/

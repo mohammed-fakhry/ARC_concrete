@@ -1,0 +1,104 @@
+.textPrimary {
+  color: $primaryBg;
+}
+
+.textSecondary {
+  color: $secondaryBg;
+}
+
+.textDanger {
+  color: $dangerBg;
+}
+
+.textAlert {
+  color: $textAlert;
+}
+
+.textDark {
+  color: $darkBg;
+}
+
+.textBlue {
+  color: $blue;
+};
+
+.textYellow {
+  color: $Yellow;
+};
+
+.textGreen {
+  color: $Green;
+};
+
+.textPurple {
+  color: $Purple;
+};
+
+.textOrange {
+  color: $Orange;
+};
+
+.cardHeader {
+  color: $primaryBg;
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.cardHeader_danger {
+  color: $dangerBg;
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.textLarge {
+  font-size: 1.3rem !important;
+  font-weight: bold !important;
+}
+
+.textSmall {
+  font-size: small;
+}
+
+.textBold {
+  font-weight: bold;
+}
+
+.textBolder {
+  font-weight: bolder;
+};
+
+.line-through {
+  text-decoration: line-through;
+};
+
+.underLine {
+  text-decoration: underline;
+  text-underline-position: under;
+  -webkit-text-underline-position: under;
+  -ms-text-underline-position: below;
+}
+
+.form-control:hover:enabled {
+  box-shadow: $elevationZ;
+  border-right: 5px solid $secondaryBg;
+}
+
+/* .form-control:focus:enabled {
+  box-sizing: border-box;
+  box-shadow: $elevationZ;
+  // border-radius: $boxRadios;
+  border-top: 1px solid $secondaryBg;
+  border-bottom: 1px solid $secondaryBg;
+  border-left: 2px solid $secondaryBg;
+  border-right: 2px solid $secondaryBg;
+} */
+
+.form-control:focus {
+  box-sizing: border-box;
+  box-shadow: $elvationZ_big;
+  // border-radius: $boxRadios;
+  /* border-top: 1px solid $secondaryBg;
+  border-bottom: 1px solid $secondaryBg; */
+  border-left: 1rem solid $secondaryBg;
+  border-right: 5px solid $secondaryBg;
+}

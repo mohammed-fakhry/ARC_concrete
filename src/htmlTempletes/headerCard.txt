@@ -1,0 +1,31 @@
+<mat-card class="box headerBox">
+  <mat-card-header>
+    <div mat-card-avatar class="ml-4">
+      <span class="dash-widget-icon textBtn">
+        <i class="fa fa-user iconBtn textSecondary textSecondaryBg"></i>
+      </span>
+    </div>
+    <mat-card-title class="textSecondary">
+      <!-- {{customerInfo.customerName}} -->
+    </mat-card-title>
+    <mat-card-subtitle>
+      <h3 class="homeSubtitle">
+        <!-- {{customerInfo.information}} -->
+      </h3>
+      <!-- <button [disabled]="isFiltered" mat-raised-button color="accent"
+        (click)="filterList('filterUncomplete')"></button> -->
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <h4 class="homeSubtitle textSecondary">
+      <!-- {{customerInfo.customerAdd}} -->
+    </h4>
+  </mat-card-content>
+  <mat-card-actions>
+    <!-- <button *ngIf="customerInfo.uncompletedCond > 0" [disabled]="isFiltered" mat-raised-button color="warn"
+      (click)="filterList('filterUncomplete')">
+      تحديث البيانات
+    </button>
+    <button mat-button routerLink="/CustomerList">العملاء</button> -->
+  </mat-card-actions>
+</mat-card>

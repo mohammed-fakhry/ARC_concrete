@@ -1,0 +1,72 @@
+// shadow
+$shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+$leftShadow: -1em 0 0.4em black;
+$elevationZ: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  0 1px 5px 0 rgba(0, 0, 0, 0.12);
+$elvationZ_big: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+  0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12);
+
+// backGround Colors
+$lightBg: rgba(195, 195, 195, 0.2);
+$primaryBg: #0049be;
+$secondaryBg: #5a73f3;
+$darkBg: #00238d;
+$infoBg: rgb(2, 107, 121);
+$dangerBg: #e0455fe3; //e0455fe3
+$textAlert: #721c24;
+$alertBg: #f8d7da;
+$success: #e0ece4;
+$boxBg: rgb(238, 238, 238);//rgba(245,245,245,1);
+$mainBackground: rgb(245, 245, 245); //#e7e5e5;//rgb(245, 245, 245);//#f5f5f5; //rgba(27,26,24,1);
+
+// circleCardColors
+$headerBlue: #2ec5fb; //42cdff
+$headerBlueBg: #c5eefd; //d1f3ff
+
+$headerDeepBlue: rgba(54, 162, 235, 1);
+$headerDeepBlueBg: rgba(54, 162, 235, 0.35);
+
+$textPrimaryBg: #0049be36;
+$textSecondaryBg: #5a73f329;
+$textDangerBg: #e0455f4f;
+$textDarkBg: #00238d44;
+
+$headerPink: #c952ce;
+$headerPinkBg: #ebadebab;
+
+$headerBrown: #8f6600;
+$headerBrownBg: #f8e5b6;//ffeec3
+
+// padges
+$greenBadge: #26af48 !important;
+$greenBadgeBg : rgba(15, 183, 107, 0.12) !important;
+
+$blueBadge: #1db9aa !important;
+$blueBadgeBg: rgba(2, 182, 179, 0.12) !important;
+
+$yellowBadge: #f39c12 !important;
+$yellowBadgeBg: rgba(255, 152, 0, 0.12) !important;
+
+$dangerBadge: #e63c3c !important; // e63c3c
+$dangerBadgeBg: rgba(242, 17, 54, 0.12) !important;
+
+// chartColors
+$red: rgba(255, 99, 132, 1);
+$blue: #1d6bacb4;
+$Yellow: rgba(255, 206, 86, 1);
+$Green: rgba(75, 192, 192, 1);
+$Purple: rgba(153, 102, 255, 1);
+$Orange: rgba(255, 159, 64, 1);
+// position
+$onTheTop: 99999999999999;
+
+//borders 0px 0px 30px 10px/0px 30px 2px 10px;
+$bottomBorderRadios: 0px 0px 0px 15px/15px 30px 10px 10px;
+$boxRadios: 0% 1% / 1% 60%;
+$boxInpRadios: 10% 1% 10% 0.5% / 15% 60% 15% 60%;
+$blobRadios: 69% 31% 30% 70% / 46% 80% 20% 54%;
+/* 35% 20% / 10% 5% */
+
+// Width
+$maxMediam: 992px;
+$scrollBarWidth: 8px;

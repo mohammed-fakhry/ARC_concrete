@@ -1,0 +1,227 @@
+<div class="container">
+  <form (ngSubmit)="onSubmit(addUserForm)" #addUserForm="ngForm">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="px-2">
+          <div id="userImg">
+            <img id="profilPic" src="assets/usersPics/{{user.userPic}}" onerror="this.src =
+            'assets/usersPics/defultpersonImg.jpg'" class="blob boxShadow">
+          </div>
+          <div class="d-flex justify-content-between pt-3">
+
+            <div class="custom-file" style="width: 100px;">
+              <label class="custom-file-label">اختيار</label>
+              <input type="file" class="custom-file-input" (change)="onFileSelect($event)">
+            </div>
+
+            <h3 class="textDark textBold text-center">{{user?.realName}}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 mb-3">
+        <div class="box p-4">
+
+          <h3 class="cardHeader mb-3">بيانات المستخدم</h3>
+          <table class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>اسم الموظف</mat-label>
+                  <input matInput required name="realName" [(ngModel)]="user.realName">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>اسم تسجيل الدخول</mat-label>
+                  <input required matInput name="name" [(ngModel)]="user.name">
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+          <mat-divider class="mt-4 mb-3"></mat-divider>
+
+          <h3 class="cardHeader mb-3">بيانات كلمة السر</h3>
+          <table class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>الرقم السرى</mat-label>
+                  <input required type="password" matInput name="auth" [(ngModel)]="user.auth">
+                  <mat-error>
+                    الرقم السرى غير مطابق
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>تأكيد الرقم السرى</mat-label>
+                  <input required type="password" matInput name="reAuth" [(ngModel)]="reAuth">
+                  <mat-error>
+                    الرقم السرى غير مطابق
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-- <div class="col-md-12">
+        <div class="box box p-4">
+          <h3 class="cardHeader mb-4">بيانات كلمة السر</h3>
+          <table class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>الرقم السرى</mat-label>
+                  <input required type="password" matInput name="auth" [(ngModel)]="user.auth">
+                  <mat-error>
+                    الرقم السرى غير مطابق
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>تأكيد الرقم السرى</mat-label>
+                  <input required type="password" matInput name="reAuth" [(ngModel)]="reAuth">
+                  <mat-error>
+                    الرقم السرى غير مطابق
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div> -->
+
+    </div>
+
+
+    <div class="mt-3">
+      <h3 class="cardHeader mb-4">صلاحيات المستخدم</h3>
+      <div class="row">
+        <div class="col">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th>العمليات الاساسية</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td>صلاحيات الوصول</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="prem" [(ngModel)]="user.prem" color="primary"
+                      (ngModelChange)="checkStatu()">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+                <tr class="textBold textPrimary">
+                  <td>تعديل</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="edi" [(ngModel)]="user.edi" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+                <tr class="textBold dangerBadge">
+                  <td>حذف</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="del" [(ngModel)]="user.del" color="warn">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th>البيانات</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td>العاملين</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="workers" [(ngModel)]="user.workers" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+                <!-- <tr class="textBold textPrimary">
+                  <td>العملاء</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="clients" [(ngModel)]="user.clients" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr> -->
+
+                <tr class="textBold dangerBadge">
+                  <td>تعديل بعد صلاحية التاريخ</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="expEdi" [(ngModel)]="user.expEdi" color="warn">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+
+                <tr class="textBold dangerBadge">
+                  <td>صلاحيات المدير</td>
+                  <td class="text-center ">
+                    <mat-slide-toggle name="unites" [(ngModel)]="user.unites" color="warn">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th>الحسابات</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td>المخازن</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="stockes" [(ngModel)]="user.stockes" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+                <tr class="textBold textPrimary">
+                  <td>الخزنة</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="safes" [(ngModel)]="user.safes" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+                <tr class="textBold textPrimary">
+                  <td>موردين / مستهلكين</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="customers" [(ngModel)]="user.customers" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <mat-divider class="mt-3"></mat-divider>
+      <div class="form-inline">
+        <button mat-flat-button color="primary" class="mt-3" type="submit">{{submitBtn.val}}</button>
+        <div *ngIf="!formValid" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
+      </div>
+    </div>
+  </form>
+</div>

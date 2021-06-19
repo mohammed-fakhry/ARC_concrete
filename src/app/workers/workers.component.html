@@ -1,0 +1,68 @@
+<div class="mainContainer">
+  <div class="box">
+      <div class="mat-elevation-z0 mt-3">
+          <div class="d-flex justify-content-between px-3">
+              <mat-form-field class="searchForm" style="width: 500px;">
+                  <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt'
+                      (ngModelChange)="search()">
+              </mat-form-field>
+              <div>
+                  <button mat-stroked-button color="primary" disabled>اضافة موظف</button>
+              </div>
+          </div>
+          <div class="example-container">
+              <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+                  <ng-container matColumnDef="workerId">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerId}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+                      <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2"
+                          routerLink="/WorkerInformation/{{row.workerId}}">
+                          {{row.workerName}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerTell">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الهاتف</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerTell}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerAdd">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>العنوان</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerAdd}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerJopCateg">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الادارة</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerJopCateg}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerJop">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الوظيفة</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerJop}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerCheckIN">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>حضور</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerCheckIN}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="workerCheckOut">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>انصراف</th>
+                      <td mat-cell *matCellDef="let row">{{row.workerCheckOut}}</td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+                  </tr>
+              </table>
+          </div>
+          <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+              [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+          </mat-paginator>
+      </div>
+  </div>
+</div>

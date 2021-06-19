@@ -1,0 +1,12 @@
+@import "../../../scss/varibals.scss";
+
+#userImg {
+  max-height: 260px;
+  position: relative;
+}
+
+img {
+  height: auto;
+  max-height: 250px;
+  border-radius: $boxRadios;
+}

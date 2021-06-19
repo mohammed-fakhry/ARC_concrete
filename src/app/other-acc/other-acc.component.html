@@ -1,0 +1,81 @@
+<div class="mainContainer">
+
+  <div class="row">
+    <div class="col-lg-5 col-md-12 mb-3">
+      <div class="box">
+        <div class="mat-elevation-z0 mt-3">
+
+          <!-- header -->
+          <div class="d-flex justify-content-between px-3">
+            <mat-form-field class="searchForm" style="width: 500px;">
+              <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+            </mat-form-field>
+            <div class="my-auto">
+              <a mat-flat-button color="accent" routerLink="/AddOtherAcc" matTooltipPosition="above"
+                matTooltip="اضافة حساب">
+                <i class="fa fa-plus fa-lg pt-1 textBold"></i>
+              </a>
+            </div>
+          </div>
+          <!-- table -->
+          <div class="example-container">
+            <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+              <ng-container matColumnDef="accId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
+                <td mat-cell *matCellDef="let row">{{row.accId}}</td>
+              </ng-container><!--  -->
+
+              <ng-container matColumnDef="AccName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الحساب</th>
+                <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentAccVal < 0"
+                  class="textBtn tBtn-dark pl-2" routerLink="/OtherAccInformation/{{row.accId}}">
+                  {{row.AccName}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="currentAccVal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>قيمة الحساب</th>
+                <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentAccVal < 0">
+                  {{row.currentAccVal | number: "1.0-2"}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                  style="text-align: right; font-size: medium;">
+                  تعديل</th>
+                <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue " *matCellDef="let row"
+                  routerLink="/AddOtherAcc/{{row.accId}}"><i class="fa fa-pencil underLine"></i></td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+              </tr>
+            </table>
+          </div>
+
+          <!-- paginator -->
+          <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+            [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+          </mat-paginator>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7 col-md-12 mb-3">
+      <mat-card class="box">
+        <mat-card-header>
+          <mat-card-title>المصاريف</mat-card-title>
+          <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
+          <!-- <div class="mr-5">
+            <button mat-raised-button color="accent" routerLink="/otherAcc">المزيد</button>
+          </div> -->
+        </mat-card-header>
+        <mat-card-content>
+          <canvas id="pieChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+</div>

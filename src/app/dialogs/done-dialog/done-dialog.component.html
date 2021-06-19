@@ -1,0 +1,22 @@
+<h2 mat-dialog-title class="cardHeader">{{data.header}}</h2>
+<mat-dialog-content class="p-2">
+  <div class="panel-body panel-flex-table standTable">
+    <table class="flex-table table">
+      <tbody class="tableBody">
+        <tr>
+          <td>{{data.info}}</td>
+        </tr>
+        <tr *ngFor="let desc of data.discription">
+          <td>{{desc}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="mb-1">
+  <button mat-raised-button color="accent" mat-dialog-close mat-dialog-close="addNew">{{data.btns.addNew}}</button>
+  <button mat-stroked-button color="primary" mat-dialog-close mat-dialog-close="goHome">{{data.btns.goHome}}</button>
+  <button mat-stroked-button color="primary" mat-dialog-close mat-dialog-close="back">
+    <div class="my-auto"><i class="fa fa-chevron-right"></i></div>
+  </button>
+</mat-dialog-actions>

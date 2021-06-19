@@ -1,0 +1,50 @@
+<mat-dialog-content>
+  <form #modalForm="ngForm">
+    <mat-form-field class="mt-3 fullWidth">
+      <input matInput required placeholder="نقدية" name="cashRecived" type="number" #cashRecived [(ngModel)]="cashVal"
+        autocomplete="off" (ngModelChange)="calcCash(modalForm)">
+      <mat-error *ngIf="!modalForm.valid">
+        النقدية اقل من قيمة الفاتورة
+      </mat-error>
+    </mat-form-field>
+
+    <mat-divider class="my-3"></mat-divider>
+    <div class="mb-3">
+      <table>
+        <tr>
+          <td class="primaryBg">
+            <div class="textBold py-2 px-5">
+              {{data}}
+            </div>
+          </td>
+          <th>
+            <div class="textBold p-2">
+              اجمالى البون
+            </div>
+          </th>
+        </tr>
+
+        <tr>
+          <td [ngClass]="remainCash < 0 ? 'dangerBg' : 'secondaryBg'">
+            <div class="textBold p-2 px-5">
+              {{remainCash}}
+            </div>
+          </td>
+          <th>
+            <div class="textBold p-2">
+              متبقى
+            </div>
+          </th>
+        </tr>
+      </table>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mx-2">
+  <button [disabled]="!modalForm.valid" mat-flat-button color="primary" type="submit" mat-dialog-close
+    [mat-dialog-close]="modalForm.valid">
+    تسجيل
+  </button>
+</mat-dialog-actions>

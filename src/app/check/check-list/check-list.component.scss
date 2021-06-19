@@ -1,0 +1,15 @@
+@import "../../../scss/varibals.scss";
+
+#onUsTable {
+  th {
+    color: $textAlert;
+  }
+}
+
+.rowContainer {
+  transition: 350ms;
+}
+
+.example-container {
+  max-height: 700px;
+}

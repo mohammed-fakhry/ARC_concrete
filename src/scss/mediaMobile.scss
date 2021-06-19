@@ -1,0 +1,128 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    padding-top: 90px !important;
+    height: 100% !important;
+  }
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody {
+    height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 768px) {
+  mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    padding-top: 90px !important;
+    height: 100% !important;
+  }
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody {
+    height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 990px) {
+  /* mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    height: 100% !important;
+  } */
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody {
+    height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+/* @media only screen and (min-width: 992px) {
+  mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    // margin-top: 0 !important;
+    height: 100% !important;
+  }
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody {
+    height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} */
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+/* @media only screen and (min-width: 1200px) {
+  mat-sidenav-container {
+    // Remove background color to save toner
+    background-color: transparent !important;
+    position: relative !important;
+    // margin-top: 0 !important;
+    height: 100% !important;
+  }
+
+  .panel-body,
+  .inpTableBody,
+  .tableBody {
+    height: 100% !important;
+    overflow-y: hidden !important;
+  }
+
+  .example-container {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} */

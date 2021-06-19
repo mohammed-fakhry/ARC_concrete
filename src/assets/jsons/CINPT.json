@@ -1,0 +1,16 @@
+{
+  "stockTransaction": {
+    "stockTransactionId": null,
+    "invNumber": null,
+    "stockId": 11,
+    "stockName": "سيف المحل",
+    "sndStockId": null,
+    "customerId" : 42,
+    "customerName" : "كاشير المحل - حسام",
+    "transactionType" : "فاتورة بيع",
+    "invoiceTotal": 0,
+    "date_time": "",
+    "notes": "",
+    "uncompleted": ""
+  }
+}

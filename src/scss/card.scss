@@ -1,0 +1,351 @@
+.infoCard {
+  padding: 0.25rem 1rem;
+  border-radius: $boxRadios;
+}
+
+.doneInfo {
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: rgb(245, 245, 245);
+  border: rgb(226, 226, 226) solid 1px;
+}
+
+.dangerAlert {
+  background-color: $dangerBg;
+  color: white;
+  width: fit-content;
+  padding: 0.25rem 1rem;
+  border-radius: $boxRadios;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.box {
+  // box-shadow: $elevationZ;
+  background-color: $boxBg;
+  z-index: 1;
+  position: relative;
+  padding-bottom: 0.5rem;
+  .form-control:not(.lightBg) {
+    background-color: $boxBg;
+  }
+}
+
+.activeBox {
+  background-color: #1d6cac1c;
+  box-shadow: $elevationZ;
+}
+
+.boxRadios {
+  border-radius: $boxRadios;
+}
+
+mat-card {
+  z-index: 1;
+  position: relative;
+}
+
+.Zindex_one {
+  position: relative;
+  z-index: 1;
+}
+
+.box:not(.inpCard) {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  display: flex;
+  flex-direction: column;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
+  transition: 0.3s;
+  border-radius: $boxRadios;
+}
+
+.box:not(.inpCard) {
+  // border-top: solid 2px $primaryBg;
+  padding-top: 0.5rem;
+  overflow-x: visible;
+}
+
+.box:not(.noAfter):before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($darkBg, $boxBg);
+  clip-path: circle(50% at right 50%);
+  opacity: 0.025;
+  z-index: -1;
+}
+
+
+// defult box border
+.box:not(.borderRight-alert):not(.primaryBorder):not(.inpCard):not(.borderRight-alert-light):not(.noBorder) {
+  border-right: 3px solid $secondaryBg;
+  // padding-right: -20px;
+}
+
+.blob {
+  max-width: 250px;
+  border-radius: $blobRadios !important;
+  transition: 200ms;
+}
+
+.boxBg {
+  background-color: $boxBg;
+}
+
+.whiteBox {
+  background-color: #ffffff;
+}
+
+.primaryBorder {
+  border-top: 2px solid $primaryBg;
+  border-bottom: 1px solid $primaryBg;
+  border-left: 1px solid $primaryBg;
+  border-right: 1px solid $primaryBg;
+  border-radius: 5px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.box:not(.whiteBox):not(.noHover):not(.activeBox):hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.headerBox {
+  box-shadow: $elevationZ;
+}
+
+mat-card:hover {
+  box-shadow: $elvationZ_big;
+  z-index: 1;
+}
+
+.cardCircle {
+  background-color: #ffffffd7;
+}
+
+.cardCircle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($darkBg, $primaryBg);
+  clip-path: circle(50% at right 50%);
+  opacity: 0.025;
+  z-index: -1;
+}
+
+.cardCircle-sm::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($darkBg, $primaryBg);
+  clip-path: circle(50% at right 50%);
+  opacity: 0.025;
+  z-index: -1;
+}
+
+.cardCircle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($secondaryBg, $primaryBg);
+  clip-path: circle(25% at 1% 3%);
+  opacity: 0.1;
+  z-index: 2;
+}
+
+.cardCircle-sm::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($secondaryBg, $primaryBg);
+  clip-path: circle(25% at 1% 3%);
+  opacity: 0.1;
+  z-index: 2;
+}
+
+.dash-widget-icon {
+  align-items: center;
+  border-radius: $blobRadios;
+  color: #fff;
+  display: inline-flex;
+  font-size: 1.875rem;
+  height: 4rem;
+  justify-content: center;
+  text-align: center;
+  width: 4rem;
+}
+
+.dash-widget-small {
+  align-items: center;
+  border-radius: $blobRadios;
+  color: #fff;
+  display: inline-flex;
+  font-size: 1.5rem;
+  height: 3rem;
+  justify-content: center;
+  text-align: center;
+  width: 3rem;
+}
+
+.homeSubtitle {
+  font-weight: bolder !important;
+  font-size: 1.4rem !important;
+}
+
+.stickyBox {
+  position: sticky;
+  margin-bottom: 20px;
+  z-index: 2;
+  // box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.stickyBox:not(.stickyToNav) {
+  top: 1rem;
+}
+
+.stickyToNav {
+  top: 0;
+}
+
+.boxShadow {
+  box-shadow: $elevationZ;
+}
+
+.bigShadow {
+  box-shadow: $elvationZ_big;
+}
+
+.fixedRow {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+}
+
+.scaled {
+  transform: scale(1.1); /* Equal to scaleX(0.7) scaleY(0.7) */
+}
+
+/* .whiteBox:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+} */
+
+.borderRight-alert {
+  border-right: 5px solid $dangerBg;
+  padding-right: 1rem;
+}
+
+.borderRight-alert-light {
+  border-right: 5px solid $alertBg;
+}
+
+.borderRight-success {
+  border-right: 5px solid $Green;
+  padding-right: 1rem;
+}
+
+.borderLeft-alert {
+  border-left: 5px solid $dangerBg;
+  padding-left: 1rem;
+}
+
+.borderTop-alert {
+  border-top: 3px solid $dangerBg;
+}
+
+.borderTop-primary {
+  border-top: 1px solid $primaryBg;
+}
+
+.borderRight-primary {
+  border-right: 5px solid $primaryBg;
+  padding-right: 1rem;
+}
+
+.borderRight-secondary {
+  border-right: 5px solid $secondaryBg;
+  padding-right: 1rem;
+}
+
+.borderYdanger {
+  border-top: solid 2px $dangerBg;
+  border-bottom: solid 1px $primaryBg;
+}
+
+.borderYprimary {
+  border-top: solid 2px $primaryBg;
+  border-bottom: solid 1px $primaryBg;
+}
+
+.borderAround {
+  padding-top: 0.5rem;
+  border-top: 2px solid #dee2e6;
+  border-bottom: 2px solid #dee2e6;
+  /* border-left: 1px solid $blue;
+  border-right: 1px solid $blue;*/
+  border-radius: 5px;
+}
+
+.borderAround-danger {
+  //border: 1px solid $dangerBg !important;
+  // border-left: 5px solid $dangerBg !important;
+  border-right: 0.5rem solid $dangerBg !important;
+  color: $dangerBg;
+}
+
+.around-danger {
+  border: 1px solid $dangerBg !important;
+  border-top: 2px solid $dangerBg !important;
+}
+
+mat-card-title {
+  color: $primaryBg;
+  font-weight: bold !important;
+}
+
+.marked {
+  color: $primaryBg;
+  font-weight: bolder;
+  text-decoration: underline;
+  text-underline-position: under;
+  -webkit-text-underline-position: under;
+  -ms-text-underline-position: below;
+}
+.calcMark {
+  background-color: #1d6bacb4; // #1d6cace0; //#3f51b5dc;
+  color: white;
+}
+
+.sideLogo {
+  height: auto;
+  max-width: 100%;
+}
+
+.logoShadow {
+  -webkit-filter: drop-shadow(5px 5px 5px rgba(34, 34, 34, 0.705));
+  filter: drop-shadow(5px 5px 5px rgba(34, 34, 34, 0.705));
+}
+
+.badgeBtn:hover {
+  box-shadow: $elevationZ;
+}

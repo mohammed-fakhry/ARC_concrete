@@ -1,0 +1,25 @@
+<mat-dialog-content>
+  <form #modalForm="ngForm">
+    <table class="fullWidth">
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="تبديل من" name="from" #from required [ngModel]="data.from" id="from">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="تبديل الى" name="to" #to required [ngModel]="data.to" id="to">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+</mat-dialog-content>
+<hr>
+<mat-dialog-actions class="mx-2">
+  <button [disabled]="!modalForm.valid" mat-flat-button color="warn" mat-dialog-close
+    [mat-dialog-close]="modalForm.value">اضافة مجموعة الاصناف</button>
+</mat-dialog-actions>

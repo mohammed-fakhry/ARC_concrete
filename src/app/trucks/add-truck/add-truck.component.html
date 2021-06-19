@@ -1,0 +1,110 @@
+<div class="container mt-3">
+  <div class="box p-4" [class.borderRight-alert]="truck.owner == 'سيارة خارجية'">
+    <form (ngSubmit)="onSubmit(addTruckForm)" #addTruckForm="ngForm">
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <div class="form-inline">
+            <mat-form-field style="padding-top: 3px;">
+              <mat-label>المالك</mat-label>
+              <mat-select required #owner name="owner" [(ngModel)]="truck.owner" (ngModelChange)="truckOwnerChanged()" id="owner">
+                <mat-option value="سيارة الشركة">
+                  سيارة الشركة
+                </mat-option>
+                <mat-option value="سيارة خارجية">
+                  سيارة خارجية
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="mr-3" style="padding-top: 3px;">
+              <mat-label>نوع السيارة</mat-label>
+              <mat-select required #truckType name="truckType" [(ngModel)]="truck.truckType" id="truckType"
+                (ngModelChange)="truckTypeChanged()">
+                <mat-option value="سيارة">
+                  سيارة
+                </mat-option>
+                <mat-option value="لودر">
+                  لودر
+                </mat-option>
+                <mat-option value="حفار">
+                  حفار
+                </mat-option>
+                <mat-option value="هراس">
+                  هراس
+                </mat-option>
+                <mat-option value="خلاطة">
+                  خلاطة
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="truck.owner == 'سيارة خارجية'" class="mr-3 w-50">
+              <input matInput type="search" required list="customerList" class="mdb-autocomplete"
+                [(ngModel)]="truck.customerName" #customerName placeholder="اسم العميل" name="customerName"
+                autocomplete="off" (change)="customerNameChanged(addTruckForm)">
+              <mat-error *ngIf="!inputValid.customerName.cond">
+                {{inputValid.customerName.msg}}
+              </mat-error>
+              <datalist id="customerList">
+                <option *ngFor="let customer of customerList" value="{{customer.customerName}}">
+                </option>
+              </datalist>
+            </mat-form-field>
+          </div>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>الاسم</mat-label>
+              <input required matInput name="name" [(ngModel)]="truck.name" #name
+                (change)="isNameRecorded(addTruckForm)">
+              <mat-error *ngIf="!inputValid.name.cond">
+                {{inputValid.name.msg}}
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>اللوحات</mat-label>
+              <input matInput required name="number" [(ngModel)]="truck.number"
+                (change)="isNumberRecorded(addTruckForm)">
+              <mat-error *ngIf="!inputValid.number.cond">
+                {{inputValid.number.msg}}
+              </mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="pt-3">
+            <mat-form-field class="w-50 pl-1">
+              <mat-label>
+                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة') ? 'سعة التحميل بالمتر' : 'تشغيل بالساعة'}}
+              </mat-label>
+              <input [disabled]="truck.truckType != 'سيارة'" required matInput name="capacity" type="number"
+                [(ngModel)]="truck.capacity" #capacity>
+            </mat-form-field>
+            <mat-form-field class="w-50 pr-1">
+              <mat-label>
+                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة') ? 'سعر المتر' : 'سعر الساعة'}}
+              </mat-label>
+              <input required matInput name="metrPrice" type="number" [(ngModel)]="truck.metrPrice" #metrPrice>
+            </mat-form-field>
+          </td>
+          <td class="pt-3">
+            <mat-form-field class="example-full-width">
+              <mat-label>الماركة</mat-label>
+              <input matInput required name="model" [(ngModel)]="truck.model">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
+      <div class="form-inline">
+        <button mat-flat-button color="primary" class="mt-3" type="submit">{{submitBtn}}</button>
+        <div *ngIf="!formValid" class="dangerBadge borderLdanger p-2 mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

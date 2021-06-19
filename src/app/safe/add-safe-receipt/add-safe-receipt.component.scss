@@ -1,0 +1,18 @@
+@import "../../../scss/varibals.scss";
+
+#saferecieptVal {
+  transition: 200ms;
+  box-sizing: border-box;
+}
+
+#saferecieptVal:hover {
+  background-color: $primaryBg;
+  // border: solid 1px $secondaryBg;
+  color: white;
+  box-shadow: $elevationZ;
+  font-size: 1.05rem;
+}
+
+#saferecieptVal:active {
+  transform: scale(.90);
+}

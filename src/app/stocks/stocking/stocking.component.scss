@@ -1,0 +1,134 @@
+@import "../../../scss/varibals.scss";
+
+mat-sidenav-container {
+  //height: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+mat-sidenav,
+mat-sidenav-content {
+  margin-top: 50px;
+  height: calc(100% - 50px);
+  background-color: $mainBackground;
+}
+
+#mat-sidenav {
+  width: 80%;
+  height: 100%;
+  background-color: $mainBackground !important;
+  border: none;
+}
+
+#productsTable {
+  th:not(.thCenter) {
+    text-align: right;
+    background-color: $secondaryBg !important;
+    color: white !important;
+  }
+}
+
+/* .mat-expansion-panel-body {
+  padding-top: 0px;
+  padding-right: 5px !important;
+  padding-bottom: 16px;
+  padding-left: 5px !important;
+} */
+
+#reportRow {
+  max-height: 50vh;
+  overflow-y: none;
+}
+
+#stocksReports,
+#reportRow {
+  th:not(.dangerBg):not(.primaryBg) {
+    background-color: $lightBg !important;
+    //color: white !important;
+    margin-top: 0.15rem;
+  }
+}
+
+#reportRow::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+
+#reportRow::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#reportRow::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+}
+
+mat-sidenav-content::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+
+mat-sidenav-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+mat-sidenav-content::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+}
+
+// bubble effect
+mat-sidenav-content::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($darkBg, $dangerBg);
+  clip-path: circle(100% at right 90%);
+  opacity: 0.025;
+  z-index: 0;
+}
+
+mat-sidenav-content::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($secondaryBg, $primaryBg);
+  clip-path: circle(15% at 1% 3%);
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.bar1,
+.bar2,
+.bar3 {
+  width: 25px;
+  height: 2px;
+  background-color: $primaryBg;
+  margin: 6px 0 6px 0;
+  //transition: 0.5s;
+}
+
+.change .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+  transform: rotate(-45deg) translate(-9px, 6px);
+  background-color: $dangerBg;
+}
+
+.change .bar2 {
+  opacity: 0;
+}
+
+.change .bar3 {
+  -webkit-transform: rotate(45deg) translate(-8px, -8px);
+  transform: rotate(45deg) translate(-8px, -8px);
+  background-color: $dangerBg;
+}

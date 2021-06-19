@@ -1,0 +1,25 @@
+<mat-dialog-content class="py-2" style="height: 100%;">
+  <form #searchForm="ngForm" style="width: 500px;">
+    <input name="id" [(ngModel)]="searchVals.id" class="d-none">
+    <!-- input -->
+    <mat-form-field class="example-full-width">
+      <!-- searchVal -->
+      <input matInput placeholder="{{placeHolder}}" list="searchValsList" class="mdb-autocomplete"
+        [disabled]="_glopal.loading" name="searchVal" [(ngModel)]="searchVals.searchVal"
+        (ngModelChange)="searchVal(searchForm)" required>
+      <datalist id="searchValsList">
+        <option *ngFor="let val of searchList" value="{{val.searchVal}}">
+        </option>
+      </datalist>
+      <mat-error *ngIf="!searchValid">يجب اختيار بيانات صحيحة</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <!-- edit button "the defult button" | result => the id for search -->
+  <button [disabled]="!searchValid" mat-button color="primary" mat-dialog-close
+    [mat-dialog-close]="searchVals.id">{{btns.edit}}</button>
+  <!-- result => "newReciept" -->
+  <button [disabled]="_glopal.loading" [class.d-none]="btns.newBtnDisabled" mat-raised-button color="accent"
+    mat-dialog-close mat-dialog-close="newReciept">{{btns.new}}</button>
+</mat-dialog-actions>

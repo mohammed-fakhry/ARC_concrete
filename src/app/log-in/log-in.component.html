@@ -1,0 +1,47 @@
+<div class="mainContainer">
+  <div class="row fixedRow">
+    <div class="col-lg-4 col-md-6 col-sm-12" style="margin:auto">
+      <div class="p-1">
+        <div class="box py-2" [class.borderRight-alert]="!formData.valid.cond">
+          <form (ngSubmit)="goIn()" class="m-3">
+            <h3 class="textPrimary mb-3">تسجيل الدخول</h3>
+            <mat-form-field class="fullWidth">
+              <mat-label>اسم المستخدم</mat-label>
+              <input [disabled]="_glopal.loading" required matInput name="name" autocomplete="off"
+                [(ngModel)]="formData.val.uName" id="userName">
+            </mat-form-field>
+            <mat-form-field class="pt-2 fullWidth">
+              <mat-label>كلمة السر</mat-label>
+              <input [disabled]="_glopal.loading" required type="password" matInput name="uAuth"
+                [(ngModel)]="formData.val.uAuth">
+            </mat-form-field>
+            <div class="form-inline">
+              <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="my-auto" type="submit">سجل
+                دخولك</button>
+              <div *ngIf="!formData.valid.cond" class="infoCard dangerBadge borderLdanger mr-3 my-auto">
+                {{formData.valid.msg}}</div>
+            </div>
+            <div [class.d-none]="!_glopal.loading" style="width: 100%;" class="mt-3">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-lg-8 col-md-6 col-sm-12 m-auto">
+      <div class="pt-5" id="welcom">
+        <div class="pt-5 fade-in text-center" id="homeLogo">
+          <img src="assets/programLogo.png" alt="">
+          <a href="http://facebook.com/mohammed.fakhry">
+            <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">Powerd by | Mohammed Fakhry</h6>
+          </a>
+          <h6 class="mt-2 text-center" style="font-size: small; color: black;">
+            Special Edition for | Tower Ready Mix Concrete
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

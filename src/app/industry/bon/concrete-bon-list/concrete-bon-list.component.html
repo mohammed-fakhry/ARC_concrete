@@ -1,0 +1,141 @@
+<div class="mainContainer">
+
+  <div class="row stickyBox">
+
+    <div class="col-xl-6 col-lg-9 mb-3">
+      <mat-card class="box headerBox" [class.borderRight-alert]="unrecordedInfo.unrecorded">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;">
+              <i class="fa fa-industry iconBtn textSecondary"></i>
+            </span>
+          </div>
+          <mat-card-title class="textSecondary">
+            بونات الخرسانة
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h3 class="textDanger">
+              بونات خرسانة بانتظار الترحيل
+            </h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="panel-body panel-flex-table standTable mt-3" *ngIf="unrecordedInfo.unrecorded">
+            <table class="flex-table table table-hover theadBorderDanger">
+              <thead class="textSecondary">
+                <tr>
+                  <th>التاريخ</th>
+                  <th style="flex: 2;">العميل</th>
+                  <th style="flex: 0.5;">عدد البونات</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr *ngFor="let bon of unrecordedInfo.details">
+                  <td>{{bon.date}}</td>
+                  <td style="flex: 2;" class="textBtn tBtn-dark pl-2"
+                    routerLink="/AddConcreteBYBon/{{bon.date}}/{{bon.customerId}}">
+                    {{bon.customerName}}
+                  </td>
+                  <td style="flex: 0.5;">{{bon.qty}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+          <button *ngIf="unrecordedInfo.unrecorded" mat-flat-button color="accent">ترحيل البونات</button>
+        </mat-card-actions> -->
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="box stickyBox">
+
+    <div class="d-flex justify-content-between px-3">
+
+      <mat-form-field class="searchForm" style="width: 400px;">
+        <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+      </mat-form-field>
+      <div class="my-auto">
+        <button mat-stroked-button color="primary" routerLink="/AddConcreteBon" matTooltip="اضافة بون خرسانة"
+          matTooltipPosition="after">
+          <i class="fa fa-plus fa-lg pt-1 textBold"></i></button>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="example-container">
+
+      <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+          <td mat-cell *matCellDef="let row" [class.borderAround-danger]="row.concreteReceipt_id == '0'">
+            {{row.date}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bonManualNum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم البون</th>
+          <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+            routerLink="/UpdateConcreteBon/{{row.bonId}}">
+            {{row.bonManualNum}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="concreteCustomer_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>العميل</th>
+          <td mat-cell *matCellDef="let row">{{row.concreteCustomer_name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="concreteName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع الخرسانة</th>
+          <td mat-cell *matCellDef="let row" [class.marked]="row.concreteName.includes(searchTxt) && searchTxt">
+            {{row.concreteName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="concreteQty">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>الكمية</th>
+          <td mat-cell *matCellDef="let row">
+            {{row.concreteQty}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="pump">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>المضخة</th>
+          <td mat-cell *matCellDef="let row" [class.marked]="row.pump.includes(searchTxt) && searchTxt">
+            {{row.pump}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="truckName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>الخلاطة</th>
+          <td mat-cell *matCellDef="let row" [class.marked]="row.truckName.includes(searchTxt) && searchTxt">
+            {{row.truckName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="driverName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>السائق</th>
+          <td mat-cell *matCellDef="let row" [class.marked]="row.driverName.includes(searchTxt) && searchTxt">
+            {{row.driverName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات</th>
+          <td mat-cell *matCellDef="let row" [class.marked]="row.notes.includes(searchTxt) && searchTxt">
+            {{row.notes}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+        </tr>
+
+      </table>
+    </div>
+
+    <!-- paginator -->
+    <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+      [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+    </mat-paginator>
+
+  </div>
+</div>

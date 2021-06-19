@@ -1,0 +1,618 @@
+<div class="mainContainer">
+  <div class="row">
+    <!-- <div class="d-flex justify-content-between"> -->
+    <div class="col-md-12 col-lg-6">
+      <button mat-button color="primary" (click)="showReports ? showReports = !showReports : onStart()"
+        style="height: fit-content; width: fit-content;margin-bottom: 1rem;">
+        <i class="fa {{showReports ? 'fa-eye-slash' : 'fa-eye'}} mt-1 pl-1"></i>
+        {{showReports? 'اخفاء التقرير' : 'اظهار التقرير'}}
+      </button>
+      <mat-form-field class="mr-4">
+        <input matInput type="date" name="reportDate" [(ngModel)]="reportDate" (change)="onStart(reportDate)">
+      </mat-form-field>
+
+      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('activeUser')" class="mr-3">عملاء نشطين</button>
+      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('lastData')">اخر بيانات</button>
+      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('generalReport')">تقرير عام</button>
+
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <div style="direction: ltr;">
+        <div class="form-inline mt-3" style="position: relative; z-index: 2;">
+          <button mat-button color="primary" (click)="onStart()"
+            style="height: fit-content; width: fit-content;margin-bottom: 1rem;">
+            <i class="fa fa-retweet mt-1 pl-1"></i>
+            تحديث البيانات
+          </button>
+          <h4 class="ml-3 textPrimary">{{dataTo}}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-5" id="welcom" [class.d-none]="showReports && !privateLoading">
+    <div class="pt-5 fade-in" id="homeLogo" [class.animate-flicker]="privateLoading">
+      <img class="m-auto" src="assets/programLogo.png" alt="">
+      <div>
+        <a href="http://facebook.com/mohammed.fakhry">
+          <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">
+            Powerd by | Mohammed Fakhry
+            <i class="fa fa-facebook-square" style="color: #006699;"></i>
+          </h6>
+        </a>
+        <h6 class="mt-2 text-center" style="font-size: small; color: black;">
+          Special Edition for | Tower Ready Mix Concrete
+        </h6>
+      </div>
+    </div>
+  </div>
+
+  <div [class.d-none]="!showReports || privateLoading">
+
+    <div class="row mb-3">
+      <mat-divider class="my-3"></mat-divider>
+      <div class="col-lg-5 col-md-12 mb-3">
+        <mat-card class="box" [class.d-none]="!_auth?.check.prem || !charts.showExpenses">
+          <mat-card-header class="d-flex justify-content-between">
+            <mat-card-title>المصاريف</mat-card-title>
+            <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
+            <div class="mr-5">
+              <button mat-raised-button color="accent" routerLink="/otherAcc">المزيد</button>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <canvas id="pieChart"></canvas>
+          </mat-card-content>
+        </mat-card>
+        <div class="row mt-3">
+
+          <div class="col-md-4 col-sm-12 mb-3">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small headerBlueBg textBtn" routerLink="/CustomerList">
+                    <i class="fa fa-users headerBlue iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="headerBlue" style="font-size: medium;">عملاء مخازن</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 col-sm-12 mb-3">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small textSecondaryBg textBtn" routerLink="/ConcreteCustomerList">
+                    <i class="fa fa-industry textSecondary iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="textSecondary" style="font-size: medium;">عملاء خرسانة</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 col-sm-12 mb-3">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small textSecondaryBg textBtn" routerLink="/TruckCustomerList">
+                    <i class="fa fa-wrench textSecondary iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="textSecondary" style="font-size: medium;">عملاء مُعدات</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.safes">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small textBtn textSecondaryBg" routerLink="/Safe">
+                    <i class="fa fa-archive textSecondary iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="textSecondary" style="font-size: medium;">الخزنة</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.safes">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small textBtn textSecondaryBg" routerLink="/Stokes">
+                    <i class="fa fa-archive textSecondary iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="textSecondary" style="font-size: medium;">المخازن</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+          <div class="col-md-4 col-sm-12 mb-3">
+            <mat-card class="box">
+              <mat-card-header>
+                <div mat-card-avatar class="ml-1">
+                  <span class="dash-widget-small textBtn headerBrownBg" routerLink="/StockInvoice">
+                    <i class="fa fa-paper-plane textBold headerBrown iconBtn"></i>
+                  </span>
+                </div>
+                <mat-card-title class="headerBrown" style="font-size: medium;">فاتورة</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div>
+
+        </div>
+      </div>
+      <!-- *ngIf="charts.showExpenses" -->
+      <div class="col-lg-7 col-md-12 mb-3" [class.d-none]="!_auth?.check.customers || !charts.showSales">
+        <mat-card class="box" *ngIf="_auth?.check.prem">
+          <mat-card-header class="d-flex justify-content-between">
+            <mat-card-title>تقرير المبيعات</mat-card-title>
+            <mat-card-subtitle>{{salesReportHeader.subtitle}}</mat-card-subtitle>
+            <div class="mr-5">
+              <button mat-raised-button color="accent" routerLink="/ProductsProfits/{{mainStock.stockId}}"
+                class="mx-2">الارباح</button>
+              <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">المزيد</button>
+              <mat-menu #menu="matMenu">
+                <button [disabled]="salesReportHeader.btns.dailyBtn.disabled" mat-menu-item
+                  (click)="changeSalesReport('daily', this.mainSafe.safeId)">
+                  {{salesReportHeader.btns.dailyBtn.title}}
+                </button>
+                <button [disabled]="salesReportHeader.btns.monthlyBtn.disabled" mat-menu-item
+                  (click)="changeSalesReport('monthly', this.mainSafe.safeId)">
+                  {{salesReportHeader.btns.monthlyBtn.title}}
+                </button>
+              </mat-menu>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <canvas id="pieChartSales"></canvas>
+          </mat-card-content>
+          <div [class.d-none]="!salesChartLoading">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div id="generalReport">
+      <mat-divider class="my-3"></mat-divider>
+      <h2 class="cardHeader">
+        <span>
+          <i class="fa fa-file my-auto pl-2"></i>
+        </span>
+        تقرير عام
+      </h2>
+      <div class="row mb-3">
+
+        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/indebtedness">
+                <span class="dash-widget-icon headerPinkBg">
+                  <i class="fa fa-file iconBtn headerPink"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerPink">
+                مستحق الدفع
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.onUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerPink">
+                {{customersInfo?.onUs?.uncompletedCond ? "-" :
+                customersInfo?.onUs?.total | number:'1.0-2'}}
+
+                <span>
+                  {{
+                  customersInfo?.onUs?.uncompletedCond
+                  ? 'يرجى استكمال البيانات'
+                  :'جنيه'
+                  }}
+                </span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
+          <mat-card class="box" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/collectible">
+                <span class="dash-widget-icon successBg">
+                  <i class="fa fa-file textGreen iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="textGreen">
+                مستحق التحصيل
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.remain?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle textGreen">
+
+                {{customersInfo?.remain?.uncompletedCond ? "-" :
+                customersInfo?.remain?.total | number:'1.0-2'}}
+
+                <span>
+                  {{
+                  customersInfo?.remain?.uncompletedCond
+                  ? 'يرجى استكمال البيانات'
+                  :'جنيه'
+                  }}
+                </span>
+
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.safes">
+          <mat-card class="box">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon textBtn textSecondaryBg"
+                  routerLink="/SafeInformation/{{mainSafe.safeId}}">
+                  <i class="fa fa-archive textSecondary iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="textSecondary">
+                رصيد | {{mainSafe.safeName}}
+              </mat-card-title>
+              <mat-card-subtitle>
+                <!-- <h2 class="homeSubtitle" style="font-size: medium;"> -->
+                <button mat-button [matMenuTriggerFor]="safeMenu">
+                  اختيار خزنة
+                </button>
+                <button mat-button routerLink="/SafeReceipt">
+                  <i class="fa fa-plus pt-1"></i>
+                </button>
+                <mat-menu #safeMenu="matMenu">
+                  <button mat-menu-item *ngFor="let safe of safesList" (click)="mainSafe = safe">
+                    {{safe.safeName}}
+                  </button>
+                </mat-menu>
+                <!-- </h2> -->
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle textSecondary">
+                {{mainSafe.currentSafeVal| number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box" [class.borderRight-alert]="counts?.invoices?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon headerBrownBg">
+                  <i class="fa fa-hashtag headerBrown"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerBrown">فواتير اليوم</mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{counts?.invoices?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerBrown">
+                {{counts?.invoices?.total | number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <!--
+        #d1f3ff
+        #42cdff
+        {{counts?.recipts?.in?.count}}
+        {{counts?.recipts?.in?.total | number:'1.0-2'}}
+       -->
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon headerBlueBg">
+                  <i class="fa fa-hashtag headerBlue"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerBlue">تحصيلات اليوم</mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{counts?.recipts?.in?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerBlue">
+                {{counts?.recipts?.in?.total | number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div id="lastData">
+      <mat-divider class="my-3"></mat-divider>
+      <!-- lastIvoices -->
+      <h2 class="cardHeader">
+        <span>
+          <i class="fa fa-database my-auto pl-2"></i>
+        </span>
+        اخر بيانات
+      </h2>
+      <div class="row mb-3">
+        <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.stockes">
+          <mat-card class="box">
+            <div class="d-flex justify-content-between mb-2">
+              <mat-card-header>
+                <mat-card-title>اخر فواتير</mat-card-title>
+              </mat-card-header>
+              <button mat-button color="primary"
+                routerLink="/invoiceReport/invoiceAll/0/{{mainStock.stockId}}">المزيد</button>
+            </div>
+            <mat-card-content>
+
+              <div class="cardTable">
+
+                <table [dataSource]="lastIvoices" mat-table class="full-width-table" matSort aria-label="Elements">
+                  <ng-container matColumnDef="date_time">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+                    <td mat-cell *matCellDef="let row" [class.borderAround-danger]="row.uncompleted">{{row.date_time}}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="transactionType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
+                    <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                      [class.textDanger]="row.transactionType.includes('بيع')"
+                      routerLink="/StockInvoice/{{row.stockTransactionId}}">
+                      {{row.transactionType}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>العميل</th>
+                    <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                      routerLink="/customerInformation/{{row.customerId}}">{{row.customerName}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
+                    <td mat-cell *matCellDef="let row" class="textBold" [class.textDanger]="row.total < 0">{{row.total |
+                      number:'1.0-2'}}
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns.lastIvoices; sticky: true" class="tableHeader">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns.lastIvoices;">
+                  </tr>
+
+                </table>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.safes">
+          <mat-card class="box">
+            <div class="d-flex justify-content-between mb-2">
+              <mat-card-header>
+                <mat-card-title>اخر ايصالات</mat-card-title>
+              </mat-card-header>
+              <button mat-button color="primary" routerLink="/SafeInformation/{{safesList[0]?.safeId}}">المزيد</button>
+            </div>
+            <mat-card-content>
+              <div class="cardTable">
+                <table [dataSource]="lastReciepts" mat-table class="full-width-table" matSort aria-label="Elements">
+
+                  <ng-container matColumnDef="date_time">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+                    <td mat-cell *matCellDef="let row">{{row.date_time}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="receiptKind">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
+                    <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                      routerLink="/SafeReceipt/{{row.safeReceiptId}}"
+                      [class.textDanger]="row.receiptKind.includes('صرف')">
+                      {{row.receiptKind}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="receiptDetail">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
+                    <td mat-cell *matCellDef="let row" [class.textDanger]="row.receiptKind.includes('صرف')"
+                      class="textBtn tBtn-dark pl-2" [routerLink]="row.routeTo">
+                      {{row.receiptDetail}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="receiptVal">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
+                    <td mat-cell *matCellDef="let row; let i = index" [class.textDanger]="row.receiptVal < 0">
+                      {{row.receiptVal | number:'1.0-2'}}
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns.lastReciepts; sticky: true" class="tableHeader">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns.lastReciepts;">
+                  </tr>
+
+                </table>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div id="activeUser">
+      <mat-divider class="my-3"></mat-divider>
+      <div class="form-inline">
+        <h2 class="cardHeader">
+          <span>
+            <i class="fa fa-users my-auto pl-2"></i>
+          </span>
+          عملاء نشطين
+        </h2>
+      </div>
+      <div class="row mb-3">
+
+        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box" [class.borderRight-alert]="customersInfo?.activeCustomers?.onUs?.uncompletedCond">
+            <!-- {{customersInfo?.activeCustomers?.onUs?.uncompletedCond}} -->
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon textBtn headerPinkBg" routerLink="/CustomerList/ActiveIndebtedness">
+                  <i class="fa fa-file iconBtn headerPink"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerPink">
+                مستحق الدفع
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.activeCustomers?.onUs?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerPink">
+
+                {{customersInfo?.activeCustomers?.onUs?.uncompletedCond ? "-" :
+                customersInfo?.activeCustomers?.onUs?.total | number:'1.0-2'}}
+
+                <span>
+                  {{
+                  customersInfo?.activeCustomers?.onUs?.uncompletedCond
+                  ? 'يرجى استكمال البيانات'
+                  :'جنيه'
+                  }}
+                </span>
+
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box" [class.borderRight-alert]="customersInfo?.activeCustomers?.remain?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn">
+                <span class="dash-widget-icon successBg" routerLink="/CustomerList/ActiveCollectible">
+                  <i class="fa fa-file textGreen iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="textGreen">
+                مستحق التحصيل
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.activeCustomers?.remain?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle textGreen">
+
+                {{customersInfo?.activeCustomers?.remain?.uncompletedCond ? "-" :
+                customersInfo?.activeCustomers?.remain?.total | number:'1.0-2'}}
+
+                <span>
+                  {{
+                  customersInfo?.activeCustomers?.remain?.uncompletedCond
+                  ? 'يرجى استكمال البيانات'
+                  :'جنيه'
+                  }}
+                </span>
+
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box" [class.borderRight-alert]="counts?.ActiveInvoices?.uncompletedCond">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn" routerLink="/invoiceReport/invoiceOut/2/{{mainStock.stockId}}">
+                <span class="dash-widget-icon headerBrownBg">
+                  <i class="fa fa-paper-plane iconBtn headerBrown"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerBrown">
+                فواتير اليوم
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{counts?.ActiveInvoices?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerBrown">
+                {{counts?.ActiveInvoices?.total | number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon headerBlueBg">
+                  <i class="fa fa-hashtag headerBlue"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerBlue">تحصيلات اليوم</mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{counts?.ActiveRecipts?.in?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerBlue">
+                {{counts?.ActiveRecipts?.in?.total | number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4">
+                <span class="dash-widget-icon headerDeepBlueBg">
+                  <i class="fa fa-hashtag headerDeepBlue"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerDeepBlue">
+                البيع المباشر
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{counts?.pointOfSale?.in?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerDeepBlue">
+                {{counts?.pointOfSale?.in?.total | number:'1.0-2'}}
+                <span>جنيه</span>
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

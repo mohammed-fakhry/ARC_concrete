@@ -1,0 +1,3 @@
+<div class="printX mb-3 stickyBox" style="z-index: 0; opacity: .85;">
+  <img class="sideLogo" src="assets/logos/clients.webp" alt="">
+</div>

@@ -1,0 +1,29 @@
+<div class="mainContainer">
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="box">
+        <mat-card>
+          <mat-card-header>
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title class="cardHeader">{{worker.workerName}}</mat-card-title>
+            <mat-card-subtitle>العنوان | {{worker.workerAdd}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">الهاتف | {{worker.workerTell}}</mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">الادارة | {{worker.workerJopCateg}}</mat-list-item>
+              <mat-list-item role="listitem">تاريخ التوظيف | {{worker.workerJopDate}}</mat-list-item>
+              <mat-list-item role="listitem">المرتب | {{worker.workerSalary}}</mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">رقم البصمة | {{worker.workerFbCode}}</mat-list-item>
+              <mat-list-item role="listitem">حضور | {{worker.workerCheckIN}}</mat-list-item>
+              <mat-list-item role="listitem">انصراف | {{worker.workerCheckOut}}</mat-list-item>
+              <mat-list-item role="listitem">الاجازة السنوية | {{worker.workerYearVacation}}</mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

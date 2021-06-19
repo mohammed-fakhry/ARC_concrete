@@ -1,0 +1,27 @@
+<mat-dialog-content class="pt-2" style="height: 100%;">
+  <form #filterByDateForm="ngForm">
+    <table>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input type="date" matInput placeholder="من تاريخ" id="fromDate" name="fromDate" required
+              [(ngModel)]="fromDate">
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input type="date" matInput placeholder="الى تاريخ" name="toDate" [(ngModel)]="toDate">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button [disabled]="!filterByDateForm.valid || fromDate > toDate" color="primary" mat-flat-button mat-dialog-close
+    [mat-dialog-close]="filterByDateForm.value" (click)="saveToLocalStorage(filterByDateForm)">فرز
+    بالتاريخ</button>
+  <button mat-button mat-dialog-close mat-dialog-close="cancel" class="mx-2">الغاء</button>
+  <div *ngIf="fromDate > toDate" class="textDanger ml-3 infoCard" style="font-size: small;">يجب ان تبدأ بتاريخ اقل
+  </div>
+</mat-dialog-actions>

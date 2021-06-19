@@ -1,0 +1,234 @@
+$inpBg: rgb(155, 155, 155);
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+  height: 1.3em;
+}
+
+.searchForm,
+.cardHeader {
+  // margin-left: .5rem;
+  margin-right: 1rem;
+}
+
+/* mat-label {
+  height: 50px!important;
+}; */
+
+mat-error {
+  height: fit-content;
+}
+
+.inpNoShadow {
+  border-radius: 5px;
+  box-shadow: none;
+  padding: 10px 20px;
+  color: white;
+  background-color: rgba(72, 144, 199, 0.541);
+}
+
+.stickyInp {
+  position: sticky;
+  top: 100px;
+}
+
+.inpCard {
+  //background-color: $inpBg;
+  border-radius: $boxInpRadios;
+  form {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .panel-body {
+    background-color: $boxBg;
+  }
+}
+
+.form-control {
+  border: none;
+}
+.form-control:disabled {
+  background-color: $lightBg !important;
+}
+
+/* .form-control:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  //border-color: $secondaryBg;
+  box-shadow: 0 0 0 #0049bedc inset, 0 0 8px #5a73f3a6;
+  outline: 0 none;
+} */
+
+.inpCard:not(.borderRight-alert):not(.primaryBorder) {
+  border-right: 5px solid $secondaryBg;
+  padding-right: 1rem;
+}
+
+.invoiceHeader {
+  input: {
+    width: 100%;
+  }
+  mat-form-field {
+    width: 100%;
+  }
+  /* mat-select,
+  mat-form-field:not(.fst-invoiceHeader):not(.fst-invoiceHeader) {
+    margin-bottom: .75rem;
+    margin-top: .75rem;
+  } */
+}
+
+.hintInpt:not(.form-control):hover {
+  background-color: #1d6bacb4;
+  color: white;
+}
+
+.inpCard_row {
+  background-color: whitesmoke;
+  box-shadow: $shadow;
+  border-radius: 5px;
+}
+
+.inpCard_noPadding {
+  background-color: $boxBg; //$inpBg;
+  border-radius: 5px;
+}
+
+.form-control {
+  height: fit-content;
+}
+
+/*
+<!-- Rounded switch -->
+<label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label>
+*/
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 21px;
+  width: 23px;
+  left: 4px;
+  bottom: 1.75px;
+  background-color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+input:checked + .slider {
+  background-color: #0278bdda;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #0278bdda;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+mat-form-field {
+  text-align: right !important;
+}
+
+.fullWidth {
+  width: 100% !important;
+}
+
+/* .example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+} */
+
+.example-full-width {
+  width: 100%;
+}
+
+td {
+  padding-right: 8px;
+}
+
+/*
+  <form (ngSubmit)="onSubmit(addCustomerForm)" #addCustomerForm="ngForm">
+    <table class="example-full-width" cellspacing="0">
+        <tr>
+            <td>
+                <mat-form-field class="example-full-width">
+                    <mat-label>الاسم</mat-label>
+                    <input required matInput name="customerName" [(ngModel)]="customer.customerName" #customerName>
+                    <mat-error *ngIf="!inputValid.customerName.cond">
+                        {{inputValid.customerName.msg}}
+                    </mat-error>
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="example-full-width">
+                    <mat-label>العنوان</mat-label>
+                    <input matInput name="customerAdd" [(ngModel)]="customer.customerAdd">
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+  </form>
+*/

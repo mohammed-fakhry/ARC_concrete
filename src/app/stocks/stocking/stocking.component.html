@@ -1,0 +1,368 @@
+<div *ngIf="loaded">
+  <!-- new  class="mainContainer" -->
+  <mat-sidenav-container>
+    <mat-sidenav id="mat-sidenav" #sidenav mode="over" [(opened)]="opened" position="end">
+      <div id="inpBox" class="box stickyBox mx-3 noHover">
+
+        <div class="d-flex justify-content-between">
+          <div class="form-inline mr-3">
+            <button mat-button color="warn" class="change" (click)="opened = !opened">
+              <div class="text-center my-auto py-2">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+              </div>
+            </button>
+            <h3 class="cardHeader my-auto">{{reportCond.inpHeader}}</h3>
+          </div>
+          <div class="p-2">
+            <!-- <button mat-stroked-button color="primary" class="mr-2" (click)="printDocument()"><i
+                class="fa fa-print"></i></button> -->
+            <button [disabled]="!this.productsInp[0]?.productName" mat-stroked-button color="primary" class="mx-2"
+              (click)="addfildes()">
+              <i class="fa fa-retweet"></i>
+            </button>
+            <button [disabled]="!this.productsInp[0]?.productName" mat-flat-button color="primary"
+              (click)="postToReport()">عرض التقرير</button>
+            <button [disabled]="!productsInp[0]?.productName || reportCond.cond == 'allStockes'" mat-flat-button
+              color="accent" (click)="addToStock()">{{reportCond.toStockBtn}}</button>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="panel-body panel-flex-table boxBg inTab" style="overflow-y: hidden;">
+          <table class="flex-table table" id="productsTable">
+
+            <thead class="textPrimary">
+              <tr>
+                <th class="thCenter" style="flex: .25;">م</th>
+                <th style="flex: 2;">اسم الصنف</th>
+                <th style="flex: .5">كمبيوتر</th>
+                <th style="flex: .5">فعلى</th>
+                <th style="flex: .75">السعر</th>
+                <th class="thCenter" style="flex: .5">الفرق</th>
+                <th class="thCenter" style="flex: .5">القيمة</th>
+                <th class="thCenter">عائلة الصنف</th>
+              </tr>
+            </thead>
+
+            <tbody class="tableBody">
+              <tr *ngFor="let inpt of productsInp; let i = index">
+                <td style="flex: .25;" class="text-center textBtn tBtn-danger" (click)="deleteRow(i)">
+                  <div class="pt-2">{{i + 1}}</div>
+                </td>
+
+                <td style="flex: 2;">
+                  <input id="product{{i}}" #productNameForList="ngModel" type="search" class="form-control"
+                    name="product{{i}}" [(ngModel)]='inpt.productName' (change)="productChanged(i)"
+                    [attr.list]="dataList[i]">
+                  <!-- *ngIf="(productNameForList.dirty || productNameForList.touched)" -->
+                  <datalist [class.d-none]="productNameForList.pristine" id="datalistproducts{{i}}">
+                    <option *ngFor="let product of productsList" value="{{product.productName}}">
+                    </option>
+                  </datalist>
+
+                  <div *ngIf="!inputValid.product[i].cond" class="dangerBadge infoCard borderLdanger"
+                    style="width:fit-content;">
+                    {{inputValid.product[i].msg}}</div>
+                </td>
+
+                <td style="flex: .5">
+                  <input type="number" class="form-control" name="computerQty{{i}}" [(ngModel)]="inpt.computerQty">
+                </td>
+
+                <td style="flex: .5">
+                  <input type="number" class="form-control" name="realQty{{i}}" [(ngModel)]="inpt.realQty">
+                </td>
+
+                <td style="flex: .75">
+                  <input type="number" class="form-control" name="price{{i}}" [(ngModel)]="inpt.price">
+                </td>
+
+                <td class="textBold lightBg" [class.textDanger]="(inpt.realQty - inpt.computerQty) < 0"
+                  style="flex: .5;">
+                  {{inpt.realQty - inpt.computerQty}}
+                </td>
+
+                <td class="textBold textPrimary"
+                  [class.textDanger]="((inpt.realQty - inpt.computerQty) * inpt.price) < 0" style="flex: .5">
+                  {{((inpt.realQty - inpt.computerQty) * inpt.price) | number:'1.0-2'}}
+                </td>
+
+                <td>{{inpt.productCategory}}</td>
+
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-2">
+          <button type="button" mat-raised-button color="accent" class="ml-5" (click)="addRow()">+</button>
+        </div>
+        <mat-divider class="my-2 mx-1"></mat-divider>
+        <div class="mx-auto mt-2" style="width: 98%;">
+          <div>
+            <div class="d-flex justify-content-between mb-2">
+              <mat-form-field class="fullWidth mr-3">
+                <textarea matInput placeholder="ملاحظات" #stockingNote maxlength="500" name="notes"
+                  [(ngModel)]='stockingHeader.stockingNote' id="notes" cols="1 0" rows="3"></textarea>
+                <mat-hint align="end">{{stockingNote.value.length}} / 500</mat-hint>
+              </mat-form-field>
+              <div class="mt-auto mb-3 mx-2" *ngIf="id">
+                <button mat-stroked-button color="accent" (click)="updateHeader()">تعديل الملاحظات</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-sidenav>
+
+    <!-- ************************************** Reports *********************************************** -->
+
+    <mat-sidenav-content class="px-3">
+      <div class="container">
+        <div class="stickyBox stickyToNav mainBg">
+          <div class="d-flex justify-content-between py-2">
+            <button mat-button color="primary" (click)="opened = !opened">
+              <div class="text-center my-auto py-2">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+              </div>
+            </button>
+            <div *ngIf="id" class="textBold textPrimary my-auto">اذن جرد رقم | ({{id}})</div>
+            <div class="textDark my-auto ml-3">{{stockingHeader.stockingDate.replace('T',' ')}}</div>
+            <div *ngIf="id">
+              <button mat-button *ngIf="idKeys?.prev" routerLink="/Stocking/{{idKeys.prev}}">السابق</button>
+              <button mat-button *ngIf="idKeys?.next" routerLink="/Stocking/{{idKeys.next}}">التالى</button>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div *ngIf="stokesReport.length > 0" class="my-4">
+          <div class="mb-3">
+            <mat-expansion-panel *ngIf="reportArr.min.length > 0 || reportArr.over.length > 0"
+              class="box mat-elevation-z0" [(expanded)]="expand" (closed)="expand = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="cardHeader">
+                  <h3 class="cardHeader my-auto py-2">{{reportState}}</h3>
+                </mat-panel-title>
+                <mat-panel-description *ngIf="reportArr.min.length > 0 || reportArr.over.length > 0"
+                  class="my-auto underLine">
+                  {{expand ? 'اغلاق' : 'عرض التقرير'}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="row mt-3" id="reportRow" *ngIf="reportArr.min.length > 0 || reportArr.over.length > 0">
+
+                <div class="col">
+                  <div class="panel-body panel-flex-table standTable" style="max-height: 50vh;">
+                    <table class="flex-table table table-hover">
+                      <thead>
+                        <tr>
+                          <th class="dangerBg" style="color: white;">عجز</th>
+                          <th [class.d-none]="!reportArr.totalMin" class="dangerBg">{{reportArr.totalMin |
+                            number:'1.0-2'}}</th>
+                        </tr>
+                        <tr>
+                          <th style="flex: 2;">الصنف</th>
+                          <th>عدد</th>
+                          <th>السعر</th>
+                          <th>القيمة</th>
+                          <th style="flex: 2;">المخزن</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tableBody ">
+                        <tr *ngFor="let p of reportArr.min">
+                          <td class="{{p.class}}" style="flex: 2;">{{p.productName}}</td>
+                          <td class="textDanger {{p.class}}">{{p.qty}}</td>
+                          <td>{{p.price}}</td>
+                          <td class="textDanger {{p.class}} textBold">{{(p.qty * p.price) | number:'1.0-2'}}</td>
+                          <td class="{{p.class}}" style="flex: 2;">{{p.stock}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="panel-body panel-flex-table standTable" style="max-height: 50vh;">
+                    <table class="flex-table table table-hover">
+                      <thead>
+                        <tr>
+                          <th class="primaryBg">زيادة</th>
+                          <th [class.d-none]="!reportArr.totalOver" class="primaryBg">{{reportArr.totalOver |
+                            number:'1.0-2'}}</th>
+                        </tr>
+                        <tr>
+                          <th style="flex: 2;">الصنف</th>
+                          <th>عدد</th>
+                          <th>السعر</th>
+                          <th>القيمة</th>
+                          <th style="flex: 2;">المخزن</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tableBody">
+                        <tr *ngFor="let p of reportArr.over">
+                          <td class="{{p.class}}" style="flex: 2;">{{p.productName}}</td>
+                          <td class="{{p.class}}">{{p.qty}}</td>
+                          <td>{{p.price}}</td>
+                          <td class="{{p.class}} textBold">{{(p.qty * p.price) | number:'1.0-2'}}</td>
+                          <td class="{{p.class}}" style="flex: 2;">{{p.stock}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="my-auto mx-3">
+                <mat-divider *ngIf="stockingHeader.stockingNote" class="my-2"></mat-divider>
+                <p>{{stockingHeader.stockingNote}}</p>
+                <mat-divider class="my-2"></mat-divider>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <div *ngIf="mainReportNet != 0">
+                      <div class="infoCard px-4 py-2"
+                        [ngClass]="mainReportNet < 0 ? 'dangerBadge borderLdanger' : 'secondaryBadge borderLsecondary'"
+                        [class.successBg]="mainReportNet == 0">
+                        {{mainReportNet > 0 ? 'اجمالى زيادة' : 'اجمالى عجز'}} | {{mainReportNet | number : '1.0-2'}}
+                      </div>
+                    </div>
+                    <div class="p-2">
+                      <button mat-stroked-button color="primary" [class.d-none]="!reported" (click)="mergeReport()">
+                        دمج المخازن
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="stokesReport.length > 0">
+                    <div *ngFor="let stock of stokesReport; let i = index" class="infoCard px-4 mb-2"
+                      [ngClass]="stock.net < 0 ? 'dangerBadge borderLdanger' : 'secondaryBadge borderLsecondary'"
+                      [class.successBg]="stock.net == 0">
+                      {{stock.stockName}} | {{stock.net | number : '1.0-2'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <div class="form-inline">
+              <button mat-raised-button color="accent" (click)="putValsToInp('click')">ترحيل المخازن</button>
+              <button *ngIf="!id" mat-raised-button color="primary" class="mr-2" (click)="saveData()">حفظ
+                البيانات</button>
+            </div>
+            <h3 class="cardHeader my-auto">تقرير المخازن</h3>
+          </div>
+
+          <mat-divider class="my-2"></mat-divider>
+          <!-- <div *ngFor="let stock of stokesReport; let i = index" class="box mb-3"> -->
+          <mat-accordion multi="true" class="Zindex_one">
+            <mat-expansion-panel class="box mat-elevation-z0" *ngFor="let stock of stokesReport; let i = index">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{stock.stockName}}
+                </mat-panel-title>
+                <!-- <mat-panel-description>
+                  description
+                </mat-panel-description> -->
+              </mat-expansion-panel-header>
+              <mat-divider class="mt-2"></mat-divider>
+
+              <div class="row mt-3" id="stocksReports">
+
+                <div class="col">
+                  <div class="panel-body panel-flex-table standTable">
+                    <table class="flex-table table table-hover">
+                      <thead class="textPrimary">
+                        <tr>
+                          <th class="dangerBg">عجز</th>
+                        </tr>
+                        <tr>
+                          <th>الصنف</th>
+                          <th>عدد</th>
+                          <th>السعر</th>
+                          <th>اجمالى</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tableBody">
+                        <tr *ngFor="let p of stock.reportArr.min">
+                          <td class="{{p.class}}">{{p.productName}}</td>
+                          <td class="textDanger {{p.class}}">{{p.qty}}</td>
+                          <td class="{{p.class}}">{{p.price}}</td>
+                          <td class="{{p.class}}">{{(p.qty * p.price) | number:'1.0-2'}}</td>
+                        </tr>
+                        <tr class="tdborder_top lightBg">
+                          <td class="textBold textDanger">اجمالى</td>
+                          <td></td>
+                          <td></td>
+                          <td class="textBold textDanger">{{stock.totalMin | number:'1.0-2'}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="panel-body panel-flex-table standTable">
+                    <table class="flex-table table table-hover">
+                      <thead class="textPrimary">
+                        <tr>
+                          <th class="primaryBg">زيادة</th>
+                        </tr>
+                        <tr>
+                          <th>الصنف</th>
+                          <th>عدد</th>
+                          <th>السعر</th>
+                          <th>اجمالى</th>
+                        </tr>
+                      </thead>
+                      <tbody class="tableBody">
+                        <tr *ngFor="let p of stock.reportArr.over">
+                          <td class="{{p.class}}">{{p.productName}}</td>
+                          <td class="{{p.class}}">{{p.qty}}</td>
+                          <td class="{{p.class}}">{{p.price}}</td>
+                          <td class="{{p.class}}">{{(p.qty * p.price) | number:'1.0-2'}}</td>
+                        </tr>
+                        <tr class="tdborder_top lightBg">
+                          <td class="textBold">اجمالى</td>
+                          <td></td>
+                          <td></td>
+                          <td class="textBold">{{stock.totalOver | number:'1.0-2'}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="m-3" *ngIf="stock.net != 0">
+                <div class="infoCard px-4"
+                  [ngClass]="stock.net < 0 ? 'dangerBadge borderLdanger' : 'secondaryBadge borderLsecondary'"
+                  [class.successBg]="stock.net == 0" style="width: fit-content;">
+                  {{stock.net > 0 ? 'زيادة' : 'عجز'}} | {{stock.net | number : '1.0-2'}}</div>
+              </div>
+              <!-- <mat-divider></mat-divider> -->
+              <div class="d-flex justify-content-between">
+                <!-- <h3 class="cardHeader my-auto">{{stock.stockName}}</h3> -->
+                <div class="p-2">
+                  <button mat-stroked-button color="accent" (click)="putValsToInp(i)">
+                    <i class="fa fa-pencil underLine"></i>
+                  </button>
+                  <button mat-stroked-button color="warn" (click)="delStockTable(i)">
+                    <i class="fa fa-trash underLine"></i>
+                  </button>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <!--  </div> -->
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

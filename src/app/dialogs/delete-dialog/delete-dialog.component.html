@@ -1,0 +1,21 @@
+<div class="mx-2">
+  <h2 mat-dialog-title class="dangerBadge borderLdanger infoCard px-4 py-2">{{data.header}}</h2>
+  <mat-dialog-content class="infoSection">
+      <div class="panel-body panel-flex-table standTable">
+          <table class="flex-table table">
+              <tbody class="tableBody">
+                  <tr>
+                      <td>{{data.info}}</td>
+                  </tr>
+                  <tr *ngFor="let desc of data.discription">
+                      <td>{{desc}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+      <button mat-raised-button color="accent" mat-dialog-close mat-dialog-close="false">الغاء</button>
+      <button mat-flat-button color="warn" mat-dialog-close mat-dialog-close="true" [disabled]="!canDel">{{delBtnVal}}</button>
+  </mat-dialog-actions>
+</div>

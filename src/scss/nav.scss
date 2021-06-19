@@ -1,0 +1,27 @@
+/* .navbar h1,h3 {
+  margin-right: 30px;
+  color: $primaryBg; // teal;
+} */
+
+.navHeader {
+  color: white;
+  background-color: $primaryBg;
+  tr {
+    background-color: $primaryBg;
+  }
+}
+
+.tableHeader:not(.headerPink) {
+  color: white;
+  background-color: $primaryBg;
+}
+
+#theNav {
+  z-index: 2;
+  position: sticky;
+  padding-right: 10px;
+  top: 0px;
+  height: fit-content;
+  color: $primaryBg;
+  background-color: #ebebeb;
+}

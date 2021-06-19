@@ -1,1 +1,158 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "scss/varibals.scss";
+@import "scss/nav.scss";
+@import "scss/btns.scss";
+@import "scss/tables.scss";
+@import "scss/card.scss";
+@import "scss/input.scss";
+@import "scss/backgrounds.scss";
+@import "scss/loader.scss";
+// @import "scss/animations.scss";
+@import "scss/text.scss";
+@import "scss/mediaMobile.scss";
+@import "scss/print.scss";
+
+* {
+  font-family: "Droid Arabic Kufi", sans-serif;
+  font-size: 0.98rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: $mainBackground; //rgba(211, 211, 211, 0.945);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($darkBg, $dangerBg);
+  clip-path: circle(100% at right 90%);
+  opacity: .05;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient($secondaryBg, $primaryBg);
+  clip-path: circle(15% at 1% 3%);
+  opacity: .25;
+  z-index: 0;
+}
+
+body:not(.mat-paginator) {
+  text-align: right;
+  direction: rtl;
+}
+
+body::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.form-inline {
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-flow: row wrap;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.mainContainer {
+  padding: 0px 20px;
+  margin-top: 1rem;
+}
+
+.container {
+  margin-top: 1rem;
+}
+
+.dropDownItemBorder {
+  border-bottom: solid 1px black;
+}
+
+.headerLeftBorder {
+  width: 2px;
+  background-color: $primaryBg;
+  height: 20px;
+}
+
+.fitContent {
+  height: fit-content;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.mat-dialog-content {
+  padding-top: 24px;
+  padding-right: 24px !important;
+  padding-bottom: 24px;
+  padding-left: 24px !important;
+}
+
+.mat-dialog-content::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+.mat-dialog-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.mat-dialog-content::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: 50px !important;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+*[ng-reflect-router-link]:focus {
+  outline: none !important;
+}
+
+.printThis {
+  display: none;
+  border-bottom: solid white 5px;
+}
