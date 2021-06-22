@@ -171,11 +171,10 @@ export class StockInvoiceComponent implements OnInit {
 
   calcUnits(
     qty: number,
-    // productUnit: number,
     metrPrice: number
   ): { loadTimes: number; payLoadPrice: number } {
     const seperate = {
-      loadTimes: qty / this.stockInvoice.truckCapacity,
+      loadTimes: Number((qty / this.stockInvoice.truckCapacity).toFixed(2)),
       payLoadPrice: metrPrice * this.stockInvoice.truckCapacity,
     };
 
@@ -423,7 +422,7 @@ export class StockInvoiceComponent implements OnInit {
       addtaxes: result.stockTransaction.addtaxes,
     };
 
-    console.log(this.stockInvoice)
+    console.log(this.stockInvoice);
 
     this.truckInfo =
       this.truckList.find(
@@ -452,7 +451,7 @@ export class StockInvoiceComponent implements OnInit {
         price: details.price,
         discound: details.discound,
         total: total - discoundVal,
-        notes: details.notes
+        notes: details.notes,
       };
 
       this.dataList.push(`datalistproducts${i}`);
@@ -1025,7 +1024,8 @@ export class StockInvoiceComponent implements OnInit {
               this.recordTruckOrder(
                 this.productQtys[i].loadTimes,
                 stockTransactionId,
-                data[0]
+                data[0],
+                'post'
               );
             });
         }
@@ -1306,6 +1306,10 @@ export class StockInvoiceComponent implements OnInit {
     cond: string = 'post'
   ) {
     if (this.stockInvoice.truckName != '') {
+      const price =
+        this.truckInfo.customerId == this.stockInvoice.customerId.toString()
+          ? 0
+          : this.truckInfo.metrPrice;
       const truckOrder: TruckOrder = {
         orderId: null,
         truckId: this.stockInvoice.truckId,
@@ -1319,10 +1323,8 @@ export class StockInvoiceComponent implements OnInit {
         truckCustomerName: '',
         LoadTimes: loadTimes,
         totalQty: 0,
-        price:
-          this.truckInfo.customerId == this.stockInvoice.customerId.toString()
-            ? 0
-            : ( this.truckInfo.metrPrice),
+        price: price,
+        realPrice: price,
         totalVal: 0,
         date_time: this.stockInvoice.date_time,
         notes: `${this.stockInvoice.customerName} | فاتورة (${invoiceId})`,

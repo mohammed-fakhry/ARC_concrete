@@ -348,6 +348,7 @@ export class HomeComponent implements OnInit {
     inCome: any[],
     duration: string
   ) => {
+
     if (expenses.length > 0) {
       this.charts.showExpenses = true;
 

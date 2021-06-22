@@ -14,6 +14,7 @@ export class TruckOrder {
   LoadTimes: number = 0;
   totalQty: number = 0;
   price: number = 0;
+  realPrice: number = 0;
   totalVal: number = 0;
   date_time: string = '';
   notes: string = '';

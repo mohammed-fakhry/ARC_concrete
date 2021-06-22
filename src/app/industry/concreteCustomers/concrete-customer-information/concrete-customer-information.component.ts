@@ -43,6 +43,10 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
   cementUses: any = [];
 
+  tempCementUses: any = [];
+
+  mainCementAcc: any = [];
+
   tempAccArry: any[] = [];
 
   isFiltered: boolean = false;
@@ -111,6 +115,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
         if (this.customerInfo.cementCustomerId) {
           this.getCementUses().then((dataUses) => {
+            this.tempCementUses = dataUses;
             this.cementUses = this.makeCementAcc(dataUses);
           });
         }
@@ -193,15 +198,39 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     return this.accArr;
   }
 
-  makeCementAcc(data: any) {
+  makeCementAcc(data: any, startVal?: number) {
     let arr: any[] = [];
 
+    if (startVal) {
+      const begainAcc =
+        startVal -
+        (data[0].transactionType == 1 ? data[0].Qty : 0) +
+        (data[0].transactionType == 2 ? data[0].Qty : 0);
+
+      const firstRow = {
+        id: 1,
+        InvoiceDetails: 'رصيد اول',
+        routeTo: ``,
+        date_time: this.searchDate.from,
+        qty_in: begainAcc > 0 ? begainAcc : 0,
+        qty_out: begainAcc < 0 ? begainAcc * -1 : 0,
+        balance: begainAcc,
+      };
+
+      arr = [...arr, firstRow];
+    }
+
     for (let i = 0; i < data.length; i++) {
+      let indx = i;
+      if (startVal) {
+        indx = i + 1;
+      }
+
       const qty_in = data[i].transactionType == 1 ? data[i].Qty : 0;
       const qty_out = data[i].transactionType == 2 ? data[i].Qty : 0;
 
       const balance =
-        i == 0 ? qty_in - qty_out : arr[i - 1].balance + qty_in - qty_out;
+        indx == 0 ? qty_in - qty_out : arr[indx - 1].balance + qty_in - qty_out;
 
       const InvoiceDetails = data[i].concreteReceipt_id
         ? `رقم الفاتورة (${data[i].manualNum})`
@@ -210,7 +239,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
           }`;
 
       const newRow = {
-        id: i + 1,
+        id: indx + 1,
         InvoiceDetails: InvoiceDetails,
         routeTo: `${
           data[i].concreteReceipt_id
@@ -225,6 +254,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
       arr = [...arr, newRow];
     }
+
+    if (!startVal) this.mainCementAcc = [...arr];
 
     this.acementTotals = {
       in: arr.map((a) => a.qty_in).reduce((a, b) => a + b, 0),
@@ -349,6 +380,15 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
       this.isFiltered = true;
       this.fillListData(newArr);
+
+      const begainWith =
+        this.mainCementAcc.find((t: any) => t.date_time >= start).balance ?? 0;
+
+      const tempCement = this.tempCementUses.filter(
+        (t: any) => t.date_time >= start && t.date_time <= end
+      );
+
+      this.cementUses = this.makeCementAcc(tempCement, begainWith);
     }
   }
 
@@ -359,8 +399,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this.isFiltered = false;
       this.fillListData(this.accArr.reverse());
       this.searchDate = { from: '', to: '' };
+
+      this.cementUses = this.makeCementAcc(this.tempCementUses);
     }
   }
-
-
 }

@@ -128,6 +128,8 @@ export class SearchInvoiceDialogComponent implements OnInit {
 
   stocksMethod() {
     this.getStockes().then((data: any) => {
+      this.searchValid = true;
+
       this.searchList = data.map((stock: Stock) => {
         return { searchVal: stock.stockName, id: stock.stockId };
       });

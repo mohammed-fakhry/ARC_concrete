@@ -73,6 +73,12 @@ export class SafeService {
     return this.http.get<OtherAcc[]>(`${this.url}otherAccountsList.php`);
   }
 
+  getOtherAccByDate(from: string, to: string) {
+    return this.http.get<any[]>(
+      `${this.url}otherAccountsList.php?fromDate=${from}&toDate=${to}`
+    );
+  }
+
   getTruckOtherAcc(id: string, from?: string, to?: string) {
     if (from && to)
       return this.http.get<any[]>(
@@ -87,7 +93,11 @@ export class SafeService {
     return this.http.post(`${this.url}postOtherAcc.php`, acc);
   }
 
-  getotherAccTransaction(id: string) {
+  getotherAccTransaction(id: string, from?: string, to?: string) {
+    if (from && to)
+      return this.http.get<any[]>(
+        `${this.url}otherAccTransaction.php?id=${id}&fromDate=${from}&toDate=${to}`
+      );
     return this.http.get<any[]>(`${this.url}otherAccTransaction.php?id=${id}`);
   }
 

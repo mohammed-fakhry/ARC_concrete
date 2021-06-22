@@ -55,7 +55,10 @@ export class OtherAccInformationComponent implements OnInit {
     });
 
     this.id = this.activeRoute.snapshot.paramMap.get('id');
+    this.onStart();
+  }
 
+  onStart() {
     Promise.all([this.getOtherAccTransaction(), this.getOtherAcc()]).then(
       (data: any[]) => {
         let accTransList: any[] = data[0];
@@ -76,11 +79,11 @@ export class OtherAccInformationComponent implements OnInit {
     );
   }
 
-  getOtherAccTransaction() {
+  getOtherAccTransaction(from?: string, to?: string) {
     return new Promise((res) => {
       if (this.id)
         this._safeService
-          .getotherAccTransaction(this.id)
+          .getotherAccTransaction(this.id, from, to)
           .subscribe((data: any[]) => res(data));
     });
   }
@@ -147,19 +150,38 @@ export class OtherAccInformationComponent implements OnInit {
     });
   };
 
-  filterByDate(from?: string, to?: string) {
-    if (from) {
-      let start = `${from} 00:00`;
-      let end = `${to} 23:59`;
+  startByDate(from: string, to: string) {
+    this._glopal.loading = true;
+    Promise.all([
+      this.getOtherAccTransaction(from, to),
+      this.getOtherAcc(),
+    ]).then((data: any[]) => {
+      let accTransList: any[] = data[0];
+      let accList: OtherAcc[] = data[1];
+      let parseId: number;
+      if (this.id) {
+        parseId = parseInt(this.id);
+        let foundAcc = accList.find((acc) => acc.accId == parseId);
+        if (foundAcc) this.accInfo = foundAcc;
+      }
+      this._glopal.currentHeader = `حركة حساب | ${this.accInfo.AccName}`;
 
-      let newArr = this.accArr.filter((acc) => {
-        return acc.date_time >= start && acc.date_time <= end;
-      });
+      let listData = this.makeSafeAcc(accTransList);
+      this.fillListData(listData);
+      this._mainService.handleTableHeight();
+
+      this.accInfo.currentAccVal = listData[0].balance;
+      this._glopal.loading = false;
+    });
+  }
+
+  filterByDate(from?: string, to?: string) {
+    if (from && to) {
+      this.startByDate(from, to);
       this.isFiltered = true;
-      this.fillListData(newArr);
     } else {
+      this.onStart();
       this.isFiltered = false;
-      this.fillListData(this.accArr);
     }
   }
 

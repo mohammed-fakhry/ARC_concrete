@@ -125,10 +125,7 @@ export class TruckOrdetListComponent implements OnInit {
     this.accArr = [];
 
     for (let i = 0; i < data.length; i++) {
-      const netVal =
-        i == 0
-          ? data[i].totalVal
-          : this.accArr[i - 1].netVal + data[i].totalVal;
+      /* CASE WHEN truckorder.loadingType <> 'متر' THEN 1 WHEN truckorder.loadingType = 'متر' Then trucks.capacity END ) * truckorder.LoadTimes * truckorder.price */
 
       // truckType
       let loadingType = data[i].loadingType
@@ -137,6 +134,17 @@ export class TruckOrdetListComponent implements OnInit {
         ? 'متر'
         : 'ساعة';
 
+      const totalVal =
+        (loadingType != 'متر' ? 1 : data[i].truckCapacity) *
+        data[i].LoadTimes *
+        data[i].realPrice;
+
+
+      const netVal =
+        i == 0
+          ? totalVal
+          : this.accArr[i - 1].netVal + totalVal;
+
       const newRow = {
         id: i + 1,
         LoadTimes: data[i].LoadTimes,
@@ -144,7 +152,7 @@ export class TruckOrdetListComponent implements OnInit {
         orderId: data[i].orderId,
         orderType: data[i].orderType,
         loadingType: loadingType,
-        price: data[i].price,
+        price: data[i].realPrice,
         totalQty: data[i].totalQty,
         totalVal: data[i].totalVal,
         netVal: netVal,

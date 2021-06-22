@@ -292,6 +292,7 @@ export class InvoicesReportComponent implements OnInit {
             LoadTimes: Math.ceil(acc.Qty / truckInfo.capacity),
             totalQty: 0,
             price: price,
+            realPrice: price,
             totalVal: 0,
             date_time: acc.date_time.replace(' ', 'T'),
             notes: `${acc.customerName} | فاتورة (${acc.stockTransactionId})`,

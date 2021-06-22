@@ -241,6 +241,7 @@ export class AddConcreteBonComponent implements OnInit {
       LoadTimes: this.concreteBon.concreteQty,
       totalQty: 0,
       price: this.truckInfo.metrPrice,
+      realPrice : this.truckInfo.metrPrice,
       totalVal: 0,
       date_time: `${this.concreteBon.date}T${this.concreteBon.time}`,
       notes: `بون خرسانة رقم (${this.concreteBon.bonManualNum})`,

@@ -264,7 +264,7 @@ export class TruckCustomerInformationComponent implements OnInit {
             .filter(
               (d: any) => d.truckId == trucksIds[i] && d.loadingType == 'متر'
             )
-            .map((d: any) => d.LoadTimes)
+            .map((d: any) => d.LoadTimes  * d.truckCapacity)
             .reduce((a: any, b: any) => a + b, 0),
         };
 

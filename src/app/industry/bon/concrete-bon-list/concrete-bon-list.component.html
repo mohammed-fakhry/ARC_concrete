@@ -14,8 +14,8 @@
             بونات الخرسانة
           </mat-card-title>
           <mat-card-subtitle>
-            <h3 class="textDanger">
-              بونات خرسانة بانتظار الترحيل
+            <h3 [class.textDanger]="unrecordedInfo.unrecorded">
+              {{unrecordedInfo.unrecorded ? 'بونات خرسانة بانتظار الترحيل' : 'تم ترحيل جميع البونات'}}
             </h3>
           </mat-card-subtitle>
         </mat-card-header>

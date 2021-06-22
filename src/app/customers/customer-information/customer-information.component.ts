@@ -193,12 +193,12 @@ export class CustomerInformationComponent implements OnInit {
     productUnit: number,
     unitPrice: number
   ): string {
-    const unitDetail = this.calcUnits(productQty, productUnit, unitPrice);
-
-    return `${unitDetail.backet}${unitDetail.unit} ${detail} ${unitDetail.backetPrice}`;
+    // const unitDetail = this.calcUnits(productQty, productUnit, unitPrice);
+    return `${productQty} ${detail} ${unitPrice}`
+    //return `${unitDetail.backet}${unitDetail.unit} ${detail} ${unitDetail.backetPrice}`;
   }
 
-  calcUnits(
+  /* calcUnits(
     qty: number,
     productUnit: number,
     unitPrice: number
@@ -218,7 +218,7 @@ export class CustomerInformationComponent implements OnInit {
     };
 
     return seperate;
-  }
+  } */
 
   /* searchResults(accArr: any[]) {
     let filteredArr = this.searchTxt

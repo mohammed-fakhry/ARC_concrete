@@ -7,7 +7,7 @@
 
           <!-- header -->
           <div class="d-flex justify-content-between px-3">
-            <mat-form-field class="searchForm" style="width: 500px;">
+            <mat-form-field class="searchForm" style="width: 300px;">
               <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
             </mat-form-field>
             <div class="my-auto">
@@ -18,7 +18,7 @@
             </div>
           </div>
           <!-- table -->
-          <div class="example-container">
+          <div class="example-container mb-3">
             <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
               <ng-container matColumnDef="accId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
@@ -62,11 +62,26 @@
       </div>
     </div>
 
-    <div class="col-lg-7 col-md-12 mb-3">
+    <div class="col-lg-7 col-md-12 mb-3 printX">
       <mat-card class="box">
-        <mat-card-header>
+        <mat-card-header class="d-flex justify-content-between">
           <mat-card-title>المصاريف</mat-card-title>
           <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
+          <div class="form-inline mr-5">
+            <div class="mr-2">
+              <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+                <i class="fa fa-filter"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز</button>
+                <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()" style="text-align: right;">اظهار
+                  الكل</button>
+              </mat-menu>
+
+              <button mat-stroked-button color="accent" class="mx-1" (click)="printDocument()"><i
+                  class="fa fa-print"></i></button>
+            </div>
+          </div>
           <!-- <div class="mr-5">
             <button mat-raised-button color="accent" routerLink="/otherAcc">المزيد</button>
           </div> -->

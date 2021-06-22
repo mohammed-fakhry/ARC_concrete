@@ -4,11 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Concrete } from 'src/app/classes/concrete';
 import { ConcreteMaterial } from 'src/app/classes/concrete-material';
+import { OtherAcc } from 'src/app/classes/other-acc';
 import { Product } from 'src/app/classes/product';
 import { DoneDialogComponent } from 'src/app/dialogs/done-dialog/done-dialog.component';
 import { ConcreteService } from 'src/app/services/concrete.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { MainService } from 'src/app/services/main.service';
+import { SafeService } from 'src/app/services/safe.service';
 import { StockService } from 'src/app/services/stock.service';
 
 @Component({
@@ -22,6 +24,7 @@ export class AddConcreteComponent implements OnInit {
   concreteList: Concrete[] = [];
 
   dataList: string[] = [];
+  accList: OtherAcc[] = [];
 
   formValid = {
     mainForm: true,
@@ -37,6 +40,7 @@ export class AddConcreteComponent implements OnInit {
     public activeRoute: ActivatedRoute,
     public _stockService: StockService,
     public _concrete: ConcreteService,
+    public _safeService: SafeService,
     public _dialog: MatDialog
   ) {
     this._glopal.loading = true;
@@ -129,16 +133,27 @@ export class AddConcreteComponent implements OnInit {
     });
   }
 
+  getOtherAcc() {
+    return new Promise((res) => {
+      this._safeService
+        .getOtherAcc()
+        .subscribe((data: OtherAcc[]) => res(data));
+    });
+  }
+
   concreteNameChanged(addConcreteForm: NgForm) {
     const isRecorded = this.concreteList.find(
       (concrete: Concrete) => concrete.name === this.concrete.name
     );
+
+    if (this.concrete.name.includes('مضخ'))
 
     if (isRecorded) {
       addConcreteForm.form.controls['concreteName'].setErrors({
         incorrect: true,
       });
     } else {
+
       addConcreteForm.form.controls['concreteName'].setErrors(null);
     }
   }

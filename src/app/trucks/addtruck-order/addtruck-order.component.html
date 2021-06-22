@@ -56,7 +56,7 @@
 
 
           <div class="row">
-            <div class="col-lg-8 col-md-12">
+            <div class="col-lg-9 col-md-12">
               <table class="my-3" cellspacing="0">
                 <div class="textSecondary">بيانات السيارة</div>
                 <tr>
@@ -73,6 +73,7 @@
                         [(ngModel)]="truckOrder.truckName" list="truckList" (change)="truckNameChanged(truckOrderForm)">
                       <datalist id="truckList">
                         <option *ngFor="let truck of truckList" value="{{truck.name}}">
+                          {{truck.number}}
                         </option>
                       </datalist>
 
@@ -90,16 +91,28 @@
                   <td class="pt-3">
                     <mat-form-field class="example-full-width">
                       <input matInput type="number"
-                        placeholder="{{truckOrder.loadingType == 'متر' ? 'عدد النقلات' : truckOrder.loadingType == 'يومية' ? 'عدد اليوميات' : 'عدد الساعات'}}" #LoadTimes
-                        name="LoadTimes" [(ngModel)]="truckOrder.LoadTimes" (ngModelChange)="calcTotal()">
+                        placeholder="{{truckOrder.loadingType == 'متر' ? 'عدد النقلات' : truckOrder.loadingType == 'يومية' ? 'عدد اليوميات' : 'عدد الساعات'}}"
+                        #LoadTimes name="LoadTimes" [(ngModel)]="truckOrder.LoadTimes" (ngModelChange)="calcTotal()">
                     </mat-form-field>
                   </td>
 
                   <td class="pt-3">
                     <mat-form-field class="example-full-width">
                       <input matInput type="number"
-                        placeholder="{{truckOrder.loadingType == 'متر' ? 'سعر المتر' : truckOrder.loadingType == 'يومية' ? 'سعر اليوم' : 'سعر الساعة'}}" #price
-                        name="price" [(ngModel)]="truckOrder.price" (ngModelChange)="calcTotal()">
+                        placeholder="{{truckOrder.loadingType == 'متر' ? 'سعر المتر' : truckOrder.loadingType == 'يومية' ? 'سعر اليوم' : 'سعر الساعة'}}"
+                        #price name="price" [(ngModel)]="truckOrder.price" (ngModelChange)="calcTotal()">
+                    </mat-form-field>
+
+                    <!-- <mat-form-field class="w-50 pr-2">
+                      <input matInput placeholder="تكلفة قياسية" #realPrice name="realPrice"
+                        [(ngModel)]="truckOrder.realPrice">
+                    </mat-form-field> -->
+                  </td>
+
+                  <td class="pt-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="تكلفة قياسية" #realPrice name="realPrice"
+                        [(ngModel)]="truckOrder.realPrice">
                     </mat-form-field>
                   </td>
 

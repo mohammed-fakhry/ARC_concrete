@@ -19,7 +19,6 @@ import { MainService } from 'src/app/services/main.service';
 import { StockService } from 'src/app/services/stock.service';
 import { Location } from '@angular/common';
 import { TruckService } from 'src/app/services/truck.service';
-import { TruckOrder } from 'src/app/classes/truck-order';
 import { ConcreteBon } from 'src/app/classes/concrete-bon';
 
 @Component({
@@ -143,7 +142,7 @@ export class AddConcreteReceiptComponent implements OnInit {
         this.customerList = result.concreteCustomers;
         this.stockList = result.stocks;
 
-        const stockInfo = this.stockList[0];
+        const stockInfo = this.stockList[1];
 
         if (
           this.addByBon.customerId &&
@@ -242,7 +241,9 @@ export class AddConcreteReceiptComponent implements OnInit {
 
       if (i == concretNames.length - 1) {
         const pumps = bons
-          .filter((bon) => !bon.pump.includes('ثابت'))
+          .filter(
+            (bon) => !bon.pump.includes('ثابت') && !bon.pump.includes('مزراب')
+          )
           .map((bon) => {
             return {
               name: bon.pump,
@@ -385,39 +386,6 @@ export class AddConcreteReceiptComponent implements OnInit {
         }
       }
 
-      /* for (let i = 0; i < concretes.length; i++) {
-        for (let nI = 0; nI < elements.length; nI++) {
-          for (let nP = 0; nI < pumps.length; nP++) {
-            const rowInfo = data.find(
-              (d) =>
-                d.concreteName == concretes[i] &&
-                d.notes == elements[nI] &&
-                d.pump == pumps[nP]
-            );
-
-            if (rowInfo) {
-
-              console.log(rowInfo)
-              const row = {
-                concrete: rowInfo.concreteName,
-                element: rowInfo.notes,
-                pump: rowInfo.pump,
-                qty: data
-                  .filter(
-                    (d) =>
-                      d.concreteName == concretes[i] &&
-                      d.notes == elements[nI] &&
-                      d.pump == pumps[nP]
-                  )
-                  .map((d) => d.concreteQty)
-                  .reduce((a, b) => a + b, 0),
-              };
-
-              this.concreteElements = [...this.concreteElements, row];
-            }
-          }
-        }
-      } */
       this.elementLoading = false;
     });
   }

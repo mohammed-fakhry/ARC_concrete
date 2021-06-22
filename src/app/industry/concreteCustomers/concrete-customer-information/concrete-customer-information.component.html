@@ -251,7 +251,7 @@
                   {{cement.qty_out | number: '1.0-2'}}
                 </td>
 
-                <td class="lightBg tdBorder textBold">
+                <td class="lightBg tdBorder textBold" [class.textDanger]="cement.balance < 0">
                   {{cement.balance | number: '1.0-2'}}
                 </td>
 

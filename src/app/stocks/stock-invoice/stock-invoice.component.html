@@ -20,7 +20,7 @@
                   <!-- <div class="textBold p-2 text-center infoCard fullWidth secondaryBadge borderLsecondary">
                     {{invoiceCond}}</div> -->
                   <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'"
-                    [class.borderRight-alert]="stockInvoice.truckOwner == 'سيارة خارجية'">
+                    [class.borderRight-alert]="stockInvoice.truckOwner == 'سيارة خارجية'" class="w-75 pl-2">
                     <input matInput type="search" list="truckList" class="mdb-autocomplete"
                       [(ngModel)]="stockInvoice.truckName" #truckName placeholder="اسم السيارة" name="truckName"
                       autocomplete="off" (change)="truckNameChanged(stockInvoiceForm)">
@@ -29,9 +29,13 @@
                     </mat-error>
                     <datalist id="truckList">
                       <option *ngFor="let truck of truckList" value="{{truck.name}}">
-                        {{truck.name}} | {{truck.number}}
+                        {{truck.number}}
                       </option>
                     </datalist>
+                  </mat-form-field>
+
+                  <mat-form-field class="w-25">
+                    <input matInput placeholder="المشال" name="metrPrice" type="number" [(ngModel)]="truckInfo.metrPrice">
                   </mat-form-field>
                 </td>
               </tr>
@@ -47,9 +51,9 @@
                       <mat-option value="فاتورة بيع" (click)="transactionTypeChanged('customerInvoice')">
                         فاتورة بيع
                       </mat-option>
-                      <!-- <mat-option value="اذن نقل" (click)="transactionTypeChanged('stockTrance')">
+                      <mat-option value="اذن نقل" (click)="transactionTypeChanged('stockTrance')">
                         اذن نقل
-                      </mat-option> -->
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </td>
@@ -263,9 +267,9 @@
               <th style="flex: 2;">اسم الصنف</th>
               <th style="flex: .75;">
                 <i class="fa fa-stop textSecondary"></i>
-                عدد نقلات
+                {{stockInvoice.truckCapacity  < 2 ? 'الكمية' : 'عدد النقلات'}}
               </th>
-              <th style="flex: .75;">
+              <th style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
                 <i class="fa fa-th-large textSecondary"></i>
                 الحمولة
               </th>
@@ -273,8 +277,10 @@
                 <i class="fa fa-th textSecondary"></i>
                 اجمالى عدد
               </th>
-              <th>سعر المتر</th>
               <th>
+                {{stockInvoice.truckCapacity  < 2 ? 'السعر' : 'سعر النقلة'}}
+              </th>
+              <th [class.d-none]="stockInvoice.truckCapacity  < 2">
                 سعر النقلة
               </th>
               <th *ngIf="showDiscound" style="flex: .35;">خصم %</th>
@@ -308,7 +314,7 @@
                   name="loadTimes{{i}}" id="loadTimes{{i}}" [(ngModel)]="productQtys[i].loadTimes"
                   (ngModelChange)="calcQty(i)" (click)="selectText('loadTimes',i)">
               </td>
-              <td style="flex: .75;">
+              <td style="flex: .75;"[class.d-none]="stockInvoice.truckCapacity  < 2">
                 <input [disabled]="!stockInvoice.customerName || !stockInvoice.truckName" type="number"
                   class="form-control lightBg" name="truckCapacity{{i}}" id="truckCapacity{{i}}"
                   (click)="selectText('truckCapacity',i)" [(ngModel)]="stockInvoice.truckCapacity"
@@ -328,7 +334,7 @@
                   [class.lightBg]="!inpt.info.product" (ngModelChange)="calcTotal(i)">
               </td>
 
-              <td>
+              <td [class.d-none]="stockInvoice.truckCapacity  < 2">
                 <input type="number" class="form-control textBold textDark" name="backetPrice{{i}}"
                   id="backetPrice{{i}}" (click)="selectText('backetPrice',i)" [(ngModel)]="productQtys[i].payLoadPrice"
                   [disabled]="!inpt.info.product" (ngModelChange)="packetPriceChange(i)">
