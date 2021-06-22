@@ -1323,7 +1323,7 @@ export class StockInvoiceComponent implements OnInit {
         truckCustomerName: '',
         LoadTimes: loadTimes,
         totalQty: 0,
-        price: price,
+        price: 0,
         realPrice: price,
         totalVal: 0,
         date_time: this.stockInvoice.date_time,

@@ -57,7 +57,7 @@
             <mat-form-field class="example-full-width">
               <mat-label>الاسم</mat-label>
               <input required matInput name="name" [(ngModel)]="truck.name" #name
-                (change)="isNameRecorded(addTruckForm)">
+                (change)="isNameRecorded(addTruckForm)" [disabled]="id != null">
               <mat-error *ngIf="!inputValid.name.cond">
                 {{inputValid.name.msg}}
               </mat-error>

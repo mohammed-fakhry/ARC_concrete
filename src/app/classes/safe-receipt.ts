@@ -24,6 +24,10 @@ export class SafeReceipt {
   concreteCustomer_id!: string | null;
   concreteCustomerName: string = '';
   concreteCustomerVal: number = 0;
+  // truck
+  truckId!: string | null;
+  truckName: string = '';
+  truckCurrentVal: number = 0;
   // truckCustomer inpts
   truckCustomerId!: string | null;
   truckCustomerName: string = '';

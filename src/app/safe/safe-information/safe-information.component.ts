@@ -173,9 +173,15 @@ export class SafeInformationComponent implements OnInit {
       }
 
       if (data[i].truckCustomerName) {
-        routeTo = `/TruckCustomerInformation/${data[i].truckCustomerId}`;
+        routeTo = `/TruckCustomerInformation/${data[i].truckId}`;
         receiptDetail = data[i].truckCustomerName;
         toolTip = 'عميل معدات'
+      }
+
+      if (data[i].truckName) {
+        routeTo = `/truckLog/${data[i].truckId}`;
+        receiptDetail = data[i].truckName;
+        toolTip = 'دفعة من تشغيل معدة'
       }
 
       let newData = {

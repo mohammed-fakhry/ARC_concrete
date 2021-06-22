@@ -9,4 +9,5 @@ export class Truck {
   owner: string = 'سيارة الشركة';
   customerId: string = '1';
   customerName: string = '';
+  truckCurrentVal: number = 0;
 }

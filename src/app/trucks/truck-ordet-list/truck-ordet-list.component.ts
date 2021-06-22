@@ -46,6 +46,8 @@ export class TruckOrdetListComponent implements OnInit {
   // totalExpencies: number = 0;
   netIncome: number = 0;
 
+  totalCashIn: number = 0;
+
   truckOtherAccInfo: OtherAcc = new OtherAcc();
 
   searchDate = { from: '', to: '' };
@@ -124,26 +126,30 @@ export class TruckOrdetListComponent implements OnInit {
   makeTruckAcc(data: TruckOrder[]) {
     this.accArr = [];
 
+    this.totalCashIn = data
+      .filter((d) => d.orderType == 'safereceipt')
+      .map((d) => d.totalVal * -1)
+      .reduce((a, b) => a + b, 0);
+
     for (let i = 0; i < data.length; i++) {
       /* CASE WHEN truckorder.loadingType <> 'متر' THEN 1 WHEN truckorder.loadingType = 'متر' Then trucks.capacity END ) * truckorder.LoadTimes * truckorder.price */
 
       // truckType
-      let loadingType = data[i].loadingType
+      /* let loadingType = data[i].loadingType
         ? data[i].loadingType
         : data[i].truckType == 'سيارة'
         ? 'متر'
         : 'ساعة';
+      */
 
       const totalVal =
-        (loadingType != 'متر' ? 1 : data[i].truckCapacity) *
-        data[i].LoadTimes *
-        data[i].realPrice;
+        data[i].orderType == 'safereceipt'
+          ? data[i].totalVal
+          : (data[i].loadingType != 'متر' ? 1 : data[i].truckCapacity) *
+            data[i].LoadTimes *
+            data[i].realPrice;
 
-
-      const netVal =
-        i == 0
-          ? totalVal
-          : this.accArr[i - 1].netVal + totalVal;
+      const netVal = i == 0 ? totalVal : this.accArr[i - 1].netVal + totalVal;
 
       const newRow = {
         id: i + 1,
@@ -151,14 +157,17 @@ export class TruckOrdetListComponent implements OnInit {
         date_time: data[i].date_time.replace('T', ' '),
         orderId: data[i].orderId,
         orderType: data[i].orderType,
-        loadingType: loadingType,
+        loadingType: data[i].loadingType,
         price: data[i].realPrice,
         totalQty: data[i].totalQty,
-        totalVal: data[i].totalVal,
+        totalVal: totalVal,
         netVal: netVal,
         truckCapacity: data[i].truckCapacity,
         truckCustomerId: data[i].truckCustomerId,
-        truckCustomerName: data[i].truckCustomerName,
+        truckCustomerName:
+          data[i].orderType == 'safereceipt'
+            ? 'ايصال نقدية'
+            : data[i].truckCustomerName,
         truckId: data[i].truckId,
         truckModel: data[i].truckModel,
         truckName: data[i].truckName,
@@ -170,15 +179,14 @@ export class TruckOrdetListComponent implements OnInit {
       this.accArr = [...this.accArr, newRow];
 
       if (i == data.length - 1) {
-        this.totalIncome = netVal;
+        this.totalIncome = netVal + this.totalCashIn;
       }
     }
 
-    /* this.totalIncome = this.accArr
-      .map((acc) => {
-        acc.totalVal;
-      })
-      .reduce((a: any, b: any) => a + b, 0); */
+   /*  this.totalIncome = this.accArr
+      .filter((d) => d.orderType != 'safereceipt')
+      .map((d) => d.totalVal)
+      .reduce((a, b) => a + b, 0); */
 
     return this.accArr.reverse();
   }

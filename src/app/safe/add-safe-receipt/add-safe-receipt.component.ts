@@ -20,6 +20,7 @@ import { ConcreteCustomer } from 'src/app/classes/concrete-customer';
 import { ConcreteService } from 'src/app/services/concrete.service';
 import { TruckService } from 'src/app/services/truck.service';
 import { TruckCustomer } from 'src/app/classes/truck-customer';
+import { Truck } from 'src/app/classes/truck';
 
 @Component({
   selector: 'app-add-safe-receipt',
@@ -36,6 +37,7 @@ export class AddSafeReceiptComponent implements OnInit {
   accList: OtherAcc[] = [];
   concreteCustomerList: ConcreteCustomer[] = [];
   truckCustomerList: TruckCustomer[] = [];
+  truckList: Truck[] = [];
 
   safeReciept: SafeReceipt = new SafeReceipt();
   otherRecieptVals: { note: string; val: number }[] = [];
@@ -49,6 +51,7 @@ export class AddSafeReceiptComponent implements OnInit {
     concreteCustomerName: { cond: true, msg: '', class: 'secondaryBadge' },
     truckCustomerName: { cond: true, msg: '', class: 'secondaryBadge' },
     AccName: { cond: true, msg: '', class: 'secondaryBadge' },
+    truckName: { cond: true, msg: '', class: 'secondaryBadge' },
     receiptVal: { cond: true, msg: '' },
   };
   date_timeDom!: HTMLElement;
@@ -123,6 +126,7 @@ export class AddSafeReceiptComponent implements OnInit {
     this.submitBtn = 'تسجيل';
     this.otherRecieptVals = [];
     this.concreteCustomerList = [];
+    this.truckList = [];
 
     this.makeOtherVal_null('عميل');
 
@@ -134,6 +138,7 @@ export class AddSafeReceiptComponent implements OnInit {
       this.getAccList(),
       this.getConcreteCustomers(),
       this.getTruckCustomers(),
+      this.getTruckList(),
     ]).then((data: any[]) => {
       const result = {
         safes: data[0],
@@ -141,6 +146,7 @@ export class AddSafeReceiptComponent implements OnInit {
         acc: data[2],
         concreteCustomers: data[3],
         truckCustomers: data[4],
+        trucks: data[5],
       };
 
       this.mainCustomerList = result.customers;
@@ -151,6 +157,7 @@ export class AddSafeReceiptComponent implements OnInit {
 
       this.accList = result.acc;
       this.safeList = result.safes;
+      this.truckList = result.trucks.filter((truck: Truck) => truck.owner == 'سيارة الشركة');
 
       this.safeReciept.safeName = this.safeList[0].safeName;
       this.safeReciept.safeId = this.safeList[0].safeId;
@@ -352,6 +359,12 @@ export class AddSafeReceiptComponent implements OnInit {
     });
   }
 
+  getTruckList(): Promise<Truck[]> {
+    return new Promise((res) => {
+      this._truckService.trucksList().subscribe((data: Truck[]) => res(data));
+    });
+  }
+
   makeOtherVal_null(cond: string) {
     if (cond == 'عميل') {
       this.safeReciept.AccName = null;
@@ -365,6 +378,10 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.truckCustomerName = '';
       this.safeReciept.truckCustomerId = '0';
       this.safeReciept.truckCustomerVal = 0;
+
+      this.safeReciept.truckName = '';
+      this.safeReciept.truckCurrentVal = 0;
+      this.safeReciept.truckId = '0';
     }
 
     if (cond == 'حساب') {
@@ -379,6 +396,10 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.truckCustomerName = '';
       this.safeReciept.truckCustomerId = '0';
       this.safeReciept.truckCustomerVal = 0;
+
+      this.safeReciept.truckName = '';
+      this.safeReciept.truckCurrentVal = 0;
+      this.safeReciept.truckId = '0';
     }
 
     if (cond == 'عميل خرسانة') {
@@ -393,6 +414,10 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.truckCustomerName = '';
       this.safeReciept.truckCustomerId = '0';
       this.safeReciept.truckCustomerVal = 0;
+
+      this.safeReciept.truckName = '';
+      this.safeReciept.truckCurrentVal = 0;
+      this.safeReciept.truckId = '0';
     }
 
     if (cond == 'عميل معدات') {
@@ -407,6 +432,30 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.concreteCustomerName = '';
       this.safeReciept.concreteCustomerVal = 0;
       this.safeReciept.concreteCustomer_id = '0';
+
+      this.safeReciept.truckName = '';
+      this.safeReciept.truckCurrentVal = 0;
+      this.safeReciept.truckId = '0';
+    }
+
+    // دفعات للمعدة
+
+    if (cond == 'دفعات للمعدة') {
+      this.safeReciept.customerId = 1;
+      this.safeReciept.currentCustomerVal = 0;
+      this.safeReciept.customerName = '';
+
+      this.safeReciept.AccName = null;
+      this.safeReciept.currentAccVal = 0;
+      this.safeReciept.accId = null;
+
+      this.safeReciept.concreteCustomerName = '';
+      this.safeReciept.concreteCustomerVal = 0;
+      this.safeReciept.concreteCustomer_id = '0';
+
+      this.safeReciept.truckCustomerName = '';
+      this.safeReciept.truckCustomerId = '0';
+      this.safeReciept.truckCustomerVal = 0;
     }
   }
 
@@ -496,6 +545,15 @@ export class AddSafeReceiptComponent implements OnInit {
           : (this.safeReciept.truckCustomerVal ?? 0) +
             (this.safeReciept.receiptVal ?? 0);
     }
+
+    if (this.safeReciept.transactionAccKind === 'دفعات للمعدة') {
+      this.valsRemain.otherValRemain =
+        this.safeReciept.receiptKind === 'ايصال استلام نقدية'
+          ? (this.safeReciept.truckCurrentVal ?? 0) -
+            (this.safeReciept.receiptVal ?? 0)
+          : (this.safeReciept.truckCurrentVal ?? 0) +
+            (this.safeReciept.receiptVal ?? 0);
+    }
   }
 
   accNameChanged = (addSafeReciept: NgForm) => {
@@ -520,6 +578,33 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['AccName'].setErrors(null);
       this.safeReciept.currentAccVal = accInfo.currentAccVal;
       this.valsRemain.otherValRemain = accInfo.currentAccVal;
+    }
+  };
+
+  truckNameChanged = (addSafeReciept: NgForm) => {
+    let truckName = this.safeReciept.truckName;
+    let truckInfo;
+    if (truckName) truckInfo = this.findTruck_byName(truckName);
+    if (!truckInfo) {
+      this.inputValid.truckName = {
+        cond: false,
+        msg: 'المُعدة غير مسجلة بقاعدة البيانات',
+        class: 'secondaryBadge',
+      };
+      addSafeReciept.form.controls['truckName'].setErrors({ incorrect: true });
+      this.safeReciept.currentAccVal = 0;
+      this.safeReciept.truckId = null;
+      this.valsRemain.otherValRemain = 0;
+    } else {
+      this.safeReciept.truckId = truckInfo.id;
+      this.inputValid.AccName.cond = true;
+      /*
+        this.inputValid.AccName.class =
+        truckInfo. >= 0 ? 'secondaryBadge' : 'dangerBadge';
+      */
+      addSafeReciept.form.controls['truckName'].setErrors(null);
+      // this.safeReciept.currentAccVal = accInfo.currentAccVal;
+      // this.valsRemain.otherValRemain = accInfo.currentAccVal;
     }
   };
 
@@ -582,6 +667,9 @@ export class AddSafeReceiptComponent implements OnInit {
 
   findAcc_byName = (accName: string): OtherAcc | undefined =>
     this.accList.find((acc) => acc.AccName === accName);
+
+  findTruck_byName = (truckName: string): Truck | undefined =>
+    this.truckList.find((truck) => truck.name === truckName);
 
   findConcreteCustomer_byName = (
     fullName: string
@@ -676,8 +764,6 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.truckCustomerVal = customerInfo.currentVal;
       this.safeReciept.truckCustomerId = customerInfo.id;
       this.valsRemain.otherValRemain = customerInfo.currentVal;
-
-      console.log(customerInfo);
     }
   }
 
@@ -945,6 +1031,10 @@ export class AddSafeReceiptComponent implements OnInit {
       concreteCustomerVal: receipt.concreteCustomerVal
         ? receipt.concreteCustomerVal
         : 0,
+      // truck
+      truckId: receipt.truckId ? receipt.truckId : null,
+      truckName: receipt.truckName ? receipt.truckName : '',
+      truckCurrentVal: receipt.truckCurrentVal ? receipt.truckCurrentVal : 0,
       // truckCustomer inpts
       truckCustomerId: receipt.truckCustomerId ? receipt.truckCustomerId : null,
       truckCustomerName: receipt.truckCustomerName

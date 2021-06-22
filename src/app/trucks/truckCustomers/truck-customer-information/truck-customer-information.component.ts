@@ -182,7 +182,11 @@ export class TruckCustomerInformationComponent implements OnInit {
         this.pureAcc = result.acc;
 
         this.tempAccArry = [...this.pureAcc];
-        this.fillListData(this.makeCustomerAcc(result.acc));
+        this.fillListData(
+          this.makeCustomerAcc(
+            this.pureAcc.filter((acc: any) => acc.orderPrice > 0)
+          )
+        );
 
         // this.maketTruckWorks(result.acc);
       })
@@ -264,7 +268,7 @@ export class TruckCustomerInformationComponent implements OnInit {
             .filter(
               (d: any) => d.truckId == trucksIds[i] && d.loadingType == 'متر'
             )
-            .map((d: any) => d.LoadTimes  * d.truckCapacity)
+            .map((d: any) => d.LoadTimes * d.truckCapacity)
             .reduce((a: any, b: any) => a + b, 0),
         };
 
@@ -611,8 +615,12 @@ export class TruckCustomerInformationComponent implements OnInit {
       let start = `${from} 00:00`;
       let end = `${to} 23:59`;
 
+      /* .filter((acc: any) => acc.orderPrice > 0) */
+
       let newArr = this.accArr.filter((acc) => {
-        return acc.date_time >= start && acc.date_time <= end;
+        return (
+          acc.date_time >= start && acc.date_time <= end && acc.orderPrice > 0
+        );
       });
 
       this.tempAccArry = this.pureAcc.filter((acc) => {

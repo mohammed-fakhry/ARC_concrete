@@ -39,7 +39,8 @@
 
           <mat-form-field style="width: 250px;">
             <mat-label>تاريخ الايصال</mat-label>
-            <input matInput [disabled]="dateExpires" type="datetime-local" name="date_time" [(ngModel)]="safeReciept.date_time" id="date_time">
+            <input matInput [disabled]="dateExpires" type="datetime-local" name="date_time"
+              [(ngModel)]="safeReciept.date_time" id="date_time">
           </mat-form-field>
 
           <table class="example-full-width my-3" cellspacing="0" class="col-lg-8 col-sm-12">
@@ -82,6 +83,9 @@
                 </mat-option>
                 <mat-option value="عميل معدات">
                   عميل معدات
+                </mat-option>
+                <mat-option value="دفعات للمعدة">
+                  دفعات للمعدة
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -174,6 +178,28 @@
               </td>
               <td style="width: 30%;">
                 <div class="{{inputValid.AccName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.currentAccVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
+
+            <tr *ngIf="safeReciept.transactionAccKind == 'دفعات للمعدة'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم المعدة" list="truckList" class="mdb-autocomplete" #truckName
+                    name="truckName" [(ngModel)]="safeReciept.truckName" (change)="truckNameChanged(addSafeReciept)"
+                    required>
+                  <datalist id="truckList">
+                    <option *ngFor="let truck of truckList" value="{{truck.name}}">
+                      {{truck.number}}
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.truckName.cond">
+                    {{inputValid.truckName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.truckName.class}} textBold p-2 text-center infoCard">
                   {{(safeReciept.currentAccVal || 0) | number:'1.0-2'}}</div>
               </td>
             </tr>

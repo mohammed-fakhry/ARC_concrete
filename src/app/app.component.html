@@ -311,7 +311,12 @@
             و المقاولات العمومية و التوريدات
           </h2> -->
           <div class="textBolder textSecondary">شركة تاور للخرسانات الجاهزة</div>
-          <!-- <div class="textBolder"> المقاولات العمومية و التوريدات</div> -->
+          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
+            للمقاولات العمومية
+          </div>
+          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
+            و التـوريدات
+          </div>
           <h2></h2>
           <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt')">
             رقم السجل التجارى : 426661

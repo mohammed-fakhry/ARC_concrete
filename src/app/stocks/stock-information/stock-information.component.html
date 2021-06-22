@@ -34,32 +34,30 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="productUnit">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>وحدة الصنف</th>
-            <td mat-cell *matCellDef="let row" [class.textDanger]="row.productUnit < 0"
-              class="tdBorder lightBg textBold">
-              {{row.productUnit}}</td>
+          <ng-container matColumnDef="allQtyIn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>وارد</th>
+            <td mat-cell *matCellDef="let row" class="tdBorder lightBg textBold">
+              {{row.allQtyIn | number: '1.0-2'}}</td>
           </ng-container>
 
-          <ng-container matColumnDef="backetQty">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>عدد وحدات</th>
-            <td mat-cell *matCellDef="let row" [class.textDanger]="row.backetQty < 0"
-              [class.dangerBadge]="row.Qty <= row.minimumQty">
-              {{row.backetQty}}</td>
+          <ng-container matColumnDef="allQtyOut">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>منصرف</th>
+            <td mat-cell *matCellDef="let row">
+              {{row.allQtyOut | number: '1.0-2'}}</td>
           </ng-container>
 
-          <ng-container matColumnDef="unitQty">
+          <!-- <ng-container matColumnDef="unitQty">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>عدد قطع</th>
             <td mat-cell *matCellDef="let row" [class.textDanger]="row.unitQty < 0"
               [class.dangerBadge]="row.Qty <= row.minimumQty">
               {{row.unitQty}}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="Qty">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>رصيد باقى</th>
             <td mat-cell *matCellDef="let row" [class.textDanger]="row.Qty < 0" class="tdBorder_left textBold lightBg"
               [ngClass]="row.Qty <= row.minimumQty ? 'dangerBadge borderLdanger' : 'lightBg'">
-              {{row.Qty}}</td>
+              {{row.Qty | number: '1.0-2'}}</td>
           </ng-container>
 
           <ng-container matColumnDef="maxPriceOut">
@@ -116,7 +114,7 @@
       </div>
 
       <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="50"
-        [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
+        [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
       </mat-paginator>
 
     </div>

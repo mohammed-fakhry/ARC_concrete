@@ -194,7 +194,7 @@ export class CustomerInformationComponent implements OnInit {
     unitPrice: number
   ): string {
     // const unitDetail = this.calcUnits(productQty, productUnit, unitPrice);
-    return `${productQty} ${detail} ${unitPrice}`
+    return `${productQty} ${detail} ${unitPrice}`;
     //return `${unitDetail.backet}${unitDetail.unit} ${detail} ${unitDetail.backetPrice}`;
   }
 
@@ -486,6 +486,10 @@ export class CustomerInformationComponent implements OnInit {
       concreteCustomer_id: '0',
       concreteCustomerName: '',
       concreteCustomerVal: 0,
+      // truck
+      truckId: null,
+      truckName: '',
+      truckCurrentVal: 0,
       // truckCustomer inpts
       truckCustomerId: '0',
       truckCustomerName: '',

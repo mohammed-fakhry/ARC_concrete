@@ -24,11 +24,7 @@ export class FixesComponent implements OnInit {
     mainUrl: 'http://localhost/accounting/',
   };
 
-  db_changes = [
-    "ALTER TABLE `concrete` ADD `accId` VARCHAR(100) NOT NULL AFTER `lastUpdated`",
-    "ALTER TABLE `truckorder` ADD `realPrice` FLOAT(10,2) NOT NULL AFTER `price`",
-    "UPDATE truckorder set truckorder.realPrice = truckorder.price"
-  ];
+  db_changes = [];
 
   constructor(
     public _stockService: StockService,

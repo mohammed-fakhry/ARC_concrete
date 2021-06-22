@@ -23,6 +23,7 @@ export class InvoicesReportComponent implements OnInit {
   listData: MatTableDataSource<any> | any;
 
   displayedColumns: string[] = [
+    'id',
     'date_time',
     'transactionType',
     'customerName',
@@ -264,46 +265,44 @@ export class InvoicesReportComponent implements OnInit {
         */
 
         if (truckInfo) {
-          let price: number = 0;
 
-          if (truckInfo.customerId == acc.customerId) {
-            price = 0;
-          } else if (
-            acc.transactionType.includes('فاتورة شراء') &&
-            acc.productName.includes('سن') &&
+
+          if (
+            acc.transactionType.includes('فاتورة بيع') &&
+            acc.productName.includes('رمل') &&
             truckInfo.owner == 'سيارة الشركة'
           ) {
-            price = 85;
-          } else {
-            price = truckInfo.metrPrice;
+            const truckOrder: TruckOrder = {
+              orderId: null,
+              truckId: acc.truckId,
+              truckName: '',
+              truckCapacity: truckInfo.capacity,
+              truckModel: '',
+              orderType: truckInfo.owner,
+              truckType: 'سيارة',
+              loadingType: 'متر',
+              truckCustomerId: '1',
+              truckCustomerName: '',
+              LoadTimes: Math.ceil(acc.Qty / truckInfo.capacity),
+              totalQty: 0,
+              price: 0,
+              realPrice: 0,
+              totalVal: 0,
+              date_time: acc.date_time.replace(' ', 'T'),
+              notes: `${acc.customerName} | فاتورة (${acc.stockTransactionId})`,
+              stockTransactionDetailsId: acc.stockTransactionDetailsId,
+              stockTransactionId: '',
+              madeBy: acc.madeBy,
+            };
+
+            console.log(truckOrder)
+
+            // console.log({ i: i, length: dataArr.length - 1 });
+
+            this._truckService
+              .updateTruckOrder(truckOrder, 'transId')
+              .subscribe();
           }
-
-          const truckOrder: TruckOrder = {
-            orderId: null,
-            truckId: acc.truckId,
-            truckName: '',
-            truckCapacity: truckInfo.capacity,
-            truckModel: '',
-            orderType: truckInfo.owner,
-            truckType: 'سيارة',
-            loadingType: 'متر',
-            truckCustomerId: '1',
-            truckCustomerName: '',
-            LoadTimes: Math.ceil(acc.Qty / truckInfo.capacity),
-            totalQty: 0,
-            price: price,
-            realPrice: price,
-            totalVal: 0,
-            date_time: acc.date_time.replace(' ', 'T'),
-            notes: `${acc.customerName} | فاتورة (${acc.stockTransactionId})`,
-            stockTransactionDetailsId: acc.stockTransactionDetailsId,
-            stockTransactionId: '',
-            madeBy: acc.madeBy,
-          };
-
-          // console.log({ i: i, length: dataArr.length - 1 });
-
-          this._truckService.postTruckOrder(truckOrder).subscribe();
         }
       }
     });

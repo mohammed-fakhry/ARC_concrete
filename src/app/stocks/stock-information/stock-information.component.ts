@@ -17,9 +17,11 @@ export class StockInformationComponent implements OnInit {
   listData: MatTableDataSource<any> | any;
   displayedColumns: string[] = [
     'productName',
-    'productUnit',
-    'backetQty',
-    'unitQty',
+    //'productUnit',
+    'allQtyIn',
+    //'backetQty',
+    'allQtyOut',
+    //'unitQty',
     'Qty',
     'maxPriceOut',
     'minPriceOut',
@@ -74,15 +76,15 @@ export class StockInformationComponent implements OnInit {
           : 'لا توجد حركة لاصناف هذا المخزن';
 
       if (result.mainStockData.length > 0) {
-        let filteredData = result.mainStockData
-          .filter((d: any) => d.Qty != 0)
-          .map((d: any) => {
+        let filteredData = result.mainStockData.filter((d: any) => d.Qty != 0);
+
+        /* .map((d: any) => {
             return {
               ...d,
               backetQty: this.calcUnits(d.Qty, d.productUnit).backet,
               unitQty: this.calcUnits(d.Qty, d.productUnit).unit,
             };
-          });
+          }); */
 
         if (result.addFromTransaction.length > 0) {
           for (let i = 0; i < filteredData.length; i++) {
@@ -121,7 +123,7 @@ export class StockInformationComponent implements OnInit {
     });
   }
 
-  calcUnits(
+  /* calcUnits(
     qty: number,
     productUnit: number
   ): { backet: number; unit: number } {
@@ -139,7 +141,7 @@ export class StockInformationComponent implements OnInit {
     };
 
     return seperate;
-  }
+  } */
 
   minumumQtyFilter() {
     const filtered = this.allProducts.filter(

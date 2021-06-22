@@ -17,8 +17,8 @@
               <td style="padding-top: 4px;">
                 <mat-form-field class="printX">
                   <mat-select placeholder="المخزن" [required]="concreteReceipt.manualNum != 'مستخلص مضخة ثابتة'"
-                    #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName"
-                    (ngModelChange)="stockNameChanged()" [disabled]="concreteReceipt.recordedByBon">
+                    disabled #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName"
+                    (ngModelChange)="stockNameChanged()">
                     <mat-option *ngFor="let stock of stockList" [value]="stock.stockName">
                       {{stock.stockName}}
                     </mat-option>

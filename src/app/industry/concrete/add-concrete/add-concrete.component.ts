@@ -146,14 +146,14 @@ export class AddConcreteComponent implements OnInit {
       (concrete: Concrete) => concrete.name === this.concrete.name
     );
 
-    if (this.concrete.name.includes('مضخ'))
-
-    if (isRecorded) {
+    if (this.concrete.name.includes('مضخ')) {
+      addConcreteForm.form.controls['concreteName'].setErrors(null);
+      this.formValid.mainForm = true;
+    } else if (isRecorded) {
       addConcreteForm.form.controls['concreteName'].setErrors({
         incorrect: true,
       });
     } else {
-
       addConcreteForm.form.controls['concreteName'].setErrors(null);
     }
   }
@@ -213,7 +213,7 @@ export class AddConcreteComponent implements OnInit {
     if (this.id) {
       this.concrete.lastUpdated = this._mainService.makeTime_date(
         new Date(Date.now())
-      )
+      );
 
       this._concrete.updateConcrete(this.concrete).subscribe();
       this.recordMaterials(this.concrete.id);
