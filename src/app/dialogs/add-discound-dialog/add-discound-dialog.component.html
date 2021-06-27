@@ -1,5 +1,5 @@
 <h3 class="textBold" [ngClass]="data.receiptKind == 'ايصال صرف نقدية' ? 'textPrimary' : 'textDanger'">
-  خصم من حساب | {{data.customerName}}
+  {{data.receiptKind == 'ايصال صرف نقدية' ? 'اضافة الى' : 'خصم من'}} حساب | {{data.customerName}}
 </h3>
 <hr>
 <mat-dialog-content>
@@ -47,27 +47,34 @@
         <td>
           <mat-form-field>
             <input [disabled]="loading" matInput placeholder="ترحيل الخصم الى حساب" list="accList"
-              class="mdb-autocomplete" #AccName name="AccName" [(ngModel)]="data.AccName" (ngModelChange)="accNameChanged(modalForm)"
-              required>
+              class="mdb-autocomplete" #AccName name="AccName" [(ngModel)]="data.AccName"
+              (ngModelChange)="accNameChanged(modalForm)" required>
             <datalist id="accList">
               <option *ngFor="let acc of accList" value="{{acc.AccName}}">
               </option>
             </datalist>
+
+            <mat-error>
+              يجب اختيار حساب صحيح
+            </mat-error>
           </mat-form-field>
         </td>
       </tr>
+      <tr>
+        <td colspan="2">
+          <mat-form-field class="w-100">
+            <input [disabled]="loading" matInput placeholder="ملاحظات" maxlength='200' name="recieptNote" #recieptNote
+              [ngModel]="data.recieptNote">
+            <mat-hint align="end">{{recieptNote.value.length || 0}} / 200</mat-hint>
+          </mat-form-field>
+        </td>
+      </tr>
+
       <tr>
         <td>
           <mat-form-field cellspacing="0">
             <input [disabled]="loading" matInput placeholder="قيمة الخصم" type="number" #receiptVal name="receiptVal"
               [ngModel]="data.receiptVal" required>
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-form-field cellspacing="0">
-            <input [disabled]="loading" matInput placeholder="ملاحظات" maxlength='200' name="recieptNote" #recieptNote
-              [ngModel]="data.recieptNote">
-            <mat-hint align="end">{{recieptNote.value.length || 0}} / 200</mat-hint>
           </mat-form-field>
         </td>
       </tr>

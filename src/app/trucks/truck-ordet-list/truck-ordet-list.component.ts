@@ -52,6 +52,8 @@ export class TruckOrdetListComponent implements OnInit {
 
   searchDate = { from: '', to: '' };
 
+  truckInfo: Truck = new Truck();
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
@@ -92,11 +94,11 @@ export class TruckOrdetListComponent implements OnInit {
               };
 
               //const truckList = result.truckList;
-              const truckInfo =
+              this.truckInfo =
                 result.truckList.find((truck: Truck) => this.id == truck.id) ??
                 new Truck();
 
-              if (truckInfo.truckType != 'سيارة') {
+              if (this.truckInfo.truckType != 'سيارة') {
                 this.displayedColumns = [
                   'id',
                   'date_time',
@@ -110,7 +112,7 @@ export class TruckOrdetListComponent implements OnInit {
                 ];
               }
 
-              this._glopal.currentHeader = `حركة نقلات السيارة | ${truckInfo.name}`;
+              this._glopal.currentHeader = `حركة نقلات السيارة | ${this.truckInfo.name}`;
 
               this.truckOtherAccInfo = result.otherAcc;
 
@@ -132,16 +134,6 @@ export class TruckOrdetListComponent implements OnInit {
       .reduce((a, b) => a + b, 0);
 
     for (let i = 0; i < data.length; i++) {
-      /* CASE WHEN truckorder.loadingType <> 'متر' THEN 1 WHEN truckorder.loadingType = 'متر' Then trucks.capacity END ) * truckorder.LoadTimes * truckorder.price */
-
-      // truckType
-      /* let loadingType = data[i].loadingType
-        ? data[i].loadingType
-        : data[i].truckType == 'سيارة'
-        ? 'متر'
-        : 'ساعة';
-      */
-
       const totalVal =
         data[i].orderType == 'safereceipt'
           ? data[i].totalVal
@@ -183,11 +175,6 @@ export class TruckOrdetListComponent implements OnInit {
       }
     }
 
-   /*  this.totalIncome = this.accArr
-      .filter((d) => d.orderType != 'safereceipt')
-      .map((d) => d.totalVal)
-      .reduce((a, b) => a + b, 0); */
-
     return this.accArr.reverse();
   }
 
@@ -222,7 +209,8 @@ export class TruckOrdetListComponent implements OnInit {
     this.listData.paginator = this.paginator;
   };
 
-  search() {
+  search(searchFor?: string) {
+    if (searchFor) this.searchTxt = searchFor
     this.listData.filter = this.searchTxt;
   }
 

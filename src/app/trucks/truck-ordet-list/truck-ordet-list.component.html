@@ -1,5 +1,36 @@
 <div class="mainContainer mt-3">
-  <div class="box">
+
+  <div class="row stickyBox">
+    <div class="col-xl-4 col-lg-6 mb-3">
+      <mat-card class="box headerBox">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;"
+              routerLink="/UpdateTruck/{{truckInfo.id}}">
+              <i class="fa fa-truck iconBtn textSecondary"></i>
+            </span>
+          </div>
+          <mat-card-title class="textSecondary">
+            {{truckInfo.name}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h5 class="homeSubtitle">
+              <span class="textSecondary">{{truckInfo.truckType}}</span> | {{truckInfo.number}}
+            </h5>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h3 class="pt-2" [class.textDanger]="truckInfo.owner == 'سيارة خارجية'">{{truckInfo.owner}}</h3>
+        </mat-card-content>
+        <mat-card-actions>
+
+          <button mat-button routerLink="/TrucksList">المعدات</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="box stickyBox">
 
     <div class="d-flex justify-content-between">
 
@@ -21,18 +52,20 @@
           اجمالى تشغيل | {{totalIncome | number:'1.0-2'}}
         </div>
 
-        <div *ngIf="totalCashIn != 0" class="infoCard blueBadge borderLsecondary py-2 mx-2">
+        <div *ngIf="totalCashIn != 0" class="infoCard blueBadge borderLsecondary py-2 mx-2 textBtn badgeBtn"
+        (click)="search('ايصال نقدية')">
           اجمالى دفعات | {{totalCashIn | number:'1.0-2'}}
         </div>
 
-        <div class="infoCard dangerBadge borderLdanger py-2 mx-2 textBtn badgeBtn"
+        <div *ngIf="truckOtherAccInfo?.accId" class="infoCard dangerBadge borderLdanger py-2 mx-2 textBtn badgeBtn"
           routerLink="/OtherAccInformation/{{truckOtherAccInfo.accId}}">
           اجمالى مصاريف | {{truckOtherAccInfo.currentAccVal | number:'1.0-2'}}
         </div>
 
         <div class="infoCard py-2 mx-2"
-          [ngClass]="(totalIncome - truckOtherAccInfo.currentAccVal) < 0 ? 'dangerBadge borderLdanger' : 'greenBadge borderRight-success'">
-          صافى | {{totalIncome - truckOtherAccInfo.currentAccVal - totalCashIn | number:'1.0-2'}}
+          [ngClass]="(totalIncome - (truckOtherAccInfo?.currentAccVal ? truckOtherAccInfo.currentAccVal : 0)) < 0 ? 'dangerBadge borderLdanger' : 'greenBadge borderRight-success'">
+          صافى | {{totalIncome - (truckOtherAccInfo?.currentAccVal ? truckOtherAccInfo.currentAccVal : 0) - totalCashIn
+          | number:'1.0-2'}}
         </div>
       </div>
     </div>
@@ -77,15 +110,17 @@
           </td>
         </ng-container>
 
+        <!-- truckCustomerId -->
         <ng-container matColumnDef="truckCustomerName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>العميل</th>
-          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.orderType == 'safereceipt'">
+          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.orderType == 'safereceipt'"
+           routerLink="/TruckCustomerInformation/{{row.truckCustomerId}}" class="textBtn tBtn-dark pl-2">
             {{row.truckCustomerName}}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="LoadTimes">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>عدد نقلات</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>نقلات | ساعات</th>
           <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.orderType == 'safereceipt'">
             {{row.LoadTimes}}
           </td>
@@ -107,14 +142,13 @@
 
         <ng-container matColumnDef="totalVal">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
-          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.totalVal < 0">{{row.totalVal | number: '1.0-2'}}
+          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.totalVal < 0" class="tdBorder">{{row.totalVal | number: '1.0-2'}}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="netVal">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
-          <td mat-cell *matCellDef="let row" class="truckOrder lightBg textBold"
-            [class.textDanger]="row.netVal < 0">
+          <td mat-cell *matCellDef="let row" class="truckOrder lightBg textBold" [class.textDanger]="row.netVal < 0">
             {{row.netVal | number: '1.0-2'}}
           </td>
         </ng-container>

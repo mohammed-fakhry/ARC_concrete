@@ -192,8 +192,8 @@
       </h2>
       <div class="row mb-3">
 
-        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <mat-card class="box boxShadow" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/indebtedness">
                 <span class="dash-widget-icon headerPinkBg">
@@ -201,7 +201,7 @@
                 </span>
               </div>
               <mat-card-title class="headerPink">
-                مستحق الدفع
+                توريدات - مستحق الدفع
               </mat-card-title>
               <mat-card-subtitle>
                 <h3 class="homeSubtitle">{{customersInfo?.onUs?.count}}</h3>
@@ -224,9 +224,9 @@
           </mat-card>
         </div>
 
-        <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
+          <mat-card class="box boxShadow" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/collectible">
                 <span class="dash-widget-icon successBg">
@@ -234,7 +234,7 @@
                 </span>
               </div>
               <mat-card-title class="textGreen">
-                مستحق التحصيل
+                توريدات - مستحق التحصيل
               </mat-card-title>
               <mat-card-subtitle>
                 <h3 class="homeSubtitle">{{customersInfo?.remain?.count}}</h3>
@@ -254,6 +254,54 @@
                   }}
                 </span>
 
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
+          <mat-card class="box boxShadow">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn" routerLink="/ConcreteCustomerList">
+                <span class="dash-widget-icon headerDeepBlueBg">
+                  <i class="fa fa-industry headerDeepBlue iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="headerDeepBlue">
+                عملاء الخرسانة
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.concreteCustomers?.remain?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle headerDeepBlue">
+                {{customersInfo?.concreteCustomers?.remain?.total | number:'1.0-2'}}
+              </h4>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+          <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
+          <mat-card class="box boxShadow">
+            <mat-card-header>
+              <div mat-card-avatar class="ml-4 textBtn" routerLink="/TruckCustomerList">
+                <span class="dash-widget-icon textSecondaryBg">
+                  <i class="fa fa-truck textSecondary iconBtn"></i>
+                </span>
+              </div>
+              <mat-card-title class="textSecondary">
+                عملاء المعدات
+              </mat-card-title>
+              <mat-card-subtitle>
+                <h3 class="homeSubtitle">{{customersInfo?.truckCustomers?.remain?.count}}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="mt-3">
+              <h4 class="homeSubtitle textSecondary">
+                {{customersInfo?.truckCustomers?.remain?.total | number:'1.0-2'}}
               </h4>
             </mat-card-content>
           </mat-card>

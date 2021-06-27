@@ -61,6 +61,7 @@ import { TruckCustomerInformationComponent } from './trucks/truckCustomers/truck
 import { OwnerGuard } from './guards/owner.guard';
 import { AddConcreteBonComponent } from './industry/bon/add-concrete-bon/add-concrete-bon.component';
 import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concrete-bon-list.component';
+import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
 
 const routes: Routes = [
   // defult path
@@ -124,6 +125,7 @@ const routes: Routes = [
   { path: 'UpdateTruckorder/:id', component: AddtruckOrderComponent, canActivate: [MasterGuard] },
   { path: 'trucksOrderLog', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
   { path: 'truckLog/:id', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
+  { path: 'ourTrucks', component: TruckInformationComponent, canActivate: [OwnerGuard] },
 
   // truckCustomers
   { path: 'TruckCustomerList', component: TruckCustomersListComponent, canActivate: [MasterGuard] },
@@ -160,8 +162,8 @@ const routes: Routes = [
   { path: 'SafeInformation/:id', component: SafeInformationComponent, canActivate: [SafesGuard] },
 
   // main settings
-  { path: 'UserSettings', component: UserSettingsComponent, canActivate: [UnitesGuard] },
-  { path: 'UserSettings/:id', component: UserSettingsComponent, canActivate: [UnitesGuard] },
+  { path: 'UserSettings', component: UserSettingsComponent, canActivate: [OwnerGuard] },
+  { path: 'UserSettings/:id', component: UserSettingsComponent, canActivate: [OwnerGuard] },
 
   // reports
   { path: 'InvoiceChangesReport', component: InvoiceChangesReportComponent, canActivate: [MasterGuard] },

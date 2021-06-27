@@ -87,6 +87,7 @@ export class AddDiscoundDialogComponent implements OnInit {
     let accInfo = accName ? this.findAcc_byName(accName) : null;
     if (accInfo) {
       this.data.accId = accInfo.accId;
+      this.data.recieptNote = `${this.data.customerName} - ${this.data.AccName}`
     } else {
       modalForm.form.controls['AccName'].setErrors({ incorrect: true });
     }

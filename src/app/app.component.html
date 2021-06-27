@@ -20,7 +20,7 @@
     </a>
 
   </div>
-  <!-- <i class="fas fa-database"></i> -->
+  <!-- changeMainUrl('setDefult') -->
 
   <div class="my-auto righttBorder printX">
     <a *ngIf="_glopal.notification.value" mat-button class="textBold" color="primary" routerLink="/checkList"
@@ -29,6 +29,8 @@
         style="transform: rotate(10deg)">
       </i>
     </a>
+
+    <a *ngIf="_auth?.check.dev && mainUrl !='http://localhost/shayman/'" mat-button (click)="toAymanDb()">db</a>
   </div>
 
   <h4 id="currentHeader" class="textBold my-auto infoCard"> {{ _glopal?.currentHeader }}</h4>
@@ -229,6 +231,9 @@
             <a mat-list-item routerLink="/TrucksList/loaders" (click)="opened = !opened">لودرات</a>
             <a mat-list-item routerLink="/TrucksList/harras" (click)="opened = !opened">هراسات</a>
             <a mat-list-item routerLink="/TrucksList/diggers" (click)="opened = !opened">حفارات</a>
+
+            <mat-divider></mat-divider>
+            <a mat-list-item routerLink="/ourTrucks" class="textBold" (click)="opened = !opened">معدات الشركة</a>
           </mat-nav-list>
         </mat-expansion-panel>
 

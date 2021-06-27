@@ -422,8 +422,6 @@ export class StockInvoiceComponent implements OnInit {
       addtaxes: result.stockTransaction.addtaxes,
     };
 
-    console.log(this.stockInvoice);
-
     this.truckInfo =
       this.truckList.find(
         (truck: Truck) => truck.id == this.stockInvoice.truckId
@@ -438,7 +436,9 @@ export class StockInvoiceComponent implements OnInit {
     if (invoiceHasDiscound) this.discoundShow();
 
     for (let i = 0; i < result.StockTransactionDetails.length; i++) {
+
       const details = result.StockTransactionDetails[i];
+      if (i == 0) this.truckInfo.metrPrice = details.truckOrder_realPrice
       const total = details.price * details.Qty;
       const discoundVal = (total * details.discound) / 100;
 
@@ -451,6 +451,7 @@ export class StockInvoiceComponent implements OnInit {
         price: details.price,
         discound: details.discound,
         total: total - discoundVal,
+        truckOrder_realPrice: details.truckOrder_realPrice,
         notes: details.notes,
       };
 
@@ -987,6 +988,7 @@ export class StockInvoiceComponent implements OnInit {
           price: this.stockTransaction[i].info.price,
           Qty: this.stockTransaction[i].info.qty,
           discound: this.stockTransaction[i].info.discound,
+          truckOrder_realPrice: this.stockTransaction[i].info.truckOrder_realPrice,
           notes: this.stockTransaction[i].info.notes,
         };
         if (tranceDetail.stockTransactionDetailsId) {

@@ -149,6 +149,10 @@ export class AddConcreteComponent implements OnInit {
     if (this.concrete.name.includes('مضخ')) {
       addConcreteForm.form.controls['concreteName'].setErrors(null);
       this.formValid.mainForm = true;
+
+      this.concrete.materials = [];
+      this.dataList = [];
+      this.formValid.materials = [];
     } else if (isRecorded) {
       addConcreteForm.form.controls['concreteName'].setErrors({
         incorrect: true,
@@ -225,20 +229,24 @@ export class AddConcreteComponent implements OnInit {
   }
 
   recordMaterials(concreteId: string) {
-    for (let i = 0; i < this.concrete.materials.length; i++) {
-      if (this.checkProduct(i)) {
-        const concreteMaterial = this.concrete.materials[i];
-        concreteMaterial.concreteId = concreteId;
+    if (this.concrete.name.includes('مضخ')) {
+      this.openDialog();
+    } else {
+      for (let i = 0; i < this.concrete.materials.length; i++) {
+        if (this.checkProduct(i)) {
+          const concreteMaterial = this.concrete.materials[i];
+          concreteMaterial.concreteId = concreteId;
 
-        if (concreteMaterial.concreteMaterial_id) {
-          this._concrete.updateConcreteMaterial(concreteMaterial).subscribe();
-        } else {
-          this._concrete.postConcreteMaterial(concreteMaterial).subscribe();
+          if (concreteMaterial.concreteMaterial_id) {
+            this._concrete.updateConcreteMaterial(concreteMaterial).subscribe();
+          } else {
+            this._concrete.postConcreteMaterial(concreteMaterial).subscribe();
+          }
         }
-      }
 
-      if (i == this.concrete.materials.length - 1) {
-        this.openDialog();
+        if (i == this.concrete.materials.length - 1) {
+          this.openDialog();
+        }
       }
     }
   }

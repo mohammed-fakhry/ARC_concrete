@@ -432,7 +432,7 @@ export class CustomerInformationComponent implements OnInit {
     safeReceipt.customerId = this.customerInfo.customerId;
     safeReceipt.customerName = this.customerInfo.customerName;
     safeReceipt.receiptKind = 'ايصال استلام نقدية';
-    safeReceipt.recieptNote = `خصم "${this.customerInfo.customerName}"`;
+    safeReceipt.recieptNote = `"${this.customerInfo.customerName}"`;
     safeReceipt.date_time = this._mainService.makeTime_date(
       new Date(Date.now())
     );
@@ -448,7 +448,7 @@ export class CustomerInformationComponent implements OnInit {
       balance > 0 ? 'ايصال استلام نقدية' : 'ايصال صرف نقدية';
     safeReceipt.receiptVal = balance > 0 ? balance : balance * -1;
     safeReceipt.date_time = date;
-    safeReceipt.recieptNote = `خصم "${this.customerInfo.customerName}"`;
+    safeReceipt.recieptNote = `"${this.customerInfo.customerName}"`;
     this.openDiscoundDialog(safeReceipt);
   }
 

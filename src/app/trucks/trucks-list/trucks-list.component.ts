@@ -70,7 +70,6 @@ export class TrucksListComponent implements OnInit {
     ];
 
     const arType = truckTypes.find((truck) => truck.en == this.searchFor);
-    // if (arType) this._glopal.currentHeader += ` | ${arType.ar}`;
 
     this.getTruckList().then((data: Truck[]) => {
       const result = arType

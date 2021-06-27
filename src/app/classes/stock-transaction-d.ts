@@ -7,5 +7,6 @@ export class StockTransactionD {
   price!: number;
   Qty!: number;
   discound!: number;
+  truckOrder_realPrice!: number;
   notes: string = '';
 }

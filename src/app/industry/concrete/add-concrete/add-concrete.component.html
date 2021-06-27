@@ -57,7 +57,7 @@
         <mat-divider class="my-3"></mat-divider>
 
         <div class="d-flex justify-content-between">
-          <button type="button" mat-stroked-button color="accent" (click)="addRow()">+</button>
+          <button [disabled]="concrete.name.includes('مضخ')" type="button" mat-stroked-button color="accent" (click)="addRow()">+</button>
           <button mat-flat-button color="primary" type="submit"
             [disabled]="!formValid.mainForm || !addConcreteForm.valid">
             {{id ? 'تعديل' : 'اضافة'}}

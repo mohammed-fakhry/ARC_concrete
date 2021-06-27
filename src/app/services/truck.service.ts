@@ -51,6 +51,10 @@ export class TruckService {
   trucksList() {
     return this.http.get<Truck[]>(`${this.url}trucksList.php`);
   }
+
+  ourTrucksAcc() {
+    return this.http.get<any[]>(`${this.url}ourTrucksAcc.php`);
+  }
   // truckOrderList
 
   updateTruck(truck: Truck) {

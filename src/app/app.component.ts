@@ -140,4 +140,11 @@ export class AppComponent {
       outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
     );
   }
+
+
+  toAymanDb() {
+    // if (cond) this.defaults.mainUrl = this.currentUrl('setToAyman');
+    localStorage.setItem('tmpDB', 'http://localhost/shayman/');
+    location.reload()
+  }
 }

@@ -906,6 +906,7 @@ export class AddConcreteReceiptComponent implements OnInit {
         productUnit: stocktrans_d.productUnit,
         price: stocktrans_d.price,
         Qty: stocktrans_d.Qty,
+        truckOrder_realPrice: 0,
         discound: 0,
         notes: '',
       };

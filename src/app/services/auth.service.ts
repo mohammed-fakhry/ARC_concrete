@@ -77,6 +77,6 @@ export class AuthService {
 
   backUp() {
     let url = this.theMainUrl();
-    return this.http.get<any>(`${url}backup.php`);
+    return this.http.get<any>(`${url}backup.php?userName=${this.uName?.realName}`);
   }
 }

@@ -13,6 +13,10 @@ import { MainService } from '../services/main.service';
 import { SafeData } from '../classes/safe-data';
 import { Stock } from '../classes/stock';
 import { CheckService } from '../services/check.service';
+import { TruckService } from '../services/truck.service';
+import { TruckCustomer } from '../classes/truck-customer';
+import { ConcreteCustomer } from '../classes/concrete-customer';
+import { ConcreteService } from '../services/concrete.service';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +34,12 @@ export class HomeComponent implements OnInit {
     activeCustomers: {
       remain: { count: number; total: number; uncompletedCond: number };
       onUs: { count: number; total: number; uncompletedCond: number };
+    };
+    concreteCustomers: {
+      remain: { count: number; total: number };
+    };
+    truckCustomers: {
+      remain: { count: number; total: number };
     };
   };
 
@@ -115,7 +125,9 @@ export class HomeComponent implements OnInit {
     public _stockService: StockService,
     public _safeService: SafeService,
     public _mainService: MainService,
-    public _customerService: CustomerService
+    public _customerService: CustomerService,
+    public _truckService: TruckService,
+    public _concrete: ConcreteService
   ) {
     this._glopal.loading = true;
     this.privateLoading = true;
@@ -157,92 +169,104 @@ export class HomeComponent implements OnInit {
       // this.getSalesReport('daily'),
       this.getSafe(),
       this.getStocks(),
-    ]).then((data: any) => {
-      const result = {
-        lastInvoices: data[0],
-        lastReciepts: data[1],
-        customers: data[2].filter(
-          (cust: any) => !cust.customerName.includes('المحل')
-        ),
-        invoicesCounts: data[3][0],
-        activeInvoicesCounts: data[3][1],
-        recieptCounts: data[4][0],
-        ActiveRecieptCounts: data[4][1],
-        pointOfSaleCounts: data[4][2],
-        otherAcc: data[5].filter((acc: OtherAcc) => acc.currentAccVal > 0),
-        safe: data[6],
-        stocks: data[7],
-      };
-
-      this.mainSafe = result.safe[0];
-
-      this.getSalesReport('daily', this.mainSafe.safeId).then((data: any) => {
-        const sales = {
-          invoices: data[0]?.length > 0 ? data[0].reverse() : [],
-          income: data[1]?.length > 0 ? data[1].reverse() : [],
+      this.getConcreteCustomers(),
+      this.getTruckCustomers(),
+    ])
+      .then((data: any) => {
+        const result = {
+          lastInvoices: data[0],
+          lastReciepts: data[1],
+          customers: data[2].filter(
+            (cust: any) => !cust.customerName.includes('المحل')
+          ),
+          invoicesCounts: data[3][0],
+          activeInvoicesCounts: data[3][1],
+          recieptCounts: data[4][0],
+          ActiveRecieptCounts: data[4][1],
+          pointOfSaleCounts: data[4][2],
+          otherAcc: data[5].filter((acc: OtherAcc) => acc.currentAccVal > 0),
+          safe: data[6],
+          stocks: data[7],
+          concreteCustomers: data[8],
+          truckCustomers: data[9],
         };
 
-        this.charts = {
-          showExpenses: result.otherAcc.length > 0 ? true : false,
-          showSales:
-            sales.invoices.length > 0 || sales.income.length > 0 ? true : false,
-        };
+        this.mainSafe = result.safe[0];
 
-        const domCharts = {
-          pieChart: document.querySelector('#pieChart') as HTMLElement,
-          pieChartSales: document.querySelector(
-            '#pieChartSales'
-          ) as HTMLElement,
-        };
+        this.getSalesReport('daily', this.mainSafe.safeId).then((data: any) => {
+          const sales = {
+            invoices: data[0]?.length > 0 ? data[0].reverse() : [],
+            income: data[1]?.length > 0 ? data[1].reverse() : [],
+          };
 
-        if (domCharts.pieChart && domCharts.pieChartSales) {
-          if (newDate) {
-            // this.up
-            this.changeSalesReport('daily', this.mainSafe.safeId);
-          } else {
-            this.generateChart(
-              result.otherAcc,
-              sales.invoices,
-              sales.income,
-              'daily'
-            );
+          this.charts = {
+            showExpenses: result.otherAcc.length > 0 ? true : false,
+            showSales:
+              sales.invoices.length > 0 || sales.income.length > 0
+                ? true
+                : false,
+          };
+
+          const domCharts = {
+            pieChart: document.querySelector('#pieChart') as HTMLElement,
+            pieChartSales: document.querySelector(
+              '#pieChartSales'
+            ) as HTMLElement,
+          };
+
+          if (domCharts.pieChart && domCharts.pieChartSales) {
+            if (newDate) {
+              // this.up
+              this.changeSalesReport('daily', this.mainSafe.safeId);
+            } else {
+              this.generateChart(
+                result.otherAcc,
+                sales.invoices,
+                sales.income,
+                'daily'
+              );
+            }
           }
-        }
-      });
+        });
 
-      this.customersInfo = this.countCustomers(result.customers);
+        this.customersInfo = this.countCustomers(
+          result.customers,
+          result.concreteCustomers,
+          result.truckCustomers
+        );
 
-      this.safesList = result.safe;
-      this.mainStock = result.stocks[0];
+        this.safesList = result.safe;
+        this.mainStock = result.stocks[0];
 
-      this.counts = this.generateCounts(
-        result.invoicesCounts,
-        result.activeInvoicesCounts,
-        result.recieptCounts,
-        result.ActiveRecieptCounts,
-        result.pointOfSaleCounts
-      );
+        this.counts = this.generateCounts(
+          result.invoicesCounts,
+          result.activeInvoicesCounts,
+          result.recieptCounts,
+          result.ActiveRecieptCounts,
+          result.pointOfSaleCounts
+        );
 
-      this.fillListData('lastIvoices', result.lastInvoices);
-      this.fillListData('lastReciepts', result.lastReciepts);
+        this.fillListData('lastIvoices', result.lastInvoices);
+        this.fillListData('lastReciepts', result.lastReciepts);
 
-      this._glopal.loading = false;
-      this.privateLoading = false;
-      const dateRecieved = this._mainService.makeTime_date(
-        new Date(Date.now())
-      );
+        this._glopal.loading = false;
+        this.privateLoading = false;
+        const dateRecieved = this._mainService.makeTime_date(
+          new Date(Date.now())
+        );
 
-      this.dataTo = this.compareMiniuts(dateRecieved);
+        this.dataTo = this.compareMiniuts(dateRecieved);
 
-      this.refreshCounter(dateRecieved);
-      this.refreshBtn = false;
-
-      setTimeout(() => {
-        this.refreshBtn = true;
-        this.compareMiniuts(dateRecieved);
         this.refreshCounter(dateRecieved);
-      }, 5000);
-    });
+        this.refreshBtn = false;
+
+        setTimeout(() => {
+          this.refreshBtn = true;
+          this.compareMiniuts(dateRecieved);
+          this.refreshCounter(dateRecieved);
+        }, 5000);
+      })
+      .catch((error) => console.log(error));
   }
 
   generateCounts(
@@ -348,7 +372,6 @@ export class HomeComponent implements OnInit {
     inCome: any[],
     duration: string
   ) => {
-
     if (expenses.length > 0) {
       this.charts.showExpenses = true;
 
@@ -593,7 +616,9 @@ export class HomeComponent implements OnInit {
   }
 
   countCustomers = (
-    customers: Customer[]
+    customers: Customer[],
+    concreteCustomers: ConcreteCustomer[],
+    truckCustomers: TruckCustomer[]
   ): {
     customers: number;
     remain: { count: number; total: number; uncompletedCond: number };
@@ -601,6 +626,12 @@ export class HomeComponent implements OnInit {
     activeCustomers: {
       remain: { count: number; total: number; uncompletedCond: number };
       onUs: { count: number; total: number; uncompletedCond: number };
+    };
+    concreteCustomers: {
+      remain: { count: number; total: number };
+    };
+    truckCustomers: {
+      remain: { count: number; total: number };
     };
   } => {
     const mainFilter = customers.filter(
@@ -664,6 +695,24 @@ export class HomeComponent implements OnInit {
           ).length,
         },
       },
+      concreteCustomers: {
+        remain: {
+          count: concreteCustomers.filter((cust) => cust.currentVal > 0).length,
+          total: concreteCustomers
+            .filter((cust) => cust.currentVal > 0)
+            .map((cust) => cust.currentVal)
+            .reduce((a, b) => a + b, 0),
+        },
+      },
+      truckCustomers: {
+        remain: {
+          count: truckCustomers.filter((cust) => cust.currentVal > 0).length,
+          total: truckCustomers
+            .filter((cust) => cust.currentVal > 0)
+            .map((cust) => cust.currentVal)
+            .reduce((a, b) => a + b, 0),
+        },
+      },
     };
   };
 
@@ -698,6 +747,28 @@ export class HomeComponent implements OnInit {
       this._customerService.getCustomer().subscribe((data: Customer[]) => {
         res(data);
       });
+    });
+  }
+
+  getTruckCustomers(): Promise<TruckCustomer[]> {
+    return new Promise((res, rej) => {
+      this._truckService.truckCustomersList().subscribe(
+        (data: TruckCustomer[]) => {
+          res(data);
+        },
+        (err) => rej('no data')
+      );
+    });
+  }
+
+  getConcreteCustomers(): Promise<ConcreteCustomer[]> {
+    return new Promise((res, rej) => {
+      this._concrete.concreteCustomerList().subscribe(
+        (data: ConcreteCustomer[]) => {
+          res(data);
+        },
+        (err) => rej('no data')
+      );
     });
   }
 
