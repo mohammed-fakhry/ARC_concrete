@@ -22,14 +22,16 @@
             <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
               <ng-container matColumnDef="accId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
-                <td mat-cell *matCellDef="let row">{{row.accId}}</td>
+                <td mat-cell *matCellDef="let row">{{row.accId == 'workerId' ? '*' : row.accId}}</td>
               </ng-container>
 
+              <!-- [routerLink]="row.AccName == 'رواتب الموظفين' ? '/Workers' : '/OtherAccInformation/' + row.accId" -->
               <ng-container matColumnDef="AccName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>الحساب</th>
                 <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentAccVal < 0"
-                  class="textBtn tBtn-dark pl-2" [routerLink]="row.AccName == 'رواتب الموظفين' ? '/Workers' : '/OtherAccInformation/' + row.accId">
-                  {{row.AccName}}</td>
+                  class="textBtn tBtn-dark pl-2" routerLink="/OtherAccInformation/{{row.accId}}">
+                  {{row.AccName}}
+                </td>
               </ng-container>
               <!--  -->
               <ng-container matColumnDef="currentAccVal">

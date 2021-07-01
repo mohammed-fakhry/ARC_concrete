@@ -47,7 +47,7 @@
             </ng-container>
 
             <ng-container matColumnDef="cashIn">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>وارد نقدية</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>دفعات</th>
               <td mat-cell *matCellDef="let row" class="tdBorder">
                 <i *ngIf="row.cashIn > 0" class="fa fa-arrow-up textGreen"></i>
                 {{row.cashIn | number: '1.0-2'}}

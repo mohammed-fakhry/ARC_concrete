@@ -4,15 +4,15 @@
     <mat-card class="box headerBox">
       <mat-card-header>
         <div mat-card-avatar class="ml-4">
-          <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;" routerLink="/AddOtherAcc/{{id}}">
+          <span *ngIf="id != 'workerId'" class="dash-widget-icon textBtn" style="background-color: #5a73f329;" routerLink="/AddOtherAcc/{{id}}">
             <i class="fa fa-user iconBtn textSecondary"></i>
           </span>
         </div>
         <mat-card-title class="textSecondary">
-          {{accInfo.AccName}}
+          {{id == "workerId" ? 'رواتب موظفين' : accInfo.AccName}}
         </mat-card-title>
         <mat-card-subtitle>
-          <h3 class="homeSubtitle" [class.textDanger]="accInfo.currentAccVal < 0">
+          <h3 *ngIf="id != 'workerId'" class="homeSubtitle" [class.textDanger]="accInfo.currentAccVal < 0">
             {{accInfo.currentAccVal | number:'1.0-2'}}
           </h3>
         </mat-card-subtitle>
