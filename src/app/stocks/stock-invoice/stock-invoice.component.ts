@@ -174,7 +174,7 @@ export class StockInvoiceComponent implements OnInit {
     metrPrice: number
   ): { loadTimes: number; payLoadPrice: number } {
     const seperate = {
-      loadTimes: Number((qty / this.stockInvoice.truckCapacity).toFixed(2)),
+      loadTimes: Number((qty / this.stockInvoice.truckCapacity).toFixed(3)),
       payLoadPrice: metrPrice * this.stockInvoice.truckCapacity,
     };
 
@@ -352,6 +352,8 @@ export class StockInvoiceComponent implements OnInit {
     Promise.all([this.getStockTransAction(), this.getStockTranseDetail()]).then(
       (data: any[]) => {
         if (data[0].length > 0) {
+
+          console.log(data)
           this.fillToEdit(data);
           // to filterCustomers Arr
           this.stockNameChanged();
@@ -436,9 +438,8 @@ export class StockInvoiceComponent implements OnInit {
     if (invoiceHasDiscound) this.discoundShow();
 
     for (let i = 0; i < result.StockTransactionDetails.length; i++) {
-
       const details = result.StockTransactionDetails[i];
-      if (i == 0) this.truckInfo.metrPrice = details.truckOrder_realPrice
+      if (i == 0) this.truckInfo.metrPrice = details.truckOrder_realPrice;
       const total = details.price * details.Qty;
       const discoundVal = (total * details.discound) / 100;
 
@@ -809,7 +810,7 @@ export class StockInvoiceComponent implements OnInit {
       this.productQtys[i].payLoadPrice = Number(
         (
           this.stockTransaction[i].info.price * this.stockInvoice.truckCapacity
-        ).toFixed(2)
+        ).toFixed(3)
       );
     }
 
@@ -850,7 +851,7 @@ export class StockInvoiceComponent implements OnInit {
     this.stockTransaction[i].info.price = Number(
       (
         this.productQtys[i].payLoadPrice / this.stockInvoice.truckCapacity
-      ).toFixed(2)
+      ).toFixed(3)
     );
     this.calcTotal(i, 'payLoadPrice');
   }
@@ -988,7 +989,8 @@ export class StockInvoiceComponent implements OnInit {
           price: this.stockTransaction[i].info.price,
           Qty: this.stockTransaction[i].info.qty,
           discound: this.stockTransaction[i].info.discound,
-          truckOrder_realPrice: this.stockTransaction[i].info.truckOrder_realPrice,
+          truckOrder_realPrice:
+            this.stockTransaction[i].info.truckOrder_realPrice,
           notes: this.stockTransaction[i].info.notes,
         };
         if (tranceDetail.stockTransactionDetailsId) {
@@ -1098,6 +1100,7 @@ export class StockInvoiceComponent implements OnInit {
   };
 
   deleteInvoice() {
+    this._glopal.loading = true;
     const processLoop = async () => {
       for (let i = 0; i < this.stockTransaction.length; i++) {
         const oldData = this.changedData.find(
@@ -1137,7 +1140,8 @@ export class StockInvoiceComponent implements OnInit {
         this._stockService
           .deleteStockTransaction(parseInt(this.id))
           .subscribe(() => {
-            this._router.navigate(['/CustomerList']);
+            this._glopal.loading = false;
+            this._location.back();
           });
     });
   }

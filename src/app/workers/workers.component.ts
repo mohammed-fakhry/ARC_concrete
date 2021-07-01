@@ -6,6 +6,8 @@ import { GlobalVarsService } from '../services/global-vars.service';
 import { MainService } from '../services/main.service';
 import { WorkerService } from '../services/worker.service';
 import { Worker } from '../classes/worker';
+import { FilterByDateDialogComponent } from '../dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-workers',
@@ -17,12 +19,17 @@ export class WorkersComponent implements OnInit {
   displayedColumns: string[] = [
     'workerId',
     'workerName',
-    'workerTell',
-    'workerAdd',
+    /* 'workerTell',
+    'workerAdd', */
     'workerJopCateg',
     'workerJop',
-    'workerCheckIN',
-    'workerCheckOut',
+    'workedDayes',
+    'discoundDayes',
+    'overDayes',
+    'payLater',
+    'cashReceived',
+    'workerCurrentVal',
+    'edit',
   ];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -31,10 +38,16 @@ export class WorkersComponent implements OnInit {
   personsList: Worker[] = [];
   searchTxt: string = '';
 
+  counts: { onUs: number; toUS: number } = { onUs: 0, toUS: 0 };
+
+  searchDate: { from: string; to: string } = { from: '', to: '' };
+  isFiltered: boolean = false;
+
   constructor(
     public _workerService: WorkerService,
     public _mainService: MainService,
-    public _glopal: GlobalVarsService
+    public _glopal: GlobalVarsService,
+    public _dialog: MatDialog
   ) {
     this._glopal.currentHeader = 'بيانات الموظفين';
     this._glopal.loading = true;
@@ -45,26 +58,53 @@ export class WorkersComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
 
-    this.getWorkers();
+    this.onStart();
   }
 
   search() {
     this.listData.filter = this.searchTxt;
   }
 
-  getWorkersPromise() {
+  getWorkersPromise(dateFrom?: string, dateTo?: string) {
     return new Promise((res) => {
-      this._workerService.getWorker().subscribe((data: Worker[]) => res(data));
+      this._workerService
+        .workerListByDate(dateFrom, dateTo)
+        .subscribe((data: any[]) => res(data));
     });
   }
 
-  getWorkers() {
+  onStart(dateFrom?: string, dateTo?: string) {
     this._glopal.loading = true;
-    this.getWorkersPromise().then((data: any) => {
+    this.searchTxt = ''
+
+    this.resetSearchByDate(dateFrom && dateTo ? true : false);
+
+    this.getWorkersPromise(dateFrom, dateTo).then((data: any) => {
       this.fillListData(data);
+
+      this.counts = this.generateCounts(data);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
+  }
+
+  resetSearchByDate(cond: boolean) {
+    this.isFiltered = cond;
+    if (!cond) this.searchDate = { from: '', to: '' };
+  }
+
+  generateCounts(data: any): { onUs: number; toUS: number } {
+    const mappedForCount = data.map((d: any) => d.workerCurrentVal);
+
+    return {
+      onUs:
+        mappedForCount
+          .filter((a: any) => a < 0)
+          .reduce((a: any, b: any) => a + b, 0) * -1,
+      toUS: mappedForCount
+        .filter((a: any) => a > 0)
+        .reduce((a: any, b: any) => a + b, 0),
+    };
   }
 
   fillListData = (data: any) => {
@@ -72,4 +112,29 @@ export class WorkersComponent implements OnInit {
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
   };
+
+  openFilterDialog = (data: any) => {
+    let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
+        this.filterByDate(result.fromDate, result.toDate);
+      }
+    });
+  };
+
+  filterByDate(from?: string, to?: string) {
+    this.searchTxt = '';
+
+    if (from && to) {
+      /* let start = `${from}T00:00`;
+      let end = `${to}T23:59`; */
+
+      this.onStart(from, to);
+    }
+  }
 }

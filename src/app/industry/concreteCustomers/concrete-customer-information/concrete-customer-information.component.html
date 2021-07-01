@@ -206,14 +206,14 @@
           <h3 class="cardHeader py-2">استهلاك "{{customerInfo.fullName}}" من الاسمنت</h3>
           <div class="form-inline">
             <div class="greenBadge borderLgreen p-2">
-              وارد | {{acementTotals.in | number: '1.0-2'}}
+              وارد | {{acementTotals.in | number: '1.0-3'}}
             </div>
             <div class="secondaryBadge borderLsecondary p-2">
-              منصرف | {{acementTotals.out | number: '1.0-2'}}
+              منصرف | {{acementTotals.out | number: '1.0-3'}}
             </div>
             <div class="p-2"
               [ngClass]="acementTotals.in - acementTotals.out >= 0 ? 'darkBadge borderLdark' : 'dangerBadge borderLdanger'">
-              صافى | {{acementTotals.in - acementTotals.out | number: '1.0-2'}}
+              صافى | {{acementTotals.in - acementTotals.out | number: '1.0-3'}}
             </div>
             <button mat-button color="warn" (click)="showCementQty = false">X</button>
           </div>
@@ -243,16 +243,16 @@
 
                 <td style="flex: 0.5;">
                   <i *ngIf="cement.qty_in > 0" class="fa fa-arrow-down textGreen"></i>
-                  {{cement.qty_in | number: '1.0-2'}}
+                  {{cement.qty_in | number: '1.0-3'}}
                 </td>
 
                 <td style="flex: 0.5;">
                   <i *ngIf="cement.qty_out > 0" class="fa fa-arrow-up textDanger"></i>
-                  {{cement.qty_out | number: '1.0-2'}}
+                  {{cement.qty_out | number: '1.0-3'}}
                 </td>
 
                 <td class="lightBg tdBorder textBold" [class.textDanger]="cement.balance < 0">
-                  {{cement.balance | number: '1.0-2'}}
+                  {{cement.balance | number: '1.0-3'}}
                 </td>
 
               </tr>

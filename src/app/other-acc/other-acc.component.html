@@ -23,15 +23,15 @@
               <ng-container matColumnDef="accId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
                 <td mat-cell *matCellDef="let row">{{row.accId}}</td>
-              </ng-container><!--  -->
+              </ng-container>
 
               <ng-container matColumnDef="AccName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>الحساب</th>
                 <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentAccVal < 0"
-                  class="textBtn tBtn-dark pl-2" routerLink="/OtherAccInformation/{{row.accId}}">
+                  class="textBtn tBtn-dark pl-2" [routerLink]="row.AccName == 'رواتب الموظفين' ? '/Workers' : '/OtherAccInformation/' + row.accId">
                   {{row.AccName}}</td>
               </ng-container>
-
+              <!--  -->
               <ng-container matColumnDef="currentAccVal">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>قيمة الحساب</th>
                 <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentAccVal < 0">

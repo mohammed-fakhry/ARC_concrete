@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="box px-5 py-3">
+
+    <form (ngSubmit)="onSubmit(addWorkerForm)" #addWorkerForm="ngForm">
+      <h2 class="textBold textPrimary">بيانات الموظف</h2>
+      <table class="w-100">
+        <div class="textSecondary my-2">بيانات شخصية</div>
+        <tr>
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="الاسم" name="workerName" [(ngModel)]="workerInfo.workerName">
+            </mat-form-field>
+          </td>
+
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="الهاتف" name="workerTell" [(ngModel)]="workerInfo.workerTell">
+            </mat-form-field>
+          </td>
+
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="العنوان" name="workerAdd" [(ngModel)]="workerInfo.workerAdd">
+            </mat-form-field>
+          </td>
+        </tr>
+        <div class="textSecondary my-2">بيانات الوظيفة</div>
+        <tr>
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="الادارة" name="workerJopCateg"
+                [(ngModel)]="workerInfo.workerJopCateg">
+            </mat-form-field>
+          </td>
+
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="الوظيفة" name="workerJop" [(ngModel)]="workerInfo.workerJop">
+            </mat-form-field>
+          </td>
+
+          <td>
+            <mat-form-field class="w-100">
+              <input required matInput placeholder="المرتب" type="number" name="workerSalary"
+                [(ngModel)]="workerInfo.workerSalary">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
+      <div>
+        <button mat-flat-button color="primary" type="submit" class="mt-3" (click)="onSubmit(addWorkerForm)"
+          [disabled]="_glopal.loading">
+          {{id ? 'تعديل' : 'تسجيل'}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

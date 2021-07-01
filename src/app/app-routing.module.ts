@@ -62,6 +62,7 @@ import { OwnerGuard } from './guards/owner.guard';
 import { AddConcreteBonComponent } from './industry/bon/add-concrete-bon/add-concrete-bon.component';
 import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concrete-bon-list.component';
 import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
+import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
 
 const routes: Routes = [
   // defult path
@@ -74,6 +75,8 @@ const routes: Routes = [
   // workers
   { path: 'Workers', component: WorkersComponent, canActivate: [WorkerGuard], },
   { path: 'WorkerInformation/:id', component: WorkerInformationComponent, canActivate: [WorkerGuard], },
+  { path: 'AddWorker', component: AddWorkerComponent, canActivate: [WorkerGuard], },
+  { path: 'UpdateWorker/:id', component: AddWorkerComponent, canActivate: [WorkerGuard], },
 
   // unites
   { path: 'Unites', component: UnitesComponent, canActivate: [UnitesGuard] },

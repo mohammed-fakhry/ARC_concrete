@@ -162,7 +162,8 @@
                   (click)="_mainService.selectText('totalDiscound',1)" (ngModelChange)="calcTotalDiscound()">
 
                 <div>
-                  <button [disabled]="id" mat-flat-button color="accent" [matMenuTriggerFor]="menu" type="button">
+                  <button [disabled]="id || addByBon?.date != null" mat-flat-button color="accent"
+                    [matMenuTriggerFor]="menu" type="button">
                     {{concreteReceipt.concreteReceiptType}}
                   </button>
                   <mat-menu #menu="matMenu">
@@ -175,10 +176,13 @@
               </div>
 
               <div class="form-inline printX mt-3">
-                <button mat-raised-button color="primary"
+                <button mat-flat-button color="primary"
                   [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires" type="submit">
                   {{id ? 'تعديل' : 'تسجيل'}}
                 </button>
+
+                <button *ngIf="id && !concreteReceipt.recordedByBon" mat-stroked-button color="warn" type="button"
+                  class="mr-2" (click)="openDelDialog()">حذف</button>
 
                 <div class="infoCard dangerBadge borderLdanger printX py-2 mr-2 textSmall"
                   *ngIf="concreteReceipt.recordedByBon">

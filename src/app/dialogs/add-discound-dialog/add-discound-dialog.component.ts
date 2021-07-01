@@ -6,6 +6,8 @@ import { SafeData } from 'src/app/classes/safe-data';
 import { SafeReceipt } from 'src/app/classes/safe-receipt';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { SafeService } from 'src/app/services/safe.service';
+import { WorkerService } from 'src/app/services/worker.service';
+import { Worker } from 'src/app/classes/worker';
 
 @Component({
   selector: 'app-add-discound-dialog',
@@ -15,12 +17,17 @@ import { SafeService } from 'src/app/services/safe.service';
 export class AddDiscoundDialogComponent implements OnInit {
   safeList: SafeData[] = [];
   accList: OtherAcc[] = [];
+  workerList: Worker[] = [];
   loading: boolean = true;
   inputValid: any;
+
+  receiptFor: string = 'acc';
+  header: string = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SafeReceipt,
     public _safeService: SafeService,
+    public _workerService: WorkerService,
     public _glopal: GlobalVarsService
   ) {}
 
@@ -30,27 +37,31 @@ export class AddDiscoundDialogComponent implements OnInit {
 
   onStart() {
     this.loading = true;
-    Promise.all([this.getSafes(), this.getAccList()]).then((data: any) => {
-      const result = {
-        safeList: data[0],
-        accList: data[1],
-      };
+    Promise.all([this.getSafes(), this.getAccList()]).then(
+      (resultData: any) => {
+        const result = {
+          safeList: resultData[0],
+          accList: resultData[1],
+        };
 
-      this.accList = result.accList;
-      if (this.data.customerName.includes('- حسام'))
-        this.safeList = result.safeList.filter((safe: any) =>
-          safe.safeName.includes('حسام')
-        );
-      else if (this.data.customerName.includes('- سيف'))
-        this.safeList = result.safeList.filter((safe: SafeData) =>
-          safe.safeName.includes('سيف')
-        );
-      else this.safeList = result.safeList;
+        this.accList = result.accList;
+        this.safeList = result.safeList;
 
-      this.data.safeName = this.safeList[0].safeName;
-      this.safeChanged();
-      this.loading = false;
-    });
+        if (this.data.customerId > 1) {
+          this.header = this.data.customerName
+          this.receiptFor = 'acc';
+        }
+
+        if (this.data.workerId > '0') {
+          this.header = this.data.workerName
+          this.receiptFor = 'worker';
+        }
+
+        this.data.safeName = this.safeList[0].safeName;
+        this.safeChanged();
+        this.loading = false;
+      }
+    );
   }
 
   getSafeInfo = (safeName: string) =>
@@ -79,6 +90,12 @@ export class AddDiscoundDialogComponent implements OnInit {
     });
   }
 
+  getWorkers(): Promise<Worker[]> {
+    return new Promise((res) => {
+      this._workerService.getWorker().subscribe((data: Worker[]) => res(data));
+    });
+  }
+
   findAcc_byName = (accName: string): OtherAcc | undefined =>
     this.accList.find((acc) => acc.AccName === accName);
 
@@ -87,7 +104,7 @@ export class AddDiscoundDialogComponent implements OnInit {
     let accInfo = accName ? this.findAcc_byName(accName) : null;
     if (accInfo) {
       this.data.accId = accInfo.accId;
-      this.data.recieptNote = `${this.data.customerName} - ${this.data.AccName}`
+      this.data.recieptNote = `${this.data.customerName} - ${this.data.AccName}`;
     } else {
       modalForm.form.controls['AccName'].setErrors({ incorrect: true });
     }

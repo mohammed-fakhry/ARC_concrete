@@ -1,5 +1,5 @@
 <h3 class="textBold" [ngClass]="data.receiptKind == 'ايصال صرف نقدية' ? 'textPrimary' : 'textDanger'">
-  {{data.receiptKind == 'ايصال صرف نقدية' ? 'اضافة الى' : 'خصم من'}} حساب | {{data.customerName}}
+  {{data.receiptKind == 'ايصال صرف نقدية' ? 'اضافة الى' : 'خصم من'}} حساب | {{header}}
 </h3>
 <hr>
 <mat-dialog-content>
@@ -9,6 +9,8 @@
     <input class="d-none" name="customerId" [(ngModel)]='data.customerId'>
     <input class="d-none" name="currentSafeVal" [(ngModel)]='data.currentSafeVal'>
     <input class="d-none" name="accId" [(ngModel)]='data.accId'>
+    <input class="d-none" name="secSafeName " [(ngModel)]='data.secSafeName '>
+    <input class="d-none" name="secSafeId" [(ngModel)]='data.secSafeId'>
     <table class="fullWidth">
       <tr>
         <td>
@@ -44,7 +46,7 @@
               required [ngModel]="data.date_time" id="date_time">
           </mat-form-field>
         </td>
-        <td>
+        <td *ngIf="receiptFor == 'acc'">
           <mat-form-field>
             <input [disabled]="loading" matInput placeholder="ترحيل الخصم الى حساب" list="accList"
               class="mdb-autocomplete" #AccName name="AccName" [(ngModel)]="data.AccName"
@@ -73,7 +75,7 @@
       <tr>
         <td>
           <mat-form-field cellspacing="0">
-            <input [disabled]="loading" matInput placeholder="قيمة الخصم" type="number" #receiptVal name="receiptVal"
+            <input [disabled]="loading" matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
               [ngModel]="data.receiptVal" required>
           </mat-form-field>
         </td>
@@ -84,7 +86,7 @@
 <hr>
 <mat-dialog-actions class="mx-2">
   <button [disabled]="!modalForm.valid" mat-flat-button color="warn" mat-dialog-close
-    [mat-dialog-close]="modalForm.value">اضافة الخصم</button>
+    [mat-dialog-close]="modalForm.value">تسجيل</button>
   <div [class.d-none]="!loading" style="width: 100%;" class="mt-2">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>

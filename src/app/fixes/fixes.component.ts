@@ -24,7 +24,9 @@ export class FixesComponent implements OnInit {
     mainUrl: 'http://localhost/accounting/',
   };
 
-  db_changes = [];
+  db_changes = [
+    "ALTER TABLE `safereceipt` ADD `workerId` VARCHAR(100) NOT NULL DEFAULT '0' AFTER `truckCurrentVal`, ADD `workerName` VARCHAR(100) NOT NULL AFTER `workerId`, ADD `workerCurrentVal` INT(11) NOT NULL AFTER `workerName`",
+  ];
 
   constructor(
     public _stockService: StockService,

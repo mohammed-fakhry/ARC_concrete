@@ -34,7 +34,7 @@
                     </datalist>
                   </mat-form-field>
 
-                  <mat-form-field class="w-25">
+                  <mat-form-field [class.d-none]="!stockInvoice.truckName" class="w-25">
                     <input matInput placeholder="المشال" name="metrPrice" type="number" [(ngModel)]="truckInfo.metrPrice">
                   </mat-form-field>
                 </td>

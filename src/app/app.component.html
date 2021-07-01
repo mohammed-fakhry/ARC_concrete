@@ -48,7 +48,7 @@
       class="mr-2 blob boxShadow" style="height: 40px;">
   </div>
 
-</mat-toolbar><!--  -->
+</mat-toolbar>
 <div id="containerLoader" [class.d-none]="!_glopal.loading || _router.url === '/LogIn'">
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
@@ -57,12 +57,7 @@
   <mat-sidenav #sidenav mode="over" [(opened)]="opened" position="end" style="width: 240px">
     <mat-nav-list dense>
       <mat-accordion multi="false">
-        <!-- <a mat-list-item routerLink="/Clients" (click)="opened = !opened" *ngIf="_auth?.check.clients">العملاء</a>
-          <a mat-list-item routerLink="/Unites" (click)="opened = !opened" *ngIf="_auth?.check.unites">الوحدات</a>
-          <a mat-list-item routerLink="/Unites" (click)="opened = !opened" *ngIf="_auth?.check.unites">
-            تقنين الوحدات
-        </a> -->
-        <!-- <mat-expansion-panel dense *ngIf="
+        <mat-expansion-panel dense *ngIf="
             _auth?.check.workers || _auth?.check.clients || _auth?.check.unites
           " [class.mainBg]="expansionPanel[0].opened" (opened)="expansionPanel[0].opened = true"
           (closed)="expansionPanel[0].opened = false">
@@ -72,9 +67,8 @@
           </mat-expansion-panel-header>
           <mat-nav-list dense>
             <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check.workers">العاملين</a>
-
           </mat-nav-list>
-        </mat-expansion-panel> -->
+        </mat-expansion-panel>
 
         <mat-expansion-panel *ngIf="_auth?.check.customers" [class.mainBg]="expansionPanel[1].opened"
           (opened)="expansionPanel[1].opened = true" (closed)="expansionPanel[1].opened = false">
@@ -177,7 +171,7 @@
                 style="text-align: right; width: 72%;" (click)="opened = !opened">
                 بونات الخرسانة
               </button>
-              <button mat-raised-button routerLink="/AddConcreteBon" (click)="opened = !opened" style="width: 20%;"
+              <button mat-flat-button routerLink="/AddConcreteBon" (click)="opened = !opened" style="width: 20%;"
                 matTooltip="بون جديد">
                 <i class="fa fa-plus pt-1 textBold textWhite"></i>
               </button>
@@ -197,8 +191,10 @@
 
             <mat-divider class="mt-2"></mat-divider>
 
-            <a mat-list-item routerLink="/ConcreteCustomerList" (click)="opened = !opened">عملاء الخرسانة</a>
-            <mat-divider></mat-divider>
+            <a mat-list-item routerLink="/ConcreteCustomerList" (click)="opened = !opened" class="textBold">
+              <span class="textSecondary">عملاء الخرسانة</span>
+            </a>
+
             <a mat-list-item routerLink="/StockInformation/11" (click)="opened = !opened">مخزن تاور</a>
             <a mat-list-item routerLink="/ConcreteList" (click)="opened = !opened">خرسانة جهد و محتوى</a>
             <mat-divider></mat-divider>
@@ -224,7 +220,10 @@
               </button>
             </div>
 
-            <a mat-list-item routerLink="/TruckCustomerList" (click)="opened = !opened">عملاء المُعدات</a>
+            <a mat-list-item routerLink="/TruckCustomerList" (click)="opened = !opened" class="textBold">
+              <i class="fa fa-users pt-1 pl-2 textSecondary"></i>
+              <span class="textSecondary">عملاء المُعدات</span>
+            </a>
 
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/TrucksList/cars" (click)="opened = !opened">سيارات</a>
@@ -297,10 +296,6 @@
             <a mat-list-item routerLink="/FixesComponent" (click)="opened = !opened" class="textBold"
               *ngIf="_auth?.check.dev">systemFixes</a>
 
-            <!-- <a mat-list-item routerLink="/tryDev" (click)="opened = !opened" class="textBold"
-              *ngIf="_auth.uName?.realName == 'فوزى' || _auth.uName?.realName == 'فخري'">
-              الجمعية
-            </a> -->
           </mat-nav-list>
         </mat-expansion-panel>
 
@@ -311,10 +306,6 @@
     <div class="mx-5 mt-4" id="printHeader">
       <div class="d-flex justify-content-between">
         <div>
-          <!-- <h2>
-            شركة تاور للخرسانات الجاهزة
-            و المقاولات العمومية و التوريدات
-          </h2> -->
           <div class="textBolder textSecondary">شركة تاور للخرسانات الجاهزة</div>
           <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
             للمقاولات العمومية
@@ -333,7 +324,6 @@
             رقم التسجيل الضريبى: 479_358_726
           </div>
         </div>
-        <!-- <div>{{_globalVarsService.currentRoute}}</div> -->
         <img src="assets/logos/printLogo.jpg" class="logoimg" id="printLogo" alt="">
       </div>
       <mat-divider class="my-3"></mat-divider>

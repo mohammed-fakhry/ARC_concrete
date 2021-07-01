@@ -9,29 +9,33 @@ export class SafeReceipt {
   // sec section
   transactionAccKind: string = '';
   // acc inpts
-  accId!: number | null;
-  AccName!: string | null;
+  accId: number = 0;
+  AccName: string = '';
   currentAccVal: number = 0;
   //safe inpts
   secSafeName: string = '';
-  secSafeId!: number | null;
-  current_SecSafeVal!: number | null;
+  secSafeId: number = 1;
+  current_SecSafeVal: number = 0;
   // customer inpts
-  customerId!: number | null;
+  customerId: number = 1;
   customerName: string = '';
   currentCustomerVal: number = 0;
   // concreteCustomer inpts
-  concreteCustomer_id!: string | null;
+  concreteCustomer_id: string = '0';
   concreteCustomerName: string = '';
   concreteCustomerVal: number = 0;
   // truck
-  truckId!: string | null;
+  truckId: string = '0';
   truckName: string = '';
   truckCurrentVal: number = 0;
   // truckCustomer inpts
-  truckCustomerId!: string | null;
+  truckCustomerId: string = '0';
   truckCustomerName: string = '';
   truckCustomerVal: number = 0;
+  // worker
+  workerId: string = '0';
+  workerName: string = '';
+  workerCurrentVal: number = 0;
   // user inpts
   receiptVal!: number;
   recieptNote: string = '';

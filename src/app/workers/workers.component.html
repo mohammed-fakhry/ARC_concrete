@@ -1,68 +1,166 @@
 <div class="mainContainer">
-  <div class="box">
-      <div class="mat-elevation-z0 mt-3">
+  <div class="row">
+    <div class="col-lg-9 col-md-12">
+      <div class="box">
+        <div class="mat-elevation-z0 mt-3">
           <div class="d-flex justify-content-between px-3">
+            <div class="form-inline printX">
               <mat-form-field class="searchForm" style="width: 500px;">
-                  <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt'
-                      (ngModelChange)="search()">
+                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
               </mat-form-field>
-              <div>
-                  <button mat-stroked-button color="primary" disabled>اضافة موظف</button>
+
+              <div class="mr-2">
+                <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+                  <i class="fa fa-filter"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+                    بالتاريخ</button>
+                  <button [disabled]="!isFiltered" mat-menu-item (click)="onStart()" style="text-align: right;">اظهار
+                    الكل</button>
+                </mat-menu>
               </div>
+            </div>
+
+            <div class="my-auto">
+              <button mat-stroked-button color="primary" routerLink="/AddWorker">
+                اضافة موظف
+              </button>
+            </div>
           </div>
           <div class="example-container">
-              <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
-                  <ng-container matColumnDef="workerId">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerId}}</td>
-                  </ng-container>
+            <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+              <ng-container matColumnDef="workerId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
+                <td mat-cell *matCellDef="let row">{{row.workerId}}</td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerName">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
-                      <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2"
-                          routerLink="/WorkerInformation/{{row.workerId}}">
-                          {{row.workerName}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="workerName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+                <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2"
+                  routerLink="/WorkerInformation/{{row.workerId}}">
+                  {{row.workerName}}</td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerTell">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الهاتف</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerTell}}</td>
-                  </ng-container>
+              <!-- <ng-container matColumnDef="workerTell">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الهاتف</th>
+                <td mat-cell *matCellDef="let row">{{row.workerTell}}</td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerAdd">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>العنوان</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerAdd}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="workerAdd">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>العنوان</th>
+                <td mat-cell *matCellDef="let row">{{row.workerAdd}}</td>
+              </ng-container> -->
 
-                  <ng-container matColumnDef="workerJopCateg">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الادارة</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerJopCateg}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="workerJopCateg">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الادارة</th>
+                <td mat-cell *matCellDef="let row">{{row.workerJopCateg}}</td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerJop">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>الوظيفة</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerJop}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="workerJop">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الوظيفة</th>
+                <td mat-cell *matCellDef="let row">{{row.workerJop}}</td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerCheckIN">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>حضور</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerCheckIN}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="workedDayes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ايام العمل</th>
+                <td mat-cell *matCellDef="let row" class="tdBorder_right">
+                  {{row.workedDayes > 0 ? (row.workedDayes | number: '1.0-2') : '-'}}
+                  <span *ngIf="row.workedDayes > 0" class="{{(row.lastWorked_date | dateInDays).class}}">
+                    {{(row.lastWorked_date | dateInDays).messege}}
+                  </span>
+                </td>
+              </ng-container>
 
-                  <ng-container matColumnDef="workerCheckOut">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>انصراف</th>
-                      <td mat-cell *matCellDef="let row">{{row.workerCheckOut}}</td>
-                  </ng-container>
+              <ng-container matColumnDef="discoundDayes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ايام الغياب</th>
+                <td mat-cell *matCellDef="let row" [ngClass]="row.discoundDayes > 0 ? 'dangerBadge borderLdanger' : ''">
+                  {{row.discoundDayes | number: '1.0-2'}}
+                </td>
+              </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-                  </tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-                  </tr>
-              </table>
+              <ng-container matColumnDef="overDayes">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>اضافى</th>
+                <td mat-cell *matCellDef="let row" [ngClass]="row.overDayes > 0 ? 'greenBadge borderLgreen' : ''">
+                  {{row.overDayes | number: '1.0-2'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="payLater">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>سلف</th>
+                <td mat-cell *matCellDef="let row" class="tdBorder_right" [class.textDanger]="row.payLater > 0">
+                  {{row.payLater | number: '1.0-2'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="cashReceived">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>دفعات</th>
+                <td mat-cell *matCellDef="let row" class="tdBorder_right">
+                  {{row.cashReceived | number: '1.0-2'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="workerCurrentVal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>راتب مستحق</th>
+                <td mat-cell *matCellDef="let row" [class.textDanger]="row.workerCurrentVal < 0"
+                  class="textBold tdBorder lightBg">
+                  {{row.workerCurrentVal | number: '1.0-2'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                  style="text-align: right; font-size: medium;">
+                  تعديل
+                </th>
+                <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue" *matCellDef="let row"
+                  routerLink="/UpdateWorker/{{row.workerId}}"><i class="fa fa-pencil underLine"></i></td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+              </tr>
+            </table>
           </div>
           <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-              [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+            [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
           </mat-paginator>
+        </div>
       </div>
+    </div>
+    <div class="col-lg-3 col-md-12 printX">
+      <img class="sideLogo" src="assets/logos/employee.png" alt="">
+
+      <div class="box p-3 boxShadow mt-3">
+
+        <div *ngIf="searchDate.from && searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
+          <span>من تاريخ | {{searchDate.from}}</span>
+          <span class="pr-2">الى تاريخ | {{searchDate.to}}</span>
+        </div>
+
+        <div *ngIf="!searchDate.from && !searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
+          من اول المدة
+        </div>
+
+        <div class="dangerBadge borderLdanger p-3 text-center textBold">
+          رواتب مستحقة الدفع | {{counts.onUs | number: '1.0-2'}}
+        </div>
+
+        <div class="darkBadge borderLdark p-3 text-center textBold mt-2">
+          مديونية موظفين | {{counts.toUS | number: '1.0-2'}}
+        </div>
+
+        <mat-divider class="mt-2"></mat-divider>
+
+        <div class="text-center textBolder mt-2" [class.textDanger]="(counts.toUS - counts.onUs) < 0"
+          style="font-size: large;">
+          صافى | {{counts.toUS - counts.onUs | number: '1.0-2'}}
+        </div>
+
+      </div>
+    </div>
+
   </div>
+
 </div>

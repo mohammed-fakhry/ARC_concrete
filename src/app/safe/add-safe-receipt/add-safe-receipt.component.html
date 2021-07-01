@@ -87,6 +87,9 @@
                 <mat-option value="دفعات للمعدة">
                   دفعات للمعدة
                 </mat-option>
+                <mat-option value="موظفين">
+                  موظفين
+                </mat-option>
               </mat-select>
             </mat-form-field>
             <!-- outdent -->
@@ -203,6 +206,28 @@
                   {{(safeReciept.currentAccVal || 0) | number:'1.0-2'}}</div>
               </td>
             </tr>
+
+            <tr *ngIf="safeReciept.transactionAccKind == 'موظفين'">
+              <td style="width: 70%;">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="اسم الموظف" list="workerList" class="mdb-autocomplete" #workerName
+                    name="workerName" [(ngModel)]="safeReciept.workerName" (change)="workerNameChanged(addSafeReciept)"
+                    required>
+                  <datalist id="workerList">
+                    <option *ngFor="let worker of workerList" value="{{worker.workerName}}">
+                      {{worker.workerJop}}
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.workerName.cond">
+                    {{inputValid.workerName.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td style="width: 30%;">
+                <div class="{{inputValid.workerName.class}} textBold p-2 text-center infoCard">
+                  {{(safeReciept.workerCurrentVal || 0) | number:'1.0-2'}}</div>
+              </td>
+            </tr>
           </table>
 
           <mat-divider class="my-3"></mat-divider>
@@ -252,8 +277,10 @@
           </table>
 
           <mat-divider class="my-3"></mat-divider>
+
           <div class="d-flex justify-content-between">
-            <button [disabled]="_glopal.loading" mat-raised-button color="primary" type="submit">{{submitBtn}}</button>
+            <button [disabled]="_glopal.loading || !safeReciept.receiptKind" mat-raised-button color="primary"
+              type="submit">{{submitBtn}}</button>
             <div class="form-inline">
               <h3 class="my-auto ml-3 py-1 infoCard lightBg" (click)="toEditReport()"
                 [class.textBtn]="_auth?.check.prem && safeReciept.isUpdated"
@@ -264,6 +291,10 @@
                 حذف الايصال
               </button>
             </div>
+          </div>
+
+          <div *ngIf="!_glopal.loading && !safeReciept.receiptKind" class="mt-3">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
           </div>
         </form>
       </div>
@@ -284,12 +315,9 @@
           {{valsRemain.safeRemain | number:'1.0-2'}}
         </div>
 
-        <div *ngIf="safeReciept.AccName || safeReciept.customerName || safeReciept.concreteCustomerName">
+        <div *ngIf="valsRemain.otherValDetail">
           <div class="text-center pt-3 pb-2">
-            {{safeReciept.AccName
-            ? safeReciept.AccName
-            : (safeReciept.customerName ? safeReciept.customerName :
-            (safeReciept.concreteCustomerName ? safeReciept.concreteCustomerName : safeReciept.truckCustomerName))}}
+            {{valsRemain.otherValDetail}}
           </div>
           <div class="infoCard text-center mx-auto textBold py-3"
             [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"

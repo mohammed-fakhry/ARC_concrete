@@ -432,6 +432,7 @@ export class CustomerInformationComponent implements OnInit {
     safeReceipt.customerId = this.customerInfo.customerId;
     safeReceipt.customerName = this.customerInfo.customerName;
     safeReceipt.receiptKind = 'ايصال استلام نقدية';
+    safeReceipt.transactionAccKind = 'موظفين'
     safeReceipt.recieptNote = `"${this.customerInfo.customerName}"`;
     safeReceipt.date_time = this._mainService.makeTime_date(
       new Date(Date.now())
@@ -475,7 +476,7 @@ export class CustomerInformationComponent implements OnInit {
       secSafeId: receipt.secSafeId ? receipt.secSafeId : 1,
       current_SecSafeVal: receipt.current_SecSafeVal
         ? receipt.current_SecSafeVal
-        : null,
+        : 0,
       // customer inpts
       customerId: transactionAccKind == 'عميل' ? receipt.customerId : 1,
       customerName: receipt.customerName ? receipt.customerName : '',
@@ -487,13 +488,17 @@ export class CustomerInformationComponent implements OnInit {
       concreteCustomerName: '',
       concreteCustomerVal: 0,
       // truck
-      truckId: null,
+      truckId: '0',
       truckName: '',
       truckCurrentVal: 0,
       // truckCustomer inpts
       truckCustomerId: '0',
       truckCustomerName: '',
       truckCustomerVal: 0,
+      // worker
+      workerId: '0',
+      workerName: '',
+      workerCurrentVal: 0,
       // user inpts
       receiptVal: receipt.receiptVal,
       recieptNote: receipt.recieptNote ? receipt.recieptNote : '',

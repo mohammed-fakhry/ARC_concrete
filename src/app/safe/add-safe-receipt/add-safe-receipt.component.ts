@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Customer } from 'src/app/classes/customer';
 import { OtherAcc } from 'src/app/classes/other-acc';
+import { Worker } from 'src/app/classes/worker';
 import { SafeData } from 'src/app/classes/safe-data';
 import { SafeReceipt } from 'src/app/classes/safe-receipt';
 import { CustomerService } from 'src/app/services/customer.service';
@@ -21,6 +22,7 @@ import { ConcreteService } from 'src/app/services/concrete.service';
 import { TruckService } from 'src/app/services/truck.service';
 import { TruckCustomer } from 'src/app/classes/truck-customer';
 import { Truck } from 'src/app/classes/truck';
+import { WorkerService } from 'src/app/services/worker.service';
 
 @Component({
   selector: 'app-add-safe-receipt',
@@ -38,6 +40,7 @@ export class AddSafeReceiptComponent implements OnInit {
   concreteCustomerList: ConcreteCustomer[] = [];
   truckCustomerList: TruckCustomer[] = [];
   truckList: Truck[] = [];
+  workerList: Worker[] = [];
 
   safeReciept: SafeReceipt = new SafeReceipt();
   otherRecieptVals: { note: string; val: number }[] = [];
@@ -52,6 +55,7 @@ export class AddSafeReceiptComponent implements OnInit {
     truckCustomerName: { cond: true, msg: '', class: 'secondaryBadge' },
     AccName: { cond: true, msg: '', class: 'secondaryBadge' },
     truckName: { cond: true, msg: '', class: 'secondaryBadge' },
+    workerName: { cond: true, msg: '', class: 'secondaryBadge' },
     receiptVal: { cond: true, msg: '' },
   };
   date_timeDom!: HTMLElement;
@@ -59,11 +63,11 @@ export class AddSafeReceiptComponent implements OnInit {
 
   valsRemain: {
     safeRemain: number;
-    //otherValDetail: string;
+    otherValDetail: string;
     otherValRemain: number;
   } = {
     safeRemain: 0,
-    //otherValDetail: '',
+    otherValDetail: '',
     otherValRemain: 0,
   };
   dateExpires: boolean = false;
@@ -80,6 +84,7 @@ export class AddSafeReceiptComponent implements OnInit {
     public _auth: AuthService,
     public _concrete: ConcreteService,
     public _snackBar: MatSnackBar,
+    public _workerService: WorkerService,
     public _truckService: TruckService
   ) {
     this._glopal.loading = true;
@@ -117,16 +122,11 @@ export class AddSafeReceiptComponent implements OnInit {
     // defult recieptVals
     //this.date_timeDom = document.querySelector('#date_time') as HTMLElement;
     this.oldReciept = new ChangedReciepts();
-    this.safeReciept = new SafeReceipt();
-    this.safeReciept.date_time = this._mainService.makeTime_date(
-      new Date(Date.now())
-    );
-    this.safeReciept.receiptKind = 'ايصال استلام نقدية';
-    this.safeReciept.transactionAccKind = 'عميل';
     this.submitBtn = 'تسجيل';
     this.otherRecieptVals = [];
     this.concreteCustomerList = [];
     this.truckList = [];
+    this.workerList = [];
 
     this.makeOtherVal_null('عميل');
 
@@ -139,6 +139,7 @@ export class AddSafeReceiptComponent implements OnInit {
       this.getConcreteCustomers(),
       this.getTruckCustomers(),
       this.getTruckList(),
+      this.getWorkers(),
     ]).then((data: any[]) => {
       const result = {
         safes: data[0],
@@ -147,6 +148,7 @@ export class AddSafeReceiptComponent implements OnInit {
         concreteCustomers: data[3],
         truckCustomers: data[4],
         trucks: data[5],
+        workers: data[6],
       };
 
       this.mainCustomerList = result.customers;
@@ -157,12 +159,11 @@ export class AddSafeReceiptComponent implements OnInit {
 
       this.accList = result.acc;
       this.safeList = result.safes;
-      this.truckList = result.trucks.filter((truck: Truck) => truck.owner == 'سيارة الشركة');
+      this.truckList = result.trucks.filter(
+        (truck: Truck) => truck.owner == 'سيارة الشركة'
+      );
 
-      this.safeReciept.safeName = this.safeList[0].safeName;
-      this.safeReciept.safeId = this.safeList[0].safeId;
-      this.safeReciept.currentSafeVal = this.safeList[0].currentSafeVal;
-      this.setSafeRemain();
+      this.workerList = result.workers;
 
       this.id = this.activeRoute.snapshot.paramMap.get('id');
 
@@ -196,15 +197,20 @@ export class AddSafeReceiptComponent implements OnInit {
               this.oldReciept = this.fillOldData(data[0]);
               //console.log({ oldData: this.oldReciept, data: data[0] });
             }
+            this._glopal.loading = false;
           });
         this.submitBtn = 'تعديل';
       }
 
       if (!this.id) {
+        this.safeReciept.safeName = this.safeList[0].safeName;
+        this.safeReciept.safeId = this.safeList[0].safeId;
+        this.safeReciept.currentSafeVal = this.safeList[0].currentSafeVal;
+        this.setSafeRemain();
+
         this.setDefultvals('new');
       }
       this.receiptKindDom.focus();
-      this._glopal.loading = false;
     });
   }
 
@@ -313,6 +319,7 @@ export class AddSafeReceiptComponent implements OnInit {
     } else {
       /* to filter customers up to the safe name */
       this.safeChanged('first');
+      this._glopal.loading = false;
     }
 
     this.safeReciept.secSafeId = 1;
@@ -365,97 +372,50 @@ export class AddSafeReceiptComponent implements OnInit {
     });
   }
 
+  getWorkers(): Promise<Worker[]> {
+    return new Promise((res) => {
+      this._workerService.getWorker().subscribe((data: Worker[]) => res(data));
+    });
+  }
+
   makeOtherVal_null(cond: string) {
-    if (cond == 'عميل') {
-      this.safeReciept.AccName = null;
-      this.safeReciept.currentAccVal = 0;
-      this.safeReciept.accId = null;
+    this.valsRemain.otherValDetail = '';
+    this.valsRemain.otherValRemain = 0;
 
+    if (cond != 'عميل') {
+      this.safeReciept.customerId = 1;
+      this.safeReciept.currentCustomerVal = 0;
+      this.safeReciept.customerName = '';
+    }
+
+    if (cond != 'حساب') {
+      this.safeReciept.AccName = '';
+      this.safeReciept.currentAccVal = 0;
+      this.safeReciept.accId = 0;
+    }
+
+    if (cond != 'عميل خرسانة') {
       this.safeReciept.concreteCustomerName = '';
       this.safeReciept.concreteCustomerVal = 0;
       this.safeReciept.concreteCustomer_id = '0';
+    }
 
+    if (cond != 'عميل معدات') {
       this.safeReciept.truckCustomerName = '';
       this.safeReciept.truckCustomerId = '0';
       this.safeReciept.truckCustomerVal = 0;
+    }
 
+    if (cond != 'دفعات للمعدة') {
       this.safeReciept.truckName = '';
       this.safeReciept.truckCurrentVal = 0;
       this.safeReciept.truckId = '0';
     }
 
-    if (cond == 'حساب') {
-      this.safeReciept.customerId = 1;
-      this.safeReciept.currentCustomerVal = 0;
-      this.safeReciept.customerName = '';
-
-      this.safeReciept.concreteCustomerName = '';
-      this.safeReciept.concreteCustomerVal = 0;
-      this.safeReciept.concreteCustomer_id = '0';
-
-      this.safeReciept.truckCustomerName = '';
-      this.safeReciept.truckCustomerId = '0';
-      this.safeReciept.truckCustomerVal = 0;
-
-      this.safeReciept.truckName = '';
-      this.safeReciept.truckCurrentVal = 0;
-      this.safeReciept.truckId = '0';
-    }
-
-    if (cond == 'عميل خرسانة') {
-      this.safeReciept.customerId = 1;
-      this.safeReciept.currentCustomerVal = 0;
-      this.safeReciept.customerName = '';
-
-      this.safeReciept.AccName = null;
-      this.safeReciept.currentAccVal = 0;
-      this.safeReciept.accId = null;
-
-      this.safeReciept.truckCustomerName = '';
-      this.safeReciept.truckCustomerId = '0';
-      this.safeReciept.truckCustomerVal = 0;
-
-      this.safeReciept.truckName = '';
-      this.safeReciept.truckCurrentVal = 0;
-      this.safeReciept.truckId = '0';
-    }
-
-    if (cond == 'عميل معدات') {
-      this.safeReciept.customerId = 1;
-      this.safeReciept.currentCustomerVal = 0;
-      this.safeReciept.customerName = '';
-
-      this.safeReciept.AccName = null;
-      this.safeReciept.currentAccVal = 0;
-      this.safeReciept.accId = null;
-
-      this.safeReciept.concreteCustomerName = '';
-      this.safeReciept.concreteCustomerVal = 0;
-      this.safeReciept.concreteCustomer_id = '0';
-
-      this.safeReciept.truckName = '';
-      this.safeReciept.truckCurrentVal = 0;
-      this.safeReciept.truckId = '0';
-    }
-
-    // دفعات للمعدة
-
-    if (cond == 'دفعات للمعدة') {
-      this.safeReciept.customerId = 1;
-      this.safeReciept.currentCustomerVal = 0;
-      this.safeReciept.customerName = '';
-
-      this.safeReciept.AccName = null;
-      this.safeReciept.currentAccVal = 0;
-      this.safeReciept.accId = null;
-
-      this.safeReciept.concreteCustomerName = '';
-      this.safeReciept.concreteCustomerVal = 0;
-      this.safeReciept.concreteCustomer_id = '0';
-
-      this.safeReciept.truckCustomerName = '';
-      this.safeReciept.truckCustomerId = '0';
-      this.safeReciept.truckCustomerVal = 0;
+    if (cond != 'موظفين') {
+      this.safeReciept.workerName = '';
+      this.safeReciept.workerCurrentVal = 0;
+      this.safeReciept.workerId = '0';
     }
   }
 
@@ -483,19 +443,6 @@ export class AddSafeReceiptComponent implements OnInit {
     let safeInfo = this.getSafeInfo(this.safeReciept.safeName);
     this.customerList = this.mainCustomerList;
     if (safeInfo) {
-      if (safeInfo.safeName.includes('حسام'))
-        this.customerList = this.mainCustomerList.filter((customer) =>
-          customer.customerName.includes('- حسام')
-        );
-      if (safeInfo.safeName.includes('سيف'))
-        this.customerList = this.mainCustomerList.filter((customer) =>
-          customer.customerName.includes('- سيف')
-        );
-      if (safeInfo.safeName.includes('نور فارس'))
-        this.customerList = this.mainCustomerList.filter((customer) =>
-          customer.customerName.includes('- نور فارس')
-        );
-
       if (cond == 'first') {
         this.safeReciept.currentSafeVal = safeInfo.currentSafeVal;
         this.safeReciept.safeId = safeInfo.safeId;
@@ -554,6 +501,15 @@ export class AddSafeReceiptComponent implements OnInit {
           : (this.safeReciept.truckCurrentVal ?? 0) +
             (this.safeReciept.receiptVal ?? 0);
     }
+
+    if (this.safeReciept.transactionAccKind === 'موظفين') {
+      this.valsRemain.otherValRemain =
+        this.safeReciept.receiptKind === 'ايصال استلام نقدية'
+          ? (this.safeReciept.workerCurrentVal ?? 0) -
+            (this.safeReciept.receiptVal ?? 0)
+          : (this.safeReciept.workerCurrentVal ?? 0) +
+            (this.safeReciept.receiptVal ?? 0);
+    }
   }
 
   accNameChanged = (addSafeReciept: NgForm) => {
@@ -568,8 +524,9 @@ export class AddSafeReceiptComponent implements OnInit {
       };
       addSafeReciept.form.controls['AccName'].setErrors({ incorrect: true });
       this.safeReciept.currentAccVal = 0;
-      this.safeReciept.accId = null;
+      this.safeReciept.accId = 0;
       this.valsRemain.otherValRemain = 0;
+      this.valsRemain.otherValDetail = '';
     } else {
       this.safeReciept.accId = accInfo.accId;
       this.inputValid.AccName.cond = true;
@@ -577,7 +534,9 @@ export class AddSafeReceiptComponent implements OnInit {
         accInfo.currentAccVal >= 0 ? 'secondaryBadge' : 'dangerBadge';
       addSafeReciept.form.controls['AccName'].setErrors(null);
       this.safeReciept.currentAccVal = accInfo.currentAccVal;
+
       this.valsRemain.otherValRemain = accInfo.currentAccVal;
+      this.valsRemain.otherValDetail = this.safeReciept.AccName;
     }
   };
 
@@ -593,8 +552,9 @@ export class AddSafeReceiptComponent implements OnInit {
       };
       addSafeReciept.form.controls['truckName'].setErrors({ incorrect: true });
       this.safeReciept.currentAccVal = 0;
-      this.safeReciept.truckId = null;
+      this.safeReciept.truckId = '0';
       this.valsRemain.otherValRemain = 0;
+      this.valsRemain.otherValDetail = '';
     } else {
       this.safeReciept.truckId = truckInfo.id;
       this.inputValid.AccName.cond = true;
@@ -603,6 +563,7 @@ export class AddSafeReceiptComponent implements OnInit {
         truckInfo. >= 0 ? 'secondaryBadge' : 'dangerBadge';
       */
       addSafeReciept.form.controls['truckName'].setErrors(null);
+      this.valsRemain.otherValDetail = '';
       // this.safeReciept.currentAccVal = accInfo.currentAccVal;
       // this.valsRemain.otherValRemain = accInfo.currentAccVal;
     }
@@ -671,6 +632,9 @@ export class AddSafeReceiptComponent implements OnInit {
   findTruck_byName = (truckName: string): Truck | undefined =>
     this.truckList.find((truck) => truck.name === truckName);
 
+  findWorker_byName = (workerName: string): Worker | undefined =>
+    this.workerList.find((worker) => worker.workerName === workerName);
+
   findConcreteCustomer_byName = (
     fullName: string
   ): ConcreteCustomer | undefined =>
@@ -694,7 +658,8 @@ export class AddSafeReceiptComponent implements OnInit {
       });
       this.safeReciept.currentCustomerVal = 0;
       this.valsRemain.otherValRemain = 0;
-      this.safeReciept.customerId = null;
+      this.valsRemain.otherValDetail = '';
+      this.safeReciept.customerId = 1;
     } else {
       this.inputValid.customerName.cond = true;
       this.inputValid.customerName.class =
@@ -702,7 +667,9 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['customerName'].setErrors(null);
       this.safeReciept.currentCustomerVal = custInfo.customerRemain;
       this.safeReciept.customerId = custInfo.customerId;
+
       this.valsRemain.otherValRemain = custInfo.customerRemain;
+      this.valsRemain.otherValDetail = custInfo.customerName;
       //addSafeReciept.form.controls['customerName'].s({ 'incorrect': true });
     }
   };
@@ -724,7 +691,9 @@ export class AddSafeReceiptComponent implements OnInit {
       });
 
       this.safeReciept.concreteCustomerVal = 0;
+
       this.valsRemain.otherValRemain = 0;
+      this.valsRemain.otherValDetail = '';
       this.safeReciept.concreteCustomer_id = '0';
     } else {
       this.inputValid.concreteCustomerName.cond = true;
@@ -732,8 +701,10 @@ export class AddSafeReceiptComponent implements OnInit {
         customerInfo.currentVal >= 0 ? 'secondaryBadge' : 'dangerBadge';
       addSafeReciept.form.controls['concreteCustomerName'].setErrors(null);
       this.safeReciept.concreteCustomerVal = customerInfo.currentVal;
-      this.safeReciept.concreteCustomer_id = customerInfo.id;
+      this.safeReciept.concreteCustomer_id = customerInfo.id ?? '0';
+
       this.valsRemain.otherValRemain = customerInfo.currentVal;
+      this.valsRemain.otherValDetail = customerInfo.fullName;
     }
   }
 
@@ -754,7 +725,9 @@ export class AddSafeReceiptComponent implements OnInit {
       });
 
       this.safeReciept.truckCustomerVal = 0;
+
       this.valsRemain.otherValRemain = 0;
+      this.valsRemain.otherValDetail = '';
       this.safeReciept.truckCustomerId = '0';
     } else {
       this.inputValid.truckCustomerName.cond = true;
@@ -762,8 +735,44 @@ export class AddSafeReceiptComponent implements OnInit {
         customerInfo.currentVal >= 0 ? 'secondaryBadge' : 'dangerBadge';
       addSafeReciept.form.controls['truckCustomerName'].setErrors(null);
       this.safeReciept.truckCustomerVal = customerInfo.currentVal;
-      this.safeReciept.truckCustomerId = customerInfo.id;
+      this.safeReciept.truckCustomerId = customerInfo.id ?? '0';
+
       this.valsRemain.otherValRemain = customerInfo.currentVal;
+      this.valsRemain.otherValDetail = customerInfo.fullName;
+    }
+  }
+
+  workerNameChanged(addSafeReciept: NgForm) {
+    const workerInfo = this.findWorker_byName(this.safeReciept.workerName);
+
+    console.log(workerInfo);
+
+    if (!workerInfo) {
+      this.inputValid.workerName = {
+        cond: false,
+        msg: 'الموظف غير مسجل بقاعدة البيانات',
+        class: 'secondaryBadge',
+      };
+
+      addSafeReciept.form.controls['workerName'].setErrors({
+        incorrect: true,
+      });
+
+      this.safeReciept.workerCurrentVal = 0;
+
+      this.valsRemain.otherValRemain = 0;
+      this.valsRemain.otherValDetail = '';
+      this.safeReciept.workerId = '0';
+    } else {
+      this.inputValid.workerName.cond = true;
+      this.inputValid.workerName.class =
+        workerInfo.workerCurrentVal >= 0 ? 'secondaryBadge' : 'dangerBadge';
+      addSafeReciept.form.controls['workerName'].setErrors(null);
+      this.safeReciept.workerCurrentVal = workerInfo.workerCurrentVal;
+      this.safeReciept.workerId = workerInfo.workerId.toString();
+
+      this.valsRemain.otherValRemain = workerInfo.workerCurrentVal;
+      this.valsRemain.otherValDetail = workerInfo.workerName;
     }
   }
 
@@ -829,10 +838,12 @@ export class AddSafeReceiptComponent implements OnInit {
   };
 
   deleteRecipt() {
+    this._glopal.loading = true;
     if (this.id)
-      this._safeService
-        .deleteSafeReciept(parseInt(this.id))
-        .subscribe(() => this._router.navigate(['/Safe']));
+      this._safeService.deleteSafeReciept(parseInt(this.id)).subscribe(() => {
+        this._glopal.loading = false;
+        this._location.back();
+      });
   }
 
   recordSafeReceipt(safeReciept: SafeReceipt) {
@@ -1006,17 +1017,17 @@ export class AddSafeReceiptComponent implements OnInit {
         ? receipt.transactionAccKind
         : '',
       // acc inpts
-      accId: receipt.accId ? receipt.accId : null,
+      accId: receipt.accId ? receipt.accId : 0,
       AccName: receipt.AccName ? receipt.AccName : '',
       currentAccVal: receipt.currentSafeVal ? receipt.currentSafeVal : 0,
       //safe inpts
       secSafeName: receipt.secSafeName ? receipt.secSafeName : '',
-      secSafeId: receipt.secSafeId ? receipt.secSafeId : null,
+      secSafeId: receipt.secSafeId ? receipt.secSafeId : 1,
       current_SecSafeVal: receipt.current_SecSafeVal
         ? receipt.current_SecSafeVal
-        : null,
+        : 0,
       // customer inpts
-      customerId: receipt.customerId ? receipt.customerId : null,
+      customerId: receipt.customerId ? receipt.customerId : 1,
       customerName: receipt.customerName ? receipt.customerName : '',
       currentCustomerVal: receipt.currentCustomerVal
         ? receipt.currentCustomerVal
@@ -1024,7 +1035,7 @@ export class AddSafeReceiptComponent implements OnInit {
       // concreteCustomer inpts
       concreteCustomer_id: receipt.concreteCustomer_id
         ? receipt.concreteCustomer_id
-        : null,
+        : '0',
       concreteCustomerName: receipt.concreteCustomerName
         ? receipt.concreteCustomerName
         : '',
@@ -1032,15 +1043,19 @@ export class AddSafeReceiptComponent implements OnInit {
         ? receipt.concreteCustomerVal
         : 0,
       // truck
-      truckId: receipt.truckId ? receipt.truckId : null,
+      truckId: receipt.truckId ? receipt.truckId : '0',
       truckName: receipt.truckName ? receipt.truckName : '',
       truckCurrentVal: receipt.truckCurrentVal ? receipt.truckCurrentVal : 0,
       // truckCustomer inpts
-      truckCustomerId: receipt.truckCustomerId ? receipt.truckCustomerId : null,
+      truckCustomerId: receipt.truckCustomerId ? receipt.truckCustomerId : '0',
       truckCustomerName: receipt.truckCustomerName
         ? receipt.truckCustomerName
         : '',
       truckCustomerVal: receipt.truckCustomerVal ? receipt.truckCustomerVal : 0,
+      // worker
+      workerId: receipt.workerId ? receipt.workerId : '0',
+      workerName: receipt.workerName ? receipt.workerName : '',
+      workerCurrentVal: receipt.workerCurrentVal ? receipt.workerCurrentVal : 0,
       // user inpts
       receiptVal: receipt.receiptVal,
       recieptNote: receipt.recieptNote ? receipt.recieptNote : '',

@@ -77,6 +77,7 @@ import { TruckCustomerInformationComponent } from './trucks/truckCustomers/truck
 import { TaxesListComponent } from './taxes/taxes-list/taxes-list.component';
 import { AddConcreteBonComponent } from './industry/bon/add-concrete-bon/add-concrete-bon.component';
 import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concrete-bon-list.component';
+import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
 
 @NgModule({
   declarations: [
@@ -141,7 +142,8 @@ import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concr
     TruckCustomerInformationComponent,
     TaxesListComponent,
     AddConcreteBonComponent,
-    ConcreteBonListComponent
+    ConcreteBonListComponent,
+    AddWorkerComponent
   ],
   imports: [
     BrowserModule,

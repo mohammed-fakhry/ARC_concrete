@@ -173,6 +173,7 @@ export class UserSettingsComponent implements OnInit {
           customers: this.user.customers,
           del: this.user.del,
           edi: this.user.edi,
+          expEdi: this.user.expEdi,
           prem: this.user.prem,
           safes: this.user.safes,
           stockes: this.user.stockes,

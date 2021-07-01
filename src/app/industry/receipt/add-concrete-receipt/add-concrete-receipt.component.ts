@@ -20,6 +20,7 @@ import { StockService } from 'src/app/services/stock.service';
 import { Location } from '@angular/common';
 import { TruckService } from 'src/app/services/truck.service';
 import { ConcreteBon } from 'src/app/classes/concrete-bon';
+import { DeleteDialogComponent } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-add-concrete-receipt',
@@ -144,6 +145,8 @@ export class AddConcreteReceiptComponent implements OnInit {
 
         const stockInfo = this.stockList[1];
 
+        console.log(stockInfo);
+
         if (
           this.addByBon.customerId &&
           this.addByBon.date &&
@@ -196,7 +199,7 @@ export class AddConcreteReceiptComponent implements OnInit {
           new Date(Date.now())
         );
 
-        const stockInfo = this.stockList[0];
+        const stockInfo = this.stockList[1];
 
         this.concreteReceipt.date_time = `${date}T23:59`;
         // customerInfo
@@ -859,6 +862,96 @@ export class AddConcreteReceiptComponent implements OnInit {
         this.openDialog();
       } */
     }
+  }
+
+  openDelDialog = () => {
+    let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      data: {
+        header: 'برجاء التأكد من بيانات الفاتورة قبل الحذف !',
+        info: `رقم | (${this.id})`,
+        discription: [
+          `لحساب : ${this.concreteReceipt.concreteCustomer_name}`,
+          `مخزن | ${this.concreteReceipt.stockTransaction.stockName}`,
+          `بقيمة | ${this.concreteReceipt.total}`,
+        ],
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'true') {
+        this.deleteInvoice();
+      }
+    });
+  };
+
+  delTranceDetail = (id: number) => {
+    return new Promise((res) => {
+      this._stockService
+        .deleteStockTransactionDetails(id)
+        .subscribe(() => res('done'));
+    });
+  };
+
+  delReceipteDetail = (id: string | null) => {
+    return new Promise((res) => {
+      if (id)
+        this._concrete
+          .delConcreteReceiptDetail(id)
+          .subscribe(() => res('done'));
+    });
+  };
+
+  deleteInvoice() {
+    this._glopal.loading = true;
+    const processLoop_receiptDetail = async () => {
+      for (let d = 0; d < this.concreteReceipt.stockTransactionD.length; d++) {
+        if (
+          this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
+        ) {
+          this._truckService
+            .deleteTruckOrder(
+              this.concreteReceipt.stockTransactionD[d]
+                .stockTransactionDetailsId,
+              'transId'
+            )
+            .subscribe();
+        }
+
+        const personId = await this.delTranceDetail(
+          this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
+        );
+      }
+    };
+
+    processLoop_receiptDetail().then(() => {
+      if (this.concreteReceipt.stockTransaction.stockTransactionId)
+        this._stockService
+          .deleteStockTransaction(
+            parseInt(this.concreteReceipt.stockTransaction.stockTransactionId)
+          )
+          .subscribe(() => {
+            console.log('stockDone');
+            this.deleteReceipts();
+          });
+    });
+  }
+
+  deleteReceipts() {
+    const processLoop_receiptDetail = async () => {
+      for (let d = 0; d < this.concreteReceipt.receiptDetails.length; d++) {
+        const personId = await this.delReceipteDetail(
+          this.concreteReceipt.receiptDetails[d].id
+        );
+      }
+    };
+
+    processLoop_receiptDetail().then(() => {
+      if (this.id)
+        this._concrete.delConcreteReceipt(this.id).subscribe(() => {
+          this._glopal.loading = false;
+          this._location.back();
+        });
+    });
   }
 
   openDialog = () => {

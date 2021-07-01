@@ -151,46 +151,15 @@ export class SafeInformationComponent implements OnInit {
         : 0;
       let balance = minVal - addVal + this.accArr[i].balance;
 
-      let receiptDetail: string = '';
-      let routeTo: string = '';
-
-      let toolTip: string = '';
-
-      if (data[i].customerName) {
-        receiptDetail = data[i].customerName;
-        routeTo = `/customerInformation/${data[i].customerId}`;
-        toolTip = "مورد | مستهلك"
-      }
-      if (data[i].AccName) {
-        receiptDetail = data[i].AccName;
-        routeTo = `/OtherAccInformation/${data[i].accId}`;
-        toolTip = "مصاريف"
-      }
-      if (data[i].concreteCustomerName) {
-        routeTo = `/ConcreteCustomerInformation/${data[i].concreteCustomer_id}`;
-        receiptDetail = data[i].concreteCustomerName;
-        toolTip = 'عميل خرسانة'
-      }
-
-      if (data[i].truckCustomerName) {
-        routeTo = `/TruckCustomerInformation/${data[i].truckId}`;
-        receiptDetail = data[i].truckCustomerName;
-        toolTip = 'عميل معدات'
-      }
-
-      if (data[i].truckName) {
-        routeTo = `/truckLog/${data[i].truckId}`;
-        receiptDetail = data[i].truckName;
-        toolTip = 'دفعة من تشغيل معدة'
-      }
+      const detailValues = this.setDetailValues(data[i]);
 
       let newData = {
         id: i + 2,
         safeReceiptId: data[i].safeReceiptId,
         receiptKind: data[i].receiptKind,
-        receiptDetail: receiptDetail,
-        routeTo: routeTo,
-        toolTip: toolTip,
+        receiptDetail: detailValues.receiptDetail,
+        routeTo: detailValues.routeTo,
+        toolTip: detailValues.toolTip,
         minVal: minVal,
         addVal: addVal,
         balance: balance,
@@ -205,6 +174,50 @@ export class SafeInformationComponent implements OnInit {
 
     return this.accArr;
   }
+
+  setDetailValues = (
+    data: any
+  ): {
+    receiptDetail: string;
+    routeTo: string;
+    toolTip: string;
+  } => {
+    let receiptDetail: string = '';
+    let routeTo: string = '';
+    let toolTip: string = '';
+
+    if (data.customerName) {
+      receiptDetail = data.customerName;
+      routeTo = `/customerInformation/${data.customerId}`;
+      toolTip = 'مورد | مستهلك';
+    } else if (data.AccName) {
+      receiptDetail = data.AccName;
+      routeTo = `/OtherAccInformation/${data.accId}`;
+      toolTip = 'مصاريف';
+    } else if (data.concreteCustomerName) {
+      routeTo = `/ConcreteCustomerInformation/${data.concreteCustomer_id}`;
+      receiptDetail = data.concreteCustomerName;
+      toolTip = 'عميل خرسانة';
+    } else if (data.truckCustomerName) {
+      routeTo = `/TruckCustomerInformation/${data.truckId}`;
+      receiptDetail = data.truckCustomerName;
+      toolTip = 'عميل معدات';
+    } else if (data.truckName) {
+      routeTo = `/truckLog/${data.truckId}`;
+      receiptDetail = data.truckName;
+      toolTip = 'دفعة من تشغيل معدة';
+    } else if (data.workerName) {
+      routeTo = `/WorkerInformation/${data.workerId}`;
+      receiptDetail = data.workerName;
+      toolTip = 'موظف';
+    }
+
+    return {
+      receiptDetail: receiptDetail,
+      routeTo: routeTo,
+      toolTip: toolTip,
+    };
+  };
 
   routeTo(data: any): string {
     if (data.customerName) {
@@ -221,84 +234,6 @@ export class SafeInformationComponent implements OnInit {
 
     return '';
   }
-
-  /* benfordRule(accArr: any[]) {
-    let test = `${accArr[15].minVal}`;
-    let one = accArr.filter((a) => {
-      const minVal = `${a.minVal}`;
-      return minVal[0] == '1';
-    });
-
-    let total = one.length;
-    let length = accArr.length;
-
-    let benford = (length / total) * 100;
-
-    console.log(benford);
-  } */
-
-  /* getBenfordData() {
-    // Returns a list of approximately 1000 numbers
-    // approximately following the Benford Distribution.
-
-    const BENFORD_PERCENTAGES = [
-      0, 0.301, 0.176, 0.125, 0.097, 0.079, 0.067, 0.058, 0.051, 0.046,
-    ];
-
-    let BenfordData = [];
-
-    let randomfactor;
-    let start;
-    let max;
-
-    for (let firstdigit = 1; firstdigit <= 9; firstdigit++) {
-      // get a random number between 0.8 and 1.2
-      randomfactor = Math.random() * 0.4 + 0.8;
-
-      max = Math.floor(1000 * BENFORD_PERCENTAGES[firstdigit] * randomfactor);
-
-      for (let numcount = 1; numcount < max; numcount++) {
-        start = firstdigit * 1000;
-        BenfordData.push(this.randBetween(start, start + 1000));
-      }
-    }
-
-    return BenfordData;
-  } */
-
-  /* randBetween(min: any, max: any) {
-    const range = max - min;
-
-    let n = Math.random() * range + min;
-
-    return n;
-  } */
-
-  /* searchResults(accArr: any[]) {
-    let filteredArr = this.searchTxt
-      ? accArr.filter(
-          (a) =>
-            a?.receiptKind?.includes(this.searchTxt) ||
-            a?.receiptDetail?.includes(this.searchTxt) ||
-            a?.minVal?.toString().includes(this.searchTxt) ||
-            a?.addVal?.toString().includes(this.searchTxt) ||
-            a?.balance?.toString().includes(this.searchTxt) ||
-            a?.date_time?.includes(this.searchTxt) ||
-            a?.madeBy?.includes(this.searchTxt) ||
-            a?.recieptNote?.includes(this.searchTxt)
-        )
-      : accArr;
-
-    this.searchResult = {
-      onUs: filteredArr
-        .map((a) => a.minVal)
-        .reduce((a: number, b: number) => a + b, 0),
-
-      toUs: filteredArr
-        .map((a) => a.addVal)
-        .reduce((a: number, b: number) => a + b, 0),
-    };
-  } */
 
   fillListData = (pureData: any) => {
     const data = pureData.reverse();

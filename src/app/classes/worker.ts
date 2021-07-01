@@ -11,4 +11,5 @@ export class Worker {
   workerYearVacation: string = '';
   workerCheckIN: string = '';
   workerCheckOut: string = '';
+  workerCurrentVal: number = 0;
 }

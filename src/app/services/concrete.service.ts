@@ -102,6 +102,12 @@ export class ConcreteService {
     );
   }
 
+  allconcreteReceipts() {
+    return this.http.get<ConcreteReceipt[]>(
+      `${this.url}allconcreteReceipts.php`
+    );
+  }
+
   postConcreteReceipt_d(concreteReceipt_d: ConcreteReceipDetails) {
     return this.http.post(
       `${this.url}postConcreteReceipt_d.php`,
@@ -157,6 +163,19 @@ export class ConcreteService {
     return this.http.put(
       `${this.url}putReceiptIdToConcreteBone.php?id=${concreteBon.bonId}`,
       concreteBon
+    );
+  }
+
+
+  delConcreteReceipt(id: string) {
+    return this.http.delete<ConcreteReceipt[]>(
+      `${this.url}delConcreteReceipt.php?id=${id}`
+    );
+  }
+
+  delConcreteReceiptDetail(id: string) {
+    return this.http.delete<ConcreteReceipDetails[]>(
+      `${this.url}delConcreteReceiptDetail.php?id=${id}`
     );
   }
 }

@@ -6,6 +6,9 @@ import { MainService } from 'src/app/services/main.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { Router } from '@angular/router';
 import { ConcreteService } from 'src/app/services/concrete.service';
+import { ConcreteReceipt } from 'src/app/classes/concrete-receipt';
+import { TruckService } from 'src/app/services/truck.service';
+import { StockService } from 'src/app/services/stock.service';
 
 @Component({
   selector: 'app-concrete-receipt-list',
@@ -48,7 +51,9 @@ export class ConcreteReceiptListComponent implements OnInit {
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
     public _router: Router,
-    public _concrete: ConcreteService
+    public _concrete: ConcreteService,
+    public _truckService: TruckService,
+    public _stockService: StockService
   ) {
     this._glopal.currentHeader = 'بيان اذون الخرسانة';
     this._glopal.loading = true;
@@ -81,9 +86,12 @@ export class ConcreteReceiptListComponent implements OnInit {
   },
   */
 
+  tempList: any[] = [];
+
   onStart() {
     this.getList()
       .then((data: any[]) => {
+        this.tempList = data;
         this.fillListData(data.reverse());
       })
       .then(() => {
@@ -109,4 +117,121 @@ export class ConcreteReceiptListComponent implements OnInit {
   search() {
     this.listData.filter = this.searchTxt;
   }
+
+  delCount: number = 0;
+  allDetailsCount: number = 0;
+  prosessDel: boolean = false;
+
+  /* handleRecordedConcretes_stock() {
+    this._glopal.loading = true;
+    this._concrete
+      .allconcreteReceipts()
+      .subscribe((data: ConcreteReceipt[]) => {
+        this.updateStocktarnsactionStockId(data);
+        this._glopal.loading = false;
+      });
+  }
+
+  updateStocktarnsactionStockId(concreteReceipts: ConcreteReceipt[]) {
+    for (let i = 0; i < concreteReceipts.length; i++) {
+      console.log(i);
+      if (concreteReceipts[i]?.stockTransaction?.stockId) {
+        concreteReceipts[i].stockTransaction.stockId = 11;
+
+        this._stockService
+          .UpdateStockTransaction(concreteReceipts[i].stockTransaction)
+          .subscribe();
+      }
+    }
+  } */
+
+  /* delTranceDetail = (id: number) => {
+    return new Promise((res) => {
+      this._stockService
+        .deleteStockTransactionDetails(id)
+        .subscribe(() => res('done'));
+    });
+  };
+
+  delReceipteDetail = (id: string | null) => {
+    return new Promise((res) => {
+      if (id)
+        this._concrete
+          .delConcreteReceiptDetail(id)
+          .subscribe(() => res('done'));
+    });
+  };
+
+  deleteInvoices(concreteReceipts: ConcreteReceipt[]) {
+    const filteredReceipts = concreteReceipts.filter(
+      (r) => r.stockTransactionD.length > 0
+    );
+    for (let i = 0; i < filteredReceipts.length; i++) {
+      const receipt = filteredReceipts[i];
+      this.allDetailsCount = receipt.stockTransactionD.length;
+
+      const processLoop_receiptDetail = async () => {
+        for (let d = 0; d < receipt.stockTransactionD.length; d++) {
+          if (receipt.stockTransactionD[d].stockTransactionDetailsId) {
+            this._truckService
+              .deleteTruckOrder(
+                receipt.stockTransactionD[d].stockTransactionDetailsId,
+                'transId'
+              )
+              .subscribe();
+          }
+
+          const personId = await this.delTranceDetail(
+            receipt.stockTransactionD[d].stockTransactionDetailsId
+          );
+
+          this.delCount = i + 1;
+        }
+      };
+
+      processLoop_receiptDetail().then(() => {
+        if (receipt.stockTransaction.stockTransactionId)
+          this._stockService
+            .deleteStockTransaction(
+              parseInt(receipt.stockTransaction.stockTransactionId)
+            )
+            .subscribe(() => {
+              console.log('stockDone');
+              if (i == filteredReceipts.length - 1)
+                this.deleteReceipts(concreteReceipts);
+            });
+      });
+    }
+  }
+
+  deleteReceipts(concreteReceipts: ConcreteReceipt[]) {
+    const filteredReceipts = concreteReceipts.filter(
+      (r) => r.receiptDetails.length > 0
+    );
+
+    this.allDetailsCount = filteredReceipts.length;
+
+    for (let i = 0; i < filteredReceipts.length; i++) {
+      const receipt = filteredReceipts[i];
+
+      const processLoop_receiptDetail = async () => {
+        for (let d = 0; d < receipt.receiptDetails.length; d++) {
+          const personId = await this.delReceipteDetail(
+            receipt.receiptDetails[d].id
+          );
+
+          this.delCount = i + 1;
+        }
+      };
+
+      processLoop_receiptDetail().then(() => {
+        if (receipt.concreteReceipt_id)
+          this._concrete
+            .delConcreteReceipt(receipt.concreteReceipt_id)
+            .subscribe(() => {
+              console.log('alldone');
+            });
+      });
+    }
+  } */
 }
