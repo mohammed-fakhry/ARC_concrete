@@ -697,18 +697,20 @@ export class HomeComponent implements OnInit {
       },
       concreteCustomers: {
         remain: {
-          count: concreteCustomers.filter((cust) => cust.currentVal > 0).length,
+          count: concreteCustomers.filter((cust) => cust.currentVal != 0)
+            .length,
           total: concreteCustomers
-            .filter((cust) => cust.currentVal > 0)
             .map((cust) => cust.currentVal)
             .reduce((a, b) => a + b, 0),
         },
       },
       truckCustomers: {
         remain: {
-          count: truckCustomers.filter((cust) => cust.currentVal > 0).length,
+          count: truckCustomers.filter(
+            (cust) => cust.currentVal != 0 && cust.fullName != 'نقلات من المخزن'
+          ).length,
           total: truckCustomers
-            .filter((cust) => cust.currentVal > 0)
+            .filter((cust) => cust.fullName != 'نقلات من المخزن')
             .map((cust) => cust.currentVal)
             .reduce((a, b) => a + b, 0),
         },

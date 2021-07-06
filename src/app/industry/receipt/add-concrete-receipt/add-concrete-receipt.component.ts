@@ -145,8 +145,6 @@ export class AddConcreteReceiptComponent implements OnInit {
 
         const stockInfo = this.stockList[1];
 
-        console.log(stockInfo);
-
         if (
           this.addByBon.customerId &&
           this.addByBon.date &&
@@ -182,6 +180,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
   fillByBons(date: string, customerId: string, customerProject: string) {
     this.concreteReceipt = new ConcreteReceipt();
+    this.concreteReceipt.madeBy = this._auth.uName.realName;
 
     if (customerProject != '0') {
       this.concreteReceipt.customerProject = customerProject;
@@ -820,6 +819,7 @@ export class AddConcreteReceiptComponent implements OnInit {
           this.recordReceiptDetails(this.concreteReceipt.concreteReceipt_id);
         });
     } else {
+
       if (this.addByBon.date && this.addByBon.customerId) {
         this.concreteReceipt.recordedByBon = true;
       }

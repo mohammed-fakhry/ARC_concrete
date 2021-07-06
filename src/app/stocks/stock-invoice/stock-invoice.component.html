@@ -197,8 +197,8 @@
                   name="loadTimes{{i}}" id="loadTimes{{i}}" [(ngModel)]="productQtys[i].loadTimes"
                   (ngModelChange)="calcQty(i)" (click)="selectText('loadTimes',i)">
               </td>
-              <td style="flex: .75;"[class.d-none]="stockInvoice.truckCapacity  < 2">
-                <input [disabled]="!stockInvoice.customerName || !stockInvoice.truckName" type="number"
+              <td style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
+                <input disabled type="number"
                   class="form-control lightBg" name="truckCapacity{{i}}" id="truckCapacity{{i}}"
                   (click)="selectText('truckCapacity',i)" [(ngModel)]="stockInvoice.truckCapacity"
                   (ngModelChange)="calcQty(i)">

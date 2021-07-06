@@ -32,6 +32,7 @@ export class TruckCustomersListComponent implements OnInit {
   searchTxt: string = '';
 
   customerList: TruckCustomer[] = [];
+  totalCurrentVals: number = 0;
 
   constructor(
     public _mainService: MainService,
@@ -54,10 +55,11 @@ export class TruckCustomersListComponent implements OnInit {
         (cust) => cust.fullName != 'نقلات من المخزن'
       );
 
+      this.totalCurrentVals = this.customerList.map((a) => a.currentVal).reduce((a, b) => a + b, 0);
       this.fillListData(this.customerList);
       this._glopal.loading = false;
 
-      console.log(this.customerList);
+      // currentVal
     });
   }
 

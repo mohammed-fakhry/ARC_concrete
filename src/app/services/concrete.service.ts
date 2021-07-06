@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Concrete } from '../classes/concrete';
 import { ConcreteBon } from '../classes/concrete-bon';
 import { ConcreteCustomer } from '../classes/concrete-customer';
+import { ConcreteFinancial } from '../classes/concrete-financial';
 import { ConcreteMaterial } from '../classes/concrete-material';
 import { ConcreteReceipDetails } from '../classes/concrete-receip-details';
 import { ConcreteReceipt } from '../classes/concrete-receipt';
@@ -166,7 +167,6 @@ export class ConcreteService {
     );
   }
 
-
   delConcreteReceipt(id: string) {
     return this.http.delete<ConcreteReceipt[]>(
       `${this.url}delConcreteReceipt.php?id=${id}`
@@ -176,6 +176,27 @@ export class ConcreteService {
   delConcreteReceiptDetail(id: string) {
     return this.http.delete<ConcreteReceipDetails[]>(
       `${this.url}delConcreteReceiptDetail.php?id=${id}`
+    );
+  }
+
+  postConcreteFinancial(financial: ConcreteFinancial) {
+    return this.http.post(`${this.url}postConcreteFinancial.php`, financial);
+  }
+
+  updateConcreteFinancial(financial: ConcreteFinancial) {
+    return this.http.put(
+      `${this.url}updateConcreteFinancial.php?id=${financial.id}`,
+      financial
+    );
+  }
+
+  concreteFinancilaList(id?: string, searchBy?: string) {
+    if (searchBy && id)
+      return this.http.get<ConcreteFinancial[]>(
+        `${this.url}concreteFinancilaList.php?searchBy=${searchBy}&id=${id}`
+      );
+    return this.http.get<ConcreteFinancial[]>(
+      `${this.url}concreteFinancilaList.php`
     );
   }
 }

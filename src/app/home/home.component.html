@@ -193,7 +193,7 @@
       <div class="row mb-3">
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box boxShadow" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
+          <mat-card class="box lightShadow" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/indebtedness">
                 <span class="dash-widget-icon headerPinkBg">
@@ -226,7 +226,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box boxShadow" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
+          <mat-card class="box lightShadow" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/collectible">
                 <span class="dash-widget-icon successBg">
@@ -261,7 +261,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box boxShadow">
+          <mat-card class="box lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/ConcreteCustomerList">
                 <span class="dash-widget-icon headerDeepBlueBg">
@@ -285,7 +285,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box boxShadow">
+          <mat-card class="box lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/TruckCustomerList">
                 <span class="dash-widget-icon textSecondaryBg">

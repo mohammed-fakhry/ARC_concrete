@@ -60,6 +60,8 @@ export class CustomerInformationComponent implements OnInit {
 
   accArr: any[] = [];
 
+  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
+
   tempAccArry: any[] = [];
 
   constructor(
@@ -134,6 +136,8 @@ export class CustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
+    this.totals = {onUs: 0, toUs: 0}
+
     for (let i = 0; i < data.length; i++) {
       const discoundVal =
         data[i].discound > 0
@@ -182,7 +186,15 @@ export class CustomerInformationComponent implements OnInit {
         addtaxes: data[i].addtaxes,
       };
       this.accArr = [...this.accArr, newData];
+
+      this.totals.onUs = this.totals.onUs + minVal
+      this.totals.toUs = this.totals.toUs + addVal
     }
+
+    /* this.totals = {
+      onUs: this.acc,
+      toUs: 0
+    } */
 
     return this.accArr;
   }
@@ -432,7 +444,7 @@ export class CustomerInformationComponent implements OnInit {
     safeReceipt.customerId = this.customerInfo.customerId;
     safeReceipt.customerName = this.customerInfo.customerName;
     safeReceipt.receiptKind = 'ايصال استلام نقدية';
-    safeReceipt.transactionAccKind = 'موظفين'
+    safeReceipt.transactionAccKind = 'موظفين';
     safeReceipt.recieptNote = `"${this.customerInfo.customerName}"`;
     safeReceipt.date_time = this._mainService.makeTime_date(
       new Date(Date.now())

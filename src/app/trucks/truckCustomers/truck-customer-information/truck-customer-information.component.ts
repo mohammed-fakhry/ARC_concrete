@@ -131,6 +131,8 @@ export class TruckCustomerInformationComponent implements OnInit {
     total: number;
   } = { arr: [], total: 0 };
 
+  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
+
   marked: boolean = false;
   markColor: string = '';
 
@@ -417,6 +419,8 @@ export class TruckCustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
+    this.totals = {onUs: 0, toUs: 0}
+
     for (let i = 0; i < data.length; i++) {
       const minVal = data[i].receiptDetail.includes('ايصال استلام نقدية')
         ? data[i].totalVal
@@ -433,6 +437,7 @@ export class TruckCustomerInformationComponent implements OnInit {
         id: i + 2,
         receiptId: data[i].receiptId,
         receiptDetail: data[i].receiptDetail,
+        orderPrice: data[i].orderPrice,
         minVal: minVal,
         addVal: addVal,
         balance: balance,
@@ -441,6 +446,9 @@ export class TruckCustomerInformationComponent implements OnInit {
       };
 
       this.accArr = [...this.accArr, newData];
+
+      this.totals.onUs = this.totals.onUs + minVal
+      this.totals.toUs = this.totals.toUs + addVal
     }
 
     return this.accArr;

@@ -137,4 +137,8 @@ export class WorkersComponent implements OnInit {
       this.onStart(from, to);
     }
   }
+
+  printDocument() {
+    window.print();
+  }
 }

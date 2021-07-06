@@ -8,14 +8,14 @@
 
   <!-- navigation Buttons -->
   <div class="my-auto printX righttBorder">
-    <a mat-button color="accent" (click)="goBack()" matTooltip="الرجوع">
+    <a mat-button color="primary" (click)="goBack()" matTooltip="الرجوع">
       <i class="fa fa-angle-right fa-lg pt-1 textBold"></i>
     </a>
-    <a *ngIf="_router.url != '/Home'" mat-button routerLink="/Home" color="accent" matTooltip="الرئيسية"
+    <a *ngIf="_router.url != '/Home'" mat-button routerLink="/Home" color="primary" matTooltip="الرئيسية"
       (click)="opened = false">
       <i class="fa fa-home fa-lg pt-1"></i>
     </a>
-    <a mat-button class="textBold" color="accent" (click)="backUp()" matTooltip="نسخة احتياطية">
+    <a mat-button class="textBold" color="primary" (click)="backUp()" matTooltip="نسخة احتياطية">
       <i class="fa fa-download pt-1"></i>
     </a>
 
@@ -192,13 +192,14 @@
             <mat-divider class="mt-2"></mat-divider>
 
             <a mat-list-item routerLink="/ConcreteCustomerList" (click)="opened = !opened" class="textBold">
-              <span class="textSecondary">عملاء الخرسانة</span>
+              <span class="textPrimary">عملاء الخرسانة</span>
             </a>
 
             <a mat-list-item routerLink="/StockInformation/11" (click)="opened = !opened">مخزن تاور</a>
             <a mat-list-item routerLink="/ConcreteList" (click)="opened = !opened">خرسانة جهد و محتوى</a>
-            <mat-divider></mat-divider>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
+            <!-- <mat-divider></mat-divider>
+            <a mat-list-item routerLink="/ConcreteFinancialPosition" (click)="opened = !opened" class="textBold">الموقف المالى</a> -->
           </mat-nav-list>
         </mat-expansion-panel>
 

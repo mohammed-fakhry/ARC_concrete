@@ -64,12 +64,17 @@ export class OtherAccInformationComponent implements OnInit {
         let accTransList: any[] = data[0];
         let accList: OtherAcc[] = data[1];
         let parseId: number;
+
+        let nameForHeader = ""
+
         if (this.id) {
           parseId = parseInt(this.id);
           let foundAcc = accList.find((acc) => acc.accId == parseId);
           if (foundAcc) this.accInfo = foundAcc;
+
+          nameForHeader = this.id == "workerId" ? 'رواتب الموظفين' : this.accInfo.AccName
         }
-        this._glopal.currentHeader = `حركة حساب | ${this.accInfo.AccName}`;
+        this._glopal.currentHeader = `حركة حساب | ${nameForHeader}`;
 
         let listData = this.makeSafeAcc(accTransList);
         this.fillListData(listData);

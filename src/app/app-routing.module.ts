@@ -63,6 +63,7 @@ import { AddConcreteBonComponent } from './industry/bon/add-concrete-bon/add-con
 import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concrete-bon-list.component';
 import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
 import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
+import { ConcreteFinancialComponent } from './industry/concrete-financial/concrete-financial.component';
 
 const routes: Routes = [
   // defult path
@@ -128,7 +129,7 @@ const routes: Routes = [
   { path: 'UpdateTruckorder/:id', component: AddtruckOrderComponent, canActivate: [MasterGuard] },
   { path: 'trucksOrderLog', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
   { path: 'truckLog/:id', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
-  { path: 'ourTrucks', component: TruckInformationComponent, canActivate: [OwnerGuard] },
+  { path: 'ourTrucks', component: TruckInformationComponent, canActivate: [MasterGuard] },
 
   // truckCustomers
   { path: 'TruckCustomerList', component: TruckCustomersListComponent, canActivate: [MasterGuard] },
@@ -155,6 +156,9 @@ const routes: Routes = [
   { path: 'UpdateConcreteCustomer/:id', component: AddConcreteCustomerComponent, canActivate: [MasterGuard] },
   { path: 'ConcreteCustomerList', component: ConcreteCustomerListComponent, canActivate: [MasterGuard] },
   { path: 'ConcreteCustomerInformation/:id', component: ConcreteCustomerInformationComponent, canActivate: [MasterGuard] },
+  // financial position
+  { path: 'ConcreteFinancialPosition', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
+  { path: 'ConcreteCustomerFinancial/:id', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
 
   // safe
   { path: 'Safe', component: SafeComponent, canActivate: [SafesGuard] },

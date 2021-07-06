@@ -6,7 +6,6 @@ import { MainService } from 'src/app/services/main.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { Router } from '@angular/router';
 import { ConcreteService } from 'src/app/services/concrete.service';
-import { ConcreteReceipt } from 'src/app/classes/concrete-receipt';
 import { TruckService } from 'src/app/services/truck.service';
 import { StockService } from 'src/app/services/stock.service';
 
@@ -66,25 +65,6 @@ export class ConcreteReceiptListComponent implements OnInit {
 
     this.onStart();
   }
-
-  /*
-  {
-    "date__time": "2021-06-07T20:11",
-    "concreteReceipt_id": "4",
-    "concretecCustomerName": "المرشدى"
-    "concreteName": "150/250",
-    "concreteQty": 20,
-    "concretePrice": 100,
-    "discound": 1,
-    "total": 13543.2,
-    "totalDiscound": "14",
-    "notes": "",
-
-  "concreteId": "1",
-  "concreteCustomer_id": "1",
-  "stockTransactionId": "31",
-  },
-  */
 
   tempList: any[] = [];
 

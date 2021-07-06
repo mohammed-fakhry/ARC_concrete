@@ -56,6 +56,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     total: number;
   } = { arr: [], total: 0 };
 
+  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
+
   marked: boolean = false;
   markColor: string = '';
 
@@ -143,6 +145,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
+    this.totals = {onUs: 0, toUs: 0}
+
     for (let i = 0; i < data.length; i++) {
       const isReceipt =
         data[i].receiptDetail.includes('ايصال صرف نقدية') ||
@@ -193,6 +197,9 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       };
 
       this.accArr = [...this.accArr, newData];
+
+      this.totals.onUs = this.totals.onUs + minVal
+      this.totals.toUs = this.totals.toUs + addVal
     }
 
     return this.accArr;

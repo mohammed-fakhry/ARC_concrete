@@ -14,11 +14,7 @@ import { ConcreteService } from 'src/app/services/concrete.service';
 })
 export class ConcreteCustomerListComponent implements OnInit {
   listData: MatTableDataSource<any> | any;
-  displayedColumns: string[] = [
-    'fullName',
-    'currentVal',
-    'edit'
-  ];
+  displayedColumns: string[] = ['fullName', 'currentVal', 'edit'];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -27,10 +23,12 @@ export class ConcreteCustomerListComponent implements OnInit {
 
   customerList: ConcreteCustomer[] = [];
 
+  totalCurrentVal: number = 0;
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
-    public _concrete: ConcreteService,
+    public _concrete: ConcreteService
   ) {
     this._glopal.currentHeader = 'بيانات عملاء خرسانة';
     this._glopal.loading = true;
@@ -45,14 +43,20 @@ export class ConcreteCustomerListComponent implements OnInit {
   }
 
   onStart() {
-    this.getCustomers().then((data: ConcreteCustomer[]) => {
-      this.customerList = data;
-      console.log(data)
-      this.fillListData(data);
-      this._glopal.loading = false;
-    }).then(() => {
-      this._mainService.handleTableHeight()
-    });
+    this.getCustomers()
+      .then((data: ConcreteCustomer[]) => {
+        this.customerList = data;
+        // currentVal
+
+        this.totalCurrentVal = this.customerList
+          .map((a) => a.currentVal)
+          .reduce((a, b) => a + b, 0);
+        this.fillListData(data);
+        this._glopal.loading = false;
+      })
+      .then(() => {
+        this._mainService.handleTableHeight();
+      });
   }
 
   getCustomers(): Promise<ConcreteCustomer[]> {

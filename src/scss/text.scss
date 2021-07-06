@@ -78,7 +78,7 @@
   -ms-text-underline-position: below;
 }
 
-.form-control:hover:enabled {
+.form-control:not(.noHover):enabled {
   box-shadow: $elevationZ;
   border-right: 5px solid $secondaryBg;
 }

@@ -17,11 +17,8 @@ export class StockInformationComponent implements OnInit {
   listData: MatTableDataSource<any> | any;
   displayedColumns: string[] = [
     'productName',
-    //'productUnit',
     'allQtyIn',
-    //'backetQty',
     'allQtyOut',
-    //'unitQty',
     'Qty',
     'maxPriceOut',
     'minPriceOut',
@@ -78,14 +75,6 @@ export class StockInformationComponent implements OnInit {
       if (result.mainStockData.length > 0) {
         let filteredData = result.mainStockData.filter((d: any) => d.Qty != 0);
 
-        /* .map((d: any) => {
-            return {
-              ...d,
-              backetQty: this.calcUnits(d.Qty, d.productUnit).backet,
-              unitQty: this.calcUnits(d.Qty, d.productUnit).unit,
-            };
-          }); */
-
         if (result.addFromTransaction.length > 0) {
           for (let i = 0; i < filteredData.length; i++) {
             const productInTrance = result.addFromTransaction.find(
@@ -102,6 +91,7 @@ export class StockInformationComponent implements OnInit {
           .reduce((a: any, b: any) => a + b);
 
         this.allProducts = filteredData;
+
         this.minimunQtyAlert = filteredData.some(
           (product: any) => product.minimumQty >= product.Qty
         );
@@ -111,37 +101,23 @@ export class StockInformationComponent implements OnInit {
           : '';
 
         this.fillListData(filteredData);
+
         this._glopal.loading = false;
+
       } else if (result.addFromTransaction.length > 0) {
+
         this.fillListData(result.addFromTransaction);
+
         this.totalVal = result.addFromTransaction
           .map((product: any) => product.lastPrice * product.Qty)
           .reduce((a: any, b: any) => a + b);
+
         this._glopal.loading = false;
+
       } else this._glopal.loading = false;
       this._mainService.handleTableHeight();
     });
   }
-
-  /* calcUnits(
-    qty: number,
-    productUnit: number
-  ): { backet: number; unit: number } {
-    const qtyFloat = `${qty / productUnit}`;
-    let dot = qtyFloat.indexOf('.');
-
-    const seperate = {
-      backet: dot > 0 ? parseInt(qtyFloat.slice(0, dot)) : qty / productUnit,
-      unit:
-        dot > 0
-          ? Math.ceil(
-              parseFloat(qtyFloat.slice(dot, qtyFloat.length)) * productUnit
-            )
-          : 0,
-    };
-
-    return seperate;
-  } */
 
   minumumQtyFilter() {
     const filtered = this.allProducts.filter(

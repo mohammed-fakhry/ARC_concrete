@@ -1,5 +1,38 @@
 <div class="mainContainer">
   <div class="row">
+
+    <div class="col-lg-3 col-md-12">
+      <img class="sideLogo printX" src="assets/logos/employee.png" alt="">
+
+      <div class="box p-3 boxShadow mt-3">
+
+        <div *ngIf="searchDate.from && searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
+          <span>من تاريخ | {{searchDate.from}}</span>
+          <span class="pr-2">الى تاريخ | {{searchDate.to}}</span>
+        </div>
+
+        <div *ngIf="!searchDate.from && !searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
+          من اول المدة
+        </div>
+
+        <div class="dangerBadge borderLdanger p-3 text-center textBold">
+          رواتب مستحقة الدفع | {{counts.onUs | number: '1.0-2'}}
+        </div>
+
+        <div class="darkBadge borderLdark p-3 text-center textBold mt-2">
+          مديونية موظفين | {{counts.toUS | number: '1.0-2'}}
+        </div>
+
+        <mat-divider class="mt-2"></mat-divider>
+
+        <div class="text-center textBolder mt-2" [class.textDanger]="(counts.toUS - counts.onUs) < 0"
+          style="font-size: large;">
+          صافى | {{counts.toUS - counts.onUs | number: '1.0-2'}}
+        </div>
+
+      </div>
+    </div>
+
     <div class="col-lg-9 col-md-12">
       <div class="box">
         <div class="mat-elevation-z0 mt-3">
@@ -23,7 +56,10 @@
             </div>
 
             <div class="my-auto">
-              <button mat-stroked-button color="primary" routerLink="/OtherAccInformation/workerId">تفاصيل المصاريف</button>
+              <button mat-stroked-button color="primary" routerLink="/OtherAccInformation/workerId">تفاصيل
+                المصاريف</button>
+              <button mat-stroked-button color="accent" class="mx-1" (click)="printDocument()"><i
+                  class="fa fa-print"></i></button>
               <button mat-flat-button color="accent" routerLink="/AddWorker" matTooltip="اضافة موظف">
                 <i class="fa fa-plus pt-1 textBold"></i>
               </button>
@@ -74,7 +110,7 @@
               </ng-container>
 
               <ng-container matColumnDef="discoundDayes">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>ايام الغياب</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الخصومات</th>
                 <td mat-cell *matCellDef="let row" [ngClass]="row.discoundDayes > 0 ? 'dangerBadge borderLdanger' : ''">
                   {{row.discoundDayes | number: '1.0-2'}}
                 </td>
@@ -87,9 +123,12 @@
                 </td>
               </ng-container>
 
+              <!-- {{(row.payLater < 0 ? row.cashReceived + row.payLater : ((row.cashReceived + row.payLater > 0) ? 0 : row.payLater)) | number: '1.0-2'}} -->
+
               <ng-container matColumnDef="payLater">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>سلف</th>
-                <td mat-cell *matCellDef="let row" class="tdBorder_right" [class.textDanger]="row.payLater > 0">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>مديونية</th>
+                <td mat-cell *matCellDef="let row" class="tdBorder_right"
+                  [ngClass]="row.payLater > 0 ? 'textDanger' : row.payLater < 0 ? 'secondaryBadge borderLsecondary' : ''">
                   {{row.payLater | number: '1.0-2'}}
                 </td>
               </ng-container>
@@ -130,37 +169,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-12 printX">
-      <img class="sideLogo" src="assets/logos/employee.png" alt="">
 
-      <div class="box p-3 boxShadow mt-3">
-
-        <div *ngIf="searchDate.from && searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
-          <span>من تاريخ | {{searchDate.from}}</span>
-          <span class="pr-2">الى تاريخ | {{searchDate.to}}</span>
-        </div>
-
-        <div *ngIf="!searchDate.from && !searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
-          من اول المدة
-        </div>
-
-        <div class="dangerBadge borderLdanger p-3 text-center textBold">
-          رواتب مستحقة الدفع | {{counts.onUs | number: '1.0-2'}}
-        </div>
-
-        <div class="darkBadge borderLdark p-3 text-center textBold mt-2">
-          مديونية موظفين | {{counts.toUS | number: '1.0-2'}}
-        </div>
-
-        <mat-divider class="mt-2"></mat-divider>
-
-        <div class="text-center textBolder mt-2" [class.textDanger]="(counts.toUS - counts.onUs) < 0"
-          style="font-size: large;">
-          صافى | {{counts.toUS - counts.onUs | number: '1.0-2'}}
-        </div>
-
-      </div>
-    </div>
 
   </div>
 

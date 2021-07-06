@@ -97,8 +97,11 @@
 }
 
 .btnToDanger:hover {
-  // background-color: white;
+  background-color: #e4e7f4;
   color: $dangerBg;
+  .fa {
+    color: $dangerBg !important;
+  }
 }
 
 .printBtns {
