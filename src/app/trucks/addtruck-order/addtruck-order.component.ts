@@ -138,7 +138,7 @@ export class AddtruckOrderComponent implements OnInit {
       truckOrderForm.form.controls['truckName'].setErrors({
         incorrect: true,
       });
-
+      this._mainService.playshortFail();
       this.truckInfo = new Truck();
 
       this.truckOrder.truckId = '';
@@ -172,7 +172,7 @@ export class AddtruckOrderComponent implements OnInit {
       truckOrderForm.form.controls['truckCustomerName'].setErrors({
         incorrect: true,
       });
-
+      this._mainService.playshortFail();
       this.truckOrder.truckCustomerId = '';
     }
   }
@@ -226,6 +226,8 @@ export class AddtruckOrderComponent implements OnInit {
   onSubmit(truckOrderForm: NgForm) {
     if (truckOrderForm.valid) {
       this.recordTruckOrder();
+    } else {
+      this._mainService.playshortFail()
     }
   }
 }

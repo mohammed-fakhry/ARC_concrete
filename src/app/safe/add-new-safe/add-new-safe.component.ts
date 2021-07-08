@@ -92,6 +92,7 @@ export class AddNewSafeComponent implements OnInit {
       addSafeForm.form.controls['safeEmployee'].setErrors(null);
     } else {
       addSafeForm.form.controls['safeEmployee'].setErrors({ incorrect: true });
+      this._mainService.playshortFail();
       this.inputValid.worker = {
         cond: false,
         msg: 'الاسم غير مسجل بقاعدة البيانات',
@@ -116,6 +117,7 @@ export class AddNewSafeComponent implements OnInit {
     if (!this.id) {
       if (this.isSaferecorded(this.safe.safeName)) {
         addSafeForm.form.controls['safeName'].setErrors({ incorrect: true });
+        this._mainService.playshortFail();
         this.inputValid.safe = { cond: false, msg: 'هذا الاسم مستخدم بالفعل' };
       } else {
         addSafeForm.form.controls['safeName'].setErrors(null);

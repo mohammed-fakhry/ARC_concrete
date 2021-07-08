@@ -141,8 +141,8 @@ mat-toolbar {
   z-index: 1000;
   color: #f2e7fe;
   transition: 350ms;
-  background-color: $secondaryBg;
-  box-shadow: $elevationZ;
+  background-color: $primaryBg;
+  box-shadow: $lightShadow;
   .fa {
     color: #f2e7fe;
   }

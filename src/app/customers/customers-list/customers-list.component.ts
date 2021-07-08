@@ -129,6 +129,8 @@ export class CustomersListComponent implements OnInit {
       // Collectible
       this.fillListData(this.customerList);
       this.counts = this.generateCustomerCounts(this.customerList);
+
+      console.log(this.counts)
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -158,6 +160,16 @@ export class CustomersListComponent implements OnInit {
     } else if (searchFor === 'uncompleted') {
       this._mainService.scrollTo('customerListTable');
       return dataTofill.filter((customer) => customer.uncompletedCond > 0);
+    } else if (searchFor === 'monthlyPaidCustomers') {
+      this._glopal.currentHeader = 'عملاء مستأجرين';
+      return dataTofill.filter((customer) =>
+        customer.customerAdd.includes('ايجار')
+      );
+    } else if (searchFor === 'gaurdsCustomers') {
+      this._glopal.currentHeader = 'حراسة وغفرات';
+      return dataTofill.filter((customer) =>
+        customer.customerAdd.includes('حراسة وغفرات')
+      );
     }
     return [];
   }
@@ -167,8 +179,19 @@ export class CustomersListComponent implements OnInit {
       (cust: Customer) =>
         !cust.customerName.includes('المحل') &&
         !cust.customerName.includes('راس المال') &&
-        !cust.customerName.includes('بنك')
+        !cust.customerName.includes('بنك') &&
+        !cust.customerAdd.includes('ايجار') &&
+        !cust.customerAdd.includes('حراسة وغفرات')
     );
+
+    const gaurdsCustomers = customers.filter(
+      (cus) =>
+        cus.customerRemain != 0 && cus.customerAdd.includes('حراسة وغفرات')
+    );
+    const monthlyPaidCustomers = customers.filter(
+      (cus) => cus.customerRemain != 0 && cus.customerAdd.includes('ايجار')
+    );
+
     const filterd = {
       active: {
         onUs: mainFilter.filter(
@@ -242,6 +265,25 @@ export class CustomersListComponent implements OnInit {
           ).length,
           filter: () => this.counterAction(filterd.all.toUs, 'allToUs'),
         },
+      },
+      gaurdsCustomers: {
+        title: 'حراسة وغفرات',
+        id: 'gaurdsCustomers',
+        count: gaurdsCustomers.length,
+        total: gaurdsCustomers
+          .map((cust: Customer) => cust.customerRemain)
+          .reduce((a: number, b: number) => a + b, 0),
+        filter: () => this.counterAction(gaurdsCustomers, 'gaurdsCustomers'),
+      },
+      monthlyPaidCustomers: {
+        title: 'مستأجرين',
+        id: 'monthlyPaidCustomers',
+        count: monthlyPaidCustomers.length,
+        total: monthlyPaidCustomers
+          .map((cust: Customer) => cust.customerRemain)
+          .reduce((a: number, b: number) => a + b, 0),
+        filter: () =>
+          this.counterAction(monthlyPaidCustomers, 'monthlyPaidCustomers'),
       },
     };
   }

@@ -98,27 +98,69 @@ export class ConcreteFinancialComponent implements OnInit {
   onStart() {
     this.id = this.activeRoute.snapshot.paramMap.get('id') ?? undefined;
 
-    this.getConcreteFinancials(this.id, 'customerId').then(
-      (data: ConcreteFinancial[]) => {
-        if (this.id) this.handleId(data);
+    if (!this.id) {
+      this.displayedColumns = [
+        'manualNum',
+        'checkDate',
+        'date_time',
+        'receiptCondition',
+        'totalQty',
+        'customerName',
+        'receiptTotal',
+        'taxesDiscound',
+        'netBeforTaxes',
+        'addTaxes',
+        'customerDiscound',
+        'netVal',
+        'cashPaid',
+        'remainVal',
+        'notes',
+        'recordRow',
+      ];
+    }
+
+    this.getConcreteFinancials(this.id, 'customerId')
+      .then((data: ConcreteFinancial[]) => {
         this.financialList = data;
         this.fillListData(data);
         this._mainService.handleTableHeight();
-        if (!this.id) this._glopal.loading = false;
-      }
-    );
+        this.handleId(data);
+      })
+      .catch((err) => {
+        const errMsg = `${err}`;
+        if (errMsg.includes("'customerName' of undefined")) {
+          this._mainService.PlayDrumFail();
+          this._snackBar
+            .open(`لا يوجد نشاط للعميل`, 'اخفاء', {
+              duration: 3000,
+            })
+            .afterDismissed()
+            .subscribe(() => {
+              if (this._router.url.includes('ConcreteCustomerFinancial'))
+                this._router.navigate([
+                  `/ConcreteCustomerInformation/${this.id}`,
+                ]);
+            });
+        }
+
+        this._glopal.loading = false;
+      });
   }
 
   handleId(concreteFinancial: ConcreteFinancial[]) {
-    this._glopal.currentHeader = `موقف مالى | ${concreteFinancial[0].customerName}`;
-    this.getConcreteCustomer(concreteFinancial[0].customerId).then(
-      (data: ConcreteCustomer[]) => {
-        this.customerInfo = data[0];
-        this.totalVals = this.sumTotalVals(concreteFinancial);
-        // this.getSections(concreteFinancial)
-        this._glopal.loading = false;
-      }
-    );
+    if (this.id) {
+      this._glopal.currentHeader = `موقف مالى | ${concreteFinancial[0].customerName}`;
+      this.getConcreteCustomer(concreteFinancial[0].customerId).then(
+        (data: ConcreteCustomer[]) => {
+          this.customerInfo = data[0];
+          // this.getSections(concreteFinancial)
+          this._glopal.loading = false;
+        }
+      );
+    } else {
+      this._glopal.loading = false;
+    }
+    this.totalVals = this.sumTotalVals(concreteFinancial);
   }
 
   getSections(data: ConcreteFinancial[]): { name: string; val: number }[] {
@@ -140,7 +182,9 @@ export class ConcreteFinancialComponent implements OnInit {
       result = [...result, row];
     }
 
-    return result.sort((a, b) => b.val - a.val);
+    return result
+      .filter((a) => a.name != 'تم الصرف')
+      .sort((a, b) => b.val - a.val);
   }
 
   sumTotalVals(data: ConcreteFinancial[]): {
@@ -179,10 +223,11 @@ export class ConcreteFinancialComponent implements OnInit {
     id?: string,
     searchBy?: string
   ): Promise<ConcreteFinancial[]> {
-    return new Promise((res) => {
-      this._concrete
-        .concreteFinancilaList(id, searchBy)
-        .subscribe((data: ConcreteFinancial[]) => res(data));
+    return new Promise((res, rej) => {
+      this._concrete.concreteFinancilaList(id, searchBy).subscribe(
+        (data: ConcreteFinancial[]) => res(data),
+        (err) => rej('nodata')
+      );
     });
   }
 
@@ -254,38 +299,43 @@ export class ConcreteFinancialComponent implements OnInit {
   }
 
   recordRow(row: ConcreteFinancial, i: number) {
-    this.financialList[i] = row;
-    this.totalVals = this.sumTotalVals(this.financialList);
+    this._glopal.loading = true;
 
-    row.remainVal = row.netVal - row.cashPaid - row.customerDiscound;
     if (row.id)
       this._concrete.updateConcreteFinancial(row).subscribe(
         () => {
-          this._snackBar.open(`تم تعديل موقف الفاتورة`, 'اخفاء', {
-            duration: 2500,
-          });
+          this.openDoneBar('تعديل', row, i);
         },
         (error) => {
-          if (error.status == '201')
-            this._snackBar.open('تم حفظ موقف الفاتورة', 'اخفاء', {
-              duration: 2500,
-            });
+          if (error.status == '201') this.openDoneBar('تعديل', row, i);
         }
       );
     else {
       this._concrete.postConcreteFinancial(row).subscribe(
-        () => {
-          this._snackBar.open(`تم تعديل موقف الفاتورة`, 'اخفاء', {
-            duration: 2500,
-          });
+        (data: any) => {
+          this.openDoneBar('حفظ', row, i);
+          row.id = data[0];
         },
         (error) => {
-          if (error.status == '201')
-            this._snackBar.open('تم حفظ موقف الفاتورة', 'اخفاء', {
-              duration: 2500,
-            });
+          if (error.status == '201') this.openDoneBar('حفظ', row, i);
         }
       );
     }
+  }
+
+  openDoneBar(cond: string, row: ConcreteFinancial, i: number) {
+    this._snackBar.open(`تم ${cond} بيانات الفاتورة`, 'اخفاء', {
+      duration: 2500,
+    });
+
+    if (row.netVal - row.cashPaid - row.customerDiscound < 0) {
+      row.remainVal = 0;
+    } else {
+      row.remainVal = row.netVal - row.cashPaid - row.customerDiscound;
+    }
+
+    this.financialList[i] = row;
+    this.totalVals = this.sumTotalVals(this.financialList);
+    this._glopal.loading = false;
   }
 }

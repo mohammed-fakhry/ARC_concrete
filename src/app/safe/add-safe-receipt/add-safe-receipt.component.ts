@@ -23,6 +23,7 @@ import { TruckService } from 'src/app/services/truck.service';
 import { TruckCustomer } from 'src/app/classes/truck-customer';
 import { Truck } from 'src/app/classes/truck';
 import { WorkerService } from 'src/app/services/worker.service';
+import { ConcreteRecieptCash } from 'src/app/classes/concrete-reciept-cash';
 
 @Component({
   selector: 'app-add-safe-receipt',
@@ -43,6 +44,9 @@ export class AddSafeReceiptComponent implements OnInit {
   workerList: Worker[] = [];
 
   safeReciept: SafeReceipt = new SafeReceipt();
+
+  concreteReceiptCash: ConcreteRecieptCash = new ConcreteRecieptCash();
+
   otherRecieptVals: { note: string; val: number }[] = [];
   submitBtn: string = '';
   recieptCondition: string = 'ايصال جديد';
@@ -71,6 +75,8 @@ export class AddSafeReceiptComponent implements OnInit {
     otherValRemain: 0,
   };
   dateExpires: boolean = false;
+
+  privateLoadingBar: boolean = false;
 
   constructor(
     public activeRoute: ActivatedRoute,
@@ -179,7 +185,7 @@ export class AddSafeReceiptComponent implements OnInit {
           .subscribe((data: SafeReceipt[]) => {
             if (data.length > 0) {
               this.safeReciept = data[0];
-              this.safeReciept.safeName = data[0].safeName;
+              //this.safeReciept.safeName = data[0].safeName;
               this.safeChanged('first');
               this.inputValid.customerName.class =
                 this.safeReciept.currentCustomerVal < 0
@@ -195,6 +201,9 @@ export class AddSafeReceiptComponent implements OnInit {
               );
               // fill to check changes after Safe
               this.oldReciept = this.fillOldData(data[0]);
+
+              if (this.safeReciept.transactionAccKind == 'عميل خرسانة')
+                this.checkforConcreteReceipt();
               //console.log({ oldData: this.oldReciept, data: data[0] });
             }
             this._glopal.loading = false;
@@ -292,6 +301,7 @@ export class AddSafeReceiptComponent implements OnInit {
     this.safeReciept.currentSafeVal = this.safeList[0].currentSafeVal;
     this.safeReciept.madeBy = this._auth.uName.realName;
     this.otherRecieptVals = [];
+    this.concreteReceiptCash = new ConcreteRecieptCash();
 
     if (cond != 'new') {
       this._glopal.loading = true;
@@ -398,6 +408,8 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.concreteCustomerName = '';
       this.safeReciept.concreteCustomerVal = 0;
       this.safeReciept.concreteCustomer_id = '0';
+    } else {
+      this.checkforConcreteReceipt();
     }
 
     if (cond != 'عميل معدات') {
@@ -417,6 +429,30 @@ export class AddSafeReceiptComponent implements OnInit {
       this.safeReciept.workerCurrentVal = 0;
       this.safeReciept.workerId = '0';
     }
+  }
+
+  checkforConcreteReceipt() {
+    this.privateLoadingBar = true;
+    if (this.id)
+      this.getConnected_ConcreteReceipt(this.id)
+        .then((data: ConcreteRecieptCash[]) => {
+          if (data[0]) this.concreteReceiptCash = data[0];
+          this.privateLoadingBar = false;
+        })
+        .catch((err) => {
+          this.privateLoadingBar = false;
+        });
+  }
+
+  getConnected_ConcreteReceipt(id: string): Promise<ConcreteRecieptCash[]> {
+    return new Promise((res, rej) => {
+      this._concrete.concreteReceipt_cashList(id).subscribe(
+        (data: ConcreteRecieptCash[]) => {
+          res(data);
+        },
+        (err) => rej('nodata')
+      );
+    });
   }
 
   receiptKindChanged(addSafeReciept: NgForm) {
@@ -523,6 +559,7 @@ export class AddSafeReceiptComponent implements OnInit {
         class: 'secondaryBadge',
       };
       addSafeReciept.form.controls['AccName'].setErrors({ incorrect: true });
+      this._mainService.playshortFail();
       this.safeReciept.currentAccVal = 0;
       this.safeReciept.accId = 0;
       this.valsRemain.otherValRemain = 0;
@@ -551,6 +588,7 @@ export class AddSafeReceiptComponent implements OnInit {
         class: 'secondaryBadge',
       };
       addSafeReciept.form.controls['truckName'].setErrors({ incorrect: true });
+      this._mainService.playshortFail();
       this.safeReciept.currentAccVal = 0;
       this.safeReciept.truckId = '0';
       this.valsRemain.otherValRemain = 0;
@@ -579,6 +617,7 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['receiptVal'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
     } else if (
       this.safeReciept.currentSafeVal < this.safeReciept.receiptVal ||
       !this.safeReciept.currentSafeVal
@@ -591,6 +630,7 @@ export class AddSafeReceiptComponent implements OnInit {
         addSafeReciept.form.controls['receiptVal'].setErrors({
           incorrect: true,
         });
+        this._mainService.playshortFail();
       }
     } else {
       this.inputValid.receiptVal.cond = true;
@@ -656,6 +696,8 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['customerName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
+
       this.safeReciept.currentCustomerVal = 0;
       this.valsRemain.otherValRemain = 0;
       this.valsRemain.otherValDetail = '';
@@ -689,6 +731,7 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['concreteCustomerName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
 
       this.safeReciept.concreteCustomerVal = 0;
 
@@ -723,6 +766,7 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['truckCustomerName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
 
       this.safeReciept.truckCustomerVal = 0;
 
@@ -757,6 +801,7 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['workerName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
 
       this.safeReciept.workerCurrentVal = 0;
 
@@ -809,7 +854,13 @@ export class AddSafeReceiptComponent implements OnInit {
   openDelDialog = () => {
     let accInfo = this.safeReciept.AccName
       ? this.safeReciept.AccName
-      : this.safeReciept.customerName;
+      : this.safeReciept.customerName
+      ? this.safeReciept.customerName
+      : this.safeReciept.concreteCustomerName
+      ? this.safeReciept.concreteCustomerName
+      : this.safeReciept.truckName
+      ? this.safeReciept.truckName
+      : this.safeReciept.workerName;
 
     let dialogRef = this._dialog.open(DeleteDialogComponent, {
       data: {
@@ -863,6 +914,7 @@ export class AddSafeReceiptComponent implements OnInit {
       addSafeReciept.form.controls['receiptVal'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
     } else {
       let dialogInfo = this.safeReciept.customerName
         ? this.safeReciept.customerName
@@ -935,6 +987,8 @@ export class AddSafeReceiptComponent implements OnInit {
             }
           );
         }
+      } else {
+        this._mainService.playshortFail();
       }
     }
   }

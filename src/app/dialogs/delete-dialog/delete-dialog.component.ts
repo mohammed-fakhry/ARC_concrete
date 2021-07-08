@@ -30,5 +30,17 @@ export class DeleteDialogComponent implements OnInit {
         }
       }
     }
+
+    this.playAlert()
+  }
+
+  playAlert() {
+    const sound = document.getElementById('alertAudio') as HTMLAudioElement;
+    if (sound) sound.play();
+  }
+
+  playLongPop() {
+    const longPop = document.getElementById('longPop') as HTMLAudioElement;
+    if (longPop) longPop.play();
   }
 }

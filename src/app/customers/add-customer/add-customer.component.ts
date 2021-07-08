@@ -152,6 +152,7 @@ export class AddCustomerComponent implements OnInit {
         addCustomerForm.form.controls['customerName'].setErrors({
           incorrect: true,
         });
+        this._mainService.playshortFail()
         this.formValid = false;
         return;
       }

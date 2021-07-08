@@ -68,7 +68,9 @@ export class AppComponent {
     this._glopal.loading = true;
     this._auth.backUp().subscribe(() => {
       this._glopal.loading = false;
-      this._router.navigate(['/LogIn']);
+      this._router
+        .navigate(['/LogIn'])
+        .then(() => setTimeout(() => this._mainService.playShutDown(), 100));
     });
   }
 
@@ -131,6 +133,7 @@ export class AppComponent {
         duration: 2500,
       });
       this._glopal.loading = false;
+      this._mainService.playLongPop()
     });
     this.opened = false;
   }
@@ -141,10 +144,9 @@ export class AppComponent {
     );
   }
 
-
   toAymanDb() {
     // if (cond) this.defaults.mainUrl = this.currentUrl('setToAyman');
     localStorage.setItem('tmpDB', 'http://localhost/shayman/');
-    location.reload()
+    location.reload();
   }
 }

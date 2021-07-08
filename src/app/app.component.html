@@ -1,6 +1,6 @@
 <mat-toolbar *ngIf="_router.url != '/LogIn' && _router.url != '/CaherReceipt'" class="printX">
 
-  <button mat-button color="primary" [class.change]="opened" class="ml-2" (click)="opened = !opened">
+  <button mat-button color="accent" [class.change]="opened" class="ml-2" (click)="opened = !opened">
     <div class="bar1"></div>
     <div class="bar2"></div>
     <div class="bar3"></div>
@@ -8,14 +8,14 @@
 
   <!-- navigation Buttons -->
   <div class="my-auto printX righttBorder">
-    <a mat-button color="primary" (click)="goBack()" matTooltip="الرجوع">
+    <a mat-button color="accent" (click)="goBack()" matTooltip="الرجوع">
       <i class="fa fa-angle-right fa-lg pt-1 textBold"></i>
     </a>
-    <a *ngIf="_router.url != '/Home'" mat-button routerLink="/Home" color="primary" matTooltip="الرئيسية"
+    <a *ngIf="_router.url != '/Home'" mat-button routerLink="/Home" color="accent" matTooltip="الرئيسية"
       (click)="opened = false">
       <i class="fa fa-home fa-lg pt-1"></i>
     </a>
-    <a mat-button class="textBold" color="primary" (click)="backUp()" matTooltip="نسخة احتياطية">
+    <a mat-button class="textBold" color="accent" (click)="backUp()" matTooltip="نسخة احتياطية">
       <i class="fa fa-download pt-1"></i>
     </a>
 
@@ -23,14 +23,14 @@
   <!-- changeMainUrl('setDefult') -->
 
   <div class="my-auto righttBorder printX">
-    <a *ngIf="_glopal.notification.value" mat-button class="textBold" color="primary" routerLink="/checkList"
+    <a *ngIf="_glopal.notification.value" mat-button class="textBold" color="accent" routerLink="/checkList"
       (click)="opened = false">
       <i [matBadge]="_glopal.notification.value" matBadgeColor="warn" class="fa fa-bell pt-1 textBold"
         style="transform: rotate(10deg)">
       </i>
     </a>
 
-    <a *ngIf="_auth?.check.dev && mainUrl !='http://localhost/shayman/'" mat-button (click)="toAymanDb()">db</a>
+    <a *ngIf="_auth?.check?.dev && mainUrl !='http://localhost/shayman/'" mat-button (click)="toAymanDb()">db</a>
   </div>
 
   <h4 id="currentHeader" class="textBold my-auto infoCard"> {{ _glopal?.currentHeader }}</h4>
@@ -58,7 +58,7 @@
     <mat-nav-list dense>
       <mat-accordion multi="false">
         <mat-expansion-panel dense *ngIf="
-            _auth?.check.workers || _auth?.check.clients || _auth?.check.unites
+            _auth?.check?.workers || _auth?.check?.clients || _auth?.check?.unites
           " [class.mainBg]="expansionPanel[0].opened" (opened)="expansionPanel[0].opened = true"
           (closed)="expansionPanel[0].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
@@ -66,11 +66,11 @@
             البيانات
           </mat-expansion-panel-header>
           <mat-nav-list dense>
-            <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check.workers">العاملين</a>
+            <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check?.workers">العاملين</a>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.customers" [class.mainBg]="expansionPanel[1].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.customers" [class.mainBg]="expansionPanel[1].opened"
           (opened)="expansionPanel[1].opened = true" (closed)="expansionPanel[1].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-th my-auto pl-2"></i>
@@ -78,11 +78,11 @@
           </mat-expansion-panel-header>
           <mat-nav-list dense>
             <a mat-list-item routerLink="/CustomerList" (click)="opened = !opened"
-              *ngIf="_auth?.check.customers">موردين/مستهلكين</a>
-            <a mat-list-item routerLink="/otherAcc" (click)="opened = !opened" *ngIf="_auth?.check.customers">
+              *ngIf="_auth?.check?.customers">موردين/مستهلكين</a>
+            <a mat-list-item routerLink="/otherAcc" (click)="opened = !opened" *ngIf="_auth?.check?.customers">
               المصاريف
             </a>
-            <div class="form-inline my-2" *ngIf="_auth?.check.stockes">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.stockes">
               <button mat-button class="textSecondary textBold" style="width: 72%; text-align: right"
                 routerLink="/checkList" (click)="opened = !opened">
                 تتبع الشيكات
@@ -95,7 +95,7 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.safes" [class.mainBg]="expansionPanel[2].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.safes" [class.mainBg]="expansionPanel[2].opened"
           (opened)="expansionPanel[2].opened = true" (closed)="expansionPanel[2].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-calculator my-auto pl-2"></i>
@@ -130,7 +130,7 @@
             المخازن
           </mat-expansion-panel-header>
           <mat-nav-list dense>
-            <div class="form-inline my-2" *ngIf="_auth?.check.stockes">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.stockes">
               <button mat-flat-button (click)="openSearchDialog('stockInvoice')" color="accent"
                 style="width: 72%; text-align: right">
                 فاتورة بيع | شراء
@@ -141,7 +141,7 @@
             </div>
             <a mat-list-item routerLink="/Stokes" (click)="opened = !opened">بيانات المخازن</a>
             <mat-divider></mat-divider>
-            <div class="form-inline my-2" *ngIf="_auth?.check.stockes">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.stockes">
               <button mat-button class="textSecondary textBold" style="width: 72%; text-align: right"
                 routerLink="/StockingList" (click)="opened = !opened">
                 حساب الجرد الفعلى
@@ -154,11 +154,11 @@
             <a mat-list-item (click)="openSearchDialog('outInvoices')">تقرير فواتير البيع</a>
             <a mat-list-item (click)="openSearchDialog('inInvoices')">تقرير فواتير الشراء</a>
             <mat-divider></mat-divider>
-            <a mat-list-item (click)="openSearchDialog('ProductsProfits')" *ngIf="_auth?.check.prem">تقرير الارباح</a>
+            <a mat-list-item (click)="openSearchDialog('ProductsProfits')" *ngIf="_auth?.check?.prem">تقرير الارباح</a>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.prem" dense [class.mainBg]="expansionPanel[4].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[4].opened"
           (opened)="expansionPanel[4].opened = true" (closed)="expansionPanel[4].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-industry my-auto pl-2"></i>
@@ -198,12 +198,13 @@
             <a mat-list-item routerLink="/StockInformation/11" (click)="opened = !opened">مخزن تاور</a>
             <a mat-list-item routerLink="/ConcreteList" (click)="opened = !opened">خرسانة جهد و محتوى</a>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
-            <!-- <mat-divider></mat-divider>
-            <a mat-list-item routerLink="/ConcreteFinancialPosition" (click)="opened = !opened" class="textBold">الموقف المالى</a> -->
+            <mat-divider></mat-divider>
+            <a mat-list-item routerLink="/ConcreteFinancialPosition" (click)="opened = !opened" class="textBold">الموقف
+              المالى</a>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.safes" [class.mainBg]="expansionPanel[5].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.safes" [class.mainBg]="expansionPanel[5].opened"
           (opened)="expansionPanel[5].opened = true" (closed)="expansionPanel[5].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-truck my-auto pl-2"></i>
@@ -237,7 +238,7 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.prem" dense [class.mainBg]="expansionPanel[6].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[6].opened"
           (opened)="expansionPanel[6].opened = true" (closed)="expansionPanel[6].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-cube my-auto pl-2"></i>
@@ -253,7 +254,7 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check.prem" dense [class.mainBg]="expansionPanel[7].opened"
+        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[7].opened"
           (opened)="expansionPanel[7].opened = true" (closed)="expansionPanel[7].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-cogs my-auto pl-2"></i>
@@ -264,7 +265,7 @@
               <i class="fa fa-download my-auto pl-2"></i>
               نسخة احتياطية
             </a>
-            <div class="form-inline my-2" *ngIf="_auth?.check.prem">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.prem">
               <button mat-button class="textSecondary textBold" style="width: 72%; text-align: right"
                 (click)="openSearchDialog('users')">
                 <i class="fa fa-user my-auto pl-2"></i>
@@ -292,10 +293,10 @@
               <i class="fa fa-whatsapp text-success my-auto pl-2"></i>
               01100703075
             </a>
-            <mat-divider *ngIf="_auth?.check.dev"></mat-divider>
+            <mat-divider *ngIf="_auth?.check?.dev"></mat-divider>
 
             <a mat-list-item routerLink="/FixesComponent" (click)="opened = !opened" class="textBold"
-              *ngIf="_auth?.check.dev">systemFixes</a>
+              *ngIf="_auth?.check?.dev">systemFixes</a>
 
           </mat-nav-list>
         </mat-expansion-panel>
@@ -304,6 +305,8 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content id="sideNavContent">
+
+    <!-- printHeader -->
     <div class="mx-5 mt-4" id="printHeader">
       <div class="d-flex justify-content-between">
         <div>
@@ -329,6 +332,18 @@
       </div>
       <mat-divider class="my-3"></mat-divider>
     </div>
+    <!-- shutDown.wav -->
+    <div id="audios" class="d-none">
+      <audio src="assets/audio/alert.wav" controls id="alertAudio"></audio>
+      <audio src="assets/audio/longPop.wav" controls id="longPop"></audio>
+      <audio src="assets/audio/popAlert.mp3" controls id="popAlert"></audio>
+      <audio src="assets/audio/mouseClickClose.wav" controls id="mouseClickClose"></audio>
+      <audio src="assets/audio/shortFail.mp3" controls id="shortFail"></audio>
+      <audio src="assets/audio/intro.mp3" controls id="intro"></audio>
+      <audio src="assets/audio/drumFail.wav" controls id="drumFail"></audio>
+      <audio src="assets/audio/shutDown.wav" controls id="shutDown"></audio>
+    </div>
+
     <router-outlet #outlet="outlet"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

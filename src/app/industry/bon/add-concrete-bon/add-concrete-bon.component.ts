@@ -154,6 +154,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['concreteCustomer_name'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail()
     }
   }
 
@@ -172,6 +173,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['truckName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail()
     }
   }
 
@@ -194,6 +196,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['concreteName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail()
     }
   }
 

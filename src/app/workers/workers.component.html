@@ -49,7 +49,7 @@
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
                     بالتاريخ</button>
-                  <button [disabled]="!isFiltered" mat-menu-item (click)="onStart()" style="text-align: right;">اظهار
+                  <button [disabled]="!isFiltered" mat-menu-item (click)="onStart('')" style="text-align: right;">اظهار
                     الكل</button>
                 </mat-menu>
               </div>
@@ -103,9 +103,6 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>ايام العمل</th>
                 <td mat-cell *matCellDef="let row" class="tdBorder_right">
                   {{row.workedDayes > 0 ? (row.workedDayes | number: '1.0-2') : '-'}}
-                  <span *ngIf="row.workedDayes > 0" class="{{(row.lastWorked_date | dateInDays).class}}">
-                    {{(row.lastWorked_date | dateInDays).messege}}
-                  </span>
                 </td>
               </ng-container>
 

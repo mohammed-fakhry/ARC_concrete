@@ -1,7 +1,6 @@
 <div class="mainContainer">
   <div class="row">
     <div class="col-md-12 col-lg-7">
-
       <div class="box p-4 mb-3">
         <form (ngSubmit)="onSubmit(concreteReceiptForm)" #concreteReceiptForm="ngForm">
           <table class="w-100">
@@ -22,7 +21,7 @@
               <td style="padding-top: 4px;">
                 <mat-form-field class="printX">
                   <mat-select placeholder="المخزن" [required]="concreteReceipt.manualNum != 'مستخلص مضخة ثابتة'"
-                    disabled #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName"
+                    #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName"
                     (ngModelChange)="stockNameChanged()">
                     <mat-option *ngFor="let stock of stockList" [value]="stock.stockName">
                       {{stock.stockName}}

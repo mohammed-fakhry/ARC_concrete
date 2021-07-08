@@ -157,6 +157,7 @@ export class AddConcreteComponent implements OnInit {
       addConcreteForm.form.controls['concreteName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail()
     } else {
       addConcreteForm.form.controls['concreteName'].setErrors(null);
     }

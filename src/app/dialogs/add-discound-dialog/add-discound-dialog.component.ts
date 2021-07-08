@@ -8,6 +8,7 @@ import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { SafeService } from 'src/app/services/safe.service';
 import { WorkerService } from 'src/app/services/worker.service';
 import { Worker } from 'src/app/classes/worker';
+import { MainService } from 'src/app/services/main.service';
 
 @Component({
   selector: 'app-add-discound-dialog',
@@ -28,6 +29,7 @@ export class AddDiscoundDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: SafeReceipt,
     public _safeService: SafeService,
     public _workerService: WorkerService,
+    public _mainService: MainService,
     public _glopal: GlobalVarsService
   ) {}
 
@@ -107,6 +109,7 @@ export class AddDiscoundDialogComponent implements OnInit {
       this.data.recieptNote = `${this.data.customerName} - ${this.data.AccName}`;
     } else {
       modalForm.form.controls['AccName'].setErrors({ incorrect: true });
+      this._mainService.playshortFail()
     }
   };
 }

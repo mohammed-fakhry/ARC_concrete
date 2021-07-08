@@ -129,7 +129,10 @@ export class LogInComponent implements OnInit {
             this._glopal.loading = false;
             this._router
               .navigate(['/Home'])
-              .then(() => this._mainService.setNotification());
+              .then(() => {
+                this._mainService.setNotification()
+                setTimeout(() => this._mainService.playIntro(), 200)
+              });
 
             this._auth.backUp();
           } else {

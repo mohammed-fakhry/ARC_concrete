@@ -58,7 +58,7 @@ export class WorkersComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
 
-    this.onStart();
+    this.onStart('new');
   }
 
   search() {
@@ -73,15 +73,30 @@ export class WorkersComponent implements OnInit {
     });
   }
 
-  onStart(dateFrom?: string, dateTo?: string) {
+  onStart(cond: string, dateFrom?: string, dateTo?: string) {
     this._glopal.loading = true;
-    this.searchTxt = ''
+    this.searchTxt = '';
+
+    if (cond == 'new') {
+      const dateNow = new Date(Date.now());
+
+      const month =
+        dateNow.getMonth() + 1 < 10
+          ? `0${dateNow.getMonth() + 1}`
+          : dateNow.getMonth() + 1;
+      // 2021-07-06
+
+      dateFrom = `${dateNow.getFullYear()}-${month}-01`;
+      dateTo = `${dateNow.getFullYear()}-${month}-30`;
+
+      this.searchDate = { from: dateFrom, to: dateTo };
+    }
 
     this.resetSearchByDate(dateFrom && dateTo ? true : false);
 
     this.getWorkersPromise(dateFrom, dateTo).then((data: any) => {
       this.fillListData(data);
-
+      console.log(dateFrom);
       this.counts = this.generateCounts(data);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
@@ -134,7 +149,7 @@ export class WorkersComponent implements OnInit {
       /* let start = `${from}T00:00`;
       let end = `${to}T23:59`; */
 
-      this.onStart(from, to);
+      this.onStart('', from, to);
     }
   }
 

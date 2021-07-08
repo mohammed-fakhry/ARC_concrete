@@ -1,7 +1,7 @@
 <div class="mx-2">
-  <h2 mat-dialog-title class="dangerBadge borderLdanger infoCard px-4 py-2">{{data.header}}</h2>
+  <h2 mat-dialog-title class="infoCard px-4 py-2 dangerBadge borderLdanger lightShadow">{{data.header}}</h2>
   <mat-dialog-content class="infoSection">
-      <div class="panel-body panel-flex-table standTable">
+      <div class="panel-body panel-flex-table standTable borderLdanger lightBg">
           <table class="flex-table table">
               <tbody class="tableBody">
                   <tr>
@@ -14,8 +14,9 @@
           </table>
       </div>
   </mat-dialog-content>
+  <mat-divider></mat-divider>
   <mat-dialog-actions>
-      <button mat-raised-button color="accent" mat-dialog-close mat-dialog-close="false">الغاء</button>
-      <button mat-flat-button color="warn" mat-dialog-close mat-dialog-close="true" [disabled]="!canDel">{{delBtnVal}}</button>
+      <button mat-stroked-button color="primary" mat-dialog-close mat-dialog-close="false">الغاء</button>
+      <button mat-flat-button color="warn" mat-dialog-close mat-dialog-close="true" [disabled]="!canDel" (click)="playLongPop()">{{delBtnVal}}</button>
   </mat-dialog-actions>
 </div>

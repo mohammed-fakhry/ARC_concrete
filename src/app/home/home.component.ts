@@ -41,6 +41,12 @@ export class HomeComponent implements OnInit {
     truckCustomers: {
       remain: { count: number; total: number };
     };
+    gaurdsCustomers: {
+      remain: { count: number; total: number };
+    };
+    monthlyPaidCustomers: {
+      remain: { count: number; total: number };
+    };
   };
 
   reportDate!: string;
@@ -148,6 +154,7 @@ export class HomeComponent implements OnInit {
       // this._glopal.currentHeader = 'الرئيسية';
     }, 50);
     this.onStart();
+    // this._mainService.playIntro()
     //this.generateChart()
   }
 
@@ -633,6 +640,12 @@ export class HomeComponent implements OnInit {
     truckCustomers: {
       remain: { count: number; total: number };
     };
+    gaurdsCustomers: {
+      remain: { count: number; total: number };
+    };
+    monthlyPaidCustomers: {
+      remain: { count: number; total: number };
+    };
   } => {
     const mainFilter = customers.filter(
       (cust: Customer) =>
@@ -641,8 +654,26 @@ export class HomeComponent implements OnInit {
         !cust.customerName.includes('بنك')
     );
 
-    const custRemain = mainFilter.filter((cus) => cus.customerRemain > 0);
-    const custOnUs = mainFilter.filter((cus) => cus.customerRemain < 0);
+    const custRemain = mainFilter.filter(
+      (cus) =>
+        cus.customerRemain > 0 &&
+        !cus.customerAdd.includes('ايجار') &&
+        !cus.customerAdd.includes('حراسة وغفرات')
+    );
+    const custOnUs = mainFilter.filter(
+      (cus) =>
+        cus.customerRemain < 0 &&
+        !cus.customerAdd.includes('ايجار') &&
+        !cus.customerAdd.includes('حراسة وغفرات')
+    );
+
+    const gaurdsCustomers = mainFilter.filter(
+      (cus) =>
+        cus.customerRemain != 0 && cus.customerAdd.includes('حراسة وغفرات')
+    );
+    const monthlyPaidCustomers = mainFilter.filter(
+      (cus) => cus.customerRemain != 0 && cus.customerAdd.includes('ايجار')
+    );
 
     const activeCustomers = {
       custRemain: mainFilter.filter(
@@ -712,6 +743,22 @@ export class HomeComponent implements OnInit {
           total: truckCustomers
             .filter((cust) => cust.fullName != 'نقلات من المخزن')
             .map((cust) => cust.currentVal)
+            .reduce((a, b) => a + b, 0),
+        },
+      },
+      gaurdsCustomers: {
+        remain: {
+          count: gaurdsCustomers.length,
+          total: gaurdsCustomers
+            .map((cust) => cust.customerRemain)
+            .reduce((a, b) => a + b, 0),
+        },
+      },
+      monthlyPaidCustomers: {
+        remain: {
+          count: monthlyPaidCustomers.length,
+          total: monthlyPaidCustomers
+            .map((cust) => cust.customerRemain)
             .reduce((a, b) => a + b, 0),
         },
       },

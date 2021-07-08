@@ -229,10 +229,9 @@ export class WorkerInformationComponent implements OnInit {
     const daySalary = this.worker.workerSalary / 30;
     const netDaysWorks =
       this.workedDayes.workedDayes +
-      this.workedDayes.overDayes -
-      this.workedDayes.discoundDayes;
+      this.workedDayes.overDayes;
 
-    this.workedDayes.remainSalary = netDaysWorks * daySalary;
+    this.workedDayes.remainSalary = (netDaysWorks * daySalary) - this.workedDayes.discoundDayes;
   }
 
   receiptForDiscound(result: SafeReceipt): SafeReceipt {
@@ -284,6 +283,7 @@ export class WorkerInformationComponent implements OnInit {
         .postEmployeeWorkedDayes(this.workedDayes)
         .subscribe(() => this.onStart());
     }
+    this._mainService.playMouseClickClose()
   }
 
   submitSalary(addSalaryForm: NgForm) {
@@ -311,7 +311,7 @@ export class WorkerInformationComponent implements OnInit {
         header: 'برجاء التأكد من بيانات الحساب قبل الحذف !',
         info: `ايام العمل | ${this.workedDayes.workedDayes}`,
         discription: [
-          `ايام الغياب | ${this.workedDayes.discoundDayes}`,
+          `خصم نقدى | ${this.workedDayes.discoundDayes}`,
           `ايام اضافى | ${this.workedDayes.overDayes}`,
           `باجمالى | ${this.workedDayes.remainSalary} جنيه`,
         ],

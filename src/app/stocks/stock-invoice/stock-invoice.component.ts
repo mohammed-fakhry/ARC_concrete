@@ -352,8 +352,7 @@ export class StockInvoiceComponent implements OnInit {
     Promise.all([this.getStockTransAction(), this.getStockTranseDetail()]).then(
       (data: any[]) => {
         if (data[0].length > 0) {
-
-          console.log(data)
+          console.log(data);
           this.fillToEdit(data);
           // to filterCustomers Arr
           this.stockNameChanged();
@@ -666,6 +665,7 @@ export class StockInvoiceComponent implements OnInit {
           stockInvoiceForm.form.controls['customerName'].setErrors({
             incorrect: true,
           });
+          this._mainService.playshortFail();
         } else {
           if (this.custInfo.customerId)
             this.stockInvoice.customerId = this.custInfo.customerId;
@@ -703,6 +703,7 @@ export class StockInvoiceComponent implements OnInit {
         stockInvoiceForm.form.controls['truckName'].setErrors({
           incorrect: true,
         });
+        this._mainService.playshortFail();
       }
     }
 
@@ -768,6 +769,7 @@ export class StockInvoiceComponent implements OnInit {
             msg: 'يجب ادخال اسم صنف صحيح',
           };
         }
+        this._mainService.playshortFail();
         this.stockTransaction[i].info.productId = 0;
       } else {
         this.inputValid.product[i] = { cond: true, msg: '' };
@@ -875,6 +877,7 @@ export class StockInvoiceComponent implements OnInit {
         cond: false,
         msg: 'لا يمكن تكرار نفس القيم مرة اخرى',
       };
+      this._mainService.playshortFail();
     }
 
     return duplicated.length > 1 ? true : false;
@@ -1352,6 +1355,7 @@ export class StockInvoiceComponent implements OnInit {
     // check if form Valid
     if (!stockInvoiceForm.valid || !this.isFormValid(stockInvoiceForm)) {
       this.inputValid.formValid = false;
+      this._mainService.playshortFail()
       return;
     } else {
       if (this._router.url === '/CaherReceipt') {

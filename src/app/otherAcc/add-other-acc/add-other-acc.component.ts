@@ -73,6 +73,7 @@ export class AddOtherAccComponent implements OnInit {
     let accInfo = this.accList.find((acc) => acc.AccName === this.acc.AccName);
     if (accInfo) {
       addOtherAccForm.form.controls['AccName'].setErrors({ incorrect: true });
+      this._mainService.playshortFail();
       this.inputValid.acc = { cond: false, msg: 'هذا الاسم مستخدم بالفعل' };
       this.inputValid.form = false;
       return false;

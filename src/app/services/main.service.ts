@@ -333,4 +333,52 @@ export class MainService {
 
     return hours > 5;
   }
+
+  playAlert() {
+    const sound = document.getElementById('alertAudio') as HTMLAudioElement;
+    if (sound) {
+      // sound.src = "assets/audio/alert.wav"
+      sound.play()
+    };
+  }
+
+  playLongPop() {
+    const longPop = document.getElementById('longPop') as HTMLAudioElement;
+    if (longPop) {
+      longPop.src = "assets/audio/longPop.wav"
+      longPop.play();
+    }
+  }
+
+  playPopAlert() {
+    const popAlert = document.getElementById('popAlert') as HTMLAudioElement;
+    if (popAlert) popAlert.play();
+  }
+
+  playMouseClickClose() {
+    const mouseClickClose = document.getElementById(
+      'mouseClickClose'
+    ) as HTMLAudioElement;
+    if (mouseClickClose) mouseClickClose.play();
+  }
+
+  playshortFail() {
+    const shortFail = document.getElementById('shortFail') as HTMLAudioElement;
+    if (shortFail) shortFail.play();
+  }
+
+  playIntro() {
+    const intro = document.getElementById('intro') as HTMLAudioElement;
+    if (intro) intro.play();
+  }
+
+  PlayDrumFail() {
+    const drumFail = document.getElementById('drumFail') as HTMLAudioElement;
+    if (drumFail) drumFail.play();
+  }
+
+  playShutDown() {
+    const shutDown = document.getElementById('shutDown') as HTMLAudioElement;
+    if (shutDown) shutDown.play();
+  }
 }

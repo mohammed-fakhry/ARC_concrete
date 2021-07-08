@@ -124,6 +124,7 @@ export class AddConcreteCustomerComponent implements OnInit {
       addCustomerForm.form.controls['fullName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail()
     } else {
       addCustomerForm.form.controls['fullName'].setErrors(null);
     }
@@ -151,7 +152,7 @@ export class AddConcreteCustomerComponent implements OnInit {
           addCustomerForm.form.controls['cementCustomerName'].setErrors({
             incorrect: true,
           });
-
+          this._mainService.playshortFail()
           this.customer.cementCustomerId = '';
         }
       }

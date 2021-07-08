@@ -50,7 +50,7 @@
           <mat-form-field>
             <input [disabled]="loading" matInput placeholder="ترحيل الخصم الى حساب" list="accList"
               class="mdb-autocomplete" #AccName name="AccName" [(ngModel)]="data.AccName"
-              (ngModelChange)="accNameChanged(modalForm)" required>
+              (change)="accNameChanged(modalForm)" required>
             <datalist id="accList">
               <option *ngFor="let acc of accList" value="{{acc.AccName}}">
               </option>

@@ -17,7 +17,9 @@
             <mat-list-item role="listitem">الادارة | {{worker.workerJopCateg}}</mat-list-item>
             <mat-list-item role="listitem">الوظيفة | {{worker.workerJop}}</mat-list-item>
             <!-- <mat-list-item role="listitem">تاريخ التوظيف | {{worker.workerJopDate}}</mat-list-item> -->
-            <mat-list-item role="listitem" class="lightBg">الراتب الشهرى | {{worker.workerSalary}}</mat-list-item>
+            <mat-list-item role="listitem" class="lightBg">
+              الراتب الشهرى | {{worker.workerSalary}} <span class="textPrimary pr-2"> | {{(worker.workerSalary / 30) | number: '1.0-2'}}</span>
+            </mat-list-item>
             <!-- <mat-divider></mat-divider>
               <mat-list-item role="listitem">رقم البصمة | {{worker.workerFbCode}}</mat-list-item>
               <mat-list-item role="listitem">حضور | {{worker.workerCheckIN}}</mat-list-item>
@@ -66,7 +68,7 @@
 
               <td>
                 <mat-form-field class="w-100 textDanger">
-                  <input type="number" required matInput placeholder="خصومات باليوم" name="discoundDayes"
+                  <input type="number" required matInput placeholder="خصم نقدية" name="discoundDayes"
                     [(ngModel)]="workedDayes.discoundDayes" (ngModelChange)="calcRemainSalary()">
                 </mat-form-field>
               </td>

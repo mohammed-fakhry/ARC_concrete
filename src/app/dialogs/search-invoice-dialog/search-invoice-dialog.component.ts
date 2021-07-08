@@ -5,6 +5,7 @@ import { Stock } from 'src/app/classes/stock';
 import { UserData } from 'src/app/classes/user-data';
 import { AuthService } from 'src/app/services/auth.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
+import { MainService } from 'src/app/services/main.service';
 import { SafeService } from 'src/app/services/safe.service';
 import { StockService } from 'src/app/services/stock.service';
 
@@ -33,6 +34,7 @@ export class SearchInvoiceDialogComponent implements OnInit {
     public _safeService: SafeService,
     public _glopal: GlobalVarsService,
     public _stockService: StockService,
+    // public _mainService: MainService,
     private _auth: AuthService
   ) {}
 

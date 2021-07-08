@@ -502,10 +502,12 @@ export class AddConcreteReceiptComponent implements OnInit {
       this.customerInfo = new ConcreteCustomer();
       this.concreteReceipt.concreteCustomer_id = null;
 
-      if (concreteReceiptForm)
+      if (concreteReceiptForm) {
         concreteReceiptForm.form.controls['concreteCustomer_name'].setErrors({
           incorrect: true,
         });
+        this._mainService.playshortFail();
+      }
     }
   }
 
@@ -819,7 +821,6 @@ export class AddConcreteReceiptComponent implements OnInit {
           this.recordReceiptDetails(this.concreteReceipt.concreteReceipt_id);
         });
     } else {
-
       if (this.addByBon.date && this.addByBon.customerId) {
         this.concreteReceipt.recordedByBon = true;
       }

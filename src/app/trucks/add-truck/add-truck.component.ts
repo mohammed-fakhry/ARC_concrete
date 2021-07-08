@@ -158,6 +158,7 @@ export class AddTruckComponent implements OnInit {
       addTruckForm.form.controls['name'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
       return true;
     } else {
       addTruckForm.form.controls['name'].setErrors(null);
@@ -217,6 +218,7 @@ export class AddTruckComponent implements OnInit {
       addTruckForm.form.controls['number'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
       return true;
     } else {
       addTruckForm.form.controls['number'].setErrors(null);
@@ -344,6 +346,7 @@ export class AddTruckComponent implements OnInit {
   onSubmit(addTruckForm: NgForm) {
     if (this.checkIfRecorded(addTruckForm)) {
       this.formValid = false;
+      this._mainService.playshortFail()
       return;
     } else {
       if (!addTruckForm.valid) {

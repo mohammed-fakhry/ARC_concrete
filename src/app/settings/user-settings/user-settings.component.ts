@@ -207,6 +207,7 @@ export class UserSettingsComponent implements OnInit {
         this.authCond = true;
         addUserForm.form.controls['reAuth'].setErrors({ incorrect: true });
         addUserForm.form.controls['auth'].setErrors({ incorrect: true });
+        this._mainService.playshortFail();
       }
       this.formValid = false;
     }

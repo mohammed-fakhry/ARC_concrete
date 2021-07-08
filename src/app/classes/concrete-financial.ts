@@ -17,4 +17,5 @@ export class ConcreteFinancial {
   receiptCondition: string = '';
   notes: string = '';
   date_time: string = '';
+  // receiptCashes: ConcreteRecieptCash[] = [];
 }

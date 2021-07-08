@@ -136,7 +136,7 @@ export class CustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
-    this.totals = {onUs: 0, toUs: 0}
+    this.totals = { onUs: 0, toUs: 0 };
 
     for (let i = 0; i < data.length; i++) {
       const discoundVal =
@@ -187,8 +187,8 @@ export class CustomerInformationComponent implements OnInit {
       };
       this.accArr = [...this.accArr, newData];
 
-      this.totals.onUs = this.totals.onUs + minVal
-      this.totals.toUs = this.totals.toUs + addVal
+      this.totals.onUs = this.totals.onUs + minVal;
+      this.totals.toUs = this.totals.toUs + addVal;
     }
 
     /* this.totals = {
@@ -425,6 +425,7 @@ export class CustomerInformationComponent implements OnInit {
             // save vals
             this._safeService.creatSafeReceipt(safeReceipt).subscribe(() => {
               this.openSnake('تم اضافة بيانات الخصم');
+              this._mainService.playMouseClickClose();
               this.onStart();
             });
           }

@@ -7,6 +7,7 @@ import { ConcreteFinancial } from '../classes/concrete-financial';
 import { ConcreteMaterial } from '../classes/concrete-material';
 import { ConcreteReceipDetails } from '../classes/concrete-receip-details';
 import { ConcreteReceipt } from '../classes/concrete-receipt';
+import { ConcreteRecieptCash } from '../classes/concrete-reciept-cash';
 
 @Injectable({
   providedIn: 'root',
@@ -197,6 +198,30 @@ export class ConcreteService {
       );
     return this.http.get<ConcreteFinancial[]>(
       `${this.url}concreteFinancilaList.php`
+    );
+  }
+
+  postConcreteReceipt_Cashe(concreteReceipt_cash: ConcreteRecieptCash) {
+    return this.http.post(
+      `${this.url}postConcreteReceipt_Cashe.php`,
+      concreteReceipt_cash
+    );
+  }
+
+  updateConcreteReceipt_cash(concreteReceipt_cash: ConcreteRecieptCash) {
+    return this.http.put(
+      `${this.url}updateConcreteReceipt_cash.php?id=${concreteReceipt_cash.id}`,
+      concreteReceipt_cash
+    );
+  }
+
+  concreteReceipt_cashList(id?: string) {
+    if (id)
+      return this.http.get<ConcreteRecieptCash[]>(
+        `${this.url}concreteReceipt_cashList.php?id=${id}`
+      );
+    return this.http.get<ConcreteRecieptCash[]>(
+      `${this.url}concreteReceipt_cashList.php`
     );
   }
 }

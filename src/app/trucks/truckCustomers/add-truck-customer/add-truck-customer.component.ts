@@ -95,6 +95,7 @@ export class AddTruckCustomerComponent implements OnInit {
       addCustomerForm.form.controls['fullName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
     } else {
       addCustomerForm.form.controls['fullName'].setErrors(null);
     }

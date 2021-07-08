@@ -81,6 +81,7 @@ export class AddProductComponent implements OnInit {
       addProductForm.form.controls['productName'].setErrors({
         incorrect: true,
       });
+      this._mainService.playshortFail();
       this.inputValid.product = { cond: false, msg: 'هذا الاسم مستخدم بالفعل' };
       this.inputValid.form = false;
       return false;
