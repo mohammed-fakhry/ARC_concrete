@@ -112,7 +112,8 @@
             </thead>
             <tbody class="tableBody">
               <tr *ngFor="let section of totalVals.sections">
-                <td style="flex: 2;" class="textBold" class="textBtn tBtn-dark pl-2" (click)="search(section.name)" [class.textDanger]="section.name == 'بدون موقف'">
+                <td style="flex: 2;" class="textBold" class="textBtn tBtn-dark pl-2" (click)="search(section.name)"
+                  [class.textDanger]="section.name == 'بدون موقف'">
                   {{section.name}}
                 </td>
                 <td [class.textDanger]="section.name == 'بدون موقف'">{{section.val | number: '1.0-2'}}</td>
@@ -227,8 +228,9 @@
 
         <ng-container matColumnDef="customerDiscound">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>خ.عميل</th>
-          <td mat-cell *matCellDef="let row">
-            <input type="number" class="form-control noHover textDanger" [(ngModel)]="row.customerDiscound">
+          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.customerDiscound > 0">
+            {{row.customerDiscound}}
+            <!-- <input type="number" class="form-control noHover textDanger" [(ngModel)]="row.customerDiscound"> -->
           </td>
         </ng-container>
 
@@ -240,13 +242,17 @@
         <ng-container matColumnDef="cashPaid">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>الدفعات</th>
           <td mat-cell *matCellDef="let row">
-            <input type="number" class="form-control noHover" [(ngModel)]="row.cashPaid">
+            {{row.cashPaid}}
+            <!-- <input type="number" class="form-control noHover" [(ngModel)]="row.cashPaid"> -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="remainVal">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>الباقى</th>
-          <td mat-cell *matCellDef="let row" class="textDanger textBold tdBorder">{{row.remainVal | number: '1.0-2'}}</td>
+          <td mat-cell *matCellDef="let row" class="textBold tdBorder"
+            [ngClass]="row.remainVal < 0 ? 'dangerBadge borderLdanger textBolder' : 'textDanger'">
+            {{row.remainVal | number: '1.0-2'}}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="notes">

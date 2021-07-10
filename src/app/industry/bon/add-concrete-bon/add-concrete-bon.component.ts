@@ -274,5 +274,6 @@ export class AddConcreteBonComponent implements OnInit {
 
   onSubmit(concreteReceiptForm: NgForm) {
     if (concreteReceiptForm.valid) this.recordConcreteBon();
+    else this._mainService.playshortFail()
   }
 }

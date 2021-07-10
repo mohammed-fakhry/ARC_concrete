@@ -9,6 +9,7 @@
         (ngModelChange)="searchVal(searchForm)" required>
       <datalist id="searchValsList">
         <option *ngFor="let val of searchList" value="{{val.searchVal}}">
+          {{val?.detail}}
         </option>
       </datalist>
       <mat-error *ngIf="!searchValid">يجب اختيار بيانات صحيحة</mat-error>
@@ -18,8 +19,8 @@
 <mat-dialog-actions>
   <!-- edit button "the defult button" | result => the id for search -->
   <button [disabled]="!searchValid" mat-button color="primary" mat-dialog-close
-    [mat-dialog-close]="searchVals.id">{{btns.edit}}</button>
+    [mat-dialog-close]="returnId()">{{btns.edit}}</button>
   <!-- result => "newReciept" -->
   <button [disabled]="_glopal.loading" [class.d-none]="btns.newBtnDisabled" mat-raised-button color="accent"
-    mat-dialog-close mat-dialog-close="newReciept">{{btns.new}}</button>
+    mat-dialog-close [mat-dialog-close]="onSubmit_new()">{{btns.new}}</button>
 </mat-dialog-actions>

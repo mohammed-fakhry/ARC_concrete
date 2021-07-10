@@ -255,6 +255,8 @@ export class AddConcreteComponent implements OnInit {
   onSubmit(addConcreteForm: NgForm) {
     if (addConcreteForm.valid) {
       this.recordMainConcrete(addConcreteForm);
+    } else {
+      this._mainService.playshortFail()
     }
   }
 }

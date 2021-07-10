@@ -152,6 +152,8 @@ export class AddProductComponent implements OnInit {
           );
         }
       }
+    } else {
+      this._mainService.playshortFail()
     }
   }
 }

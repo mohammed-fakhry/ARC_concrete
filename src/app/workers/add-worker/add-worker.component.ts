@@ -71,7 +71,7 @@ export class AddWorkerComponent implements OnInit {
         discription: [
           `الادارة | ${this.workerInfo.workerJopCateg}`,
           `الوظيفة | ${this.workerInfo.workerJop}`,
-          `الراتب | ${this.workerInfo.workerSalary}`
+          `الراتب | ${this.workerInfo.workerSalary}`,
         ],
         btns: {
           addNew: 'اضافة بيانات جديدة',
@@ -128,8 +128,7 @@ export class AddWorkerComponent implements OnInit {
   }
 
   onSubmit(addWorkerForm: NgForm) {
-    if (addWorkerForm.valid) {
-      this.recordWorker();
-    }
+    if (addWorkerForm.valid) this.recordWorker();
+    else this._mainService.playshortFail();
   }
 }

@@ -24,6 +24,7 @@ import { TruckCustomer } from 'src/app/classes/truck-customer';
 import { Truck } from 'src/app/classes/truck';
 import { WorkerService } from 'src/app/services/worker.service';
 import { ConcreteRecieptCash } from 'src/app/classes/concrete-reciept-cash';
+import { SearchInvoiceDialogComponent } from 'src/app/dialogs/search-invoice-dialog/search-invoice-dialog.component';
 
 @Component({
   selector: 'app-add-safe-receipt',
@@ -77,6 +78,17 @@ export class AddSafeReceiptComponent implements OnInit {
   dateExpires: boolean = false;
 
   privateLoadingBar: boolean = false;
+
+  /*
+
+                  concreteReceiptCash.id ?
+                  'تعديل نوع الايصال بالموقف المالى' :
+                  'يجب ربط الايصال بالموقف المالى للعميل'
+
+
+  */
+
+  concreteReciptCash_btn: string = '';
 
   constructor(
     public activeRoute: ActivatedRoute,
@@ -436,12 +448,21 @@ export class AddSafeReceiptComponent implements OnInit {
     if (this.id)
       this.getConnected_ConcreteReceipt(this.id)
         .then((data: ConcreteRecieptCash[]) => {
-          if (data[0]) this.concreteReceiptCash = data[0];
+          if (data[0]) {
+            this.concreteReceiptCash = data[0];
+          }
+          this.concreteReciptCash_btn = this.concreteReceiptCash.id
+            ? `تم ربط الايصال بالفاتورة رقم (${this.concreteReceiptCash.manualNum}) | ${this.concreteReceiptCash.concreteReceipt_id} | تعديل`
+            : 'يجب ربط الايصال بالموقف المالى للعميل';
           this.privateLoadingBar = false;
         })
         .catch((err) => {
           this.privateLoadingBar = false;
         });
+    else {
+      this.privateLoadingBar = false;
+      this.concreteReciptCash_btn = 'يجب ربط الايصال بالموقف المالى للعميل';
+    }
   }
 
   getConnected_ConcreteReceipt(id: string): Promise<ConcreteRecieptCash[]> {
@@ -954,6 +975,7 @@ export class AddSafeReceiptComponent implements OnInit {
                 /* this.openDialog(thedialog);
                 this._glopal.loading = false; */
                 this.processUpdate(thedialog);
+                if (this.id) this.recordConcreteCash(this.id);
               },
               (error) => {
                 /* if data saved but some vars are undifined */
@@ -961,6 +983,7 @@ export class AddSafeReceiptComponent implements OnInit {
                   /* this._glopal.loading = false;
                   this.openDialog(thedialog); */
                   this.processUpdate(thedialog);
+                  if (this.id) this.recordConcreteCash(this.id);
                 }
               }
             );
@@ -969,11 +992,14 @@ export class AddSafeReceiptComponent implements OnInit {
               duration: 2500,
             });
             this._glopal.loading = false;
+            this._mainService.PlayDrumFail();
           }
         } else {
           // new safereceipt
           this.recordSafeReceipt(this.recieptData_forDb(this.safeReciept)).then(
             (data: any) => {
+              this.recordConcreteCash(data[0]);
+
               if (this.otherRecieptVals.length == 0) {
                 thedialog.discription = [
                   `ايصال رقم | (${data[0]})`,
@@ -990,6 +1016,21 @@ export class AddSafeReceiptComponent implements OnInit {
       } else {
         this._mainService.playshortFail();
       }
+    }
+  }
+
+  recordConcreteCash(safeReceiptId: string) {
+    this.concreteReceiptCash.safeReceiptId = safeReceiptId;
+
+    if (this.concreteReceiptCash.id) {
+      this._concrete
+        .updateConcreteReceipt_cash(this.concreteReceiptCash)
+        .subscribe();
+    } else {
+      if (this.concreteReceiptCash.concreteReceipt_id)
+        this._concrete
+          .postConcreteReceipt_Cashe(this.concreteReceiptCash)
+          .subscribe();
     }
   }
 
@@ -1056,6 +1097,44 @@ export class AddSafeReceiptComponent implements OnInit {
       this.openDialog(theDialog);
     }
   }
+
+  openSearchDialog = (
+    addSafeReciept: NgForm,
+    concreteReceiptCash_id?: string | null
+  ) => {
+    this.concreteCustomerNameChanged(addSafeReciept);
+
+    if (this.safeReciept.concreteCustomer_id > '0') {
+      this._glopal.loading = true;
+      const passVals = {
+        specialSearch: 'concreteRecipts_Cash_Method',
+        customerId: this.safeReciept.concreteCustomer_id,
+        concreteCashId: concreteReceiptCash_id,
+      };
+
+      let dialogRef = this._dialog.open(SearchInvoiceDialogComponent, {
+        data: passVals,
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          if (result?.concreteReceipt_id) {
+            if (result?.header == 'discound') {
+              this.concreteReceiptCash.safeReceiptKind = 'خصم';
+            } else {
+              this.concreteReceiptCash.safeReceiptKind = 'فاتورة';
+            }
+          }
+          this.concreteReceiptCash.concreteReceipt_id =
+            result.concreteReceipt_id;
+          this.concreteReciptCash_btn = `تم ربط الايصال بالفاتورة رقم (${result?.manualNum}) | ${result?.concreteReceipt_id} | تعديل`;
+          this._mainService.play_secondaryDone();
+        }
+      });
+    }
+
+    console.log(this.concreteReceiptCash);
+  };
 
   recieptData_forDb(receipt: SafeReceipt): SafeReceipt {
     return {

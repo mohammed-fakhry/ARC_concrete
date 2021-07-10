@@ -264,7 +264,7 @@
       </div>
 
       <div class="box my-3 px-2" *ngIf="concreteReceipt.recordedByBon">
-        <mat-progress-bar mode="indeterminate" *ngIf="elementLoading"></mat-progress-bar>
+        <mat-progress-bar mode="buffer" *ngIf="elementLoading"></mat-progress-bar>
         <div class="cardHeader py-3 mb-2">
           بيان تفصيلى عن الفاتورة رقم ({{concreteReceipt.manualNum}})
         </div>

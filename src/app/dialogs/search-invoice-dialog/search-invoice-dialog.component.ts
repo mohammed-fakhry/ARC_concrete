@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ConcreteReceipt } from 'src/app/classes/concrete-receipt';
 import { Stock } from 'src/app/classes/stock';
 import { UserData } from 'src/app/classes/user-data';
 import { AuthService } from 'src/app/services/auth.service';
+import { ConcreteService } from 'src/app/services/concrete.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { MainService } from 'src/app/services/main.service';
 import { SafeService } from 'src/app/services/safe.service';
@@ -18,7 +20,8 @@ export class SearchInvoiceDialogComponent implements OnInit {
   searchList: any[] = [];
   searchVals = {
     id: null,
-    searchVal: null,
+    searchVal: '',
+    detail: '',
   };
 
   searchValid: boolean = false;
@@ -34,7 +37,7 @@ export class SearchInvoiceDialogComponent implements OnInit {
     public _safeService: SafeService,
     public _glopal: GlobalVarsService,
     public _stockService: StockService,
-    // public _mainService: MainService,
+    public _concrete: ConcreteService,
     private _auth: AuthService
   ) {}
 
@@ -91,10 +94,26 @@ export class SearchInvoiceDialogComponent implements OnInit {
         },
         method: () => this.usersMethod(),
       },
+      {
+        searchFor: 'concreteRecipts_Cash_Method',
+        placeHolder: 'بحث برقم الفاتورة',
+        btns: {
+          edit: 'دفعة من فاتورة',
+          new: 'ايصال خصم',
+          newBtnDisabled: false,
+        },
+        method: () => this.concreteRecipts_Cash_Method(),
+      },
     ];
 
     /* texts effect */
-    let textVals = textsArr.find((text) => text.searchFor.includes(this.data));
+    const specialSearch = this.data?.specialSearch
+      ? this.data?.specialSearch
+      : this.data;
+
+    let textVals = textsArr.find((text) =>
+      text.searchFor.includes(specialSearch)
+    );
     if (textVals) {
       this.placeHolder = textVals.placeHolder ? textVals.placeHolder : '';
       this.btns = {
@@ -116,6 +135,7 @@ export class SearchInvoiceDialogComponent implements OnInit {
       this.searchValid = true;
       searchForm.form.controls['searchVal'].setErrors(null);
       this.searchVals.id = recVal.id;
+      if (recVal?.manualNum) this.searchVals.detail = recVal.manualNum
     } else {
       this.searchValid = false;
       searchForm.form.controls['searchVal'].setErrors({ incorrect: true });
@@ -125,6 +145,59 @@ export class SearchInvoiceDialogComponent implements OnInit {
   getStockes() {
     return new Promise((res) => {
       this._stockService.getStockes().subscribe((data: Stock[]) => res(data));
+    });
+  }
+
+  getConcreteReceipts(id: string, searchBy: string) {
+    return new Promise((res) => {
+      this._concrete
+        .concreteReceiptList(id, searchBy)
+        .subscribe((data: ConcreteReceipt[]) => res(data));
+    });
+  }
+
+  concreteRecipts_Cash_Method() {
+    if (this.data.customerId) {
+      this.getConcreteReceipts(
+        this.data.customerId,
+        'concreteCustomerReceipts'
+      ).then((data: any) => {
+        this.searchList = data.map((d: any) => {
+          return {
+            searchVal: `فاتورة رقم(${d.manualNum}) | ${d.concreteReceipt_id}`,
+            manualNum: d.manualNum,
+            detail: d.date_time,
+            id: d.concreteReceipt_id,
+          };
+        });
+
+        if (this.data?.concreteCashId) {
+          this.getReceiptCashes(this.data.concreteCashId).then(
+            (result: any) => {
+              if (result.length > 0) {
+                this.searchVals = {
+                  id: result[0]?.concreteReceipt_id,
+                  searchVal: `فاتورة رقم(${result[0]?.manualNum}) | ${result[0]?.concreteReceipt_id}`,
+                  detail: result[0]?.manualNum,
+                };
+
+                if (result[0]?.concreteReceipt_id) this.searchValid = true;
+                else this.searchValid = false;
+              }
+
+              this._glopal.loading = false;
+            }
+          );
+        } else this._glopal.loading = false;
+      });
+    }
+  }
+
+  getReceiptCashes(id: string) {
+    return new Promise((res) => {
+      this._concrete
+        .concreteReceipt_cashList(id, 'concretereceiptcash_Id')
+        .subscribe((data: any) => res(data));
     });
   }
 
@@ -170,5 +243,26 @@ export class SearchInvoiceDialogComponent implements OnInit {
       });
       this._glopal.loading = false;
     });
+  }
+
+  returnId() {
+    if (this.data?.specialSearch) {
+      return {
+        concreteReceipt_id: this.searchVals.id,
+        manualNum: this.searchVals.detail
+      };
+    }
+    return this.searchVals.id
+  }
+
+  onSubmit_new() {
+    if (this.data?.specialSearch) {
+      return {
+        header: 'discound',
+        concreteReceipt_id: this.searchVals.id,
+        manualNum: this.searchVals.detail
+      };
+    }
+    return 'newReciept';
   }
 }

@@ -92,9 +92,9 @@ export class AddOtherAccComponent implements OnInit {
         info: `باسم | ${this.acc.AccName}`,
         discription: [``],
         btns: {
-          addNew: "اضافة بيانات جديدة",
-          goHome: "المصاريف"
-        }
+          addNew: 'اضافة بيانات جديدة',
+          goHome: 'المصاريف',
+        },
       },
     });
 
@@ -132,6 +132,7 @@ export class AddOtherAccComponent implements OnInit {
             this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
               duration: 2500,
             });
+            this._mainService.PlayDrumFail();
           }
         } else {
           this._safeService.creatOtherAcc(this.acc).subscribe(
@@ -148,6 +149,8 @@ export class AddOtherAccComponent implements OnInit {
           );
         }
       }
+    } else {
+      this._mainService.playshortFail();
     }
   }
 }

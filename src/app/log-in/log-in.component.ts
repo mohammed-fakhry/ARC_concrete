@@ -127,12 +127,12 @@ export class LogInComponent implements OnInit {
 
             this._auth.isAuth = true;
             this._glopal.loading = false;
-            this._router
-              .navigate(['/Home'])
-              .then(() => {
-                this._mainService.setNotification()
-                setTimeout(() => this._mainService.playIntro(), 200)
-              });
+            this._router.navigate(['/Home']).then(() => {
+              this._mainService.setNotification();
+              setTimeout(() => {
+                this._mainService.playIntro();
+              }, 200);
+            });
 
             this._auth.backUp();
           } else {
@@ -142,6 +142,7 @@ export class LogInComponent implements OnInit {
             };
             this._auth.isAuth = false;
             this._glopal.loading = false;
+            this._mainService.PlayDrumFail();
           }
         },
         (error) => {
@@ -152,6 +153,7 @@ export class LogInComponent implements OnInit {
           };
           this._auth.isAuth = false;
           this._glopal.loading = false;
+          this._mainService.PlayDrumFail();
         }
       );
   }

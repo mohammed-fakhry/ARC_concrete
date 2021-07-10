@@ -153,6 +153,7 @@ export class MainService {
     this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
       duration: 2500,
     });
+    this.PlayDrumFail()
     return false;
   };
 
@@ -362,6 +363,12 @@ export class MainService {
     if (mouseClickClose) mouseClickClose.play();
   }
 
+  // secondaryDone
+  play_secondaryDone() {
+    const secondaryDone = document.getElementById('secondaryDone') as HTMLAudioElement;
+    if (secondaryDone) secondaryDone.play();
+  }
+
   playshortFail() {
     const shortFail = document.getElementById('shortFail') as HTMLAudioElement;
     if (shortFail) shortFail.play();
@@ -377,8 +384,10 @@ export class MainService {
     if (drumFail) drumFail.play();
   }
 
-  playShutDown() {
-    const shutDown = document.getElementById('shutDown') as HTMLAudioElement;
-    if (shutDown) shutDown.play();
+  // sci_click
+  Play_sci_click() {
+    const sci_click = document.getElementById('sci_click') as HTMLAudioElement;
+    if (sci_click) sci_click.play();
   }
+
 }

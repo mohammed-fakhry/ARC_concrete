@@ -130,7 +130,7 @@ export class CustomersListComponent implements OnInit {
       this.fillListData(this.customerList);
       this.counts = this.generateCustomerCounts(this.customerList);
 
-      console.log(this.counts)
+      console.log(this.counts);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -141,25 +141,46 @@ export class CustomersListComponent implements OnInit {
 
     if (searchFor === 'indebtedness') {
       this._glopal.currentHeader = `${mainHeader} عملاء دائنين`;
-      return dataTofill.filter((customer) => customer.customerRemain < 0);
+      return dataTofill.filter(
+        (customer) =>
+          customer.customerRemain < 0 &&
+          !customer.customerAdd.includes('ايجار') &&
+          !customer.customerAdd.includes('حراسة وغفرات')
+      );
     } else if (searchFor === 'ActiveIndebtedness') {
       this._glopal.currentHeader = `${mainHeader} عملاء نشطين دائنين`;
       return dataTofill.filter(
         (customer) =>
-          customer.customerRemain < 0 && customer.customerName.includes('--')
+          customer.customerRemain < 0 &&
+          customer.customerName.includes('--') &&
+          !customer.customerAdd.includes('ايجار') &&
+          !customer.customerAdd.includes('حراسة وغفرات')
       );
     } else if (searchFor === 'collectible') {
       this._glopal.currentHeader = `${mainHeader} عملاء مدينين`;
-      return dataTofill.filter((customer) => customer.customerRemain > 0);
+      return dataTofill.filter(
+        (customer) =>
+          customer.customerRemain > 0 &&
+          !customer.customerAdd.includes('ايجار') &&
+          !customer.customerAdd.includes('حراسة وغفرات')
+      );
     } else if (searchFor === 'ActiveCollectible') {
       this._glopal.currentHeader = `${mainHeader} عملاء نشطين مدينين`;
       return dataTofill.filter(
         (customer) =>
-          customer.customerRemain > 0 && customer.customerName.includes('--')
+          customer.customerRemain > 0 &&
+          customer.customerName.includes('--') &&
+          !customer.customerAdd.includes('ايجار') &&
+          !customer.customerAdd.includes('حراسة وغفرات')
       );
     } else if (searchFor === 'uncompleted') {
       this._mainService.scrollTo('customerListTable');
-      return dataTofill.filter((customer) => customer.uncompletedCond > 0);
+      return dataTofill.filter(
+        (customer) =>
+          customer.uncompletedCond > 0 &&
+          !customer.customerAdd.includes('ايجار') &&
+          !customer.customerAdd.includes('حراسة وغفرات')
+      );
     } else if (searchFor === 'monthlyPaidCustomers') {
       this._glopal.currentHeader = 'عملاء مستأجرين';
       return dataTofill.filter((customer) =>

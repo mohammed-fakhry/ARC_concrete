@@ -124,7 +124,11 @@ export class ConcreteService {
     );
   }
 
-  concreteReceiptList() {
+  concreteReceiptList(id?: string, searchBy?: string) {
+    if (id && searchBy)
+      return this.http.get<any[]>(
+        `${this.url}concreteReceiptList.php?id=${id}&searchBy=${searchBy}`
+      );
     return this.http.get<any[]>(`${this.url}concreteReceiptList.php`);
   }
 
@@ -215,10 +219,10 @@ export class ConcreteService {
     );
   }
 
-  concreteReceipt_cashList(id?: string) {
+  concreteReceipt_cashList(id?: string, searchBy: string = 'id') {
     if (id)
       return this.http.get<ConcreteRecieptCash[]>(
-        `${this.url}concreteReceipt_cashList.php?id=${id}`
+        `${this.url}concreteReceipt_cashList.php?${searchBy}=${id}`
       );
     return this.http.get<ConcreteRecieptCash[]>(
       `${this.url}concreteReceipt_cashList.php`

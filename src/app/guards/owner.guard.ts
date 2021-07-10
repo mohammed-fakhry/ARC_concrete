@@ -5,6 +5,7 @@ import {
   Router,
 } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { MainService } from '../services/main.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class OwnerGuard implements CanActivate {
   constructor(
     public _auth: AuthService,
     public _router: Router,
+    public _mainService: MainService,
     public _snackBar: MatSnackBar
   ) {}
 
@@ -24,6 +26,7 @@ export class OwnerGuard implements CanActivate {
         this._snackBar.open('لا توجد صلاحية للوصول', 'اخفاء', {
           duration: 2500,
         });
+        this._mainService.PlayDrumFail()
         return false;
       }
     } else {

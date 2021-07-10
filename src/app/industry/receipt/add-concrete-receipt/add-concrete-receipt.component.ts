@@ -904,37 +904,46 @@ export class AddConcreteReceiptComponent implements OnInit {
 
   deleteInvoice() {
     this._glopal.loading = true;
-    const processLoop_receiptDetail = async () => {
-      for (let d = 0; d < this.concreteReceipt.stockTransactionD.length; d++) {
-        if (
-          this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
+
+    if (this.concreteReceipt.stockTransaction.stockTransactionId) {
+      const processLoop_receiptDetail = async () => {
+        for (
+          let d = 0;
+          d < this.concreteReceipt.stockTransactionD.length;
+          d++
         ) {
-          this._truckService
-            .deleteTruckOrder(
-              this.concreteReceipt.stockTransactionD[d]
-                .stockTransactionDetailsId,
-              'transId'
-            )
-            .subscribe();
+          if (
+            this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
+          ) {
+            this._truckService
+              .deleteTruckOrder(
+                this.concreteReceipt.stockTransactionD[d]
+                  .stockTransactionDetailsId,
+                'transId'
+              )
+              .subscribe();
+          }
+
+          const personId = await this.delTranceDetail(
+            this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
+          );
         }
+      };
 
-        const personId = await this.delTranceDetail(
-          this.concreteReceipt.stockTransactionD[d].stockTransactionDetailsId
-        );
-      }
-    };
-
-    processLoop_receiptDetail().then(() => {
-      if (this.concreteReceipt.stockTransaction.stockTransactionId)
-        this._stockService
-          .deleteStockTransaction(
-            parseInt(this.concreteReceipt.stockTransaction.stockTransactionId)
-          )
-          .subscribe(() => {
-            console.log('stockDone');
-            this.deleteReceipts();
-          });
-    });
+      processLoop_receiptDetail().then(() => {
+        if (this.concreteReceipt.stockTransaction.stockTransactionId)
+          this._stockService
+            .deleteStockTransaction(
+              parseInt(this.concreteReceipt.stockTransaction.stockTransactionId)
+            )
+            .subscribe(() => {
+              console.log('stockDone');
+              this.deleteReceipts();
+            });
+      });
+    } else {
+      this.deleteReceipts();
+    }
   }
 
   deleteReceipts() {
@@ -1052,6 +1061,8 @@ export class AddConcreteReceiptComponent implements OnInit {
       !this.formValid.concretes.some((product) => !product.concreteName)
     ) {
       this.startRecord();
+    } else {
+      this._mainService.playshortFail()
     }
   }
 

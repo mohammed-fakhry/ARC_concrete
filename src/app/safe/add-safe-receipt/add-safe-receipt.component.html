@@ -283,15 +283,10 @@
               <button [disabled]="_glopal.loading || !safeReciept.receiptKind" mat-raised-button color="primary"
                 type="submit">{{submitBtn}}</button>
 
-              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn"
+              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn" (click)="openSearchDialog(addSafeReciept, concreteReceiptCash.id)"
                 [ngClass]="concreteReceiptCash.id ? 'darkBadge borderLdark' :'dangerBadge borderLdanger'"
                 *ngIf="concreteReceiptCash.id || safeReciept.transactionAccKind === 'عميل خرسانة'">
-                {{
-                  concreteReceiptCash.id ?
-                  'تعديل نوع الايصال بالموقف المالى' :
-                  'يجب ربط الايصال بالموقف المالى للعميل'
-
-                }}
+                {{concreteReciptCash_btn}}
               </div>
             </div>
 
@@ -308,7 +303,7 @@
           </div>
 
           <div *ngIf="!_glopal.loading && !safeReciept.receiptKind || privateLoadingBar" class="mt-3">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <mat-progress-bar mode="buffer"></mat-progress-bar>
           </div>
         </form>
       </div>

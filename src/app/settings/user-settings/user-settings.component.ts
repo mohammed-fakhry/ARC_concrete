@@ -210,6 +210,7 @@ export class UserSettingsComponent implements OnInit {
         this._mainService.playshortFail();
       }
       this.formValid = false;
+      this._mainService.playshortFail()
     }
   }
 }

@@ -1293,6 +1293,7 @@ export class StockInvoiceComponent implements OnInit {
           duration: 2500,
         });
         this._glopal.loading = false;
+        this._mainService.PlayDrumFail()
       }
     } else {
       this.recordStockTransAction().then((data: any) => {

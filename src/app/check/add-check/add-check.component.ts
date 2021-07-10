@@ -179,6 +179,8 @@ export class AddCheckComponent implements OnInit {
       } else {
         this.postNewCheck();
       }
+    } else {
+      this._mainService.playshortFail()
     }
   }
 }

@@ -336,6 +336,7 @@ export class ConcreteFinancialComponent implements OnInit {
 
     this.financialList[i] = row;
     this.totalVals = this.sumTotalVals(this.financialList);
+    this._mainService.play_secondaryDone()
     this._glopal.loading = false;
   }
 }

@@ -171,6 +171,7 @@ export class AddNewSafeComponent implements OnInit {
         this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
           duration: 2500,
         });
+        this._mainService.PlayDrumFail()
       }
     } else {
       this._safeService.creatSafe(this.safe).subscribe(
@@ -193,6 +194,7 @@ export class AddNewSafeComponent implements OnInit {
       this.recordSafe();
       this.inputValid.form = true;
     } else {
+      this._mainService.playshortFail()
       this.inputValid.form = false;
     }
   }

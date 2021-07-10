@@ -4,7 +4,7 @@ import { StockTransactionD } from './stock-transaction-d';
 
 export class ConcreteReceipt {
   concreteReceipt_id!: string | null;
-  concreteReceiptType: string = "فاتورة خرسانة"
+  concreteReceiptType: string = 'فاتورة خرسانة';
   concreteCustomer_id!: string | null;
   concreteCustomer_name: string = '';
   customerProject: string = '';
@@ -18,6 +18,7 @@ export class ConcreteReceipt {
   madeBy: string = '';
   addTaxesVal: number = 0;
   recordedByBon: boolean = false;
+  // receiptRemainCash: number = 0;
 
   receiptDetails: ConcreteReceipDetails[] = [];
   stockTransaction: StockTransaction = new StockTransaction();

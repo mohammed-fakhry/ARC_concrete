@@ -126,6 +126,7 @@ export class AddCustomerComponent implements OnInit {
         this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
           duration: 2500,
         });
+        this._mainService.PlayDrumFail()
       }
     } else {
       this._customerService.creatCustomer(this.customer).subscribe();
@@ -161,6 +162,7 @@ export class AddCustomerComponent implements OnInit {
     // check if form Valid
     if (!addCustomerForm.valid) {
       this.formValid = false;
+      this._mainService.playshortFail()
       return;
     }
 

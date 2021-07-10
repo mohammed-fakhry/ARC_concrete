@@ -288,6 +288,7 @@ export class WorkerInformationComponent implements OnInit {
 
   submitSalary(addSalaryForm: NgForm) {
     if (addSalaryForm.valid) this.recordWorkedDayes();
+    else this._mainService.playshortFail()
   }
 
   handleRout(detail: string, id: string) {

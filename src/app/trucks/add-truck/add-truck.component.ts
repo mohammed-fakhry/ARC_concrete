@@ -351,6 +351,7 @@ export class AddTruckComponent implements OnInit {
     } else {
       if (!addTruckForm.valid) {
         this.formValid = false;
+        this._mainService.playshortFail()
         return;
       } else {
         this.formValid = true;

@@ -70,7 +70,7 @@ export class AppComponent {
       this._glopal.loading = false;
       this._router
         .navigate(['/LogIn'])
-        .then(() => setTimeout(() => this._mainService.playShutDown(), 100));
+        .then(() => setTimeout(() => this._mainService.playLongPop(), 200));
     });
   }
 

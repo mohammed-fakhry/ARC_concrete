@@ -3,5 +3,7 @@ export class ConcreteRecieptCash {
   concreteReceipt_id: string = '';
   safeReceiptId: string = '';
   safeReceiptKind: string = '';
+  receiptFor: string = 'فاتورة'; // or 'خصم'
+  manualNum: string = '';
   receiptVal: number = 0;
 }
