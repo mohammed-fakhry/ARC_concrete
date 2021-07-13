@@ -476,12 +476,26 @@ export class AddConcreteReceiptComponent implements OnInit {
     });
   }
 
-  stockNameChanged() {
-    /* const customerInfo = this.customerList.find((customer) => customer.fullName === this.concreteReceipt.concreteCustomer_name)
-
-    if (customerInfo) {
-
-    } */
+  manualNumChanged(concreteReceiptForm: NgForm) {
+    if (
+      this.concreteReceipt.manualNum != 'مستخلص مضخة ثابتة' &&
+      this.concreteReceipt.manualNum != ''
+    ) {
+      this._concrete
+        .checkConcreteManualNum(this.concreteReceipt.manualNum)
+        .subscribe((data: any) => {
+          if (data.length > 0) {
+            concreteReceiptForm.form.controls['manualNum'].setErrors({
+              incorrect: true,
+            });
+            this._mainService.playshortFail();
+          } else {
+            concreteReceiptForm.form.controls['manualNum'].setErrors(null);
+          }
+        });
+    } else {
+      concreteReceiptForm.form.controls['manualNum'].setErrors(null);
+    }
   }
 
   customerNameChanged(concreteReceiptForm?: NgForm) {
@@ -1026,35 +1040,6 @@ export class AddConcreteReceiptComponent implements OnInit {
     }
   }
 
-  /* recordTruckOrder(tranceDetail: StockTransactionD, transeId?: string) {
-    const truckOrder: TruckOrder = {
-      orderId: null,
-      truckId: '7',
-      truckName: '',
-      truckCapacity: 1,
-      truckModel: '',
-      orderType: 'سيارة خرسانة',
-      truckType: 'سيارة',
-      loadingType: 'متر',
-      truckCustomerId: '1',
-      truckCustomerName: '',
-      LoadTimes: tranceDetail.Qty,
-      totalQty: 0,
-      price: tranceDetail.price,
-      totalVal: 0,
-      date_time: this.concreteReceipt.date_time,
-      notes: `${this.concreteReceipt.concreteCustomer_name} | فاتورة (${this.concreteReceipt.manualNum})`,
-      stockTransactionDetailsId:
-        transeId ?? tranceDetail.stockTransactionDetailsId.toString(),
-      stockTransactionId: tranceDetail.stockTransactionId,
-      madeBy: this._auth.uName.realName,
-    };
-
-    if (!transeId)
-      this._truckService.updateTruckOrder(truckOrder, 'transId').subscribe();
-    else this._truckService.postTruckOrder(truckOrder).subscribe();
-  } */
-
   onSubmit(concreteReceiptForm: NgForm) {
     if (
       concreteReceiptForm.valid &&
@@ -1062,7 +1047,7 @@ export class AddConcreteReceiptComponent implements OnInit {
     ) {
       this.startRecord();
     } else {
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     }
   }
 

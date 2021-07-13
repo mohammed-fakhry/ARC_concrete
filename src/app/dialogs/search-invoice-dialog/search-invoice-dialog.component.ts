@@ -166,7 +166,7 @@ export class SearchInvoiceDialogComponent implements OnInit {
           return {
             searchVal: `فاتورة رقم(${d.manualNum}) | ${d.concreteReceipt_id}`,
             manualNum: d.manualNum,
-            detail: d.date_time,
+            detail: `${d.date_time} | (${d.receiptRemainCash})`,
             id: d.concreteReceipt_id,
           };
         });

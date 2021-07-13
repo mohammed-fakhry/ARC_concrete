@@ -218,9 +218,10 @@ export class WorkerInformationComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: SafeReceipt) => {
       if (result) {
         const safeReceipt = this.receiptForDiscound(result);
-        this._safeService
-          .creatSafeReceipt(safeReceipt)
-          .subscribe(() => this.onStart());
+        this._safeService.creatSafeReceipt(safeReceipt).subscribe(() => {
+          this._mainService.playMouseClickClose();
+          this.onStart();
+        });
       }
     });
   };
@@ -228,10 +229,10 @@ export class WorkerInformationComponent implements OnInit {
   calcRemainSalary() {
     const daySalary = this.worker.workerSalary / 30;
     const netDaysWorks =
-      this.workedDayes.workedDayes +
-      this.workedDayes.overDayes;
+      this.workedDayes.workedDayes + this.workedDayes.overDayes;
 
-    this.workedDayes.remainSalary = (netDaysWorks * daySalary) - this.workedDayes.discoundDayes;
+    this.workedDayes.remainSalary =
+      netDaysWorks * daySalary - this.workedDayes.discoundDayes;
   }
 
   receiptForDiscound(result: SafeReceipt): SafeReceipt {
@@ -283,12 +284,12 @@ export class WorkerInformationComponent implements OnInit {
         .postEmployeeWorkedDayes(this.workedDayes)
         .subscribe(() => this.onStart());
     }
-    this._mainService.playMouseClickClose()
+    this._mainService.playMouseClickClose();
   }
 
   submitSalary(addSalaryForm: NgForm) {
     if (addSalaryForm.valid) this.recordWorkedDayes();
-    else this._mainService.playshortFail()
+    else this._mainService.playshortFail();
   }
 
   handleRout(detail: string, id: string) {

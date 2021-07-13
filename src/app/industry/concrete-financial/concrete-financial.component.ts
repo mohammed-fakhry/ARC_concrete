@@ -328,14 +328,14 @@ export class ConcreteFinancialComponent implements OnInit {
       duration: 2500,
     });
 
-    if (row.netVal - row.cashPaid - row.customerDiscound < 0) {
+    /* if (row.netVal - row.cashPaid - row.customerDiscound < 0) {
       row.remainVal = 0;
     } else {
       row.remainVal = row.netVal - row.cashPaid - row.customerDiscound;
     }
 
     this.financialList[i] = row;
-    this.totalVals = this.sumTotalVals(this.financialList);
+    this.totalVals = this.sumTotalVals(this.financialList); */
     this._mainService.play_secondaryDone()
     this._glopal.loading = false;
   }

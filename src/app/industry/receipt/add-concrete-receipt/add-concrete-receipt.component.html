@@ -21,12 +21,12 @@
               <td style="padding-top: 4px;">
                 <mat-form-field class="printX">
                   <mat-select placeholder="المخزن" [required]="concreteReceipt.manualNum != 'مستخلص مضخة ثابتة'"
-                    #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName"
-                    (ngModelChange)="stockNameChanged()">
+                    #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName">
                     <mat-option *ngFor="let stock of stockList" [value]="stock.stockName">
                       {{stock.stockName}}
                     </mat-option>
                   </mat-select>
+
                 </mat-form-field>
               </td>
               <td class="printX">
@@ -74,7 +74,12 @@
               <td>
                 <mat-form-field class="printX">
                   <input [disabled]="concreteReceipt.manualNum == 'مستخلص مضخة ثابتة'" matInput
-                    placeholder="رقم الفاتورة" name="manualNum" [(ngModel)]="concreteReceipt.manualNum">
+                    placeholder="رقم الفاتورة" name="manualNum" #manualNum [(ngModel)]="concreteReceipt.manualNum"
+                    (change)="manualNumChanged(concreteReceiptForm)">
+
+                  <mat-error>
+                    هذا الرقم مسجل بالفعل
+                  </mat-error>
                 </mat-form-field>
 
                 <div class="printThis">

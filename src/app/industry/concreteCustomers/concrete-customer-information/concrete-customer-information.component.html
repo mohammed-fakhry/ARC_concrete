@@ -55,17 +55,18 @@
             استهلاك الاسمنت
           </button>
 
-          <button mat-raised-button color="primary" routerLink="/ConcreteCustomerFinancial/{{customerInfo.id}}">الموقف المالى</button>
+          <button mat-raised-button color="primary" routerLink="/ConcreteCustomerFinancial/{{customerInfo.id}}">الموقف
+            المالى</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="box stickyBox">
+  <div class="box stickyBox printX">
     <div class="mat-elevation-z0 mt-3">
       <div class="d-flex justify-content-between px-3">
 
-        <div class="form-inline printX">
+        <div class="form-inline">
           <mat-form-field class="searchForm" style="width: 500px;">
             <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
           </mat-form-field>
@@ -76,6 +77,8 @@
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
                 بالتاريخ</button>
+              <button  mat-menu-item (click)="filterList('noId')"
+                style="text-align: right;">ايصالات غير مرحلة</button>
               <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
                 style="text-align: right;">اظهار الكل</button>
             </mat-menu>
@@ -144,8 +147,7 @@
           <ng-container matColumnDef="receiptSerial">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الفاتورة</th>
             <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2" [routerLink]="row.routeTo"
-              [class.marked]="row.receiptSerial?.includes(searchTxt) && searchTxt"
-              [class.textDanger]="row.addVal > 0">
+              [class.marked]="row.receiptSerial?.includes(searchTxt) && searchTxt" [class.textDanger]="row.addVal > 0">
               {{row.receiptSerial}}</td>
           </ng-container>
 
@@ -159,8 +161,9 @@
           <ng-container matColumnDef="receiptDetail">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
             <td mat-cell *matCellDef="let row" [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt"
-            [class.textDanger]="row.addVal > 0">
-              {{row.receiptDetail}}</td>
+              [class.textDanger]="row.addVal > 0" [class.borderLdanger]="row.concretereceiptcash_id == 'noId'">
+              {{row.receiptDetail}}
+            </td>
           </ng-container>
 
           <!-- (click)="markToCalc(row.minVal * -1,i,'minVal')" -->

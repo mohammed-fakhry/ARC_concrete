@@ -216,8 +216,12 @@
             <a mat-list-item routerLink="/ConcreteList" (click)="opened = !opened">خرسانة جهد و محتوى</a>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
             <mat-divider></mat-divider>
-            <a mat-list-item routerLink="/ConcreteFinancialPosition" (click)="opened = !opened" class="textBold">الموقف
-              المالى</a>
+            <a mat-list-item routerLink="/OtherAccInformation/36" (click)="opened = !opened" class="textBold">
+              <span class="textDanger">مصاريف المحطة</span>
+            </a>
+            <a mat-list-item routerLink="/ConcreteFinancialPosition" (click)="opened = !opened" class="textBold">
+              <span class="textDark">الموقف المالى</span>
+            </a>
           </mat-nav-list>
         </mat-expansion-panel>
 

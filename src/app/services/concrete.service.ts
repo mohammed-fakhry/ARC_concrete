@@ -154,6 +154,12 @@ export class ConcreteService {
     );
   }
 
+  checkConcreteManualNum(manualNum: string) {
+    return this.http.get<ConcreteBon[]>(
+      `${this.url}checkConcreteManualNum.php?manualNum=${manualNum}`
+    );
+  }
+
   postConcreteBon(concreteBon: ConcreteBon) {
     return this.http.post(`${this.url}postConcreteBon.php`, concreteBon);
   }
@@ -175,6 +181,12 @@ export class ConcreteService {
   delConcreteReceipt(id: string) {
     return this.http.delete<ConcreteReceipt[]>(
       `${this.url}delConcreteReceipt.php?id=${id}`
+    );
+  }
+
+  deleteConcreteCash(id: string) {
+    return this.http.delete<ConcreteReceipt[]>(
+      `${this.url}deleteConcreteCash.php?id=${id}`
     );
   }
 

@@ -41,7 +41,7 @@
   font-size: medium;
   border-right: solid 2px #f2e7fe;
   padding-right: 1em;
-  background-color: $boxBg;//#413d47;
+  background-color: $boxBg; //#413d47;
   color: $darkBg !important;
 }
 
@@ -89,7 +89,6 @@ mat-sidenav-content::before {
   opacity: 0.025;
   z-index: 0;
 }
-
 
 mat-sidenav-content::after {
   content: "";
@@ -141,7 +140,7 @@ mat-toolbar {
   z-index: 1000;
   color: #f2e7fe;
   transition: 350ms;
-  background-color: $primaryBg;
+  background-color: #0049bed5;
   box-shadow: $lightShadow;
   .fa {
     color: #f2e7fe;

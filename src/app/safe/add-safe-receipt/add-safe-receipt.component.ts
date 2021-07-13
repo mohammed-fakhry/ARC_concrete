@@ -462,6 +462,7 @@ export class AddSafeReceiptComponent implements OnInit {
     else {
       this.privateLoadingBar = false;
       this.concreteReciptCash_btn = 'يجب ربط الايصال بالموقف المالى للعميل';
+      this.concreteReceiptCash = new ConcreteRecieptCash()
     }
   }
 
@@ -914,6 +915,10 @@ export class AddSafeReceiptComponent implements OnInit {
     if (this.id)
       this._safeService.deleteSafeReciept(parseInt(this.id)).subscribe(() => {
         this._glopal.loading = false;
+        if (this.concreteReceiptCash.id)
+          this._concrete
+            .deleteConcreteCash(this.concreteReceiptCash.id)
+            .subscribe();
         this._location.back();
       });
   }

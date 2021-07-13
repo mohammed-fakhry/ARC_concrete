@@ -228,7 +228,8 @@
 
         <ng-container matColumnDef="customerDiscound">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>خ.عميل</th>
-          <td mat-cell *matCellDef="let row" [class.dangerBadge]="row.customerDiscound > 0">
+          <td mat-cell *matCellDef="let row"
+            [ngClass]="row.customerDiscound > 0 ? 'dangerBadge' : row.customerDiscound != 0 ? 'darkBadge' : ''">
             {{row.customerDiscound}}
             <!-- <input type="number" class="form-control noHover textDanger" [(ngModel)]="row.customerDiscound"> -->
           </td>
@@ -265,7 +266,8 @@
 
         <ng-container matColumnDef="recordRow">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>حفظ</th>
-          <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2" (click)="recordRow(row, i)">
+          <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2" [class.darkBadge]="row.id"
+            (click)="recordRow(row, i)">
             {{row.id ? 'تعديل' : 'تسجيل'}}
           </td>
         </ng-container>

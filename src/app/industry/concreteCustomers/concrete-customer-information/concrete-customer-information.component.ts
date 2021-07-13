@@ -180,6 +180,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       const newData = {
         id: i + 2,
         date_time: data[i].date_time.replace('T', ' '),
+        concretereceiptcash_id: data[i].concretereceiptcash_id,
         receiptSerial: `${isReceipt ? 'ايصال' : 'فاتورة'} ${
           data[i].receiptSerial
         }${data[i].customerProject ? ' | ' + data[i].customerProject : ''}`,
@@ -408,6 +409,11 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this.searchDate = { from: '', to: '' };
 
       this.cementUses = this.makeCementAcc(this.tempCementUses);
+    } else if (cond == 'noId') {
+      this.isFiltered = true
+      const tempArr = this.accArr.filter((a) => a.concretereceiptcash_id == 'noId').reverse()
+      this.fillListData(tempArr)
+      this.searchDate = { from: '', to: '' };
     }
   }
 }

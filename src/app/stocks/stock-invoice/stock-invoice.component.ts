@@ -287,8 +287,8 @@ export class StockInvoiceComponent implements OnInit {
           } else {
             this.invoiceCond = 'فاتورة جديدة';
             if (this.transactionTypeDom) this.transactionTypeDom.focus();
-            this._glopal.loading = false;
           }
+          this._glopal.loading = false;
           // to filterCustomers Arr
           this.stockNameChanged();
         }
@@ -299,7 +299,7 @@ export class StockInvoiceComponent implements OnInit {
       })
       .then(() => {
         this._mainService.handleTableHeight();
-        this._glopal.loading = false;
+        // this._glopal.loading = false;
       });
   }
 
@@ -352,7 +352,6 @@ export class StockInvoiceComponent implements OnInit {
     Promise.all([this.getStockTransAction(), this.getStockTranseDetail()]).then(
       (data: any[]) => {
         if (data[0].length > 0) {
-          console.log(data);
           this.fillToEdit(data);
           // to filterCustomers Arr
           this.stockNameChanged();
@@ -600,7 +599,7 @@ export class StockInvoiceComponent implements OnInit {
       this.stockInvoice.transactionType === 'فاتورة بيع' ||
       this.stockInvoice.transactionType === 'اذن نقل'
     ) {
-      this._glopal.loading = true;
+      if (!this._glopal.loading) this._glopal.loading = true;
       this.productLastSoldPrice(`${this.stockInvoice.stockId}`).then(
         (data: any) => {
           this.productsList = this.productListFactory(data, this.allProducts);
@@ -1293,7 +1292,7 @@ export class StockInvoiceComponent implements OnInit {
           duration: 2500,
         });
         this._glopal.loading = false;
-        this._mainService.PlayDrumFail()
+        this._mainService.PlayDrumFail();
       }
     } else {
       this.recordStockTransAction().then((data: any) => {
@@ -1356,7 +1355,7 @@ export class StockInvoiceComponent implements OnInit {
     // check if form Valid
     if (!stockInvoiceForm.valid || !this.isFormValid(stockInvoiceForm)) {
       this.inputValid.formValid = false;
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
       return;
     } else {
       if (this._router.url === '/CaherReceipt') {
