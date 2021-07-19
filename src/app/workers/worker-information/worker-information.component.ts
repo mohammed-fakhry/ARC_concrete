@@ -80,6 +80,9 @@ export class WorkerInformationComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activeRoute.snapshot.paramMap.get('id');
+    window.addEventListener('resize', () => {
+      this._mainService.handleTableHeight();
+    });
     this.onStart();
   }
 
@@ -226,13 +229,35 @@ export class WorkerInformationComponent implements OnInit {
     });
   };
 
-  calcRemainSalary() {
+  calcRemainSalary(addSalaryForm?: NgForm, calcFor?: string) {
     const daySalary = this.worker.workerSalary / 30;
     const netDaysWorks =
       this.workedDayes.workedDayes + this.workedDayes.overDayes;
 
     this.workedDayes.remainSalary =
       netDaysWorks * daySalary - this.workedDayes.discoundDayes;
+
+    if (addSalaryForm && calcFor) {
+      this.check_workedDayes_Valid(addSalaryForm, calcFor);
+    }
+  }
+
+  workedDaysValid: boolean = false;
+
+  check_workedDayes_Valid(addSalaryForm: NgForm, calcFor: string) {
+    if (this.workedDayes.workedDayes > 30 && calcFor == 'workedDayes') {
+      addSalaryForm.form.controls[`workedDayes`].setErrors({
+        incorrect: true,
+      });
+      this._mainService.playshortFail();
+    } else if (this.workedDayes.overDayes > 30 && calcFor == 'overDayes') {
+      addSalaryForm.form.controls[`overDayes`].setErrors({
+        incorrect: true,
+      });
+      this._mainService.playshortFail();
+    } else {
+      addSalaryForm.form.controls[`${calcFor}`].setErrors(null);
+    }
   }
 
   receiptForDiscound(result: SafeReceipt): SafeReceipt {

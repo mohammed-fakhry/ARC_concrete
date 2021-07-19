@@ -667,8 +667,6 @@ export class AddConcreteReceiptComponent implements OnInit {
     }
 
     this.discoundsArry.sort((a, b) => a.discVal - b.discVal);
-
-    // console.log(filtered);
   }
 
   calcInvoiceTotal() {
@@ -951,7 +949,6 @@ export class AddConcreteReceiptComponent implements OnInit {
               parseInt(this.concreteReceipt.stockTransaction.stockTransactionId)
             )
             .subscribe(() => {
-              console.log('stockDone');
               this.deleteReceipts();
             });
       });

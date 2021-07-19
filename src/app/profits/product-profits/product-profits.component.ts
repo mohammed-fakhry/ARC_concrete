@@ -143,7 +143,6 @@ export class ProductProfitsComponent implements OnInit {
 
   makeProductsList(productsList: ProductsAvg[]) {
 
-    console.log(this.productsList)
     for (let i = 0; i < productsList.length; i++) {
       if (productsList[i].priceInAVG == 0) {
         let found = this.productPricesList.find(

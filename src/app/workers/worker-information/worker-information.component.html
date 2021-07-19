@@ -18,7 +18,8 @@
             <mat-list-item role="listitem">الوظيفة | {{worker.workerJop}}</mat-list-item>
             <!-- <mat-list-item role="listitem">تاريخ التوظيف | {{worker.workerJopDate}}</mat-list-item> -->
             <mat-list-item role="listitem" class="lightBg">
-              الراتب الشهرى | {{worker.workerSalary}} <span class="textPrimary pr-2"> | {{(worker.workerSalary / 30) | number: '1.0-2'}}</span>
+              الراتب الشهرى | {{worker.workerSalary}} <span class="textPrimary pr-2"> | {{(worker.workerSalary / 30) |
+                number: '1.0-2'}}</span>
             </mat-list-item>
             <!-- <mat-divider></mat-divider>
               <mat-list-item role="listitem">رقم البصمة | {{worker.workerFbCode}}</mat-list-item>
@@ -38,9 +39,9 @@
 
       <!--  -->
       <div *ngIf="showCalcSalary" class="box boxShadow p-2 mt-3">
-        <div class="cardHeader mb-3">حساب الراتب</div>
+        <div class="cardHeader mb-3">حساب ايام العمل</div>
 
-        <form (ngSubmit)="submitSalary(addSalaryForm)" #addSalaryForm="ngForm">
+        <form (ngSubmit)="submitSalary(addSalaryForm)" #addSalaryForm="ngForm" id="addSalaryForm">
           <table class="w-100">
             <tr>
               <td>
@@ -53,7 +54,11 @@
               <td>
                 <mat-form-field class="w-100 textPrimary">
                   <input type="number" required matInput placeholder="ايام العمل" name="workedDayes"
-                    [(ngModel)]="workedDayes.workedDayes" (ngModelChange)="calcRemainSalary()">
+                    [(ngModel)]="workedDayes.workedDayes"
+                    (ngModelChange)="calcRemainSalary(addSalaryForm,'workedDayes')">
+                  <mat-error>
+                    يجب ادخال عدد صالح
+                  </mat-error>
                 </mat-form-field>
               </td>
             </tr>
@@ -62,7 +67,10 @@
               <td>
                 <mat-form-field class="w-100 textDark">
                   <input type="number" required matInput placeholder="ايام الاضافى" name="overDayes"
-                    [(ngModel)]="workedDayes.overDayes" (ngModelChange)="calcRemainSalary()">
+                    [(ngModel)]="workedDayes.overDayes" (ngModelChange)="calcRemainSalary(addSalaryForm,'overDayes')">
+                    <mat-error>
+                      يجب ادخال عدد صالح
+                    </mat-error>
                 </mat-form-field>
               </td>
 
@@ -84,7 +92,7 @@
           </table>
 
           <div class="form-inline">
-            <button mat-flat-button color="primary" type="submit">ترحيل</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="!addSalaryForm.valid">ترحيل</button>
             <button *ngIf="workedDayes.id" mat-stroked-button color="warn" type="button" class="mr-2"
               (click)="openDelDialog()">
               حذف

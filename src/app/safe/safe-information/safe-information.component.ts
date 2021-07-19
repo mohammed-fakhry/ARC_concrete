@@ -58,6 +58,12 @@ export class SafeInformationComponent implements OnInit {
 
   isFiltered: boolean = false;
 
+  headerTotals: { openedVal: number; income: number; outcome: number } = {
+    openedVal: 0,
+    income: 0,
+    outcome: 0,
+  };
+
   constructor(
     public _mainService: MainService,
     public activeRoute: ActivatedRoute,
@@ -242,6 +248,7 @@ export class SafeInformationComponent implements OnInit {
     this.listData.paginator = this.paginator;
     // this.searchResults(pureData);
     this.tempAccArry = pureData;
+    this.setHeaderTotals(data.reverse());
   };
 
   search() {
@@ -279,6 +286,41 @@ export class SafeInformationComponent implements OnInit {
       this.isFiltered = false;
       this.fillListData(this.accArr);
       this.searchDate = { from: '', to: '' };
+    }
+
+    setTimeout(() => {
+      this.setlogoHeight();
+    }, 50);
+  }
+
+  setlogoHeight() {
+    const safeInfoHeader = document.querySelector(
+      '#safeInfoHeader'
+    ) as HTMLElement;
+    const safeInfoLogo = document.querySelector('#safeInfoLogo') as HTMLElement;
+    if (safeInfoHeader && safeInfoLogo)
+      safeInfoLogo.style.maxHeight = `${safeInfoHeader.offsetHeight}px`;
+    this._mainService.play_sweepTransition();
+  }
+
+  setHeaderTotals(accArr: any) {
+    if (accArr.length > 0) {
+      this.headerTotals.openedVal =
+        accArr[0].balance + accArr[0].addVal - accArr[0].minVal;
+
+      this.headerTotals.income = accArr
+        .map((a: any) => a.minVal)
+        .reduce((a: any, b: any) => a + b, 0);
+
+      this.headerTotals.outcome = accArr
+        .map((a: any) => a.addVal)
+        .reduce((a: any, b: any) => a + b, 0);
+    } else {
+      this.headerTotals = {
+        openedVal: 0,
+        income: 0,
+        outcome: 0,
+      };
     }
   }
 

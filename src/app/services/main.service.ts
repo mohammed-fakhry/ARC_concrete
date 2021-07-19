@@ -153,7 +153,7 @@ export class MainService {
     this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
       duration: 2500,
     });
-    this.PlayDrumFail()
+    this.playDrumFail()
     return false;
   };
 
@@ -265,7 +265,6 @@ export class MainService {
     aNum = ('000000000' + newNum)
       .substr(-9)
       .match(/^(\d{2})(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
-    //console.log('aNum : ' + aNum)
     if (!aNum) return;
     let strA = '';
     strA +=
@@ -286,7 +285,6 @@ export class MainService {
           (aNum[4] == 0 ? 'الف ' : '')
         : '';
 
-    //console.log(two[aNum[4][0]])
     strA +=
       aNum[4] != 0
         ? (aNum[3] != 0 && one[aNum[4][1]] != ''
@@ -379,15 +377,15 @@ export class MainService {
     if (intro) intro.play();
   }
 
-  PlayDrumFail() {
+  playDrumFail() {
     const drumFail = document.getElementById('drumFail') as HTMLAudioElement;
     if (drumFail) drumFail.play();
   }
 
   // sci_click
-  Play_sci_click() {
-    const sci_click = document.getElementById('sci_click') as HTMLAudioElement;
-    if (sci_click) sci_click.play();
+  play_sweepTransition() {
+    const sweepTransition = document.getElementById('sweepTransition') as HTMLAudioElement;
+    if (sweepTransition) sweepTransition.play();
   }
 
 }

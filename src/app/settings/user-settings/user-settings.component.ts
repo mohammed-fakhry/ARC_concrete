@@ -69,7 +69,6 @@ export class UserSettingsComponent implements OnInit {
         this.submitBtn = { val: 'تعديل' };
         this.user = data[0];
 
-        console.log(data[0])
         this.reAuth = null;
         this.user.auth = null;
         this._glopal.loading = false;

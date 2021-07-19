@@ -101,8 +101,6 @@ export class TryDevComponent implements OnInit {
         this._mainService.handleTableHeight();
       }
     }
-
-    //console.log(this.dataList);
   }
 
   generatePerson = (): { name: string; amount: number; checked: boolean }[] => {

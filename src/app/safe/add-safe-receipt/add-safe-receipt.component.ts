@@ -216,7 +216,6 @@ export class AddSafeReceiptComponent implements OnInit {
 
               if (this.safeReciept.transactionAccKind == 'عميل خرسانة')
                 this.checkforConcreteReceipt();
-              //console.log({ oldData: this.oldReciept, data: data[0] });
             }
             this._glopal.loading = false;
           });
@@ -811,8 +810,6 @@ export class AddSafeReceiptComponent implements OnInit {
   workerNameChanged(addSafeReciept: NgForm) {
     const workerInfo = this.findWorker_byName(this.safeReciept.workerName);
 
-    console.log(workerInfo);
-
     if (!workerInfo) {
       this.inputValid.workerName = {
         cond: false,
@@ -1137,8 +1134,6 @@ export class AddSafeReceiptComponent implements OnInit {
         }
       });
     }
-
-    console.log(this.concreteReceiptCash);
   };
 
   recieptData_forDb(receipt: SafeReceipt): SafeReceipt {

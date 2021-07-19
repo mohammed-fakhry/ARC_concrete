@@ -39,12 +39,12 @@
     </div>
 
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
-      <div class="box py-2 px-3 headerBox">
-        <div class="dangerBadge borderLdanger p-3 text-center">
+      <div class="box p-2 headerBox textBold">
+        <div class="dangerBadge p-2 mb-2  text-center">
           اجمالى دائن | {{totals.onUs | number: '1.0-2'}}
         </div>
 
-        <div class="greenBadge borderLgreen p-3 mt-3 text-center">
+        <div class="greenBadge p-2  text-center">
           اجمالى مدين | {{totals.toUs | number: '1.0-2'}}
         </div>
 

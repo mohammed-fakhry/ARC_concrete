@@ -181,7 +181,6 @@ export class AddtruckOrderComponent implements OnInit {
     if (this.truckOrder.loadingType != 'متر') {
       this.truckOrder.truckCapacity = 1;
     }
-    //console.log(this.truckOrder.loadingType);
   }
 
   recordTruckOrder() {

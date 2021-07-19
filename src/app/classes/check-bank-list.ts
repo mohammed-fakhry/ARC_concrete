@@ -180,15 +180,6 @@ export class CheckBankList {
     const tomorrowDate = new Date(todayDate.setDate(this.today.getDate() + 1));
     const tomorrow = this.dateToStr(tomorrowDate);
 
-    /* console.log({
-      timing: timing,
-      new: newDate,
-      today: todayStr,
-      tomorrow: tomorrow,
-      checkDate: checkDate,
-      tomoDate: tomorrowDate,
-    }); */
-
     if (timing === 'شيكات تم تحصيلها') return true;
     if (timing === 'شيكات اليوم' && newDate === todayStr) return true;
     if (timing === 'شيكات غداً' && tomorrow === newDate) return true;

@@ -129,7 +129,6 @@ export class AddCheckComponent implements OnInit {
         this.bankCheck.date = newDate;
         this.bankCheck.checkNumber = `${parseInt(this.bankCheck.checkNumber) + 1}`
       }
-      //console.log(this.bankCheck.date);
       this._checkService.postBankCheck(this.bankCheck).subscribe(
         () => {
           if (i === this.checkCounts - 1) this.passDialog();

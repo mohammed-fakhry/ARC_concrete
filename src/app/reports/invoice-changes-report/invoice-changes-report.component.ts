@@ -66,7 +66,6 @@ export class InvoiceChangesReportComponent implements OnInit {
         this.fillListData(data);
         this._mainService.handleTableHeight();
         this._glopal.loading = false;
-        // console.log(this.changedIvoices)
       })
       .then(() => {
         const searchFor = this.activeRoute.snapshot.paramMap.get('searchFor');

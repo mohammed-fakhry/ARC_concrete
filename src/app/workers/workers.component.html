@@ -2,9 +2,8 @@
   <div class="row">
 
     <div class="col-lg-3 col-md-12">
-      <img class="sideLogo printX" src="assets/logos/employee.png" alt="">
 
-      <div class="box p-3 boxShadow mt-3">
+      <div class="box p-3 boxShadow stickyBox">
 
         <div *ngIf="searchDate.from && searchDate.to" class="inforCard lightBg text-center p-2 mb-2">
           <span>من تاريخ | {{searchDate.from}}</span>
@@ -31,10 +30,38 @@
         </div>
 
       </div>
+
+      <img class="sideLogo printX mt-2" src="assets/logos/employee.png" alt="">
+
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title >تفاصيل رواتب المدة</mat-card-title>
+          <mat-card-subtitle>حساب قيمة ايام العمل</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="secondaryBadge borderLsecondary p-2 text-center textBold">
+            اجمالى رواتب | {{salaryTotals.workedDays | number: '1.0-2'}}
+          </div>
+
+          <div class="greenBadge borderLgreen p-2 text-center textBold">
+            اجمالى اضافى | {{salaryTotals.overDayes | number: '1.0-2'}}
+          </div>
+
+          <div class="dangerBadge borderLdanger p-2 text-center textBold mt-2">
+            اجمالى خصومات | {{salaryTotals.discounds | number: '1.0-2'}}
+          </div>
+
+          <div class="text-center textBolder mt-2" style="font-size: large;">
+            صافى | {{(salaryTotals.workedDays + salaryTotals.overDayes - salaryTotals.discounds) | number: '1.0-2'}}
+          </div>
+        </mat-card-content>
+      </mat-card>
+
     </div>
 
     <div class="col-lg-9 col-md-12">
-      <div class="box">
+      <div class="box stickyBox">
         <div class="mat-elevation-z0 mt-3">
           <div class="d-flex justify-content-between px-3">
             <div class="form-inline printX">
@@ -56,7 +83,7 @@
             </div>
 
             <div class="my-auto">
-              <button mat-stroked-button color="primary" routerLink="/OtherAccInformation/workerId">تفاصيل
+              <button mat-stroked-button color="warn" routerLink="/OtherAccInformation/workerId">تفاصيل
                 المصاريف</button>
               <button mat-stroked-button color="accent" class="mx-1" (click)="printDocument()"><i
                   class="fa fa-print"></i></button>

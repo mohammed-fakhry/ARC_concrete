@@ -184,12 +184,6 @@ export class CheckListComponent implements OnInit {
       };
     }
 
-    /* console.log(
-      this.mainList[i].checkDetail.listData.onUs.data.filter((d: BankCheck) =>
-        d.payFor.includes(this.mainList[i].searchTxt.onUs)
-      ).length
-    ); */
-
     if (checkType === 'toUs') {
       this.mainList[i].checkDetail.listData.toUs.filter =
         this.mainList[i].searchTxt.toUs;

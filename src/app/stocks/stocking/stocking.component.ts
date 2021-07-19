@@ -215,7 +215,6 @@ export class StockingComponent implements OnInit {
         }
         setTimeout(() => {
           this._mainService.handleTableHeight();
-          console.log(this.stokesReport);
         }, 100);
 
         // close the side barInputs if its an old stocking

@@ -130,7 +130,6 @@ export class CustomersListComponent implements OnInit {
       this.fillListData(this.customerList);
       this.counts = this.generateCustomerCounts(this.customerList);
 
-      console.log(this.counts);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });

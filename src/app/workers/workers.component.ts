@@ -96,11 +96,59 @@ export class WorkersComponent implements OnInit {
 
     this.getWorkersPromise(dateFrom, dateTo).then((data: any) => {
       this.fillListData(data);
-      console.log(dateFrom);
       this.counts = this.generateCounts(data);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
+  }
+
+  salaryTotals: {
+    workedDays: number;
+    overDayes: number;
+    discounds: number;
+    payLater: 0;
+  } = {
+    workedDays: 0,
+    overDayes: 0,
+    discounds: 0,
+    payLater: 0,
+  };
+
+  setSalaryTotals(data: any) {
+    /*
+    cashReceived: 1450
+    discoundDayes: 0.44
+    lastWorked_date: "2021-07-07T15:02"
+    overDayes: 0.04
+    payLater: 0
+    workedDayes: 6
+    workerCheckIN: ""
+    workerCheckOut: ""
+    workerCurrentVal: 0
+    workerFbCode: ""
+    workerId: "13"
+    workerJop: "سائق وتباع حفار1"
+    workerJopCateg: "المعدات"
+    workerJopDate: ""
+    workerName: "نصر الدين شبانه انور"
+    workerSalary: "7200"
+    workerYearVacation: ""
+    */
+
+    this.salaryTotals = {
+      workedDays: data
+        .map((d: any) => d.workedDayes * (d.workerSalary / 30))
+        .reduce((a: any, b: any) => a + b, 0),
+      overDayes: data
+        .map((d: any) => d.overDayes * (d.workerSalary / 30))
+        .reduce((a: any, b: any) => a + b, 0),
+      discounds: data
+        .map((d: any) => d.discoundDayes)
+        .reduce((a: any, b: any) => a + b, 0),
+      payLater: data
+        .map((d: any) => d.payLater)
+        .reduce((a: any, b: any) => a + b, 0),
+    };
   }
 
   resetSearchByDate(cond: boolean) {
@@ -126,6 +174,7 @@ export class WorkersComponent implements OnInit {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
+    this.setSalaryTotals(data);
   };
 
   openFilterDialog = (data: any) => {

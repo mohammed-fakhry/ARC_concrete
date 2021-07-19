@@ -226,46 +226,7 @@ export class InvoicesReportComponent implements OnInit {
 
         const truckInfo = trucks.find((truck) => truck.id == acc.truckId);
 
-        // console.log(truckInfo)
-        /*
-        Qty: 1100
-        customerId: "103"
-        customerName: "كساره الفهد"
-        date_time: "2022-06-15 07:30"
-        discound: 0
-        madeBy: "فخري"
-        notes: "  "
-        price: 65
-        productId: "2"
-        productName: "سن 1"
-        productUnit: 1
-        stockName: "المخزن الرئيسى"
-        stockTransactionDetailsId: "2251"
-        stockTransactionId: "1195"
-        total: 71500
-        transactionType: "فاتورة شراء ( 1195 )"
-        truckId: "19"
-        uncompleted: ""
-        */
-
-        /*
-        1	orderIdPrimary
-        2	truckId
-        3	orderType
-        4	loadingType
-        5	truckCustomerId
-        6	LoadTimes
-        7	price
-        8	date_time
-        9	notes
-        10	stockTransactionDetailsId
-        11	madeBy
-
-
-        */
-
         if (truckInfo) {
-
 
           if (
             acc.transactionType.includes('فاتورة بيع') &&
@@ -295,10 +256,6 @@ export class InvoicesReportComponent implements OnInit {
               madeBy: acc.madeBy,
             };
 
-            console.log(truckOrder)
-
-            // console.log({ i: i, length: dataArr.length - 1 });
-
             this._truckService
               .updateTruckOrder(truckOrder, 'transId')
               .subscribe();
@@ -307,30 +264,7 @@ export class InvoicesReportComponent implements OnInit {
       }
     });
 
-    // console.log(this.accArr.filter((d: any) => d.customerName == 'محجر م.اسماعيل عبدالعاطي'));
   }
-
-  /* calcUnits(
-    qty: number,
-    productUnit: number,
-    unitPrice: number
-  ): { netQty: string; backetPrice: number } {
-    const qtyFloat = `${qty / productUnit}`;
-    let dot = qtyFloat.indexOf('.');
-
-    const seperate = {
-      // backet: dot > 0 ? parseInt(qtyFloat.slice(0, dot)) : qty / productUnit,
-      netQty:
-        dot > 0
-          ? `${parseFloat(qtyFloat.slice(0, dot))}.${Math.round(
-              parseFloat(qtyFloat.slice(dot, qtyFloat.length)) * productUnit
-            )}`
-          : `${qty / productUnit}`,
-      backetPrice: unitPrice * productUnit,
-    };
-
-    return seperate;
-  } */
 
   getInvoicesReport() {
     return new Promise((res) => {
@@ -404,6 +338,5 @@ export class InvoicesReportComponent implements OnInit {
       this._router.navigate([
         `/invoiceReport/productTransaction/${productId}/${this.url.id}`,
       ]);
-    else console.log(this.url);
   }
 }

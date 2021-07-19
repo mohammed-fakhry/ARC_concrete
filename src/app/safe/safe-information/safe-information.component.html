@@ -2,7 +2,7 @@
 
   <div class="row stickyBox">
     <div class="col-lg-4 col-md-6 mb-3 stickyBox">
-      <mat-card class="box headerBox">
+      <mat-card class="box" id="safeInfoHeader">
         <mat-card-header>
           <div mat-card-avatar class="ml-4">
             <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;"
@@ -19,35 +19,46 @@
             </h3>
           </mat-card-subtitle>
         </mat-card-header>
+        <mat-card-content>
+          <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+
+            <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+              <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+              <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+            </tr>
+
+            <tr *ngIf="headerTotals.openedVal != 0" class="darkBadge borderLdark">
+              <th class="p-2">رصيد اول</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.openedVal | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr class="secondaryBadge borderLsecondary">
+              <th class="p-2">وارد</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
+              <th class="p-2">اجمالى</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.income + headerTotals.openedVal | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
+
+            <tr class="dangerBadge borderLdanger">
+              <th class="p-2">منصرف</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
+            </tr>
+          </table>
+        </mat-card-content>
       </mat-card>
     </div>
 
-    <!-- <div class="col-xl-4 col-lg-6 mb-3">
-      <div>
-        <div class="panel-body panel-flex-table standTable">
-          <table class="flex-table table table-hover">
-            <thead class="textSecondaryBg textSecondary">
-              <tr>
-                <th style="flex: 2;">بحث عن</th>
-                <th>دائن</th>
-                <th>مدين</th>
-                <th>صافى</th>
-              </tr>
-            </thead>
-            <tbody class="tableBody">
-              <tr>
-                <td style="flex: 2;" [class.marked]="searchTxt">{{searchTxt ? searchTxt : 'الكل'}}</td>
-                <td class="textDanger">{{searchResult.onUs | number:'1.0-2'}}</td>
-                <td>{{searchResult.toUs | number:'1.0-2'}}</td>
-                <td class="textSecondaryBg textBold" [class.textDanger]="(searchResult.onUs - searchResult.toUs) < 0">
-                  {{(searchResult.onUs - searchResult.toUs) | number:'1.0-2'}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div> -->
+    <div class="col-lg-4 col-md-hide mb-3 stickyBox">
+      <img class="sideLogo" src="assets/logos/safeLogo.gif" id="safeInfoLogo">
+    </div>
   </div>
 
 
@@ -70,16 +81,6 @@
           </div>
         </div>
 
-        <div *ngIf="searchDate.from" class="my-auto">
-          <span class="px-3">من تاريخ | {{searchDate.from}}</span>
-          <span class="px-3">الى تاريخ | {{searchDate.to}}</span>
-        </div>
-
-        <!--  <div class="my-auto">
-                  <h3 class="textBold textPrimary ml-2 my-auto" [class.textDanger]="safeInfo.currentSafeVal < 0">رصيد الخزنة
-                      |
-                      {{safeInfo?.currentSafeVal | number:'1.0-2'}}</h3>
-              </div> -->
         <div class="my-auto">
           <button *ngIf="marked" mat-raised-button class="textBold"
             [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
@@ -128,8 +129,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
             <td mat-cell *matCellDef="let row" [class.textDanger]="row.receiptKind.includes('صرف')"
               class="textBtn tBtn-dark pl-2" [routerLink]="row.routeTo"
-              [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt"
-              matTooltip="{{row.toolTip}}" matTooltipPosition="before" matTooltipClass="secondaryBg">
+              [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt" matTooltip="{{row.toolTip}}"
+              matTooltipPosition="before" matTooltipClass="secondaryBg">
               {{row.receiptDetail}}</td>
           </ng-container>
 
