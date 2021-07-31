@@ -78,12 +78,19 @@ export class InvoicesReportComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
 
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('invoiceReport')
       ) {
         setTimeout(() => this.onStart(), 0);
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('invoiceReport')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
     setTimeout(() => this.onStart(), 0);
@@ -227,7 +234,6 @@ export class InvoicesReportComponent implements OnInit {
         const truckInfo = trucks.find((truck) => truck.id == acc.truckId);
 
         if (truckInfo) {
-
           if (
             acc.transactionType.includes('فاتورة بيع') &&
             acc.productName.includes('رمل') &&
@@ -263,7 +269,6 @@ export class InvoicesReportComponent implements OnInit {
         }
       }
     });
-
   }
 
   getInvoicesReport() {

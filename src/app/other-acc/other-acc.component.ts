@@ -97,9 +97,9 @@ export class OtherAccComponent implements OnInit {
 
   updateChart(data: OtherAcc[]) {
     this.PieChart.data.datasets[0].data = data.map((sub) => sub.currentAccVal);
-    this.PieChart.data.labels = data.map((sub) => sub.AccName)
+    this.PieChart.data.labels = data.map((sub) => sub.AccName);
 
-    this.PieChart.update()
+    this.PieChart.update();
   }
 
   getOtherAcc(): Promise<OtherAcc[]> {
@@ -132,8 +132,13 @@ export class OtherAccComponent implements OnInit {
     let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== 'cancel')
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
         this.filterByDate(result.fromDate, result.toDate);
+      }
     });
   };
 
@@ -143,14 +148,13 @@ export class OtherAccComponent implements OnInit {
       this.getOtherAccByDate(from, to).then((data: OtherAcc[]) => {
         this.otherAcc = data;
         this.fillListData(data);
-        this.updateChart(
-          data.filter((acc: OtherAcc) => acc.currentAccVal > 0)
-        );
+        this.updateChart(data.filter((acc: OtherAcc) => acc.currentAccVal > 0));
         this._mainService.handleTableHeight();
         this._glopal.loading = false;
         this.isFiltered = true;
       });
     } else {
+      this.searchDate = { from: '', to: '' };
       this.onStart();
       this.isFiltered = false;
     }
@@ -158,10 +162,7 @@ export class OtherAccComponent implements OnInit {
 
   printDocument() {
     let search = this.searchTxt ? this.searchTxt : '';
-    let printAcc = this.otherAcc.filter(
-      (acc) =>
-        acc.currentAccVal > 0
-    );
+    let printAcc = this.otherAcc.filter((acc) => acc.currentAccVal > 0);
     this.fillListData(printAcc);
     setTimeout(() => window.print(), 200);
   }

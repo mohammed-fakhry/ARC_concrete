@@ -9,6 +9,7 @@ import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { SafeService } from 'src/app/services/safe.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
+import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
 
 @Component({
   selector: 'app-safe-information',
@@ -58,11 +59,7 @@ export class SafeInformationComponent implements OnInit {
 
   isFiltered: boolean = false;
 
-  headerTotals: { openedVal: number; income: number; outcome: number } = {
-    openedVal: 0,
-    income: 0,
-    outcome: 0,
-  };
+  headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
   constructor(
     public _mainService: MainService,
@@ -287,10 +284,6 @@ export class SafeInformationComponent implements OnInit {
       this.fillListData(this.accArr);
       this.searchDate = { from: '', to: '' };
     }
-
-    setTimeout(() => {
-      this.setlogoHeight();
-    }, 50);
   }
 
   setlogoHeight() {
@@ -300,21 +293,28 @@ export class SafeInformationComponent implements OnInit {
     const safeInfoLogo = document.querySelector('#safeInfoLogo') as HTMLElement;
     if (safeInfoHeader && safeInfoLogo)
       safeInfoLogo.style.maxHeight = `${safeInfoHeader.offsetHeight}px`;
-    this._mainService.play_sweepTransition();
+    //this._mainService.play_sweepTransition();
   }
 
   setHeaderTotals(accArr: any) {
     if (accArr.length > 0) {
       this.headerTotals.openedVal =
-        accArr[0].balance + accArr[0].addVal - accArr[0].minVal;
+        accArr[0].balance +
+        (accArr[0].receiptKind == 'رصيد اول'
+          ? 0
+          : accArr[0].addVal - accArr[0].minVal);
 
-      this.headerTotals.income = accArr
-        .map((a: any) => a.minVal)
-        .reduce((a: any, b: any) => a + b, 0);
+      const filteredAcc = accArr.filter(
+        (acc: any) => acc.receiptKind != 'رصيد اول'
+      );
 
-      this.headerTotals.outcome = accArr
-        .map((a: any) => a.addVal)
-        .reduce((a: any, b: any) => a + b, 0);
+      this.headerTotals.income = filteredAcc
+        //.map((a: any) => a.minVal)
+        .reduce((a: any, b: any) => a + b.minVal, 0);
+
+      this.headerTotals.outcome = filteredAcc
+        //.map((a: any) => a.addVal)
+        .reduce((a: any, b: any) => a + b.addVal, 0);
     } else {
       this.headerTotals = {
         openedVal: 0,
@@ -322,6 +322,10 @@ export class SafeInformationComponent implements OnInit {
         outcome: 0,
       };
     }
+
+    setTimeout(() => {
+      this.setlogoHeight();
+    }, 50);
   }
 
   toReceipt(id: string, receiptKind: string) {

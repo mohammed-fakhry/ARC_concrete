@@ -10,6 +10,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Truck } from 'src/app/classes/truck';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
+import { SafeReceipt } from 'src/app/classes/safe-receipt';
+import { AddDiscoundDialogComponent } from 'src/app/dialogs/add-discound-dialog/add-discound-dialog.component';
+import { SafeService } from 'src/app/services/safe.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-truck-customer-information',
@@ -95,16 +101,6 @@ export class TruckCustomerInformationComponent implements OnInit {
     hourly: 0,
   };
 
-  /*
-  id: i + 2,
-  receiptId: data[i].receiptId,
-  receiptDetail: data[i].receiptDetail,
-  minVal: minVal,
-  addVal: addVal,
-  balance: balance,
-  date_time: data[i].date_time,
-  note: data[i].note,
-  */
   displayedColumns: string[] = [
     'id',
     'date_time',
@@ -131,7 +127,7 @@ export class TruckCustomerInformationComponent implements OnInit {
     total: number;
   } = { arr: [], total: 0 };
 
-  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
+  headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
   marked: boolean = false;
   markColor: string = '';
@@ -149,6 +145,9 @@ export class TruckCustomerInformationComponent implements OnInit {
     public _glopal: GlobalVarsService,
     public _truckService: TruckService,
     public _router: Router,
+    public _safeService: SafeService,
+    public _snackBar: MatSnackBar,
+    public _auth: AuthService,
     public activeRoute: ActivatedRoute,
     public _dialog: MatDialog
   ) {
@@ -419,8 +418,6 @@ export class TruckCustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
-    this.totals = {onUs: 0, toUs: 0}
-
     for (let i = 0; i < data.length; i++) {
       const minVal = data[i].receiptDetail.includes('ايصال استلام نقدية')
         ? data[i].totalVal
@@ -442,13 +439,11 @@ export class TruckCustomerInformationComponent implements OnInit {
         addVal: addVal,
         balance: balance,
         date_time: data[i].date_time,
+        date: data[i].date_time.replace(' ', 'T'),
         note: data[i].note,
       };
 
       this.accArr = [...this.accArr, newData];
-
-      this.totals.onUs = this.totals.onUs + minVal
-      this.totals.toUs = this.totals.toUs + addVal
     }
 
     return this.accArr;
@@ -485,9 +480,32 @@ export class TruckCustomerInformationComponent implements OnInit {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
-    // this.searchResults(pureData);
-    // this.tempAccArry = pureData;
+    this.setHeaderTotals(data.reverse());
   };
+
+  setHeaderTotals(accArr: any) {
+    if (accArr.length > 0) {
+      this.headerTotals.openedVal =
+        accArr[0].balance +
+        (accArr[0].receiptDetail == 'رصيد اول'
+          ? 0
+          : accArr[0].minVal - accArr[0].addVal);
+
+      const filteredAcc = accArr.filter(
+        (acc: any) => acc.receiptDetail != 'رصيد اول'
+      );
+
+      this.headerTotals.income = filteredAcc
+        //.map((a: any) => a.minVal)
+        .reduce((a: any, b: any) => a + b.minVal, 0);
+
+      this.headerTotals.outcome = filteredAcc
+        //.map((a: any) => a.addVal)
+        .reduce((a: any, b: any) => a + b.addVal, 0);
+    } else {
+      this.headerTotals = new AccHeaderTotals();
+    }
+  }
 
   search() {
     if (this.marked) this.clearCalcArr();
@@ -577,6 +595,97 @@ export class TruckCustomerInformationComponent implements OnInit {
     } else {
       window.print();
     }
+  }
+
+  /* main discound button */
+  addDiscound() {
+    const safeReceipt = new SafeReceipt();
+    safeReceipt.concreteCustomer_id = this.customerInfo?.id ?? ''; // parseInt(this.customerInfo?.id ?? '1') ?? 1;
+    safeReceipt.customerName = this.customerInfo.fullName;
+    safeReceipt.receiptKind = 'ايصال استلام نقدية';
+    safeReceipt.recieptNote = `"${this.customerInfo.fullName}"`;
+    safeReceipt.date_time = this._mainService.makeTime_date(
+      new Date(Date.now())
+    );
+    this.openDiscoundDialog(safeReceipt);
+  }
+
+  /* discound when click on a balance */
+  discoundThis(balance: number, date: string) {
+    const safeReceipt = new SafeReceipt();
+    safeReceipt.customerName = this.customerInfo.fullName;
+    safeReceipt.receiptKind =
+      balance > 0 ? 'ايصال استلام نقدية' : 'ايصال صرف نقدية';
+    safeReceipt.receiptVal = balance > 0 ? balance : balance * -1;
+    safeReceipt.date_time = date;
+    safeReceipt.recieptNote = `"${this.customerInfo.fullName}"`;
+    this.openDiscoundDialog(safeReceipt);
+  }
+
+  openSnake(message: string) {
+    this._snackBar.open(message, 'اخفاء', {
+      duration: 2500,
+    });
+  }
+
+  openDiscoundDialog = (data: SafeReceipt) => {
+    let dialogRef = this._dialog.open(AddDiscoundDialogComponent, {
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe((result: SafeReceipt) => {
+      if (result) {
+        for (let i = 0; i < 2; i++) {
+          if (i == 0) {
+            const safeReceipt = this.recieptData_forDb(result, 'عميل معدات');
+            this._safeService.creatSafeReceipt(safeReceipt).subscribe();
+          } else {
+            // reverse receiptKind
+            result.receiptKind =
+              result.receiptKind == 'ايصال صرف نقدية'
+                ? 'ايصال استلام نقدية'
+                : 'ايصال صرف نقدية';
+            // make vals
+            const safeReceipt = this.recieptData_forDb(result, 'حساب');
+            // save vals
+            this._safeService.creatSafeReceipt(safeReceipt).subscribe(() => {
+              this.openSnake('تم اضافة بيانات الخصم');
+              this._mainService.playMouseClickClose();
+              this.onStart();
+            });
+          }
+        }
+      }
+    });
+  };
+
+  recieptData_forDb(
+    receipt: SafeReceipt,
+    transactionAccKind: string
+  ): SafeReceipt {
+    let safeReceipt = new SafeReceipt();
+
+    safeReceipt.date_time = receipt.date_time;
+    safeReceipt.receiptKind = receipt.receiptKind;
+    safeReceipt.safeName = receipt.safeName;
+    safeReceipt.currentSafeVal = receipt.currentSafeVal;
+    safeReceipt.safeId = receipt.safeId;
+    safeReceipt.transactionAccKind = transactionAccKind;
+    safeReceipt.accId = transactionAccKind == 'حساب' ? receipt.accId : 0;
+    safeReceipt.AccName = transactionAccKind == 'حساب' ? receipt.AccName : '';
+    safeReceipt.currentAccVal = receipt.currentAccVal
+      ? receipt.currentAccVal
+      : 0;
+
+    // customer information
+    safeReceipt.truckCustomerId =
+      transactionAccKind == 'عميل معدات' ? this.customerInfo?.id ?? '' : '0';
+    safeReceipt.truckCustomerName =
+      transactionAccKind == 'عميل معدات' ? this.customerInfo.fullName : '';
+    safeReceipt.receiptVal = receipt.receiptVal;
+    safeReceipt.recieptNote = receipt.recieptNote ? receipt.recieptNote : '';
+    safeReceipt.madeBy = this._auth.uName.realName;
+    return safeReceipt;
   }
 
   gotoReceipt(receiptDetail: string, id: string) {

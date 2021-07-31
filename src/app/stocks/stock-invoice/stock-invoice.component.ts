@@ -142,12 +142,19 @@ export class StockInvoiceComponent implements OnInit {
 
     this.onStart();
     //this.html_inputs = document.querySelector('.form-control') as HTMLElement
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('StockInvoice')
       ) {
         this.onStart();
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('StockInvoice')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
 
@@ -364,6 +371,7 @@ export class StockInvoiceComponent implements OnInit {
           );
           if (custFounded) this.custInfo = custFounded;
           if (this.transactionTypeDom) this.transactionTypeDom.focus();
+          this._glopal.loading = false;
         }
       }
     );
@@ -1292,7 +1300,7 @@ export class StockInvoiceComponent implements OnInit {
           duration: 2500,
         });
         this._glopal.loading = false;
-        this._mainService.PlayDrumFail();
+        this._mainService.playDrumFail();
       }
     } else {
       this.recordStockTransAction().then((data: any) => {

@@ -9,6 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ConcreteCustomer } from 'src/app/classes/concrete-customer';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
+import { SafeReceipt } from 'src/app/classes/safe-receipt';
+import { AddDiscoundDialogComponent } from 'src/app/dialogs/add-discound-dialog/add-discound-dialog.component';
+import { SafeService } from 'src/app/services/safe.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-concrete-customer-information',
@@ -19,6 +25,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
   id: string | null = null;
 
   listData: MatTableDataSource<any> | any;
+
+  headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
   displayedColumns: string[] = [
     'id',
@@ -56,8 +64,6 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     total: number;
   } = { arr: [], total: 0 };
 
-  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
-
   marked: boolean = false;
   markColor: string = '';
 
@@ -68,23 +74,14 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     out: 0,
   };
 
-  /*
-  {
-  "concreteReceipt_id": "8",
-  "date_time": "2021-06-06 18:24",
-  "receiptDetail": "263 X خرسانة لبانى محتوى 150 - 2",
-  "notes": "سقف العاشر برج 1D",
-  "total": 113710.51,
-  "totalDiscound": 14,
-  "concreteCustomer": "المرشدى"
-  },
-  */
-
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
     public _concrete: ConcreteService,
     public activeRoute: ActivatedRoute,
+    public _safeService: SafeService,
+    public _snackBar: MatSnackBar,
+    public _auth: AuthService,
     public _dialog: MatDialog
   ) {
     (this._glopal.loading = true),
@@ -145,8 +142,6 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
-    this.totals = {onUs: 0, toUs: 0}
-
     for (let i = 0; i < data.length; i++) {
       const isReceipt =
         data[i].receiptDetail.includes('ايصال صرف نقدية') ||
@@ -180,6 +175,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       const newData = {
         id: i + 2,
         date_time: data[i].date_time.replace('T', ' '),
+        date: data[i].date_time.replace(' ', 'T'),
         concretereceiptcash_id: data[i].concretereceiptcash_id,
         receiptSerial: `${isReceipt ? 'ايصال' : 'فاتورة'} ${
           data[i].receiptSerial
@@ -198,9 +194,6 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       };
 
       this.accArr = [...this.accArr, newData];
-
-      this.totals.onUs = this.totals.onUs + minVal
-      this.totals.toUs = this.totals.toUs + addVal
     }
 
     return this.accArr;
@@ -307,7 +300,32 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     this.listData.paginator = this.paginator;
     // this.searchResults(pureData);
     this.tempAccArry = pureData;
+    this.setHeaderTotals(data.reverse());
   };
+
+  setHeaderTotals(accArr: any) {
+    if (accArr.length > 0) {
+      this.headerTotals.openedVal =
+        accArr[0].balance +
+        (accArr[0].InvoiceDetails == 'رصيد اول'
+          ? 0
+          : accArr[0].minVal - accArr[0].addVal);
+
+      const filteredAcc = accArr.filter(
+        (acc: any) => acc.InvoiceDetails != 'رصيد اول'
+      );
+
+      this.headerTotals.income = filteredAcc
+        //.map((a: any) => a.minVal)
+        .reduce((a: any, b: any) => a + b.minVal, 0);
+
+      this.headerTotals.outcome = filteredAcc
+        //.map((a: any) => a.addVal)
+        .reduce((a: any, b: any) => a + b.addVal, 0);
+    } else {
+      this.headerTotals = new AccHeaderTotals();
+    }
+  }
 
   search() {
     if (this.marked) this.clearCalcArr();
@@ -340,6 +358,96 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
   printDocument() {
     window.print();
+  }
+
+  /* main discound button */
+  addDiscound() {
+    const safeReceipt = new SafeReceipt();
+    safeReceipt.concreteCustomer_id = this.customerInfo?.id ?? ''; // parseInt(this.customerInfo?.id ?? '1') ?? 1;
+    safeReceipt.customerName = this.customerInfo.fullName;
+    safeReceipt.receiptKind = 'ايصال استلام نقدية';
+    safeReceipt.recieptNote = `"${this.customerInfo.fullName}"`;
+    safeReceipt.date_time = this._mainService.makeTime_date(
+      new Date(Date.now())
+    );
+    this.openDiscoundDialog(safeReceipt);
+  }
+
+  /* discound when click on a balance */
+  discoundThis(balance: number, date: string) {
+    const safeReceipt = new SafeReceipt();
+    safeReceipt.customerName = this.customerInfo.fullName;
+    safeReceipt.receiptKind =
+      balance > 0 ? 'ايصال استلام نقدية' : 'ايصال صرف نقدية';
+    safeReceipt.receiptVal = balance > 0 ? balance : balance * -1;
+    safeReceipt.date_time = date;
+    safeReceipt.recieptNote = `"${this.customerInfo.fullName}"`;
+    this.openDiscoundDialog(safeReceipt);
+  }
+
+  openSnake(message: string) {
+    this._snackBar.open(message, 'اخفاء', {
+      duration: 2500,
+    });
+  }
+
+  openDiscoundDialog = (data: SafeReceipt) => {
+    let dialogRef = this._dialog.open(AddDiscoundDialogComponent, {
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe((result: SafeReceipt) => {
+      if (result) {
+        for (let i = 0; i < 2; i++) {
+          if (i == 0) {
+            const safeReceipt = this.recieptData_forDb(result, 'عميل خرسانة');
+            this._safeService.creatSafeReceipt(safeReceipt).subscribe();
+          } else {
+            // reverse receiptKind
+            result.receiptKind =
+              result.receiptKind == 'ايصال صرف نقدية'
+                ? 'ايصال استلام نقدية'
+                : 'ايصال صرف نقدية';
+            // make vals
+            const safeReceipt = this.recieptData_forDb(result, 'حساب');
+            // save vals
+            this._safeService.creatSafeReceipt(safeReceipt).subscribe(() => {
+              this.openSnake('تم اضافة بيانات الخصم');
+              this._mainService.playMouseClickClose();
+              this.onStart();
+            });
+          }
+        }
+      }
+    });
+  };
+
+  recieptData_forDb(
+    receipt: SafeReceipt,
+    transactionAccKind: string
+  ): SafeReceipt {
+    let safeReceipt = new SafeReceipt();
+
+    safeReceipt.date_time = receipt.date_time;
+    safeReceipt.receiptKind = receipt.receiptKind;
+    safeReceipt.safeName = receipt.safeName;
+    safeReceipt.currentSafeVal = receipt.currentSafeVal;
+    safeReceipt.safeId = receipt.safeId;
+    safeReceipt.transactionAccKind = transactionAccKind;
+    safeReceipt.accId = transactionAccKind == 'حساب' ? receipt.accId : 0;
+    safeReceipt.AccName = transactionAccKind == 'حساب' ? receipt.AccName : '';
+    safeReceipt.currentAccVal = receipt.currentAccVal
+      ? receipt.currentAccVal
+      : 0;
+
+    safeReceipt.concreteCustomer_id =
+      transactionAccKind == 'عميل خرسانة' ? this.customerInfo?.id ?? '' : '0';
+    safeReceipt.concreteCustomerName =
+      transactionAccKind == 'عميل خرسانة' ? this.customerInfo.fullName : '';
+    safeReceipt.receiptVal = receipt.receiptVal;
+    safeReceipt.recieptNote = receipt.recieptNote ? receipt.recieptNote : '';
+    safeReceipt.madeBy = this._auth.uName.realName;
+    return safeReceipt;
   }
 
   clearCalcArr() {
@@ -405,14 +513,17 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
     if (cond == 'showAll') {
       this.isFiltered = false;
-      this.fillListData(this.accArr.reverse());
+      this.fillListData(this.accArr);
       this.searchDate = { from: '', to: '' };
 
       this.cementUses = this.makeCementAcc(this.tempCementUses);
     } else if (cond == 'noId') {
-      this.isFiltered = true
-      const tempArr = this.accArr.filter((a) => a.concretereceiptcash_id == 'noId').reverse()
-      this.fillListData(tempArr)
+      // filter receipts not connected with an invoice
+      this.isFiltered = true;
+      const tempArr = this.accArr.filter(
+        (a) => a.concretereceiptcash_id == 'noId'
+      );
+      this.fillListData(tempArr);
       this.searchDate = { from: '', to: '' };
     }
   }

@@ -9,6 +9,7 @@ import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { SafeService } from 'src/app/services/safe.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
+import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
 
 @Component({
   selector: 'app-other-acc-information',
@@ -37,6 +38,9 @@ export class OtherAccInformationComponent implements OnInit {
   searchTxt: string = '';
   accArr: any[] = [];
   isFiltered: boolean = false;
+  headerTotals: AccHeaderTotals = new AccHeaderTotals();
+  searchDate: { from: string; to: string } = { from: '', to: '' };
+  tempAccArry: any[] = [];
 
   constructor(
     public _mainService: MainService,
@@ -65,14 +69,15 @@ export class OtherAccInformationComponent implements OnInit {
         let accList: OtherAcc[] = data[1];
         let parseId: number;
 
-        let nameForHeader = ""
+        let nameForHeader = '';
 
         if (this.id) {
           parseId = parseInt(this.id);
           let foundAcc = accList.find((acc) => acc.accId == parseId);
           if (foundAcc) this.accInfo = foundAcc;
 
-          nameForHeader = this.id == "workerId" ? 'رواتب الموظفين' : this.accInfo.AccName
+          nameForHeader =
+            this.id == 'workerId' ? 'رواتب الموظفين' : this.accInfo.AccName;
         }
         this._glopal.currentHeader = `حركة حساب | ${nameForHeader}`;
 
@@ -132,15 +137,41 @@ export class OtherAccInformationComponent implements OnInit {
       };
       this.accArr = [...this.accArr, newData];
     }
+    let result = this.accArr
 
-    return this.accArr.reverse();
+    return result.reverse();
   }
 
   fillListData = (data: any) => {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
+    this.tempAccArry = data;
+    this.setHeaderTotals(data);
   };
+
+  setHeaderTotals(accArr: any) {
+    if (accArr.length > 0) {
+      accArr.reverse()
+      this.headerTotals.openedVal =
+        accArr[0].balance +
+        (accArr[0].receiptDetail == 'رصيد اول'
+          ? 0
+          : accArr[0].minVal - accArr[0].addVal);
+
+      const filteredAcc = accArr.filter(
+        (acc: any) => acc.receiptDetail != 'رصيد اول'
+      );
+
+      this.headerTotals.income = filteredAcc
+        .reduce((a: any, b: any) => a + b.minVal, 0);
+
+      this.headerTotals.outcome = filteredAcc
+        .reduce((a: any, b: any) => a + b.addVal, 0);
+    } else {
+      this.headerTotals = new AccHeaderTotals();
+    }
+  }
 
   search() {
     this.listData.filter = this.searchTxt;
@@ -150,8 +181,13 @@ export class OtherAccInformationComponent implements OnInit {
     let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== 'cancel')
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
         this.filterByDate(result.fromDate, result.toDate);
+      }
     });
   };
 
@@ -171,20 +207,28 @@ export class OtherAccInformationComponent implements OnInit {
       }
       this._glopal.currentHeader = `حركة حساب | ${this.accInfo.AccName}`;
 
-      let listData = this.makeSafeAcc(accTransList);
+      let listData = this.makeSafeAcc(accTransList.reverse());
       this.fillListData(listData);
       this._mainService.handleTableHeight();
 
-      this.accInfo.currentAccVal = listData[0].balance;
+      this.accInfo.currentAccVal = this.accInfo.currentAccVal;
       this._glopal.loading = false;
     });
   }
 
   filterByDate(from?: string, to?: string) {
     if (from && to) {
-      this.startByDate(from, to);
+      let start = `${from} 00:00`;
+      let end = `${to} 23:59`;
+
       this.isFiltered = true;
+      let newArr = this.accArr.filter((acc) => {
+        return acc.date_time >= start && acc.date_time <= end;
+      });
+
+      this.startByDate(from, to);
     } else {
+      this.searchDate = { from: '', to: '' };
       this.onStart();
       this.isFiltered = false;
     }

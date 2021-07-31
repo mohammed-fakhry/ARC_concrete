@@ -94,13 +94,20 @@ export class StockingComponent implements OnInit {
     });
 
     this.onStart();
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('Stocking')
       ) {
         this.clearAllArr();
         this.onStart();
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('Stocking')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
   }

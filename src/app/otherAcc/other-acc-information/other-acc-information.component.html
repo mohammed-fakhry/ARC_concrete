@@ -1,29 +1,86 @@
 <div class="mainContainer">
 
-  <div class="col-lg-4 col-md-6 mb-3 stickyBox">
-    <mat-card class="box headerBox">
-      <mat-card-header>
-        <div mat-card-avatar class="ml-4">
-          <span *ngIf="id != 'workerId'" class="dash-widget-icon textBtn" style="background-color: #5a73f329;" routerLink="/AddOtherAcc/{{id}}">
-            <i class="fa fa-user iconBtn textSecondary"></i>
-          </span>
-        </div>
-        <mat-card-title class="textSecondary">
-          {{id == "workerId" ? 'رواتب موظفين' : accInfo.AccName}}
-        </mat-card-title>
-        <mat-card-subtitle>
-          <h3 *ngIf="id != 'workerId'" class="homeSubtitle" [class.textDanger]="accInfo.currentAccVal < 0">
-            {{accInfo.currentAccVal | number:'1.0-2'}}
-          </h3>
-        </mat-card-subtitle>
-      </mat-card-header>
+  <div class="row stickyBox">
 
-      <mat-card-actions>
-        <button *ngIf="accInfo.truckId" mat-stroked-button color="primary"
-          routerLink="/truckLog/{{accInfo.truckId}}">تشغيل السيارة</button>
-        <button mat-button routerLink="/otherAcc">المصاريف</button>
-      </mat-card-actions>
-    </mat-card>
+    <div class="col-lg-4 col-md-6 mb-3 stickyBox">
+      <mat-card class="box headerBox">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span *ngIf="id != 'workerId'" class="dash-widget-icon textBtn" style="background-color: #5a73f329;" routerLink="/AddOtherAcc/{{id}}">
+              <i class="fa fa-user iconBtn textSecondary"></i>
+            </span>
+          </div>
+          <mat-card-title class="textSecondary">
+            {{id == "workerId" ? 'رواتب موظفين' : accInfo.AccName}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h3 *ngIf="id != 'workerId'" class="homeSubtitle" [class.textDanger]="accInfo.currentAccVal < 0">
+              {{accInfo.currentAccVal | number:'1.0-2'}}
+            </h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-actions>
+          <button *ngIf="accInfo.truckId" mat-stroked-button color="primary"
+            routerLink="/truckLog/{{accInfo.truckId}}">تشغيل السيارة</button>
+          <button mat-button routerLink="/otherAcc">المصاريف</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
+
+      <div class="box px-3">
+        <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+
+          <tr *ngIf="!searchDate.from">
+            <td class="p-2">من اول المدة</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+            <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+            <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="borderLdark">
+            <th class="p-2 darkBadge">رصيد اول</th>
+            <td class="p-2 tdBorder_right" [ngClass]="headerTotals.openedVal < 0 ? 'textDanger' : 'darkBadge'">
+              {{headerTotals.openedVal | number: '1.0-2'}}
+            </td>
+          </tr>
+
+          <tr class="dangerBadge borderLdanger">
+            <th class="p-2">منصرف</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">اجمالى</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome + headerTotals.openedVal | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+
+          <tr class="secondaryBadge borderLsecondary">
+            <th class="p-2">وارد</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">صافى</th>
+            <td class="p-2 tdBorder_right"
+              [class.textDanger]="headerTotals.openedVal - headerTotals.income  + headerTotals.outcome < 0">
+              {{(headerTotals.openedVal - headerTotals.income + headerTotals.outcome) | number: '1.0-2'}}
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+    </div>
   </div>
 
   <div class="box stickyBox">

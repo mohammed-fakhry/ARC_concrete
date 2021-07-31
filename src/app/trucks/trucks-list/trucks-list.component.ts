@@ -46,12 +46,19 @@ export class TrucksListComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
 
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('TrucksList')
       ) {
         setTimeout(() => this.onStart(), 0);
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('TrucksList')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
 

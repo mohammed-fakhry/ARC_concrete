@@ -20,8 +20,6 @@
               {{(customerInfo.uncompletedCond > 0) ? 'برجاء استكمال بيانات الحساب' : customerInfo.customerRemain |
               number:'1.0-2'}}
             </h3>
-            <!-- <button [disabled]="isFiltered" mat-raised-button color="accent"
-              (click)="filterList('filterUncomplete')"></button> -->
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
@@ -40,15 +38,57 @@
     </div>
 
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
-      <div class="box headerBox text-center textBold p-2">
-        <div class="dangerBadge p-2 mb-2">
-          اجمالى دائن | {{totals.onUs | number: '1.0-2'}}
-        </div>
 
-        <div class="greenBadge p-2">
-          اجمالى مدين | {{totals.toUs | number: '1.0-2'}}
-        </div>
+      <div class="box px-3">
+        <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+
+          <tr *ngIf="!searchDate.from">
+            <td class="p-2">من اول المدة</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+            <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+            <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="borderLdark">
+            <th class="p-2 darkBadge">رصيد اول</th>
+            <td class="p-2 tdBorder_right" [ngClass]="headerTotals.openedVal < 0 ? 'textDanger' : 'darkBadge'">
+              {{headerTotals.openedVal | number: '1.0-2'}}
+            </td>
+          </tr>
+
+          <tr class="dangerBadge borderLdanger">
+            <th class="p-2">منصرف</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">اجمالى</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome + headerTotals.openedVal | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+
+          <tr class="secondaryBadge borderLsecondary">
+            <th class="p-2">وارد</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">صافى</th>
+            <td class="p-2 tdBorder_right"
+              [class.textDanger]="headerTotals.openedVal - headerTotals.income  + headerTotals.outcome < 0">
+              {{(headerTotals.openedVal - headerTotals.income + headerTotals.outcome) | number: '1.0-2'}}
+            </td>
+          </tr>
+
+        </table>
       </div>
+
     </div>
 
     <!-- <div class="col-xl-4 col-lg-6 mb-3">
@@ -103,15 +143,6 @@
           </div>
         </div>
 
-        <div *ngIf="searchDate.from" class="my-auto">
-          <span class="px-3">من تاريخ | {{searchDate.from}}</span>
-          <span class="px-3">الى تاريخ | {{searchDate.to}}</span>
-        </div>
-        <!-- <div class="my-auto">
-          <h3 class="textBold textPrimary ml-2 my-auto" [class.textDanger]="customerInfo.customerRemain < 0">صافى
-            الحساب |
-            {{customerInfo?.customerRemain | number:'1.0-2'}}</h3>
-        </div> -->
         <div class="my-auto">
           <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
             matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
@@ -163,10 +194,10 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>دائن</th>
             <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="minVal{{i}}" class="markVal"
               (click)="markToCalc(row.minVal * -1,i,'minVal')"
-              [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
               [class.borderRight-success]="(row.discound > 0 && row.minVal > 0)"
-              [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'secondaryBadge borderLsecondary' : ''"
+              [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'borderLsecondary' : ''"
               matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
+              [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
               [matTooltipDisabled]="row.addtaxes == 0 || row.minVal < 0">
               <i *ngIf="row.minVal > 0" class="fa fa-arrow-down textGreen"></i>
               {{row.minVal | number:'1.0-2'}}
@@ -177,9 +208,9 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>مدين</th>
             <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="addVal{{i}}" class="markVal"
               (click)="markToCalc(row.addVal,i,'addVal')"
-              [class.marked]="row.addVal.toString().includes(searchTxt) && searchTxt"
               [class.borderRight-success]="row.discound > 0 && row.addVal > 0"
-              [ngClass]="(row.addtaxes > 0 && row.addVal > 0) ? 'secondaryBadge borderLsecondary' : ''"
+              [ngClass]="(row.addtaxes > 0 && row.addVal > 0) ? 'borderLsecondary' : ''"
+              [class.marked]="row.addVal.toString().includes(searchTxt) && searchTxt"
               matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
               [matTooltipDisabled]="row.addtaxes == 0 || row.addVal < 0">
               <i *ngIf="row.addVal > 0" class="fa fa-arrow-up textDanger"></i>

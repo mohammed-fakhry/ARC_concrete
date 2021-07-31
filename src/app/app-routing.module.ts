@@ -64,6 +64,8 @@ import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concr
 import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
 import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
 import { ConcreteFinancialComponent } from './industry/concrete-financial/concrete-financial.component';
+import { InstructionsComponent } from './instructions/instructions.component';
+import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
 
 const routes: Routes = [
   // defult path
@@ -72,6 +74,9 @@ const routes: Routes = [
 
   // home
   { path: 'Home', component: HomeComponent, canActivate: [AuthGuard], },
+
+  // instructions
+  { path: 'instructions/:searchFor', component: InstructionsComponent, canActivate: [MasterGuard] },
 
   // workers
   { path: 'Workers', component: WorkersComponent, canActivate: [WorkerGuard], },
@@ -177,6 +182,7 @@ const routes: Routes = [
   { path: 'InvoiceChangesReport/:searchFor', component: InvoiceChangesReportComponent, canActivate: [MasterGuard] },
   { path: 'ReceiptsChangesReport', component: ReceiptChangesListComponent, canActivate: [MasterGuard] },
   { path: 'ReceiptsChangesReport/:searchFor', component: ReceiptChangesListComponent, canActivate: [MasterGuard] },
+  { path: 'Addtaxes', component: AddTaxesListComponent, canActivate: [UnitesGuard] },
 
   // fixes, canActivate: [DevelopmentGuard]
   { path: 'FixesComponent', component: FixesComponent, canActivate: [DevelopmentGuard] },

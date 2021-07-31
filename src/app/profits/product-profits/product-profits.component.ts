@@ -82,12 +82,19 @@ export class ProductProfitsComponent implements OnInit {
     });
 
     this.onStart();
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('ProductsProfits')
       ) {
         this.onStart();
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('ProductsProfits')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
   }
@@ -142,7 +149,6 @@ export class ProductProfitsComponent implements OnInit {
   }
 
   makeProductsList(productsList: ProductsAvg[]) {
-
     for (let i = 0; i < productsList.length; i++) {
       if (productsList[i].priceInAVG == 0) {
         let found = this.productPricesList.find(

@@ -1,0 +1,33 @@
+<div class="mainContainer">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="stickyBox">
+        <mat-selection-list #shoes [multiple]="false">
+          <mat-list-option *ngFor="let content of instructions.contents; let i = index" [value]="content.mainTitle" (click)="_mainService.scrollTo(content.id)">
+            {{i + 1}} . {{content.mainTitle}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div *ngFor="let content of instructions.contents; let i = index" class="mb-3 pt-3 pr-2" id="{{content.id}}">
+        <h2 class="textDark">{{i + 1}} . {{content.mainTitle}}</h2>
+        <img *ngIf="content.mainPic" class="sideLogo mb-3 border" src="{{content.mainPic}}">
+        <div class="mt-2">
+          <div *ngFor="let row of content.body">
+            <p [ngClass]="row.class">
+              <i class="fa fa-window-minimize pl-2 textSmall"></i>
+              {{row.title}}
+            </p>
+            <img *ngIf="row.pic" class="sideLogo mb-3 border" src="{{row.pic}}">
+          </div>
+
+        </div>
+
+        <mat-divider class="mt-3"></mat-divider>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -142,7 +142,7 @@ export class LogInComponent implements OnInit {
             };
             this._auth.isAuth = false;
             this._glopal.loading = false;
-            this._mainService.PlayDrumFail();
+            this._mainService.playDrumFail();
           }
         },
         (error) => {
@@ -153,7 +153,7 @@ export class LogInComponent implements OnInit {
           };
           this._auth.isAuth = false;
           this._glopal.loading = false;
-          this._mainService.PlayDrumFail();
+          this._mainService.playDrumFail();
         }
       );
   }

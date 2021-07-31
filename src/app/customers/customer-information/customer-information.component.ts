@@ -14,6 +14,7 @@ import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dial
 import { AddDiscoundDialogComponent } from 'src/app/dialogs/add-discound-dialog/add-discound-dialog.component';
 import { SafeReceipt } from 'src/app/classes/safe-receipt';
 import { AuthService } from 'src/app/services/auth.service';
+import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
 
 @Component({
   selector: 'app-customer-information',
@@ -42,13 +43,8 @@ export class CustomerInformationComponent implements OnInit {
   searchTxt: string = '';
   searchDate: { from: string; to: string } = { from: '', to: '' };
 
-  /* searchResult: {
-    onUs: number;
-    toUs: number;
-  } = {
-    onUs: 0,
-    toUs: 0,
-  }; */
+  headerTotals: AccHeaderTotals = new AccHeaderTotals();
+
   customerInfo: Customer = new Customer();
 
   isFiltered: boolean = false;
@@ -59,8 +55,6 @@ export class CustomerInformationComponent implements OnInit {
   } = { arr: [], total: 0 };
 
   accArr: any[] = [];
-
-  totals: { onUs: number; toUs: number } = { toUs: 0, onUs: 0 };
 
   tempAccArry: any[] = [];
 
@@ -136,7 +130,7 @@ export class CustomerInformationComponent implements OnInit {
 
     this.accArr = [...this.accArr, firstRow];
 
-    this.totals = { onUs: 0, toUs: 0 };
+    // this.totals = { onUs: 0, toUs: 0 };
 
     for (let i = 0; i < data.length; i++) {
       const discoundVal =
@@ -186,15 +180,7 @@ export class CustomerInformationComponent implements OnInit {
         addtaxes: data[i].addtaxes,
       };
       this.accArr = [...this.accArr, newData];
-
-      this.totals.onUs = this.totals.onUs + minVal;
-      this.totals.toUs = this.totals.toUs + addVal;
     }
-
-    /* this.totals = {
-      onUs: this.acc,
-      toUs: 0
-    } */
 
     return this.accArr;
   }
@@ -205,58 +191,8 @@ export class CustomerInformationComponent implements OnInit {
     productUnit: number,
     unitPrice: number
   ): string {
-    // const unitDetail = this.calcUnits(productQty, productUnit, unitPrice);
     return `${productQty} ${detail} ${unitPrice}`;
-    //return `${unitDetail.backet}${unitDetail.unit} ${detail} ${unitDetail.backetPrice}`;
   }
-
-  /* calcUnits(
-    qty: number,
-    productUnit: number,
-    unitPrice: number
-  ): { backet: number; unit: string; backetPrice: number } {
-    const qtyFloat = `${qty / productUnit}`;
-    let dot = qtyFloat.indexOf('.');
-
-    const seperate = {
-      backet: dot > 0 ? parseInt(qtyFloat.slice(0, dot)) : qty / productUnit,
-      unit:
-        dot > 0
-          ? `.${Math.round(
-              parseFloat(qtyFloat.slice(dot, qtyFloat.length)) * productUnit
-            )}`
-          : '',
-      backetPrice: unitPrice * productUnit,
-    };
-
-    return seperate;
-  } */
-
-  /* searchResults(accArr: any[]) {
-    let filteredArr = this.searchTxt
-      ? accArr.filter(
-          (a) =>
-            a?.recieptType?.includes(this.searchTxt) ||
-            a?.receiptDetail?.includes(this.searchTxt) ||
-            a?.minVal?.toString().includes(this.searchTxt) ||
-            a?.addVal?.toString().includes(this.searchTxt) ||
-            a?.balance?.toString().includes(this.searchTxt) ||
-            a?.date_time?.includes(this.searchTxt) ||
-            a?.date?.includes(this.searchTxt) ||
-            a?.note?.includes(this.searchTxt)
-        )
-      : accArr;
-
-    this.searchResult = {
-      onUs: filteredArr
-        .map((a) => a.minVal)
-        .reduce((a: number, b: number) => a + b, 0),
-
-      toUs: filteredArr
-        .map((a) => a.addVal)
-        .reduce((a: number, b: number) => a + b, 0),
-    };
-  } */
 
   getcustomerInfo() {
     return new Promise((res) => {
@@ -287,7 +223,32 @@ export class CustomerInformationComponent implements OnInit {
     this.listData.paginator = this.paginator;
     // this.searchResults(pureData);
     this.tempAccArry = pureData;
+    this.setHeaderTotals(data.reverse());
   };
+
+  setHeaderTotals(accArr: any) {
+    if (accArr.length > 0) {
+      this.headerTotals.openedVal =
+        accArr[0].balance +
+        (accArr[0].recieptType == 'رصيد اول'
+          ? 0
+          : accArr[0].minVal - accArr[0].addVal);
+
+      const filteredAcc = accArr.filter(
+        (acc: any) => acc.recieptType != 'رصيد اول'
+      );
+
+      this.headerTotals.income = filteredAcc
+        //.map((a: any) => a.minVal)
+        .reduce((a: any, b: any) => a + b.minVal, 0);
+
+      this.headerTotals.outcome = filteredAcc
+        //.map((a: any) => a.addVal)
+        .reduce((a: any, b: any) => a + b.addVal, 0);
+    } else {
+      this.headerTotals = new AccHeaderTotals();
+    }
+  }
 
   search() {
     if (this.marked) this.clearCalcArr();
@@ -341,7 +302,7 @@ export class CustomerInformationComponent implements OnInit {
 
     if (cond == 'showAll') {
       this.isFiltered = false;
-      this.fillListData(this.accArr.reverse());
+      this.fillListData(this.accArr);
       this.searchDate = { from: '', to: '' };
     }
 
@@ -445,7 +406,7 @@ export class CustomerInformationComponent implements OnInit {
     safeReceipt.customerId = this.customerInfo.customerId;
     safeReceipt.customerName = this.customerInfo.customerName;
     safeReceipt.receiptKind = 'ايصال استلام نقدية';
-    safeReceipt.transactionAccKind = 'موظفين';
+    //safeReceipt.transactionAccKind = 'موظفين';
     safeReceipt.recieptNote = `"${this.customerInfo.customerName}"`;
     safeReceipt.date_time = this._mainService.makeTime_date(
       new Date(Date.now())
@@ -471,35 +432,35 @@ export class CustomerInformationComponent implements OnInit {
     transactionAccKind: string
   ): SafeReceipt {
     return {
-      safeReceiptId: receipt.safeReceiptId ? receipt.safeReceiptId : null,
-      receiptKind: receipt.receiptKind,
-      date_time: receipt.date_time,
+      safeReceiptId: receipt.safeReceiptId ? receipt.safeReceiptId : null, //
+      receiptKind: receipt.receiptKind, //
+      date_time: receipt.date_time, //
       //fst safe inpts
-      safeName: receipt.safeName,
-      currentSafeVal: receipt.currentSafeVal,
-      safeId: receipt.safeId,
+      safeName: receipt.safeName, //
+      currentSafeVal: receipt.currentSafeVal, //
+      safeId: receipt.safeId, //
       // sec section
-      transactionAccKind: transactionAccKind,
+      transactionAccKind: transactionAccKind, //
       // acc inpts
-      accId: transactionAccKind == 'حساب' ? receipt.accId : 0,
-      AccName: transactionAccKind == 'حساب' ? receipt.AccName : '',
-      currentAccVal: receipt.currentAccVal ? receipt.currentAccVal : 0,
+      accId: transactionAccKind == 'حساب' ? receipt.accId : 0, //
+      AccName: transactionAccKind == 'حساب' ? receipt.AccName : '', //
+      currentAccVal: receipt.currentAccVal ? receipt.currentAccVal : 0, //
       //safe inpts
-      secSafeName: receipt.secSafeName ? receipt.secSafeName : '',
-      secSafeId: receipt.secSafeId ? receipt.secSafeId : 1,
+      secSafeName: receipt.secSafeName ? receipt.secSafeName : '', //
+      secSafeId: receipt.secSafeId ? receipt.secSafeId : 1, //
       current_SecSafeVal: receipt.current_SecSafeVal
         ? receipt.current_SecSafeVal
-        : 0,
+        : 0, //
       // customer inpts
-      customerId: transactionAccKind == 'عميل' ? receipt.customerId : 1,
-      customerName: receipt.customerName ? receipt.customerName : '',
+      customerId: transactionAccKind == 'عميل' ? receipt.customerId : 1, //
+      customerName: receipt.customerName ? receipt.customerName : '', //
       currentCustomerVal: receipt.currentCustomerVal
         ? receipt.currentCustomerVal
-        : 0,
+        : 0, //
       // concreteCustomer inpts
-      concreteCustomer_id: '0',
-      concreteCustomerName: '',
-      concreteCustomerVal: 0,
+      concreteCustomer_id: '0', //
+      concreteCustomerName: '', //
+      concreteCustomerVal: 0, //
       // truck
       truckId: '0',
       truckName: '',

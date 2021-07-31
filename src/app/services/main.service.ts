@@ -31,6 +31,10 @@ export class MainService {
 
   url: string | null = localStorage.getItem('tmpDB');
 
+  getLocalJson(localUrl: string) {
+    return this.http.get<any[]>(`${localUrl}`);
+  }
+
   handleTableHeight() {
     let windowHeight = window.innerHeight;
     if (windowHeight > 700) {

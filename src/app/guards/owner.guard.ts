@@ -26,7 +26,7 @@ export class OwnerGuard implements CanActivate {
         this._snackBar.open('لا توجد صلاحية للوصول', 'اخفاء', {
           duration: 2500,
         });
-        this._mainService.PlayDrumFail()
+        this._mainService.playDrumFail()
         return false;
       }
     } else {

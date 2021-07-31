@@ -79,15 +79,6 @@ export class AddSafeReceiptComponent implements OnInit {
 
   privateLoadingBar: boolean = false;
 
-  /*
-
-                  concreteReceiptCash.id ?
-                  'تعديل نوع الايصال بالموقف المالى' :
-                  'يجب ربط الايصال بالموقف المالى للعميل'
-
-
-  */
-
   concreteReciptCash_btn: string = '';
 
   constructor(
@@ -115,12 +106,19 @@ export class AddSafeReceiptComponent implements OnInit {
 
     this.onStart();
 
-    this._router.events.subscribe((val) => {
+    let observUrlChange = this._router.events.subscribe((val) => {
       if (
         val instanceof NavigationEnd &&
         this._router.url.includes('SafeReceipt')
       ) {
         this.onStart();
+      }
+
+      if (
+        val instanceof NavigationEnd &&
+        !this._router.url.includes('SafeReceipt')
+      ) {
+        observUrlChange.unsubscribe();
       }
     });
 
@@ -461,7 +459,7 @@ export class AddSafeReceiptComponent implements OnInit {
     else {
       this.privateLoadingBar = false;
       this.concreteReciptCash_btn = 'يجب ربط الايصال بالموقف المالى للعميل';
-      this.concreteReceiptCash = new ConcreteRecieptCash()
+      this.concreteReceiptCash = new ConcreteRecieptCash();
     }
   }
 
@@ -994,7 +992,7 @@ export class AddSafeReceiptComponent implements OnInit {
               duration: 2500,
             });
             this._glopal.loading = false;
-            this._mainService.PlayDrumFail();
+            this._mainService.playDrumFail();
           }
         } else {
           // new safereceipt

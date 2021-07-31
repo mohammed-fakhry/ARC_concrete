@@ -126,7 +126,7 @@ export class AddCustomerComponent implements OnInit {
         this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
           duration: 2500,
         });
-        this._mainService.PlayDrumFail()
+        this._mainService.playDrumFail()
       }
     } else {
       this._customerService.creatCustomer(this.customer).subscribe();

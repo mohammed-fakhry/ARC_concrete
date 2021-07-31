@@ -64,7 +64,7 @@
   <audio src="assets/audio/shortFail.mp3" controls id="shortFail"></audio>
   <audio src="assets/audio/intro.mp3" controls id="intro"></audio>
   <audio src="assets/audio/drumFail.wav" controls id="drumFail"></audio>
-  <audio src="assets/audio/sweepTransition.wav" controls id="sweepTransition"></audio>
+  <!-- <audio src="assets/audio/sweepTransition.wav" controls id="sweepTransition"></audio> -->
 </div>
 
 <mat-sidenav-container *ngIf="_auth?.check != null">
@@ -106,6 +106,13 @@
                 <i class="fa fa-plus pt-1 textBold"></i>
               </button>
             </div>
+
+            <mat-divider></mat-divider>
+
+            <a mat-list-item routerLink="/instructions/customer_instructions" (click)="opened = !opened" *ngIf="_auth?.check?.customers">
+              <i class="fa fa-exclamation-triangle my-auto pl-2"></i>
+              التعليمات
+            </a>
           </mat-nav-list>
         </mat-expansion-panel>
 
@@ -272,6 +279,8 @@
             <a mat-list-item routerLink="/ReceiptsChangesReport" (click)="opened = !opened">
               ايصالات النقدية
             </a>
+
+            <a mat-list-item *ngIf="_auth?.check?.unites" routerLink="Addtaxes" (click)="opened = !opened">تقرير ض</a>
           </mat-nav-list>
         </mat-expansion-panel>
 

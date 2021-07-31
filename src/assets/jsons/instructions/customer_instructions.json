@@ -1,0 +1,212 @@
+{
+  "header": "تعليمات الاستخدام | موردين و مستهلكين",
+  "contents": [
+    {
+      "mainTitle": "البيانات الاساسية",
+      "mainPic": "assets/jsons/instructions/customer/mainHeder.jpg",
+      "id": "mainData",
+      "body": [
+        {
+          "title": "على الترتيب",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "زر الانتقال الى تعديل بيانات العميل بجوار اسم العميل",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "المبلغ المستحق على العميل باللون الاحمر ان كان مستحق الدفع",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "العنوان",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "زر الانتقال الى قائمة المودين و المستهلكين",
+          "pic": "",
+          "class": "text-dark"
+        }
+      ]
+    },
+    {
+      "mainTitle": "اجمالى الدفعات و الفواتير",
+      "mainPic": "assets/jsons/instructions/customer/mainHederInformation.jpg",
+      "id": "totalsSection",
+      "body": [
+        {
+          "title": "فى حالة الفرز بالتاريخ يتم عرض بيانات المدة المحددة",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "الرصيد الاول هو المبلغ الصافى قبل المدة المُحددة",
+          "pic": "",
+          "class": "text-dark"
+        }
+      ]
+    },
+    {
+      "mainTitle": "شريط البحث و فرز البيانات",
+      "mainPic": "assets/jsons/instructions/customer/searchAndFilter.jpg",
+      "id": "searchSection",
+      "body": [
+        {
+          "title": "البحث تفاعلى بمجرد مطابقة اى بيانات تحتوى على كلمة البحث",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك البحث ايضا بارقام الدائن او المدين او الاجمالى و حتى الملاحظات",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك فرز البيانات خلال فترة زمنية معينة باختيار الفرز بالتاريخ",
+          "pic": "assets/jsons/instructions/customer/searchByDate.jpg",
+          "class": "textDark pt-3"
+        },
+        {
+          "title": "يمكنك فرز بيانات الفواتير غير المكتملة و التى تم تحديدها مسبقاً اثناء انشاء الفواتير",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك الغاء الفرز عن طريق اختيار اظهار الكل ليتم عرض بيانات من اول المدة",
+          "pic": "",
+          "class": "text-dark"
+        }
+      ]
+    },
+    {
+      "mainTitle": "خصم او اضافة مبلغ من حساب العميل مباشرة",
+      "mainPic": "",
+      "id": "DiscoundSection",
+      "body": [
+        {
+          "title": "اضغط على زر الخصم",
+          "pic": "assets/jsons/instructions/customer/addDiscoundButton.jpg",
+          "class": "text-dark"
+        },
+        {
+          "title": "سيتم فتح نافذة منبثقة لادخال بيانات الخصم",
+          "pic": "assets/jsons/instructions/customer/addDiscound.jpg",
+          "class": "text-dark"
+        },
+        {
+          "title": "فى حالة خصم للعميل يجب اختيار ايصال استلام نقدية، اما فى حالة اضافة مبلغ على العميل يتم اختيار ايصال صرف",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "ثم اختيار اسم حساب المصاريف لتحويل المبلغ المخصوم او المضاف بداخله",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك اضافة اى ملاحظات تريدها و يفضل ان تحتفظ بالملاحظة التى يتم انشائها بواسطة النظام",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك خصم او اضافة مبلغ من القيم النهائية مباشرةً، فقط اضغط على المبلغ المراد خصمه و سيقوم النظام بكتابة كل البيانات المطلوبة ماعدا حساب المصاريف المُراد ترحيل الخصم بداخله",
+          "pic": "assets/jsons/instructions/customer/discoundFromBalance.jpg",
+          "class": "textDark pt-3"
+        },
+        {
+          "title": "تنبيه : بعد اختيار امر التسجيل سيتم ادراج عدد 2 ايصال نقدية لموازنة رصيد الخزنة، لذا فى حالة تعديل ايصال الخصم يجب تعديل الايصال الذى انشأه النظام بداخل حساب المصاريف",
+          "pic": "",
+          "class": "textDanger textBold"
+        }
+      ]
+    },
+    {
+      "mainTitle": "جمع قيم الرصيد الدائن و الرصيد المدين",
+      "mainPic": "assets/jsons/instructions/customer/markToCalc.jpg",
+      "id": "markToCalcSection",
+      "body": [
+        {
+          "title": "يمكنك جمع قيم الرصيد الدائن او الرصيد المدين بالضغط على خانة الرصيد",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يقوم النظام بجمع خانات الرصيد الدائن و طرحها من الرصيد المدين ",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك ازالة خانة من الجمع عن طريق الضغط عليها مرة اخرى",
+          "pic": "",
+          "class": "textDanger"
+        },
+        {
+          "title": "يتم عرض الناتج فى خانة الميزان",
+          "pic": "assets/jsons/instructions/customer/blanceAccInformation.jpg",
+          "class": "textDark pt-3"
+        },
+        {
+          "title": "فى حالة ان مجموع خانات الرصيد الدائن اكبر من الرصيد المدين سيتم اظهار القيمة بالسالب و يتم عرضها باللون الاحمر",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يمكنك ازالة جميع العلامات و الالغاء عن طريق الضغط على زر 'ميزان'",
+          "pic": "",
+          "class": "textDanger"
+        }
+      ]
+    },
+    {
+      "mainTitle": "الصيانة و الايجارات",
+      "mainPic": "",
+      "id": "fixesAccSection",
+      "body": [
+        {
+          "title": "خطوات اثبات قيمة الصيانة",
+          "pic": "",
+          "class": "textDark textBold"
+        },
+        {
+          "title": "1 . اضغط على زر الخصم",
+          "pic": "assets/jsons/instructions/customer/addDiscoundButton.jpg",
+          "class": "text-dark"
+        },
+        {
+          "title": "2 . اختار ايصال استلام نقدية",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "3 . اختيار اسم المُعدة التى تم صيانتها",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "4 . كتابة ملاحظات واضحة تشرح ماهية الخدمة المُقدمة",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "5 . كتابة قيمة تكلفة الصيانة فى خانة قيمة الايصال",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "6 . تسجيل الايصال",
+          "pic": "",
+          "class": "text-dark"
+        },
+        {
+          "title": "يجب اختيار خزنة المعدات عند انشاء الايصال ",
+          "pic": "",
+          "class": "textDanger pb-2"
+        }
+      ]
+    }
+  ]
+}

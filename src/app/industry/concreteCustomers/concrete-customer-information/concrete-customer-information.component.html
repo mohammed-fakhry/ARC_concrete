@@ -40,13 +40,61 @@
 
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
       <div class="box p-2 headerBox textBold">
-        <div class="dangerBadge p-2 mb-2  text-center">
+
+        <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+
+          <tr *ngIf="!searchDate.from">
+            <td class="p-2">من اول المدة</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+            <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+            <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="borderLdark">
+            <th class="p-2 darkBadge">رصيد اول</th>
+            <td class="p-2 tdBorder_right" [ngClass]="headerTotals.openedVal < 0 ? 'textDanger' : 'darkBadge'">
+              {{headerTotals.openedVal | number: '1.0-2'}}
+            </td>
+          </tr>
+
+          <tr class="dangerBadge borderLdanger">
+            <th class="p-2">منصرف</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">اجمالى</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.outcome + headerTotals.openedVal | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr>
+            <th></th>
+            <td></td>
+          </tr>
+
+          <tr class="secondaryBadge borderLsecondary">
+            <th class="p-2">وارد</th>
+            <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" class="lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">صافى</th>
+            <td class="p-2 tdBorder_right"
+              [class.textDanger]="headerTotals.openedVal - headerTotals.income  + headerTotals.outcome < 0">
+              {{(headerTotals.openedVal - headerTotals.income + headerTotals.outcome) | number: '1.0-2'}}
+            </td>
+          </tr>
+
+        </table>
+        <!-- <div class="dangerBadge p-2 mb-2  text-center">
           اجمالى دائن | {{totals.onUs | number: '1.0-2'}}
         </div>
 
         <div class="greenBadge p-2  text-center">
           اجمالى مدين | {{totals.toUs | number: '1.0-2'}}
-        </div>
+        </div> -->
 
         <div class="mt-2">
 
@@ -77,18 +125,12 @@
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
                 بالتاريخ</button>
-              <button  mat-menu-item (click)="filterList('noId')"
-                style="text-align: right;">ايصالات غير مرحلة</button>
+              <button mat-menu-item (click)="filterList('noId')" style="text-align: right;">ايصالات غير مرحلة</button>
               <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
                 style="text-align: right;">اظهار الكل</button>
             </mat-menu>
           </div>
 
-        </div>
-
-        <div *ngIf="searchDate.from" class="my-auto">
-          <span class="px-3">من تاريخ | {{searchDate.from}}</span>
-          <span class="px-3">الى تاريخ | {{searchDate.to}}</span>
         </div>
 
         <div class="my-auto">
@@ -100,10 +142,10 @@
             {{calcArr.total | number:'1.0-2'}}</button>
           <button mat-flat-button color="accent" class="mx-1" (click)="printDocument()"><i
               class="fa fa-print"></i></button>
-          <!-- <button mat-flat-button color="warn" (click)="addDiscound()" matTooltip="خصم من الحساب"
+          <button mat-flat-button color="warn" (click)="addDiscound()" matTooltip="خصم من الحساب"
             matTooltipPosition="above" matTooltipClass="dangerBadge borderLdanger">
             <i class="fa fa-lg fa-tags my-auto"></i>
-          </button> -->
+          </button>
         </div>
 
 
@@ -195,7 +237,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
             <td mat-cell *matCellDef="let row" [class.textDanger]="row.balance < 0"
               [class.marked]="row.balance.toString().includes(searchTxt) && searchTxt"
-              class="textBtn tBtn-danger pl-2 tdBorder">
+              class="textBtn tBtn-danger pl-2 tdBorder" (click)="discoundThis(row.balance, row.date)">
               {{row.balance | number:'1.0-2'}}
             </td>
           </ng-container>
