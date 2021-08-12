@@ -5,9 +5,24 @@
       <div class="box">
         <!-- search -->
         <div class="d-flex justify-content-between px-3">
-          <mat-form-field class="searchForm" style="width: 500px;">
-            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
-          </mat-form-field>
+          <div class="form-inline">
+            <mat-form-field class="searchForm" style="width: 500px;">
+              <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+            </mat-form-field>
+
+            <div class="mr-2">
+              <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+                <i class="fa fa-filter"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+                  بالتاريخ</button>
+                <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()"
+                  style="text-align: right;">اظهار الكل</button>
+              </mat-menu>
+            </div>
+          </div>
+
         </div>
 
         <div class="example-container">
@@ -76,10 +91,19 @@
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-hide printX">
-      <img class="sideLogo" src="assets/logos/garage.png" alt="">
+    <div class="col-lg-3 col-md-12">
+      <img class="sideLogo printX" src="assets/logos/garage.png" alt="">
 
       <div class="box p-3 boxShadow">
+
+        <div class="p-3 text-center textBold">
+          <div *ngIf="!searchDate.from">من اول المدة</div>
+
+          <div *ngIf="searchDate.from">
+            من تاريخ "{{searchDate.from}}" | الى تاريخ "{{searchDate.to}}"
+          </div>
+        </div>
+
         <div class="darkBadge borderLdark p-3 text-center textBold">
           اجمالى تشغيل | {{counts.works | number: '1.0-2'}}
         </div>

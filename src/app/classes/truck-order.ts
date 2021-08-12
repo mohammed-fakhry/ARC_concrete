@@ -20,5 +20,6 @@ export class TruckOrder {
   notes: string = '';
   stockTransactionDetailsId: string = '1';
   stockTransactionId: string = '';
+  concreteBonId: string = '0';
   madeBy: string = '';
 }

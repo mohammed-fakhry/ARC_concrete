@@ -82,6 +82,13 @@ export class ConcreteService {
     );
   }
 
+  getConcreteProfits() {
+    return this.http.get<any[]>(
+      `${this.url}getConcreteProfits.php?get=1`
+    );
+  }
+
+
   /* ConcreteReceipt */
 
   postConcreteReceipt(concreteReceipt: ConcreteReceipt) {
@@ -239,5 +246,13 @@ export class ConcreteService {
     return this.http.get<ConcreteRecieptCash[]>(
       `${this.url}concreteReceipt_cashList.php`
     );
+  }
+
+  concreteWorkerExpences(dateFrom?: string, dateTo?: string) {
+    if (dateFrom && dateTo)
+      return this.http.get<any[]>(
+        `${this.url}concreteWorkerExpences.php?fromDate=${dateFrom}&toDate=${dateTo}`
+      );
+    else return this.http.get<any[]>(`${this.url}concreteWorkerExpences.php`);
   }
 }

@@ -5,6 +5,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { MainService } from 'src/app/services/main.service';
 import { TruckService } from 'src/app/services/truck.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
 
 @Component({
   selector: 'app-truck-information',
@@ -49,10 +51,14 @@ export class TruckInformationComponent implements OnInit {
     cashIn: 0,
   };
 
+  searchDate: { from: string; to: string } = { from: '', to: '' };
+  isFiltered: boolean = false;
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
-    public _truckService: TruckService
+    public _truckService: TruckService,
+    public _dialog: MatDialog
   ) {
     this._glopal.currentHeader = 'مُعدات الشركة';
     this._glopal.loading = true;
@@ -66,19 +72,18 @@ export class TruckInformationComponent implements OnInit {
     this.onStart();
   }
 
-  onStart() {
-    this.getOurtruckAcc().then((data) => {
+  onStart(from?: string, to?: string) {
+    this.getOurtruckAcc(from, to).then((data) => {
       const sortedData = data
-      .map((a: any) => {
-        return {
-          ...a,
-          netIncome: a.truckOrderVals - a.otherAccVals - a.cashIn,
-        };
-      })
-      .sort((a: any, b: any) => {
-        return b.truckOrderVals - a.truckOrderVals;
-      });
-
+        .map((a: any) => {
+          return {
+            ...a,
+            netIncome: a.truckOrderVals - a.otherAccVals - a.cashIn,
+          };
+        })
+        .sort((a: any, b: any) => {
+          return b.truckOrderVals - a.truckOrderVals;
+        });
 
       this.fillListData(sortedData);
       this.counts = this.setCounts(data);
@@ -101,9 +106,11 @@ export class TruckInformationComponent implements OnInit {
     };
   };
 
-  getOurtruckAcc(): Promise<any[]> {
+  getOurtruckAcc(from?: string, to?: string): Promise<any[]> {
     return new Promise((res) => {
-      this._truckService.ourTrucksAcc().subscribe((data: any[]) => res(data));
+      this._truckService
+        .ourTrucksAcc(from, to)
+        .subscribe((data: any[]) => res(data));
     });
   }
 
@@ -115,5 +122,35 @@ export class TruckInformationComponent implements OnInit {
 
   search() {
     this.listData.filter = this.searchTxt;
+  }
+
+  openFilterDialog = (data: any) => {
+    let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
+        this.filterByDate(result.fromDate, result.toDate);
+      }
+    });
+  };
+
+  filterByDate(from?: string, to?: string) {
+    this.searchTxt = '';
+
+    this._glopal.loading = true;
+
+    if (from && to) {
+      this.onStart(from, to);
+
+      this.isFiltered = true;
+    } else {
+      this.onStart();
+      this.searchDate = { from: '', to: '' };
+      this.isFiltered = false;
+    }
   }
 }

@@ -91,32 +91,29 @@
 
     </div>
 
-    <!-- <div class="col-xl-4 col-lg-6 mb-3">
-      <div>
+    <div class="col-xl-4 col-lg-6 mb-3">
+      <div class="box px-2">
+        <h3 class="textBold pr-2">تفاصيل اعداد الاصناف</h3>
         <div class="panel-body panel-flex-table standTable">
           <table class="flex-table table table-hover">
             <thead class="textSecondaryBg textSecondary">
               <tr>
-                <th style="flex: 2;">بحث عن</th>
-                <th>دائن</th>
-                <th>مدين</th>
-                <th>صافى</th>
+                <th>الصنف</th>
+                <th>وارد</th>
+                <th>منصرف</th>
               </tr>
             </thead>
             <tbody class="tableBody">
-              <tr>
-                <td style="flex: 2;" [class.marked]="searchTxt">{{searchTxt ? searchTxt : 'الكل'}}</td>
-                <td class="textDanger">{{searchResult.onUs | number:'1.0-2'}}</td>
-                <td>{{searchResult.toUs | number:'1.0-2'}}</td>
-                <td class="textSecondaryBg textBold" [class.textDanger]="(searchResult.toUs -searchResult.onUs) < 0">
-                  {{(searchResult.toUs -searchResult.onUs) | number:'1.0-2'}}
-                </td>
+              <tr *ngFor="let product of productsQty">
+                <td>{{product.productName}}</td>
+                <td>{{product.in | number: '1.0-3'}}</td>
+                <td class="textDanger">{{product.out | number: '1.0-3'}}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </div>
 

@@ -81,6 +81,7 @@ import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
 import { ConcreteFinancialComponent } from './industry/concrete-financial/concrete-financial.component';
 import { InstructionsComponent } from './instructions/instructions.component';
 import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
+import { ConcreteProfitsComponent } from './industry/concrete-profits/concrete-profits.component';
 
 @NgModule({
   declarations: [
@@ -149,7 +150,8 @@ import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.com
     AddWorkerComponent,
     ConcreteFinancialComponent,
     InstructionsComponent,
-    AddTaxesListComponent
+    AddTaxesListComponent,
+    ConcreteProfitsComponent
   ],
   imports: [
     BrowserModule,

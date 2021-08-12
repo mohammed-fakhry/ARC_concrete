@@ -40,10 +40,13 @@ export class TruckService {
   }
 
   updateTruckOrder(truckOrder: TruckOrder, cond: string) {
+    let updatebyId = '';
+    if (cond == 'id') updatebyId = truckOrder.orderId ?? '';
+    if (cond == 'transId') updatebyId = truckOrder.stockTransactionDetailsId;
+    if (cond == 'bonId') updatebyId = truckOrder.concreteBonId;
+
     return this.http.put(
-      `${this.url}updateTruckOrder.php?${cond}=${
-        cond == 'id' ? truckOrder.orderId : truckOrder.stockTransactionDetailsId
-      }`,
+      `${this.url}updateTruckOrder.php?${cond}=${updatebyId}`,
       truckOrder
     );
   }
@@ -52,7 +55,11 @@ export class TruckService {
     return this.http.get<Truck[]>(`${this.url}trucksList.php`);
   }
 
-  ourTrucksAcc() {
+  ourTrucksAcc(from?: string, to?: string) {
+    if (from && to)
+      return this.http.get<TruckOrder[]>(
+        `${this.url}ourTrucksAcc.php?fromDate=${from}&toDate=${to}`
+      );
     return this.http.get<any[]>(`${this.url}ourTrucksAcc.php`);
   }
   // truckOrderList

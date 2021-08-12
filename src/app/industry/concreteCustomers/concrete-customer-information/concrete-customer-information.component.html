@@ -1,6 +1,6 @@
 <div class="mainContainer">
   <!-- <div class="col-lg-9 col-md-12"> -->
-  <div class="row stickyBox">
+  <div class="row stickyBox" id="concreteCustomerInfoHeader">
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="box headerBox">
         <mat-card-header>
@@ -110,9 +110,9 @@
     </div>
   </div>
 
-  <div class="box stickyBox printX">
+  <div class="box stickyBox" id="concreteCustomerInfoMainTable">
     <div class="mat-elevation-z0 mt-3">
-      <div class="d-flex justify-content-between px-3">
+      <div class="d-flex justify-content-between px-3 printX">
 
         <div class="form-inline">
           <mat-form-field class="searchForm" style="width: 500px;">
@@ -264,11 +264,13 @@
   </div>
 
   <div class="row stickyBox darkBadge bigShadow" [class.d-none]="!showCementQty && customerInfo.cementCustomerId">
-    <div class="col-lg-8 col-md-12">
+    <div class="col-lg-10 col-md-12">
       <div class=" mr-2 mt-3 stickyBox box" id="cementQty">
         <div class="d-flex justify-content-between">
           <h3 class="cardHeader py-2">استهلاك "{{customerInfo.fullName}}" من الاسمنت</h3>
           <div class="form-inline">
+            <button mat-flat-button color="accent" class="mx-1" (click)="printDocument('cementQty')"><i
+              class="fa fa-print"></i></button>
             <div class="greenBadge borderLgreen p-2">
               وارد | {{acementTotals.in | number: '1.0-3'}}
             </div>

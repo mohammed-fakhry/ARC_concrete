@@ -1,0 +1,204 @@
+<div class="mainContainer">
+
+  <div class="row stickyBox">
+
+    <div class="col-xl-5 col-lg-6 col-md-12 mb-3">
+      <div class="box boxShadow p-2 headerBox textBold">
+
+        <table class="textBold w-100 mt-2">
+
+          <tr *ngIf="!searchDate.from" style="border-bottom: solid black 2px;">
+            <td class="p-2 pb-3">من اول المدة</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+            <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+            <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+          </tr>
+
+          <tr>
+            <td colspan="2" class="textBold textDark pt-2">المبيعات</td>
+          </tr>
+          <tr>
+            <th class="p-2 darkBadge">اجمالى المبيعات</th>
+            <td class="p-2 darkBadge tdBorder_right">{{headerTotal.concreteInvoiceTotal | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr>
+            <td colspan="2" class="textBold pt-3 textDanger">التكلفة و خصم أ.ت.ص</td>
+          </tr>
+          <tr class="lightBg">
+            <th class="p-2">تكلفة الخام</th>
+            <td class="p-2 tdBorder_right">{{headerTotal.materialExpences | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg">
+            <th class="p-2">خصم أ.ت.ص</th>
+            <td class="p-2 tdBorder_right">{{headerTotal.taxesDiscound | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg">
+            <th class="p-2">لودر | ({{headerTotal.concreteQty}} متر × 5)</th>
+            <td class="p-2 tdBorder_right">{{headerTotal.concreteQty * 5 | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg">
+            <th class="p-2">تكلفة الخلط و الديزل | ({{headerTotal.concreteQty}} متر × 35)</th>
+            <td class="p-2 tdBorder_right">{{headerTotal.concreteQty * 35 | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg textBold">
+            <th class="p-2" style="border-top: 1px solid black;">اجمالى تكاليف</th>
+            <td class="p-2 tdBorder_right" style="border-top: 1px solid black;">
+              {{headerTotal.totalExpences | number: '1.0-2'}}
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2" class="textBold pt-3 textDanger">المصروفات</td>
+          </tr>
+          <tr *ngFor="let acc of otherAcc">
+            <th class="p-2 textBtn tBtn-dark pl-2" routerLink="/OtherAccInformation/{{acc.accId}}">{{acc.AccName}}</th>
+            <td class="p-2 tdBorder_right dangerBadge">{{acc.currentAccVal | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg">
+            <th class="p-2">رواتب موظفين</th>
+            <td class="p-2 tdBorder_right">{{workerExpences | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg">
+            <th class="p-2">النقل</th>
+            <td class="p-2 tdBorder_right">{{truckExpences | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr class="lightBg textBold">
+            <th class="p-2" style="border-top: 1px solid black;">اجمالى مصاريف</th>
+            <td class="p-2 tdBorder_right" style="border-top: 1px solid black;">
+              {{headerTotal.accExpences + workerExpences + truckExpences | number:'1.0-2'}}</td>
+          </tr>
+
+          <tr class="textBold alert alert-danger">
+            <th class="p-2 textBold">اجمالى مصاريف و تكاليف</th>
+            <td class="p-2 textBold tdBorder_right">{{headerTotal.accExpences + workerExpences + truckExpences +
+              headerTotal.totalExpences | number: '1.0-2'}}</td>
+          </tr>
+
+          <tr>
+            <th class="pb-3"></th>
+            <td class="pb-3"></td>
+          </tr>
+
+          <tr
+            [ngClass]="( headerTotal.concreteInvoiceTotal - workerExpences - truckExpences- headerTotal.accExpences - headerTotal.totalExpences) > 0 ? 'greenBadge borderLgreen' : 'dangerBadge borderLdanger'">
+            <th class="p-2 textLarge">
+              {{( headerTotal.concreteInvoiceTotal - workerExpences - truckExpences-headerTotal.accExpences -
+              headerTotal.totalExpences) > 0 ? 'ارباح' : 'خسائر'}}
+            </th>
+            <td class="p-2 tdBorder_right textLarge">{{headerTotal.concreteInvoiceTotal - workerExpences -
+              truckExpences- headerTotal.accExpences - headerTotal.totalExpences | number: '1.0-2'}}</td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div>
+
+    <div class="col-xl-7 col-lg-6 col-md-hide printX">
+      <img class="sideLogo" src="assets/logos/concreteCustomers.gif" alt="">
+    </div>
+
+  </div>
+
+  <div class="box stickyBox">
+    <div class="d-flex justify-content-between px-3">
+      <div class="form-inline">
+        <mat-form-field class="searchForm" style="width: 400px;">
+          <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+        </mat-form-field>
+
+        <div class="mr-2">
+          <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+            <i class="fa fa-filter"></i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+              بالتاريخ</button>
+            <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()" style="text-align: right;">اظهار
+              الكل</button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="my-auto">
+        <button mat-stroked-button color="primary" routerLink="/AddConcreteBon" matTooltip="اضافة بون خرسانة">
+          <i class="fa fa-plus fa-lg pt-1 textBold"></i></button>
+      </div>
+    </div>
+
+    <!-- table class="textBtn tBtn-dark pl-2" -->
+    <div class="example-container">
+
+      <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+        <ng-container matColumnDef="date_time">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+          <td mat-cell *matCellDef="let row">{{row.date_time}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="receiptDetail">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>بيان</th>
+          <td mat-cell *matCellDef="let row"
+            [class.marked]="(row.concreteReceipt_id.includes(searchTxt) || row.manualNum.includes(searchTxt)) && searchTxt"
+            routerLink="/UpdateConcreteReceipt/{{row.concreteReceipt_id}}" class="textBtn tBtn-dark pl-2">
+            {{row.concreteReceipt_id}} | فاتورة ({{row.manualNum}})
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="concreteCustomerName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>العميل</th>
+          <td mat-cell *matCellDef="let row">{{row.concreteCustomerName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="invoiceTotal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>تكلفة خام</th>
+          <td mat-cell *matCellDef="let row" class="tdBorder_right">{{row.invoiceTotal | number: '1.0-3'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taxesDiscound">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>خصم أ.ت.ص</th>
+          <td mat-cell *matCellDef="let row">{{row.taxesDiscound | number: '1.0-3'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="allExpences">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى تكلفة</th>
+          <td mat-cell *matCellDef="let row" class="tdBorder_left lightBg textBold">{{row.invoiceTotal +
+            row.taxesDiscound | number: '1.0-3'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="netBeforTaxes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى الفاتورة</th>
+          <td mat-cell *matCellDef="let row" class="textBold tdBorder_left">{{row.netBeforTaxes | number: '1.0-3'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="profits">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ارباح</th>
+          <td mat-cell *matCellDef="let row" class="textDark">{{(row.netBeforTaxes - row.invoiceTotal +
+            row.taxesDiscound) | number: '1.0-2'}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+        </tr>
+
+      </table>
+    </div>
+
+    <!-- paginator -->
+    <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+      [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+    </mat-paginator>
+
+  </div>
+</div>

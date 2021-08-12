@@ -59,8 +59,12 @@
             </tr>
 
             <tr>
+              <td class="py-2"></td>
+            </tr>
+
+            <tr>
               <td>
-                <mat-form-field class="w-50">
+                <mat-form-field class="w-25">
                   <input required matInput placeholder="السائق" name="driverName" [(ngModel)]="concreteBon.driverName">
                   <mat-error>
                     يجب ادخال اسم السائق
@@ -81,12 +85,20 @@
                   </datalist>
                 </mat-form-field>
 
+                <mat-form-field class="w-25 px-1">
+                  <input matInput type="number" placeholder="المشال" name="metrPrice" [(ngModel)]="truckInfo.metrPrice">
+                </mat-form-field>
+
                 <mat-form-field class="w-25">
-                  <input matInput placeholder="اللوحات" name="truckNumber" [(ngModel)]="truckInfo.number">
+                  <input matInput placeholder="اللوحات" name="truckNumber" [(ngModel)]="truckInfo.number" disabled>
                 </mat-form-field>
 
               </td>
 
+            </tr>
+
+            <tr>
+              <td class="py-2"></td>
             </tr>
 
             <tr>

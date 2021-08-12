@@ -84,8 +84,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     public _auth: AuthService,
     public _dialog: MatDialog
   ) {
-    (this._glopal.loading = true),
-      (this._glopal.currentHeader = 'تفاصيل حساب عميل خرسانة');
+    this._glopal.loading = true;
+    this._glopal.currentHeader = 'تفاصيل حساب عميل خرسانة';
   }
 
   ngOnInit(): void {
@@ -356,8 +356,29 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     if (!this.marked) this.marked = true;
   };
 
-  printDocument() {
-    window.print();
+  printDocument(cond?: string) {
+    if (cond == 'cementQty') {
+      const concreteCustomerInfoMainTable = document.querySelector(
+        '#concreteCustomerInfoMainTable'
+      ) as HTMLElement;
+      const concreteCustomerInfoHeader = document.querySelector(
+        '#concreteCustomerInfoHeader'
+      ) as HTMLElement;
+
+      concreteCustomerInfoMainTable.classList.add('printX');
+      concreteCustomerInfoHeader.classList.add('printX');
+
+      window.print();
+
+      concreteCustomerInfoMainTable.classList.remove('printX');
+      concreteCustomerInfoHeader.classList.remove('printX');
+    } else {
+      const cementQty = document.querySelector('#cementQty') as HTMLElement;
+
+      cementQty.classList.add('printX');
+      window.print();
+      cementQty.classList.remove('printX');
+    }
   }
 
   /* main discound button */

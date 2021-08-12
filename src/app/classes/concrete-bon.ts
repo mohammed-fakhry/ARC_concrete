@@ -10,6 +10,7 @@ export class ConcreteBon {
   driverName: string = '';
   truckId!: string | null;
   truckName: string = '';
+  metrPrice: number = 0;
   date: string = '';
   time: string = '';
   pump: string = '';

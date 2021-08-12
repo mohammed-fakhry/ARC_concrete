@@ -28,7 +28,7 @@
 
         </mat-card-content>
         <!-- <mat-card-actions>
-          <button mat-button>actionOne</button>
+          <button mat-button (click)="tempFix()">actionOne</button>
           <button mat-button>actionTwo</button>
         </mat-card-actions> -->
       </mat-card>
@@ -68,6 +68,10 @@
               </td>
             </tr>
           </table> -->
+          <button mat-flat-button color="warn" (click)="tempFix()" [disabled]="loopDetails.length > 0">
+            {{loadCond}}
+            <span *ngIf="loopDetails.length > 0"> {{loopDetails.length}} | {{loopDetails.loop}}</span>
+          </button>
           </mat-card-content>
         </mat-card>
 

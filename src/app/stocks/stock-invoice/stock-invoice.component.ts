@@ -1347,6 +1347,7 @@ export class StockInvoiceComponent implements OnInit {
         notes: `${this.stockInvoice.customerName} | فاتورة (${invoiceId})`,
         stockTransactionDetailsId: stockTransactionDetailsId,
         stockTransactionId: '',
+        concreteBonId: '0',
         madeBy: this._auth.uName.realName,
       };
 

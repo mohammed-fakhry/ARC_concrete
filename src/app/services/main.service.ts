@@ -157,7 +157,7 @@ export class MainService {
     this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
       duration: 2500,
     });
-    this.playDrumFail()
+    this.playDrumFail();
     return false;
   };
 
@@ -341,14 +341,14 @@ export class MainService {
     const sound = document.getElementById('alertAudio') as HTMLAudioElement;
     if (sound) {
       // sound.src = "assets/audio/alert.wav"
-      sound.play()
-    };
+      sound.play();
+    }
   }
 
   playLongPop() {
     const longPop = document.getElementById('longPop') as HTMLAudioElement;
     if (longPop) {
-      longPop.src = "assets/audio/longPop.wav"
+      longPop.src = 'assets/audio/longPop.wav';
       longPop.play();
     }
   }
@@ -367,7 +367,9 @@ export class MainService {
 
   // secondaryDone
   play_secondaryDone() {
-    const secondaryDone = document.getElementById('secondaryDone') as HTMLAudioElement;
+    const secondaryDone = document.getElementById(
+      'secondaryDone'
+    ) as HTMLAudioElement;
     if (secondaryDone) secondaryDone.play();
   }
 
@@ -388,7 +390,9 @@ export class MainService {
 
   // sci_click
   play_sweepTransition() {
-    const sweepTransition = document.getElementById('sweepTransition') as HTMLAudioElement;
+    const sweepTransition = document.getElementById(
+      'sweepTransition'
+    ) as HTMLAudioElement;
     if (sweepTransition) sweepTransition.play();
   }
 

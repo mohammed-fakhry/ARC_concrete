@@ -11,6 +11,7 @@ import { OtherAcc } from '../classes/other-acc';
 import { SafeReceipt } from '../classes/safe-receipt';
 import { DeleteDialogComponent } from '../dialogs/delete-dialog/delete-dialog.component';
 import { MainService } from '../services/main.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-fixes',
@@ -26,6 +27,8 @@ export class FixesComponent implements OnInit {
 
   db_changes = [];
 
+  url: string | null = localStorage.getItem('tmpDB');
+
   constructor(
     public _stockService: StockService,
     public _glopal: GlobalVarsService,
@@ -33,6 +36,7 @@ export class FixesComponent implements OnInit {
     public _dialog: MatDialog,
     public _location: Location,
     public _mainService: MainService,
+    private http: HttpClient,
     public _router: Router
   ) {
     this._glopal.currentHeader = 'SystemFixes';
@@ -263,5 +267,79 @@ export class FixesComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  loadCond: string = 'tempFix';
+  loopDetails = {
+    length: 0,
+    loop: 0,
+  };
+
+  tempFix_request(cond: string, data?: any) {
+    if (cond == 'get')
+      return this.http.get<any[]>(`${this.url}tempFix.php?get=1`);
+
+    if (cond == 'post')
+      return this.http.post(`${this.url}tempFix.php?post=1`, data);
+
+    else
+      return this.http.put(
+        `${this.url}tempFix.php?id=${data.bonId}&put=1`,
+        data , {responseType: 'text'}
+      );
+  }
+
+  getTempData() : Promise<any[]> {
+    return new Promise((res) => {
+      this.tempFix_request('get').subscribe((data: any) => res(data));
+    });
+  }
+
+  post_put_TempData(cond: string, data: any) {
+    return new Promise((res) => {
+      this.tempFix_request(cond, data).subscribe((data: any) => res(data));
+    });
+  };
+
+  tempFix() {
+    /* this.getTempData().then((data: any[]) => {
+      this.loadCond = '...loading';
+      this.loopDetails.length = data.length;
+
+      const processLoop = async () => {
+        for (let i = 0; i < data.length; i++) {
+
+          const PostData = {
+            orderId: null,
+            truckId: data[i].truckId,
+            truckName: '',
+            truckCapacity: data[i].capacity,
+            truckModel: '',
+            orderType: data[i].owner,
+            truckType: data[i].truckType,
+            loadingType: 'متر',
+            truckCustomerId: '1',
+            truckCustomerName: '',
+            LoadTimes: data[i].concreteQty,
+            totalQty: 0,
+            price: data[i].metrPrice,
+            realPrice: data[i].metrPrice,
+            totalVal: 0,
+            date_time: `${data[i].date}T${data[i].time}`,
+            notes: `بون خرسانة رقم (${data[i].bonManualNum})`,
+            stockTransactionDetailsId: '1',
+            stockTransactionId: '1',
+            concreteBonId: data[i].bonId,
+            madeBy: data[i].madeBy,
+          }
+
+          const respon = await this.post_put_TempData('post', PostData);
+
+          this.loopDetails.loop = i + 1;
+        }
+      };
+
+      processLoop().then(() => (this.loadCond = 'done.'));
+    }); */
   }
 }

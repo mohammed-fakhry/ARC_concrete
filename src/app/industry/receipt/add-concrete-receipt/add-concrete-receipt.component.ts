@@ -50,11 +50,13 @@ export class AddConcreteReceiptComponent implements OnInit {
   totalsArry: number[] = [];
   totalsArryBfAddVal: number[] = [];
 
-  discoundsArry: any[] = []; /* { description: string; val: number }[] | */
+  discoundsArry: any[] = [];
 
   totalBeforAddTaxes: number = 0;
   // addTaxVal: number = 0;
   mainTotal: number = 0;
+
+  totalConcreteQty: number = 0;
 
   recieptMaterials: {
     qty: number;
@@ -670,9 +672,20 @@ export class AddConcreteReceiptComponent implements OnInit {
   }
 
   calcInvoiceTotal() {
-    this.invoiceTotal = this.concreteReceipt.stockTransactionD
-      .map((row) => row.Qty * row.price)
-      .reduce((a, b) => a + b, 0);
+    this.concreteReceipt.stockTransaction.invoiceTotal =
+      this.concreteReceipt.stockTransactionD
+        .map((row) => row.Qty * row.price)
+        .reduce((a, b) => a + b, 0);
+
+    this.totalConcreteQty = this.concreteReceipt.receiptDetails
+      .filter((b: ConcreteReceipDetails) => !b.concreteName.includes('مضخ'))
+      .reduce((a: any, b: any) => a + b.concreteQty, 0);
+
+    const loaderExpences = this.totalConcreteQty * 5
+    const mixerExpences = this.totalConcreteQty * 35
+    const truckExpences = this.totalConcreteQty * 25
+
+    this.invoiceTotal = this.concreteReceipt.stockTransaction.invoiceTotal + loaderExpences + mixerExpences + truckExpences;
   }
 
   generateMaterials(): any[] {
@@ -696,10 +709,6 @@ export class AddConcreteReceiptComponent implements OnInit {
     return allMaterials;
   }
 
-  /* calcPower(a: number, b: number) : number {
-    return parseInt(Number(a * ).toFixed(3))
-  } */
-
   calcMaterial(indx?: number) {
     if (indx === 0 || indx) {
       this.recieptMaterials[indx].qty =
@@ -707,6 +716,11 @@ export class AddConcreteReceiptComponent implements OnInit {
       this.calcTotal(indx);
     }
 
+    this.totalConcreteQty = this.concreteReceipt.receiptDetails
+      .filter((b: ConcreteReceipDetails) => !b.concreteName.includes('مضخ'))
+      .reduce((a: any, b: any) => a + b.concreteQty, 0);
+
+    // console.log(this.totalConcreteQty);
     if (this.concreteReceipt.concreteReceiptType != 'مستخلص مضخة ثابتة') {
       const allMaterials = this.generateMaterials();
 

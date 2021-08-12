@@ -36,7 +36,7 @@
 
       <mat-card>
         <mat-card-header>
-          <mat-card-title >تفاصيل رواتب المدة</mat-card-title>
+          <mat-card-title>تفاصيل رواتب المدة</mat-card-title>
           <mat-card-subtitle>حساب قيمة ايام العمل</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
@@ -97,6 +97,7 @@
               <ng-container matColumnDef="workerId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
                 <td mat-cell *matCellDef="let row">{{row.workerId}}</td>
+                <td mat-footer-cell *matFooterCellDef> اجمالى </td>
               </ng-container>
 
               <ng-container matColumnDef="workerName">
@@ -104,6 +105,7 @@
                 <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2"
                   routerLink="/WorkerInformation/{{row.workerId}}">
                   {{row.workerName}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <!-- <ng-container matColumnDef="workerTell">
@@ -119,11 +121,13 @@
               <ng-container matColumnDef="workerJopCateg">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>الادارة</th>
                 <td mat-cell *matCellDef="let row">{{row.workerJopCateg}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <ng-container matColumnDef="workerJop">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>الوظيفة</th>
                 <td mat-cell *matCellDef="let row">{{row.workerJop}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <ng-container matColumnDef="workedDayes">
@@ -131,6 +135,7 @@
                 <td mat-cell *matCellDef="let row" class="tdBorder_right">
                   {{row.workedDayes > 0 ? (row.workedDayes | number: '1.0-2') : '-'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <ng-container matColumnDef="discoundDayes">
@@ -138,6 +143,7 @@
                 <td mat-cell *matCellDef="let row" [ngClass]="row.discoundDayes > 0 ? 'dangerBadge borderLdanger' : ''">
                   {{row.discoundDayes | number: '1.0-2'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <ng-container matColumnDef="overDayes">
@@ -145,6 +151,7 @@
                 <td mat-cell *matCellDef="let row" [ngClass]="row.overDayes > 0 ? 'greenBadge borderLgreen' : ''">
                   {{row.overDayes | number: '1.0-2'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <!-- {{(row.payLater < 0 ? row.cashReceived + row.payLater : ((row.cashReceived + row.payLater > 0) ? 0 : row.payLater)) | number: '1.0-2'}} -->
@@ -155,6 +162,7 @@
                   [ngClass]="row.payLater > 0 ? 'textDanger' : row.payLater < 0 ? 'secondaryBadge borderLsecondary' : ''">
                   {{row.payLater | number: '1.0-2'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> {{tableTotals.payLater | number: '1.0-2'}} </td>
               </ng-container>
 
               <ng-container matColumnDef="cashReceived">
@@ -162,6 +170,7 @@
                 <td mat-cell *matCellDef="let row" class="tdBorder_right">
                   {{row.cashReceived | number: '1.0-2'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> {{tableTotals.cashReceived | number: '1.0-2'}} </td>
               </ng-container>
 
               <ng-container matColumnDef="workerCurrentVal">
@@ -170,6 +179,7 @@
                   class="textBold tdBorder lightBg">
                   {{row.workerCurrentVal | number: '1.0-2'}}
                 </td>
+                <td mat-footer-cell *matFooterCellDef> {{tableTotals.workerCurrentVal | number: '1.0-2'}} </td>
               </ng-container>
 
               <ng-container matColumnDef="edit">
@@ -179,12 +189,14 @@
                 </th>
                 <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue" *matCellDef="let row"
                   routerLink="/UpdateWorker/{{row.workerId}}"><i class="fa fa-pencil underLine"></i></td>
+                <td mat-footer-cell *matFooterCellDef> Total </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
               </tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
               </tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
             </table>
           </div>
           <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"

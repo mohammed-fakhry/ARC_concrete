@@ -110,6 +110,10 @@ export class AddConcreteBonComponent implements OnInit {
             this.truckList.find(
               (truck) => truck.id == this.concreteBon.truckId
             ) ?? new Truck();
+
+          this.truckInfo.metrPrice = this.concreteBon.metrPrice
+
+          console.log(this.concreteBon)
         });
     } else {
       this.concreteBon.date = this._mainService.makeDate(new Date(Date.now()));
@@ -154,7 +158,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['concreteCustomer_name'].setErrors({
         incorrect: true,
       });
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     }
   }
 
@@ -173,7 +177,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['truckName'].setErrors({
         incorrect: true,
       });
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     }
   }
 
@@ -196,7 +200,7 @@ export class AddConcreteBonComponent implements OnInit {
       concreteBonForm.form.controls['concreteName'].setErrors({
         incorrect: true,
       });
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     }
   }
 
@@ -229,7 +233,7 @@ export class AddConcreteBonComponent implements OnInit {
     });
   };
 
-  recordTruckOrder() {
+  recordTruckOrder(cond: string, bonId: string) {
     let truckOrder: TruckOrder = {
       orderId: null,
       truckId: this.truckInfo.id,
@@ -244,36 +248,41 @@ export class AddConcreteBonComponent implements OnInit {
       LoadTimes: this.concreteBon.concreteQty,
       totalQty: 0,
       price: this.truckInfo.metrPrice,
-      realPrice : this.truckInfo.metrPrice,
+      realPrice: this.truckInfo.metrPrice,
       totalVal: 0,
       date_time: `${this.concreteBon.date}T${this.concreteBon.time}`,
-      notes: `بون خرسانة رقم (${this.concreteBon.bonManualNum})`,
+      notes: `بون خرسانة رقم (${this.concreteBon.bonManualNum}) | ${bonId}`,
       stockTransactionDetailsId: '1',
       stockTransactionId: '1',
+      concreteBonId: bonId,
       madeBy: this.concreteBon.madeBy,
     };
 
-    /* if (this.id) {
-      truckOrder.orderId = this.id;
-      this._truckService.updateTruckOrder(truckOrder, 'id').subscribe();
-    } else */ this._truckService.postTruckOrder(truckOrder).subscribe();
+    if (cond == 'post')
+      this._truckService.postTruckOrder(truckOrder).subscribe();
+
+    if (cond == 'update')
+      this._truckService.updateTruckOrder(truckOrder, 'bonId').subscribe();
   }
 
   recordConcreteBon() {
     if (this.id) {
       this._concrete.updateConcreteBon(this.concreteBon).subscribe(() => {
         this.openDialog();
+        if (this.concreteBon.bonId)
+          this.recordTruckOrder('update', this.concreteBon.bonId);
       });
-      this.recordTruckOrder();
     } else
-      this._concrete.postConcreteBon(this.concreteBon).subscribe(() => {
-        this.openDialog();
-        this.recordTruckOrder();
-      });
+      this._concrete
+        .postConcreteBon(this.concreteBon)
+        .subscribe((data: any) => {
+          this.openDialog();
+          this.recordTruckOrder('post', data);
+        });
   }
 
   onSubmit(concreteReceiptForm: NgForm) {
     if (concreteReceiptForm.valid) this.recordConcreteBon();
-    else this._mainService.playshortFail()
+    else this._mainService.playshortFail();
   }
 }

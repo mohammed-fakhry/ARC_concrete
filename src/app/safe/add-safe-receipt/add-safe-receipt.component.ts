@@ -158,7 +158,7 @@ export class AddSafeReceiptComponent implements OnInit {
       this.getWorkers(),
     ]).then((data: any[]) => {
       const result = {
-        safes: data[0],
+        safes: data[0].filter((safe: any) => safe.safeId != 17),
         customers: data[1],
         acc: data[2],
         concreteCustomers: data[3],

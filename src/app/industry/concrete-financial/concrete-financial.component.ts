@@ -239,10 +239,14 @@ export class ConcreteFinancialComponent implements OnInit {
     });
   }
 
+  tempArr: any[] = [];
+
   fillListData = (data: any) => {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
+
+    this.tempArr = data;
   };
 
   search(searchfor?: string) {
@@ -328,7 +332,9 @@ export class ConcreteFinancialComponent implements OnInit {
       duration: 2500,
     });
 
-    this._mainService.play_secondaryDone()
+    this.totalVals = this.sumTotalVals(this.tempArr);
+
+    this._mainService.play_secondaryDone();
     this._glopal.loading = false;
   }
 }

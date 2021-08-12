@@ -43,6 +43,12 @@ export class WorkersComponent implements OnInit {
   searchDate: { from: string; to: string } = { from: '', to: '' };
   isFiltered: boolean = false;
 
+  tableTotals = {
+    cashReceived: 0,
+    payLater: 0,
+    workerCurrentVal: 0,
+  };
+
   constructor(
     public _workerService: WorkerService,
     public _mainService: MainService,
@@ -175,7 +181,22 @@ export class WorkersComponent implements OnInit {
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
     this.setSalaryTotals(data);
+
+    this.tableTotals = this.getTableTotals(data);
   };
+
+  getTableTotals(data: any) {
+    const result = {
+      cashReceived: data.reduce((a: any, b: any) => a + b.cashReceived, 0),
+      payLater: data.reduce((a: any, b: any) => a + b.payLater, 0),
+      workerCurrentVal: data.reduce(
+        (a: any, b: any) => a + b.workerCurrentVal,
+        0
+      ),
+    };
+
+    return result;
+  }
 
   openFilterDialog = (data: any) => {
     let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);

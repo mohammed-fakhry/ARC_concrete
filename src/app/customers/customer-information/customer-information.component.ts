@@ -58,6 +58,8 @@ export class CustomerInformationComponent implements OnInit {
 
   tempAccArry: any[] = [];
 
+  productsQty: any[] = [];
+
   constructor(
     public _mainService: MainService,
     public activeRoute: ActivatedRoute,
@@ -169,6 +171,8 @@ export class CustomerInformationComponent implements OnInit {
               data[i].productPrice
             )
           : data[i].receiptDetail,
+        productName: data[i].productName,
+        productQty: data[i].productQty,
         uncompleted: data[i].uncompleted,
         discound: discoundVal,
         minVal: minVal,
@@ -247,6 +251,52 @@ export class CustomerInformationComponent implements OnInit {
         .reduce((a: any, b: any) => a + b.addVal, 0);
     } else {
       this.headerTotals = new AccHeaderTotals();
+    }
+
+    this.countProductQty(accArr);
+  }
+
+  countProductQty(accArr: any) {
+    const productArr = accArr
+      .filter((acc: any) => acc.productName)
+      .map((acc: any) => {
+        return {
+          recieptType: acc.recieptType,
+          productName: acc.productName,
+          productQty: acc.productQty,
+        };
+      });
+
+    const products = [
+      ...new Set(productArr.map((product: any) => product.productName)),
+    ];
+
+    this.productsQty = [];
+
+    for (let i = 0; i < products.length; i++) {
+      const allQty_out = productArr
+        .filter(
+          (product: any) =>
+            product.productName == products[i] &&
+            product.recieptType.includes('فاتورة بيع')
+        )
+        .reduce((a: any, b: any) => a + b.productQty, 0);
+
+      const allQty_in = productArr
+        .filter(
+          (product: any) =>
+            product.productName == products[i] &&
+            product.recieptType.includes('فاتورة شراء')
+        )
+        .reduce((a: any, b: any) => a + b.productQty, 0);
+
+      const row = {
+        productName: products[i],
+        out: allQty_out,
+        in: allQty_in,
+      };
+
+      this.productsQty.push(row);
     }
   }
 

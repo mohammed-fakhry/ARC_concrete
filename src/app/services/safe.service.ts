@@ -82,7 +82,7 @@ export class SafeService {
   getTruckOtherAcc(id: string, from?: string, to?: string) {
     if (from && to)
       return this.http.get<any[]>(
-        `${this.url}otherAccountsList.php?id=${id}&fromDate=${from}&toDate=${to}`
+        `${this.url}otherAccountsList.php?truckId=${id}&fromDate=${from}&toDate=${to}`
       );
     return this.http.get<OtherAcc[]>(
       `${this.url}otherAccountsList.php?truckId=${id}`

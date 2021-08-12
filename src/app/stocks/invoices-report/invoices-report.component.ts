@@ -259,6 +259,7 @@ export class InvoicesReportComponent implements OnInit {
               notes: `${acc.customerName} | فاتورة (${acc.stockTransactionId})`,
               stockTransactionDetailsId: acc.stockTransactionDetailsId,
               stockTransactionId: '',
+              concreteBonId: '0',
               madeBy: acc.madeBy,
             };
 

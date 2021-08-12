@@ -167,7 +167,7 @@
       <mat-divider class="mt-4 mb-3"></mat-divider>
 
       <div class="d-flex justify-content-between">
-        <button [disabled]="truckOrder.stockTransactionDetailsId > '1' || dateExpires" mat-flat-button color="primary"
+        <button [disabled]="truckOrder.stockTransactionDetailsId > '1' || truckOrder.concreteBonId > '0' || dateExpires" mat-flat-button color="primary"
           type="submit">
           {{id ? 'تعديل' : 'تسجيل'}}
         </button>
