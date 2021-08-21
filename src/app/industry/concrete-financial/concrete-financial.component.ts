@@ -74,6 +74,11 @@ export class ConcreteFinancialComponent implements OnInit {
     sectionsTotal: 0,
   };
 
+  staticMixerTotals = {
+    income: 0,
+    outcome: 0
+  }
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
@@ -119,12 +124,23 @@ export class ConcreteFinancialComponent implements OnInit {
       ];
     }
 
-    this.getConcreteFinancials(this.id, 'customerId')
-      .then((data: ConcreteFinancial[]) => {
-        this.financialList = data;
-        this.fillListData(data);
+    Promise.all([this.getConcreteFinancials(this.id, 'customerId'), this.getMixingTotal()])
+      .then((data: any) => {
+
+        const result = {
+          financialList: data[0],
+          mixerTotal: data[1]
+        }
+        this.financialList = result.financialList;
+
+        this.staticMixerTotals = {
+          income: result.mixerTotal[1].totalVal,
+          outcome: result.mixerTotal[0].totalVal
+        }
+
+        this.fillListData(result.financialList);
         this._mainService.handleTableHeight();
-        this.handleId(data);
+        this.handleId(result.financialList);
       })
       .catch((err) => {
         const errMsg = `${err}`;
@@ -161,6 +177,15 @@ export class ConcreteFinancialComponent implements OnInit {
       this._glopal.loading = false;
     }
     this.totalVals = this.sumTotalVals(concreteFinancial);
+  }
+
+  getMixingTotal() {
+    return new Promise((res) => {
+        this._concrete
+          .staticMixerTotals(this.id)
+          .subscribe((data: any) => res(data));
+      // else res([])
+    });
   }
 
   getSections(data: ConcreteFinancial[]): { name: string; val: number }[] {

@@ -285,8 +285,13 @@
 
               <div class="infoCard printX py-2 mr-2 textBtn badgeBtn" (click)="openSearchDialog(addSafeReciept, concreteReceiptCash.id)"
                 [ngClass]="concreteReceiptCash.id ? 'darkBadge borderLdark' :'dangerBadge borderLdanger'"
-                *ngIf="concreteReceiptCash.id || safeReciept.transactionAccKind === 'عميل خرسانة'">
+                *ngIf="concreteReceiptCash.id || safeReciept.transactionAccKind === 'عميل خرسانة' && !safeReciept.recieptNote.includes(staticMixerNote)">
                 {{concreteReciptCash_btn}}
+              </div>
+
+              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn darkBadge" (click)="safeReciept.recieptNote = staticMixerNote"
+                *ngIf="safeReciept.transactionAccKind === 'عميل خرسانة' && !safeReciept.recieptNote.includes(staticMixerNote) && !concreteReceiptCash.id">
+                دفعة من مستخلص
               </div>
             </div>
 

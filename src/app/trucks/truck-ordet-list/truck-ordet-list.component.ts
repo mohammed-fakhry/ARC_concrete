@@ -79,50 +79,58 @@ export class TruckOrdetListComponent implements OnInit {
     this.id = this.activeRoute.snapshot.paramMap.get('id');
     // const isId = this.id ?? undefined;
 
-    if (this.id)
-      this.getOrderList(this.id, from, to).then((data: TruckOrder[]) => {
-        this.fillListData(this.makeTruckAcc(data));
+    if (this.id) {
+      this.getTruckList().then((data: Truck[]) => {
+        this.truckInfo =
+          data.find((truck: Truck) => this.id == truck.id) ?? new Truck();
 
-        this._mainService.handleTableHeight();
-
-        if (this.id) {
-          Promise.all([this.getTruckList(), this.truckOtherAcc(from, to)]).then(
-            (data: any[]) => {
-              const result = {
-                truckList: data[0],
-                otherAcc: data[1][0],
-              };
-
-              //const truckList = result.truckList;
-              this.truckInfo =
-                result.truckList.find((truck: Truck) => this.id == truck.id) ??
-                new Truck();
-
-              if (this.truckInfo.truckType != 'سيارة') {
-                this.displayedColumns = [
-                  'id',
-                  'date_time',
-                  'orderId',
-                  'truckCustomerName',
-                  'totalQty',
-                  'price',
-                  'totalVal',
-                  'netVal',
-                  'notes',
-                ];
+        if (this.truckInfo.truckType == 'مضخة') {
+          if (this.id)
+            this.getPumpOrderList(this.id, from, to).then(
+              (data: TruckOrder[]) => {
+                this.handleTruck_orders(data, from, to);
               }
-
-              this._glopal.currentHeader = `حركة نقلات السيارة | ${this.truckInfo.name}`;
-
-              this.truckOtherAccInfo = result.otherAcc;
-
-              this._glopal.loading = false;
-            }
-          );
+            );
         } else {
-          this._glopal.loading = false;
+          if (this.id)
+            this.getOrderList(this.id, from, to).then((data: TruckOrder[]) => {
+              this.handleTruck_orders(data, from, to);
+            });
         }
       });
+    }
+  }
+
+  handleTruck_orders(data: any, from?: string, to?: string) {
+    this.fillListData(this.makeTruckAcc(data));
+
+    this._mainService.handleTableHeight();
+
+    if (this.id) {
+      this.truckOtherAcc(from, to).then((responce: OtherAcc[]) => {
+        if (this.truckInfo.truckType != 'سيارة') {
+          this.displayedColumns = [
+            'id',
+            'date_time',
+            'orderId',
+            'truckCustomerName',
+            'totalQty',
+            'price',
+            'totalVal',
+            'netVal',
+            'notes',
+          ];
+        }
+
+        this._glopal.currentHeader = `حركة نقلات السيارة | ${this.truckInfo.name}`;
+
+        this.truckOtherAccInfo = responce[0];
+
+        this._glopal.loading = false;
+      });
+    } else {
+      this._glopal.loading = false;
+    }
   }
 
   makeTruckAcc(data: TruckOrder[]) {
@@ -195,6 +203,18 @@ export class TruckOrdetListComponent implements OnInit {
     });
   }
 
+  getPumpOrderList(
+    id: string,
+    from?: string,
+    to?: string
+  ): Promise<TruckOrder[]> {
+    return new Promise((res) => {
+      this._truckService
+        .getPumpOrderList('pumpId', id, from, to)
+        .subscribe((data: TruckOrder[]) => res(data));
+    });
+  }
+
   getTruckList(): Promise<Truck[]> {
     return new Promise((res) => {
       this._truckService.trucksList().subscribe((data: Truck[]) => {
@@ -210,7 +230,7 @@ export class TruckOrdetListComponent implements OnInit {
   };
 
   search(searchFor?: string) {
-    if (searchFor) this.searchTxt = searchFor
+    if (searchFor) this.searchTxt = searchFor;
     this.listData.filter = this.searchTxt;
   }
 

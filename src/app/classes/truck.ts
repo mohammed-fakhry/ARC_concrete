@@ -10,4 +10,5 @@ export class Truck {
   customerId: string = '1';
   customerName: string = '';
   truckCurrentVal: number = 0;
+  concreteId: string = '0';
 }

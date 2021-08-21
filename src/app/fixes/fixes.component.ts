@@ -25,7 +25,11 @@ export class FixesComponent implements OnInit {
     mainUrl: 'http://localhost/accounting/',
   };
 
-  db_changes = [];
+  db_changes = [
+    "ALTER TABLE `truckorder` ADD `concreteReceiptD_id` VARCHAR(100) NOT NULL DEFAULT '0' AFTER `concreteBonId`",
+    "ALTER TABLE `concretereceipt_detail` ADD `pumpCost` FLOAT(10.2) NOT NULL DEFAULT '0' AFTER `concretePrice`",
+    "INSERT INTO `truckorder` (`orderId`, `truckId`, `orderType`, `loadingType`, `truckCustomerId`, `LoadTimes`, `price`, `realPrice`, `date_time`, `notes`, `stockTransactionDetailsId`, `concreteBonId`, `concreteReceiptD_id`, `madeBy`) VALUES (NULL, '120', 'سيارة خارجية', 'متر', '1', '189', '30', '26.32', '2021-08-15T23:59', 'دجلة لاند مارك فاتورة رقم (247)', '1', '0', '1316', 'foto7')"
+  ];
 
   url: string | null = localStorage.getItem('tmpDB');
 
@@ -302,7 +306,7 @@ export class FixesComponent implements OnInit {
   };
 
   tempFix() {
-    /* this.getTempData().then((data: any[]) => {
+    this.getTempData().then((data: any[]) => {
       this.loadCond = '...loading';
       this.loopDetails.length = data.length;
 
@@ -310,36 +314,17 @@ export class FixesComponent implements OnInit {
         for (let i = 0; i < data.length; i++) {
 
           const PostData = {
-            orderId: null,
-            truckId: data[i].truckId,
-            truckName: '',
-            truckCapacity: data[i].capacity,
-            truckModel: '',
-            orderType: data[i].owner,
-            truckType: data[i].truckType,
-            loadingType: 'متر',
-            truckCustomerId: '1',
-            truckCustomerName: '',
-            LoadTimes: data[i].concreteQty,
-            totalQty: 0,
-            price: data[i].metrPrice,
-            realPrice: data[i].metrPrice,
-            totalVal: 0,
-            date_time: `${data[i].date}T${data[i].time}`,
-            notes: `بون خرسانة رقم (${data[i].bonManualNum})`,
-            stockTransactionDetailsId: '1',
-            stockTransactionId: '1',
-            concreteBonId: data[i].bonId,
-            madeBy: data[i].madeBy,
+            bonId: data[i].bonId,
+            pumpId: data[i].pumpId
           }
 
-          const respon = await this.post_put_TempData('post', PostData);
+          const respon = await this.post_put_TempData('put', PostData);
 
           this.loopDetails.loop = i + 1;
         }
       };
 
       processLoop().then(() => (this.loadCond = 'done.'));
-    }); */
+    });
   }
 }

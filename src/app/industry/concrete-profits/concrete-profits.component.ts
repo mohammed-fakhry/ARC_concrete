@@ -85,7 +85,7 @@ export class ConcreteProfitsComponent implements OnInit {
       };
 
       this.mainList = result.concreteProfits;
-      this.otherAcc = result.accList;
+      this.otherAcc = result.accList.filter((acc: any) => acc.currentAccVal != 0);
       this.workerExpences = result.workerExpences.workersExpenses;
       this.truckExpences = result.workerExpences.trucksExpenses
       this.fillListData(result.concreteProfits);
@@ -209,7 +209,7 @@ export class ConcreteProfitsComponent implements OnInit {
         };
 
         this.otherAcc = result.otherAcc.filter((acc: OtherAcc) =>
-          acc.AccName.includes('المحطه')
+          acc.AccName.includes('المحطه') && acc.currentAccVal != 0
         );
 
         this.workerExpences = result.workerExpences.workersExpenses;
@@ -229,7 +229,7 @@ export class ConcreteProfitsComponent implements OnInit {
             workerExpences: data[1],
           };
 
-          this.otherAcc = result.otherAcc;
+          this.otherAcc = result.otherAcc.filter((acc: any) => acc.currentAccVal != 0);
           this.fillListData(this.mainList);
           this.isFiltered = false;
           this.searchDate = { from: '', to: '' };

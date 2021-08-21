@@ -19,7 +19,7 @@
             <mat-form-field class="mr-3" style="padding-top: 3px;">
               <mat-label>نوع السيارة</mat-label>
               <mat-select required #truckType name="truckType" [(ngModel)]="truck.truckType" id="truckType"
-                (ngModelChange)="truckTypeChanged()">
+                (ngModelChange)="truckTypeChanged()" [disabled]="truck.truckType == 'مضخة' && id != null">
                 <mat-option value="سيارة">
                   سيارة
                 </mat-option>
@@ -34,6 +34,9 @@
                 </mat-option>
                 <mat-option value="خلاطة">
                   خلاطة
+                </mat-option>
+                <mat-option value="مضخة">
+                  مضخة
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -79,14 +82,14 @@
           <td class="pt-3">
             <mat-form-field class="w-50 pl-1">
               <mat-label>
-                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة') ? 'سعة التحميل بالمتر' : 'تشغيل بالساعة'}}
+                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة' || truck.truckType == 'مضخة') ? 'سعة التحميل بالمتر' : 'تشغيل بالساعة'}}
               </mat-label>
               <input [disabled]="truck.truckType != 'سيارة'" required matInput name="capacity" type="number"
                 [(ngModel)]="truck.capacity" #capacity>
             </mat-form-field>
             <mat-form-field class="w-50 pr-1">
               <mat-label>
-                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة') ? 'سعر المتر' : 'سعر الساعة'}}
+                {{(truck.truckType == 'سيارة' || truck.truckType == 'خلاطة' || truck.truckType == 'مضخة') ? 'سعر المتر' : 'سعر الساعة'}}
               </mat-label>
               <input required matInput name="metrPrice" type="number" [(ngModel)]="truck.metrPrice" #metrPrice>
             </mat-form-field>

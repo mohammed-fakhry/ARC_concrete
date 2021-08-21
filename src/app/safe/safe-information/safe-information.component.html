@@ -15,7 +15,8 @@
           </mat-card-title>
           <mat-card-subtitle>
             <h3 class="homeSubtitle" [class.textDanger]="safeInfo.currentSafeVal < 0">
-              {{safeInfo.currentSafeVal | number:'1.0-2'}}
+              {{(searchDate.from ? headerTotals.income + headerTotals.openedVal - headerTotals.outcome :
+              safeInfo.currentSafeVal) | number:'1.0-2'}}
             </h3>
           </mat-card-subtitle>
         </mat-card-header>
@@ -51,12 +52,17 @@
               <th class="p-2">منصرف</th>
               <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
             </tr>
+
+            <!-- <tr *ngIf="searchDate.from" class="textBolder">
+              <th class="p-2" style="border-top: solid 1px black;">باقى</th>
+              <td class="p-2 tdBorder_right" style="border-top: solid 1px black;">{{headerTotals.income + headerTotals.openedVal - headerTotals.outcome | number: '1.0-2'}}</td>
+            </tr> -->
           </table>
         </mat-card-content>
       </mat-card>
     </div>
 
-    <div class="col-lg-4 col-md-hide mb-3 stickyBox">
+    <div class="col-lg-4 col-md-hide mb-3 stickyBox printX">
       <img class="sideLogo" src="assets/logos/safeLogo.gif" id="safeInfoLogo">
     </div>
   </div>

@@ -3,11 +3,13 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Concrete } from 'src/app/classes/concrete';
 import { Customer } from 'src/app/classes/customer';
 import { OtherAcc } from 'src/app/classes/other-acc';
 import { Truck } from 'src/app/classes/truck';
 import { DoneDialogComponent } from 'src/app/dialogs/done-dialog/done-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { ConcreteService } from 'src/app/services/concrete.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { MainService } from 'src/app/services/main.service';
@@ -70,7 +72,8 @@ export class AddTruckComponent implements OnInit {
     public _snackBar: MatSnackBar,
     public _customerService: CustomerService,
     public _safeService: SafeService,
-    public _auth: AuthService
+    public _auth: AuthService,
+    public _concrete: ConcreteService
   ) {
     this._glopal.currentHeader = 'اضافة بيانات سيارة';
     this._glopal.loading = true;
@@ -175,6 +178,15 @@ export class AddTruckComponent implements OnInit {
       this.truck.customerId = '1';
       this.truck.customerName = '';
     }
+
+    if (this.truck.owner == 'سيارة خارجية' && this.truck.truckType == 'مضخة') {
+      if (!this.truck.name.includes('استعمال')) {
+        const newName = `استعمال ${this.truck.name}`;
+        this.truck.name = newName;
+      }
+    } else {
+      this.truck.name = this.truck.name.replace('استعمال', '').trim();
+    }
   }
 
   customerNameChanged(addTruckForm: NgForm) {
@@ -202,6 +214,19 @@ export class AddTruckComponent implements OnInit {
   truckTypeChanged() {
     if (this.truck.truckType != 'سيارة') {
       this.truck.capacity = 1;
+    }
+
+    if (this.truck.truckType == 'مضخة') {
+      this.truck.name = 'مضخة';
+
+      if (this.truck.owner == 'سيارة خارجية') {
+        if (!this.truck.name.includes('استعمال')) {
+          const newName = `استعمال ${this.truck.name}`;
+          this.truck.name = this.truck.name;
+        }
+      } else {
+        this.truck.name.replace(' استعمال', '');
+      }
     }
   }
 
@@ -248,18 +273,6 @@ export class AddTruckComponent implements OnInit {
   }
 
   openDialog = () => {
-    /* const truckTypes = [
-      { routTo: '/TrucksList/cars', ar: 'سيارة', goHome: 'سيارات' },
-      { routTo: '/TrucksList/loaders', ar: 'لودر', goHome: 'لودرات' },
-      { routTo: '/TrucksList/harras', ar: 'هراس', goHome: 'هراسات' },
-      { routTo: '/TrucksList/diggers', ar: 'حفار', goHome: 'حفارات' },
-      { routTo: '/TrucksList/mixers', ar: 'خلاطة', goHome: 'خلاطات' },
-    ];
-
-    const routeTo =
-      truckTypes.find((d: any) => d.ar == this.truck.truckType)?.routTo ??
-      '/Home'; */
-
     let dialogRef = this._dialog.open(DoneDialogComponent, {
       data: {
         header: 'تم تسجيل بيانات السيارة',
@@ -304,20 +317,35 @@ export class AddTruckComponent implements OnInit {
         }
       );
     } else {
-      this._truckService.postTruck(this.truck).subscribe(
-        (data: any) => {
+      if (this.truck.truckType == 'مضخة') {
+        let concrete: Concrete = new Concrete();
+
+        concrete.name = this.truck.name;
+
+        this._concrete
+          .postConcrete(concrete)
+          .subscribe((data: any) => this.postTruck(data[0]));
+      } else {
+        this.postTruck();
+      }
+    }
+  }
+
+  postTruck(concreteId?: string) {
+    this.truck.concreteId = concreteId ?? '0';
+    this._truckService.postTruck(this.truck).subscribe(
+      (data: any) => {
+        this._glopal.loading = false;
+        this.openDialog();
+        this.recordOtherAcc(data[0]);
+      },
+      (error) => {
+        if (error.status == '201') {
           this._glopal.loading = false;
           this.openDialog();
-          this.recordOtherAcc(data[0]);
-        },
-        (error) => {
-          if (error.status == '201') {
-            this._glopal.loading = false;
-            this.openDialog();
-          }
         }
-      );
-    }
+      }
+    );
   }
 
   recordOtherAcc(truckId: string) {
@@ -346,12 +374,12 @@ export class AddTruckComponent implements OnInit {
   onSubmit(addTruckForm: NgForm) {
     if (this.checkIfRecorded(addTruckForm)) {
       this.formValid = false;
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
       return;
     } else {
       if (!addTruckForm.valid) {
         this.formValid = false;
-        this._mainService.playshortFail()
+        this._mainService.playshortFail();
         return;
       } else {
         this.formValid = true;

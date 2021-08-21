@@ -146,7 +146,7 @@
 
               <mat-form-field class="w-25">
                 <input required matInput placeholder="طريقة الصب" name="pump" list="pumpsList" class="mdb-autocomplete"
-                  [(ngModel)]="concreteBon.pump">
+                  [(ngModel)]="concreteBon.pump" (change)="pumpChanged()">
 
                 <datalist id="pumpsList">
                   <option *ngFor="let pump of pumpsList" value="{{pump.name}}">

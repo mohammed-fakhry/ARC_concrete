@@ -12,7 +12,7 @@ import { GlobalVarsService } from './global-vars.service';
   providedIn: 'root',
 })
 export class MainService {
-  example_container!: HTMLElement;
+  example_container!: NodeListOf<Element>;
   standTable!: HTMLElement;
   tableWithHeader!: HTMLElement;
   tableWithSearch!: HTMLElement;
@@ -41,11 +41,14 @@ export class MainService {
       // 64 is navbar's hight
       let height = window.innerHeight - 64 - 210;
 
-      this.example_container = document.querySelector(
+      this.example_container = document.querySelectorAll(
         '.example-container'
-      ) as HTMLElement;
-      if (this.example_container)
-        this.example_container.style.maxHeight = `${height}px`;
+      ) as NodeListOf<Element>;
+      if (this.example_container) {
+        this.example_container.forEach((element: any) => {
+          element.style.maxHeight = `${height}px`;
+        });
+      }
 
       this.tableWithHeader = document.querySelector(
         '.tableWithHeader'
@@ -187,19 +190,32 @@ export class MainService {
   }
 
   scrollTo(elementId: string, noBg?: boolean) {
-    const elmnt = document.getElementById(elementId);
-    if (elmnt) {
-      elmnt.scrollIntoView({
+    if (elementId == 'top') {
+      // console.log('top')
+      //document.body.scrollTop = 0; // For Safari
+      //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+      // console.log('totop')
+      window.scrollTo({
+        top: 0,
+        left: 0,
         behavior: 'smooth',
       });
+    } else {
+      const elmnt = document.getElementById(elementId);
+      if (elmnt) {
+        elmnt.scrollIntoView({
+          behavior: 'smooth',
+        });
 
-      elmnt.style.transition = '350ms';
-      if (!noBg) elmnt?.classList.add('darkGrayBg');
+        elmnt.style.transition = '350ms';
+        if (!noBg) elmnt?.classList.add('darkGrayBg');
 
-      setTimeout(() => {
-        elmnt.style.transition = '700ms';
-        if (!noBg) elmnt?.classList.remove('darkGrayBg');
-      }, 800);
+        setTimeout(() => {
+          elmnt.style.transition = '700ms';
+          if (!noBg) elmnt?.classList.remove('darkGrayBg');
+        }, 800);
+      }
     }
   }
 
@@ -395,5 +411,4 @@ export class MainService {
     ) as HTMLAudioElement;
     if (sweepTransition) sweepTransition.play();
   }
-
 }

@@ -15,7 +15,7 @@
           </mat-card-title>
           <mat-card-subtitle>
             <h5 class="homeSubtitle" [class.textDanger]="customerInfo.currentVal < 0">
-              {{customerInfo.currentVal | number:'1.0-2'}}
+              {{customerInfo.currentVal - staticMixerTotals.outcome +  staticMixerTotals.income | number:'1.0-2'}}
             </h5>
           </mat-card-subtitle>
         </mat-card-header>

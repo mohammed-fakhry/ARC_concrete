@@ -260,6 +260,7 @@ export class InvoicesReportComponent implements OnInit {
               stockTransactionDetailsId: acc.stockTransactionDetailsId,
               stockTransactionId: '',
               concreteBonId: '0',
+              concreteReceiptD_id: '0',
               madeBy: acc.madeBy,
             };
 

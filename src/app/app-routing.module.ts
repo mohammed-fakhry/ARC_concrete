@@ -67,6 +67,7 @@ import { ConcreteFinancialComponent } from './industry/concrete-financial/concre
 import { InstructionsComponent } from './instructions/instructions.component';
 import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
 import { ConcreteProfitsComponent } from './industry/concrete-profits/concrete-profits.component';
+import { StaticMixerFinancialComponent } from './industry/static-mixer-financial/static-mixer-financial.component';
 
 const routes: Routes = [
   // defult path
@@ -165,6 +166,7 @@ const routes: Routes = [
   // financial position
   { path: 'ConcreteFinancialPosition', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
   { path: 'ConcreteCustomerFinancial/:id', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
+  { path: 'StaticMixerFinancial/:id', component: StaticMixerFinancialComponent, canActivate: [MasterGuard] },
   // profits
   { path: 'concreteProfits', component: ConcreteProfitsComponent, canActivate: [MasterGuard] },
 

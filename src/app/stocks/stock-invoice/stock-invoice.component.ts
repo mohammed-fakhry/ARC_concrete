@@ -1348,6 +1348,7 @@ export class StockInvoiceComponent implements OnInit {
         stockTransactionDetailsId: stockTransactionDetailsId,
         stockTransactionId: '',
         concreteBonId: '0',
+        concreteReceiptD_id: '0',
         madeBy: this._auth.uName.realName,
       };
 

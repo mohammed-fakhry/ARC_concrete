@@ -8,6 +8,7 @@ import { ConcreteMaterial } from '../classes/concrete-material';
 import { ConcreteReceipDetails } from '../classes/concrete-receip-details';
 import { ConcreteReceipt } from '../classes/concrete-receipt';
 import { ConcreteRecieptCash } from '../classes/concrete-reciept-cash';
+import { Truck } from '../classes/truck';
 
 @Injectable({
   providedIn: 'root',
@@ -102,6 +103,12 @@ export class ConcreteService {
     return this.http.put(
       `${this.url}updateConcreteReceipt.php?id=${concreteReceipt.concreteReceipt_id}`,
       concreteReceipt
+    );
+  }
+
+  getPumpList(concreteId: string) {
+    return this.http.get<Truck[]>(
+      `${this.url}getPumpList.php?concreteId=${concreteId}`
     );
   }
 
@@ -254,5 +261,17 @@ export class ConcreteService {
         `${this.url}concreteWorkerExpences.php?fromDate=${dateFrom}&toDate=${dateTo}`
       );
     else return this.http.get<any[]>(`${this.url}concreteWorkerExpences.php`);
+  }
+
+  staticMixerTotals(id?: string) {
+    return this.http.get<any[]>(
+      `${this.url}staticMixerTotals.php?id=${id}`
+    );
+  }
+
+  getStaticMixerFinancial(id: string) {
+    return this.http.get<any[]>(
+      `${this.url}getStaticMixerFinancial.php?id=${id}`
+    );
   }
 }

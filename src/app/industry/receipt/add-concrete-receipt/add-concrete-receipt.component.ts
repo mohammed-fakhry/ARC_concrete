@@ -21,6 +21,8 @@ import { Location } from '@angular/common';
 import { TruckService } from 'src/app/services/truck.service';
 import { ConcreteBon } from 'src/app/classes/concrete-bon';
 import { DeleteDialogComponent } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
+import { TruckOrder } from 'src/app/classes/truck-order';
+import { Truck } from 'src/app/classes/truck';
 
 @Component({
   selector: 'app-add-concrete-receipt',
@@ -35,6 +37,8 @@ export class AddConcreteReceiptComponent implements OnInit {
     customerId: string | null;
     customerProject: string | null;
   };
+
+  trucks: Truck[] = [];
 
   productList: Product[] = [];
   concreteList: Concrete[] = [];
@@ -72,6 +76,9 @@ export class AddConcreteReceiptComponent implements OnInit {
 
   concreteUpdated: boolean = false;
   dateExpires: boolean = false;
+
+  pumpCosts: { name: string; cost: string; totalCost: number; qty: number }[] =
+    [];
 
   constructor(
     public _mainService: MainService,
@@ -236,9 +243,13 @@ export class AddConcreteReceiptComponent implements OnInit {
         i
       ].concreteName = `${concretNames[i]}`;
 
+      // console.log(this.concreteReceipt.receiptDetails[i]);
+
       this.productNameChanged(i);
 
       this.concreteReceipt.receiptDetails[i].concreteQty = qty;
+
+      this.checkIfOutsidePump(this.concreteReceipt.receiptDetails[i], i);
 
       this.calcTotal(i);
       this.calcMaterial(i);
@@ -312,6 +323,20 @@ export class AddConcreteReceiptComponent implements OnInit {
         this.totalsArryBfAddVal.push(
           receiptDetails.concreteQty * receiptDetails.concretePrice
         );
+
+        this.checkIfOutsidePump(receiptDetails, i);
+
+        /* if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+          if (receiptDetails.concreteId)
+            this._concrete
+              .getPumpList(receiptDetails.concreteId)
+              .subscribe(
+                (truckData: Truck[]) => (this.trucks[i] = truckData[0])
+              );
+        } else {
+          this.trucks[i] = new Truck();
+        } */
+
         this.calcTotal(i);
       }
 
@@ -450,6 +475,15 @@ export class AddConcreteReceiptComponent implements OnInit {
     this.recieptMaterials.push({ qty: 0, materials: [] });
     this.totalsArry.push(0);
     this.totalsArryBfAddVal.push(0);
+
+    /* if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+      if (receiptDetails.concreteId)
+        this._concrete
+          .getPumpList(receiptDetails.concreteId)
+          .subscribe((truckData: Truck[]) => this.trucks.push(truckData[0]));
+    } else {
+      this.trucks.push(new Truck());
+    } */
   }
 
   getProducts(): Promise<Product[]> {
@@ -545,6 +579,8 @@ export class AddConcreteReceiptComponent implements OnInit {
         };
       }
 
+      this.checkIfOutsidePump(this.concreteReceipt.receiptDetails[i], i);
+
       this.formValid.concretes[i].concreteName = true;
     } else {
       this.concreteReceipt.receiptDetails[i].concreteId = null;
@@ -565,6 +601,30 @@ export class AddConcreteReceiptComponent implements OnInit {
     if (this.concreteReceipt.concreteReceiptType != 'مستخلص مضخة ثابتة') {
       this.calcMaterial();
     }
+  }
+
+  checkIfOutsidePump(receiptDetails: ConcreteReceipDetails, i: number) {
+    if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+      if (receiptDetails.concreteId)
+        this._concrete
+          .getPumpList(receiptDetails.concreteId)
+          .subscribe((truckData: Truck[]) => (this.trucks[i] = truckData[0]));
+
+      const cost = receiptDetails.pumpCost - receiptDetails.concretePrice;
+
+      this.pumpCosts.push({
+        name: receiptDetails.concreteName,
+        cost: cost.toFixed(2),
+        qty: receiptDetails.concreteQty,
+        totalCost: cost * receiptDetails.concreteQty,
+      });
+
+      // console.log(receiptDetails.pumpCost - receiptDetails.concretePrice)
+    } else {
+      this.trucks[i] = new Truck();
+    }
+
+    // console.log(receiptDetails);
   }
 
   changeConcreteReceiptType(type: string) {
@@ -610,6 +670,26 @@ export class AddConcreteReceiptComponent implements OnInit {
     this.concreteReceipt.totalInAr = `${this._mainService.inArabicWords(
       this.concreteReceipt.total
     )}`;
+
+    if (
+      this.concreteReceipt.receiptDetails[i].concreteName.includes(
+        'استعمال مضخه'
+      )
+    ) {
+      this.calcPumpCost(this.concreteReceipt.receiptDetails[i]);
+      this.calcInvoiceTotal();
+    }
+  }
+
+  calcPumpCost(concreteReceipt_d: ConcreteReceipDetails) {
+    let indx = this.pumpCosts.findIndex(
+      (pump: any) => pump.name == concreteReceipt_d.concreteName
+    );
+
+    const cost = concreteReceipt_d.pumpCost - concreteReceipt_d.concretePrice;
+    this.pumpCosts[indx].cost = cost.toFixed(2);
+    this.pumpCosts[indx].totalCost = cost * concreteReceipt_d.concreteQty;
+    this.pumpCosts[indx].qty = concreteReceipt_d.concreteQty;
   }
 
   calcTotalDiscound() {
@@ -681,11 +761,16 @@ export class AddConcreteReceiptComponent implements OnInit {
       .filter((b: ConcreteReceipDetails) => !b.concreteName.includes('مضخ'))
       .reduce((a: any, b: any) => a + b.concreteQty, 0);
 
-    const loaderExpences = this.totalConcreteQty * 5
-    const mixerExpences = this.totalConcreteQty * 35
-    const truckExpences = this.totalConcreteQty * 25
+    const loaderExpences = this.totalConcreteQty * 5;
+    const mixerExpences = this.totalConcreteQty * 35;
+    const truckExpences = this.totalConcreteQty * 25;
 
-    this.invoiceTotal = this.concreteReceipt.stockTransaction.invoiceTotal + loaderExpences + mixerExpences + truckExpences;
+    this.invoiceTotal =
+      this.concreteReceipt.stockTransaction.invoiceTotal +
+      loaderExpences +
+      mixerExpences +
+      truckExpences +
+      this.pumpCosts.reduce((a: any, b: any) => a + b.totalCost, 0);
   }
 
   generateMaterials(): any[] {
@@ -879,16 +964,70 @@ export class AddConcreteReceiptComponent implements OnInit {
       if (receiptDetails.concreteId) {
         receiptDetails.concreteReceipt_id = concreteReceipt_id;
         if (receiptDetails.id) {
-          this._concrete.updateConcreteReceipt_d(receiptDetails).subscribe();
+          this._concrete
+            .updateConcreteReceipt_d(receiptDetails)
+            .subscribe(() => {
+              if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+                let truckOrder = new TruckOrder();
+                truckOrder.realPrice = receiptDetails.pumpCost;
+                truckOrder.LoadTimes = receiptDetails.concreteQty;
+                truckOrder.date_time = this.concreteReceipt.date_time;
+                truckOrder.concreteReceiptD_id = receiptDetails.id
+                  ? receiptDetails.id
+                  : '0';
+                this._truckService
+                  .updateTruckOrder(truckOrder, 'concreteReceiptD_id')
+                  .subscribe();
+              }
+            });
         } else {
-          this._concrete.postConcreteReceipt_d(receiptDetails).subscribe();
+          this._concrete
+            .postConcreteReceipt_d(receiptDetails)
+            .subscribe((data: any) => {
+              if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+                const truckOrder = this.generatrtruckorder(
+                  receiptDetails,
+                  data[0],
+                  i
+                );
+
+                this._truckService.postTruckOrder(truckOrder).subscribe();
+              }
+            });
         }
       }
-
-      /* if (i === this.concreteReceipt.receiptDetails.length - 1) {
-        this.openDialog();
-      } */
     }
+  }
+
+  generatrtruckorder(
+    receiptDetails: ConcreteReceipDetails,
+    receiptDetails_id: string,
+    i: number
+  ): TruckOrder {
+    return {
+      orderId: null,
+      truckId: this.trucks[i].id,
+      truckName: this.trucks[i].name,
+      truckCapacity: this.trucks[i].capacity,
+      truckModel: this.trucks[i].model,
+      orderType: 'سيارة خارجية',
+      truckType: 'مضخة',
+      loadingType: 'متر',
+      truckCustomerId: '1',
+      truckCustomerName: '',
+      LoadTimes: receiptDetails.concreteQty,
+      totalQty: 0,
+      price: receiptDetails.concretePrice,
+      realPrice: receiptDetails.pumpCost,
+      totalVal: 0,
+      date_time: this.concreteReceipt.date_time,
+      notes: `${this.concreteReceipt.concreteCustomer_id} | فاتورة (${this.concreteReceipt.manualNum})`,
+      stockTransactionDetailsId: '1',
+      stockTransactionId: '',
+      concreteBonId: '0',
+      concreteReceiptD_id: receiptDetails_id,
+      madeBy: this._auth.uName.realName,
+    };
   }
 
   openDelDialog = () => {

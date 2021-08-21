@@ -25,7 +25,7 @@ export class AddConcreteBonComponent implements OnInit {
   id!: string | null;
 
   concreteList: Concrete[] = [];
-  pumpsList: Concrete[] = [];
+  pumpsList: Truck[] = [];
 
   customerList: ConcreteCustomer[] = [];
   truckList: Truck[] = [];
@@ -83,8 +83,8 @@ export class AddConcreteBonComponent implements OnInit {
         (concrete: any) => !concrete.name.includes('مضخ')
       );
 
-      this.pumpsList = result.concretes.filter((concrete: any) =>
-        concrete.name.includes('مضخ')
+      this.pumpsList = result.trucks.filter(
+        (truck: any) => truck.truckType == 'مضخة'
       );
       this.customerList = result.customers;
       this.truckList = result.trucks.filter(
@@ -111,9 +111,9 @@ export class AddConcreteBonComponent implements OnInit {
               (truck) => truck.id == this.concreteBon.truckId
             ) ?? new Truck();
 
-          this.truckInfo.metrPrice = this.concreteBon.metrPrice
+          this.truckInfo.metrPrice = this.concreteBon.metrPrice;
 
-          console.log(this.concreteBon)
+          console.log(this.concreteBon);
         });
     } else {
       this.concreteBon.date = this._mainService.makeDate(new Date(Date.now()));
@@ -204,6 +204,18 @@ export class AddConcreteBonComponent implements OnInit {
     }
   }
 
+  pumpChanged() {
+    const pump = this.pumpsList.find(
+      (p: Truck) => p.name == this.concreteBon.pump
+    );
+
+    if (pump) {
+      this.concreteBon.pumpId = pump.id;
+    } else {
+      this.concreteBon.pumpId = '0';
+    }
+  }
+
   openDialog = () => {
     let dialogRef = this._dialog.open(DoneDialogComponent, {
       data: {
@@ -255,6 +267,7 @@ export class AddConcreteBonComponent implements OnInit {
       stockTransactionDetailsId: '1',
       stockTransactionId: '1',
       concreteBonId: bonId,
+      concreteReceiptD_id: '0',
       madeBy: this.concreteBon.madeBy,
     };
 

@@ -74,6 +74,7 @@ export class TrucksListComponent implements OnInit {
       { en: 'harras', ar: 'هراس' },
       { en: 'diggers', ar: 'حفار' },
       { en: 'mixers', ar: 'خلاطة' },
+      { en: 'pumps', ar: 'مضخة' },
     ];
 
     const arType = truckTypes.find((truck) => truck.en == this.searchFor);
@@ -86,7 +87,6 @@ export class TrucksListComponent implements OnInit {
       this.fillListData(result);
       this._mainService.handleTableHeight();
 
-      if (arType) this._glopal.currentHeader = this.searchFor ? `قائمة المعدات | ${arType.ar}` : 'قائمة المعدات';
       this._glopal.loading = false;
     });
   }

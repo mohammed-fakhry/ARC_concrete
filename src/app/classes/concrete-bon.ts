@@ -14,6 +14,7 @@ export class ConcreteBon {
   date: string = '';
   time: string = '';
   pump: string = '';
+  pumpId: string = '0';
   madeBy: string = '';
   notes: string = '';
   concreteReceipt_id: string = '0';

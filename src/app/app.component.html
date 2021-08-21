@@ -30,7 +30,8 @@
       </i>
     </a>
 
-    <a *ngIf="_auth?.check?.dev && mainUrl !='http://localhost/shayman/'" mat-button (click)="toAymanDb()">
+    <a *ngIf="_auth?.check?.dev && mainUrl !='http://localhost/shayman/'" mat-button [matTooltip]="mainUrl" Qa
+      (click)="toAymanDb()">
       <i class="fa fa-database my-auto pl-2"></i></a>
   </div>
 
@@ -109,7 +110,8 @@
 
             <mat-divider></mat-divider>
 
-            <a mat-list-item routerLink="/instructions/customer_instructions" (click)="opened = !opened" *ngIf="_auth?.check?.customers">
+            <a mat-list-item routerLink="/instructions/customer_instructions" (click)="opened = !opened"
+              *ngIf="_auth?.check?.customers">
               <i class="fa fa-exclamation-triangle my-auto pl-2"></i>
               التعليمات
             </a>
@@ -221,7 +223,9 @@
 
             <a mat-list-item routerLink="/StockInformation/11" (click)="opened = !opened">مخزن تاور</a>
             <a mat-list-item routerLink="/ConcreteList" (click)="opened = !opened">خرسانة جهد و محتوى</a>
+            <mat-divider></mat-divider>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
+            <a mat-list-item routerLink="/TrucksList/pumps" (click)="opened = !opened">مضخات</a>
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/OtherAccInformation/36" (click)="opened = !opened" class="textBold">
               <span class="textDanger">مصاريف المحطة</span>

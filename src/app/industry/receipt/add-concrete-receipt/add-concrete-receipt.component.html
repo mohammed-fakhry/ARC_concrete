@@ -131,6 +131,10 @@
                       style="width:fit-content;">
                       برجاء ادخال اسم منتج صحيح
                     </div>
+
+
+                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="text" class="form-control printX"
+                      disabled value="{{trucks[i]?.customerName}}">
                   </td>
                   <td>
                     <input
@@ -138,6 +142,9 @@
                       type="number" class="form-control" name="materialQty{{i}}" [(ngModel)]="product.concreteQty"
                       id="materialQty{{i}}" (click)="_mainService.selectText('materialQty',i)"
                       (ngModelChange)="calcMaterial(i)">
+
+                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="text" class="form-control printX"
+                      disabled value="تكلفة الضخ">
                   </td>
 
                   <td>
@@ -145,6 +152,10 @@
                       class="form-control" name="concretePrice{{i}}" [(ngModel)]="product.concretePrice"
                       id="concretePrice{{i}}" (click)="_mainService.selectText('concretePrice',i)"
                       (ngModelChange)="calcTotal(i)">
+
+                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="number"
+                      class="form-control printX" name="pumpCost{{i}}" [(ngModel)]="product.pumpCost" id="pumpCost{{i}}"
+                      (click)="_mainService.selectText('pumpCost',i)" (ngModelChange)="calcTotal(i)">
                   </td>
 
                   <td class="printX">
@@ -159,7 +170,8 @@
                   </td>
 
                   <td class="printThis d-none">
-                    <div class="textPrimary textBold pt-2">{{product.concretePrice * product.concreteQty | number:'1.0-2'}}</div>
+                    <div class="textPrimary textBold pt-2">{{product.concretePrice * product.concreteQty |
+                      number:'1.0-2'}}</div>
                   </td>
                 </tr>
               </tbody>
@@ -380,6 +392,15 @@
                   <input type="text" value="25" class="form-control" disabled>
                 </td>
                 <td class="thCenter textBold pt-3">{{totalConcreteQty * 25}}</td>
+              </tr>
+
+              <tr *ngFor="let pumpCost of pumpCosts" class="textBold">
+                <td class="pt-3">{{pumpCost.name}}</td>
+                <td class="pt-3">{{pumpCost.qty}}</td>
+                <td>
+                  <input type="text" [value]="pumpCost.cost" class="form-control" disabled>
+                </td>
+                <td class="thCenter textBold pt-3" [class.textDanger]="pumpCost.totalCost < 0">{{pumpCost.totalCost | number: '1.0-3'}}</td>
               </tr>
             </tbody>
           </table>

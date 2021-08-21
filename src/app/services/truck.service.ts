@@ -44,6 +44,7 @@ export class TruckService {
     if (cond == 'id') updatebyId = truckOrder.orderId ?? '';
     if (cond == 'transId') updatebyId = truckOrder.stockTransactionDetailsId;
     if (cond == 'bonId') updatebyId = truckOrder.concreteBonId;
+    if (cond == 'concreteReceiptD_id') updatebyId = truckOrder.concreteReceiptD_id;
 
     return this.http.put(
       `${this.url}updateTruckOrder.php?${cond}=${updatebyId}`,
@@ -77,7 +78,17 @@ export class TruckService {
     return this.http.get<TruckOrder[]>(
       `${this.url}truckOrderList.php?${cond}=${id}`
     );
-    //return this.http.get<TruckOrder[]>(`${this.url}truckOrderList.php`);
+  }
+
+  getPumpOrderList(cond: string = 'id', id: string, from?: string, to?: string) {
+    if (from && to)
+      return this.http.get<TruckOrder[]>(
+        `${this.url}getPumpOrderList.php?${cond}=${id}&fromDate=${from}&toDate=${to}`
+      );
+
+    return this.http.get<TruckOrder[]>(
+      `${this.url}getPumpOrderList.php?${cond}=${id}`
+    );
   }
 
   getTruckCustomerAcc(id: string) {

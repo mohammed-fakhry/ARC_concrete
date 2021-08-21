@@ -25,8 +25,18 @@ export class ConcreteCustomerInformationComponent implements OnInit {
   id: string | null = null;
 
   listData: MatTableDataSource<any> | any;
+  cementListData: MatTableDataSource<any> | any;
 
   headerTotals: AccHeaderTotals = new AccHeaderTotals();
+
+  cementDisplayedColumns: string[] = [
+    'id',
+    'date_time',
+    'InvoiceDetails',
+    'qty_in',
+    'qty_out',
+    'balance',
+  ];
 
   displayedColumns: string[] = [
     'id',
@@ -40,8 +50,18 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     'notes',
   ];
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  //@ViewChild(MatSort) sort!: MatSort;
+  //@ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  @ViewChild('mainTableSort', { static: true }) sort!: MatSort;
+  @ViewChild('mainTable_paginator', { static: true }) paginator!: MatPaginator;
+
+  //@ViewChild(MatSort) sort_cement!: MatSort;
+  //@ViewChild(MatPaginator) paginator_cement!: MatPaginator;
+
+  @ViewChild('cementTable_sort', { static: true }) sort_cement!: MatSort;
+  @ViewChild('cementTable_paginator', { static: true })
+  paginator_cement!: MatPaginator;
 
   searchTxt: string = '';
   searchDate: { from: string; to: string } = { from: '', to: '' };
@@ -67,12 +87,22 @@ export class ConcreteCustomerInformationComponent implements OnInit {
   marked: boolean = false;
   markColor: string = '';
 
-  showCementQty: boolean = false;
+  // showCementQty: boolean = false;
 
   acementTotals = {
+    begainWith: 0,
     in: 0,
     out: 0,
   };
+
+  staticMixerTotals = {
+    income: 0,
+    outcome: 0,
+  };
+
+  concreteCustomerInfoHeader: HTMLElement = document.getElementById(
+    'concreteCustomerInfoHeader'
+  ) as HTMLElement;
 
   constructor(
     public _mainService: MainService,
@@ -93,6 +123,10 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
     this.onStart();
+
+    this.concreteCustomerInfoHeader = document.getElementById(
+      'concreteCustomerInfoHeader'
+    ) as HTMLElement;
   }
 
   onStart() {
@@ -101,21 +135,27 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     Promise.all([
       this.getCustomer(),
       this.getCustomerAcc(),
-      /* this.getCementUses(), */
+      this.getMixerTotals(),
     ])
       .then((data: any) => {
         const result = {
           customer: data[0][0],
           acc: data[1],
-          /* cementUses: data[2], */
+          mixerTotal: data[2],
         };
 
         this.customerInfo = result.customer;
+
+        this.staticMixerTotals = {
+          income: result.mixerTotal[1].totalVal,
+          outcome: result.mixerTotal[0].totalVal,
+        };
 
         if (this.customerInfo.cementCustomerId) {
           this.getCementUses().then((dataUses) => {
             this.tempCementUses = dataUses;
             this.cementUses = this.makeCementAcc(dataUses);
+            this.fillCementData(this.cementUses);
           });
         }
 
@@ -125,6 +165,15 @@ export class ConcreteCustomerInformationComponent implements OnInit {
         this._glopal.loading = false;
         this._mainService.handleTableHeight();
       });
+  }
+
+  getMixerTotals() {
+    return new Promise((res) => {
+      if (this.id)
+        this._concrete
+          .staticMixerTotals(this.id)
+          .subscribe((data: any[]) => res(data));
+    });
   }
 
   makeCustomerAcc(data: any[]) {
@@ -219,6 +268,10 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       };
 
       arr = [...arr, firstRow];
+
+      this.acementTotals.begainWith = begainAcc;
+    } else {
+      this.acementTotals.begainWith = 0;
     }
 
     for (let i = 0; i < data.length; i++) {
@@ -258,10 +311,10 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
     if (!startVal) this.mainCementAcc = [...arr];
 
-    this.acementTotals = {
-      in: arr.map((a) => a.qty_in).reduce((a, b) => a + b, 0),
-      out: arr.map((a) => a.qty_out).reduce((a, b) => a + b, 0),
-    };
+    this.acementTotals.in =
+      arr.reduce((a, b) => a + b.qty_in, 0) - this.acementTotals.begainWith;
+
+    this.acementTotals.out = arr.reduce((a, b) => a + b.qty_out, 0);
 
     return arr.reverse();
   }
@@ -301,6 +354,14 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     // this.searchResults(pureData);
     this.tempAccArry = pureData;
     this.setHeaderTotals(data.reverse());
+  };
+
+  fillCementData = (pureData: any) => {
+    // const data = pureData.reverse();
+    this.cementListData = new MatTableDataSource(pureData);
+    this.cementListData.sort = this.sort_cement;
+    this.cementListData.paginator = this.paginator_cement;
+    // this._mainService.handleTableHeight()
   };
 
   setHeaderTotals(accArr: any) {
@@ -485,9 +546,9 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     this.marked = false;
   }
 
-  toCementQty(cond?: string) {
-    this.showCementQty = true;
-    setTimeout(() => this._mainService.scrollTo('cementQty', true), 100);
+  toCementQty() {
+    this._mainService.handleTableHeight();
+    this._mainService.scrollTo('cementQty', true);
   }
 
   openFilterDialog = (data: any) => {
@@ -526,6 +587,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       );
 
       this.cementUses = this.makeCementAcc(tempCement, begainWith);
+      this.fillCementData(this.cementUses);
     }
   }
 
@@ -538,6 +600,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this.searchDate = { from: '', to: '' };
 
       this.cementUses = this.makeCementAcc(this.tempCementUses);
+      this.fillCementData(this.cementUses);
     } else if (cond == 'noId') {
       // filter receipts not connected with an invoice
       this.isFiltered = true;
