@@ -29,6 +29,11 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
   headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
+  concreteTotals: {
+    concretes: { concreteName: string; total: number }[];
+    total: number;
+  } = { concretes: [], total: 0 };
+
   cementDisplayedColumns: string[] = [
     'id',
     'date_time',
@@ -231,6 +236,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
         }${data[i].customerProject ? ' | ' + data[i].customerProject : ''}`,
         //customerProject: data[i].customerProject,
         receiptDetail: `${data[i].receiptDetail}`,
+        concreteQty: data[i].concreteQty,
+        concreteName: data[i].concreteName,
         routeTo: `/${
           data[i].receiptDetail.includes('ايصال')
             ? 'SafeReceipt'
@@ -245,6 +252,7 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this.accArr = [...this.accArr, newData];
     }
 
+    // console.log(data)
     return this.accArr;
   }
 
@@ -354,13 +362,46 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     // this.searchResults(pureData);
     this.tempAccArry = pureData;
     this.setHeaderTotals(data.reverse());
+    this.generatConcretesTotals(pureData);
   };
+
+  generatConcretesTotals(pureData: any) {
+
+    const concreteArr = pureData.filter(
+      (d: any) => d.concreteName && !d.concreteName.includes('مضخ')
+    );
+
+    const concretes: any[] = [
+      ...new Set(concreteArr.map((c: any) => c.concreteName)),
+    ];
+
+    this.concreteTotals.concretes = [];
+
+    for (let i = 0; i < concretes.length; i++) {
+      const filtered = concreteArr.filter(
+        (c: any) => c.concreteName == concretes[i]
+      );
+
+      const concreteDetails = {
+        concreteName: concretes[i],
+        total: filtered.reduce((a: any, b: any) => a + b.concreteQty, 0),
+      };
+
+      this.concreteTotals.concretes.push(concreteDetails);
+    }
+
+    this.concreteTotals.total = this.concreteTotals.concretes.reduce(
+      (a: any, b: any) => a + b.total,
+      0
+    );
+  }
 
   fillCementData = (pureData: any) => {
     // const data = pureData.reverse();
     this.cementListData = new MatTableDataSource(pureData);
     this.cementListData.sort = this.sort_cement;
     this.cementListData.paginator = this.paginator_cement;
+
     // this._mainService.handleTableHeight()
   };
 

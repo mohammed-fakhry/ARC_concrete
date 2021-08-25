@@ -23,6 +23,8 @@ export class StaticMixerFinancialComponent implements OnInit {
 
   headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
+  productSearchBtn!: NodeListOf<Element>;
+
   /*
     id: i + 2,
     date_time: data[i].date_time,
@@ -107,25 +109,28 @@ export class StaticMixerFinancialComponent implements OnInit {
       this.getCustomerInfo(),
       this.getStaticMixerAcc(),
       this.getMixingTotal(),
-    ]).then((data: any) => {
-      const result = {
-        customerInfo: data[0][0],
-        accArr: data[1],
-        mixerTotal: data[2],
-      };
+    ])
+      .then((data: any) => {
+        const result = {
+          customerInfo: data[0][0],
+          accArr: data[1],
+          mixerTotal: data[2],
+        };
 
-      this.staticMixerTotals = {
-        income: result.mixerTotal[1].totalVal,
-        outcome: result.mixerTotal[0].totalVal,
-      };
+        this.staticMixerTotals = {
+          income: result.mixerTotal[1].totalVal,
+          outcome: result.mixerTotal[0].totalVal,
+        };
 
-      this.customerInfo = result.customerInfo;
+        this.customerInfo = result.customerInfo;
 
-      this.fillListData(this.makeMixerAcc(result.accArr));
-      this._mainService.handleTableHeight();
+        this.fillListData(this.makeMixerAcc(result.accArr));
 
-      this._glopal.loading = false;
-    });
+        this._glopal.loading = false;
+      })
+      .then(() => {
+        this._mainService.handleTableHeight();
+      });
   }
 
   makeMixerAcc(data: any[]) {
@@ -147,7 +152,7 @@ export class StaticMixerFinancialComponent implements OnInit {
         routeTo: `/${
           data[i].receiptDetail.includes('ايصال')
             ? 'SafeReceipt'
-            : 'UpdateConcreteReceipt'
+            : 'UpdateConcreteBon'
         }/${data[i].receiptId}`,
         minVal: data[i].minVAl,
         addVal: data[i].addVal,
@@ -257,7 +262,29 @@ export class StaticMixerFinancialComponent implements OnInit {
     );
   }
 
-  search() {
+  search(searchFor?: string, elementId?: string, indx?: number) {
+    if (searchFor) {
+      // console.log(this.productSearchBtn.length);
+      if (typeof this.productSearchBtn == 'undefined') {
+        this.productSearchBtn = document.querySelectorAll(
+          '.productSearchBtn'
+        ) as NodeListOf<Element>;
+      }
+
+      if (this.productSearchBtn) {
+        this.productSearchBtn.forEach((element: any) => {
+          element.classList.remove('darkGrayBg');
+        });
+
+        const productNameStatic = document.getElementById(
+          `${elementId}${indx}`
+        ) as HTMLElement;
+        if (productNameStatic) {
+          productNameStatic.classList.add('darkGrayBg');
+        }
+      }
+      this.searchTxt = searchFor == 'all' ? '' : searchFor;
+    }
     if (this.marked) this.clearCalcArr();
     this.listData.filter = this.searchTxt;
     // this.searchResults(this.tempAccArry);

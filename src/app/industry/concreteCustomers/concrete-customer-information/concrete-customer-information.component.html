@@ -283,7 +283,7 @@
       </div>
 
       <mat-paginator #mainTable_paginator="matPaginator" [length]="listData?.data.length" [pageIndex]="0"
-        [pageSize]="100" [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+        [pageSize]="100" [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
       </mat-paginator>
     </div>
   </div>
@@ -340,9 +340,32 @@
         </table>
       </div>
 
-      <div class="printX mt-3" style="z-index: 0; opacity: .75;">
-        <img class="sideLogo" src="assets/logos/cement.png" alt="">
+      <div class="box p-2 headerBox mt-3">
+        <div class="cardHeader pb-2">اجمالى الجهد و المحتوى</div>
+        <table [class.d-none]="_glopal.loading" class="w-100 mt-2">
+
+          <tr class="textBold lightBg" style="border-top: solid #00238d 2px;">
+            <th class="py-2 px-2">الجهد و المحتوى</th>
+            <th class="py-2">الكمية</th>
+          </tr>
+
+          <tr *ngFor="let concrete of concreteTotals.concretes">
+            <td class="p-2">{{concrete.concreteName}}</td>
+            <td class="p-2 tdBorder_right">{{concrete.total | number: '1.0-3'}}</td>
+          </tr>
+
+          <tr class="textBold lightBg" style="border-top: solid #00238d 2px;">
+            <th class="p-2">اجمالى</th>
+            <td>{{concreteTotals.total}}</td>
+          </tr>
+
+
+        </table>
       </div>
+
+      <!-- <div class="printX mt-3" style="z-index: 0; opacity: .75;">
+        <img class="sideLogo" src="assets/logos/cement.png" alt="">
+      </div> -->
     </div>
 
     <div class="col-lg-8 col-md-12">
@@ -434,7 +457,7 @@
 
         <!-- paginator -->
         <mat-paginator #cementTable_paginator="matPaginator" [length]="cementListData?.data.length" [pageIndex]="0"
-          [pageSize]="100" [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+          [pageSize]="100" [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
         </mat-paginator>
 
       </div>

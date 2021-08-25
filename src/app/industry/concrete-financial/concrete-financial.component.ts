@@ -79,6 +79,8 @@ export class ConcreteFinancialComponent implements OnInit {
     outcome: 0
   }
 
+  sectionFinancialBtn!: NodeListOf<Element>;
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService,
@@ -274,9 +276,28 @@ export class ConcreteFinancialComponent implements OnInit {
     this.tempArr = data;
   };
 
-  search(searchfor?: string) {
+  search(searchfor?: string, elementId?: string, indx?: number) {
     if (searchfor) {
-      if (searchfor == 'بدون موقف') {
+      if (typeof this.sectionFinancialBtn == 'undefined') {
+        this.sectionFinancialBtn = document.querySelectorAll(
+          '.sectionFinancialBtn'
+        ) as NodeListOf<Element>;
+      }
+
+      if (this.sectionFinancialBtn) {
+        this.sectionFinancialBtn.forEach((element: any) => {
+          element.classList.remove('darkGrayBg');
+        });
+
+        const productNameStatic = document.getElementById(
+          `${elementId}${indx}`
+        ) as HTMLElement;
+        if (productNameStatic) {
+          productNameStatic.classList.add('darkGrayBg');
+        }
+      }
+
+      if (searchfor == 'بدون موقف' || searchfor == 'all') {
         this.searchTxt = '';
       } else {
         this.searchTxt = searchfor;

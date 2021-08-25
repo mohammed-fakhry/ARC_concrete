@@ -36,4 +36,9 @@ export class CustomerService {
   updateCustomer(customer: Customer) {
     return this.http.put(`${this.url}updateCustomer.php?id=` + customer.customerId, customer)
   }
+
+  // fromDate=${dateFrom}&toDate=${dateTo}
+  getSalesAndPurshus_ByDate(dateFrom: string, dateTo: string) {
+    return this.http.get<any[]>(`${this.url}getSalesAndPurshus_ByDate.php?fromDate=${dateFrom}&toDate=${dateTo}`)
+  }
 }

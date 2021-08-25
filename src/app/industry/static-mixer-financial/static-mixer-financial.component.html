@@ -98,8 +98,11 @@
               </tr>
             </thead>
             <tbody class="tableBody">
-              <tr *ngFor="let product of productsQty">
-                <td>{{product.productName}}</td>
+              <tr *ngFor="let product of productsQty; let i = index">
+                <td class="textBtn tBtn-dark pl-2 productSearchBtn" id="productNameStatic{{i}}"
+                  (click)="search(product.productName, 'productNameStatic', i)">
+                  {{product.productName}}
+                </td>
                 <td class="textBold">{{product.out | number: '1.0-3'}}</td>
               </tr>
 
@@ -108,7 +111,7 @@
                 <td class="py-2"></td>
               </tr>
               <tr class="darkBadge textBold">
-                <td class="py-2">اجمالى</td>
+                <td class="py-2 textBtn tBtn-dark pl-2" (click)="search('all', '', 0)">اجمالى</td>
                 <td class="py-2">{{totalProductsQty}}</td>
               </tr>
             </tbody>
@@ -134,8 +137,8 @@
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
                 بالتاريخ</button>
-              <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()"
-                style="text-align: right;">اظهار الكل</button>
+              <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()" style="text-align: right;">اظهار
+                الكل</button>
             </mat-menu>
           </div>
 
@@ -177,7 +180,7 @@
           <ng-container matColumnDef="receiptDetail">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
             <td mat-cell *matCellDef="let row" [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt"
-              [class.textDanger]="row.addVal > 0">
+              [class.textDanger]="row.addVal > 0" class="textBtn tBtn-dark pl-2" [routerLink]="row.routeTo">
               {{row.receiptDetail}}
             </td>
           </ng-container>
@@ -243,7 +246,7 @@
       </div>
 
       <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-        [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+        [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
       </mat-paginator>
     </div>
   </div>

@@ -323,6 +323,10 @@ tr.example-element-row:not(.example-expanded-row):active {
   border-top: solid 1px rgba(0, 0, 0, 0.2);
 }
 
+.tdborder_top_primary {
+  border-top: solid 1px $primaryBg;
+}
+
 .tdBorder {
   border-left: solid 1px rgba(0, 0, 0, 0.12);
   border-right: solid 1px rgba(0, 0, 0, 0.12);
@@ -443,7 +447,7 @@ tr {
 
     <!-- paginator -->
     <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-      [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+      [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
     </mat-paginator>
 
   </div>

@@ -7,6 +7,8 @@ import { MainService } from 'src/app/services/main.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customers-list',
@@ -44,6 +46,15 @@ export class CustomersListComponent implements OnInit {
   searchFor: string | null = null;
   uncompleted: boolean = false;
 
+  sales_and_Purchases: {
+    salesTitle: string;
+    sales: number;
+    purchasesTitle: string;
+    purchases: number;
+    trClass: string;
+  }[] = [];
+  searchDate: { from: string; to: string } = { from: '', to: '' };
+
   counts!: any; /* {
     activeCustomers: {
       onUs: {
@@ -80,7 +91,8 @@ export class CustomersListComponent implements OnInit {
     public _glopal: GlobalVarsService,
     public _customerService: CustomerService,
     public activeRoute: ActivatedRoute,
-    public _router: Router
+    public _router: Router,
+    public _dialog: MatDialog
   ) {
     this._glopal.currentHeader = 'بيانات موردين | مستهلكين';
     this._glopal.loading = true;
@@ -96,13 +108,6 @@ export class CustomersListComponent implements OnInit {
     ) as HTMLElement;
 
     this.customerList = [];
-
-    /* this.getCustomers().then((data: any) => {
-      this.customerList = data;
-      this.fillListData(data);
-      this._mainService.handleTableHeight();
-      this._glopal.loading = false;
-    }); */
 
     this.onStart();
   }
@@ -290,18 +295,20 @@ export class CustomersListComponent implements OnInit {
         title: 'حراسة وغفرات',
         id: 'gaurdsCustomers',
         count: gaurdsCustomers.length,
-        total: gaurdsCustomers
-          .map((cust: Customer) => cust.customerRemain)
-          .reduce((a: number, b: number) => a + b, 0),
+        total: gaurdsCustomers.reduce(
+          (a: any, b: any) => a + b.customerRemain,
+          0
+        ),
         filter: () => this.counterAction(gaurdsCustomers, 'gaurdsCustomers'),
       },
       monthlyPaidCustomers: {
         title: 'مستأجرين',
         id: 'monthlyPaidCustomers',
         count: monthlyPaidCustomers.length,
-        total: monthlyPaidCustomers
-          .map((cust: Customer) => cust.customerRemain)
-          .reduce((a: number, b: number) => a + b, 0),
+        total: monthlyPaidCustomers.reduce(
+          (a: any, b: any) => a + b.customerRemain,
+          0
+        ),
         filter: () =>
           this.counterAction(monthlyPaidCustomers, 'monthlyPaidCustomers'),
       },
@@ -312,11 +319,6 @@ export class CustomersListComponent implements OnInit {
     this.fillListData(newCustomerList);
     this.isFiltered = false;
     const boxDom = document.querySelector(`#${elementId}`) as HTMLElement;
-
-    /* if (boxDom) {
-      boxDom.classList.contains('activeBox');
-      this.filterList('showAll');
-    } */
 
     if (boxDom) {
       if (boxDom.classList.contains('activeBox')) {
@@ -335,16 +337,6 @@ export class CustomersListComponent implements OnInit {
     }
   }
 
-  /* searchCustomer(searchFor: string): Promise<Customer[]> {
-    return new Promise((res) => {
-      this._customerService
-        .searchCustomers(searchFor)
-        .subscribe((data: Customer[]) => {
-          res(data);
-        });
-    });
-  } */
-
   getCustomers() {
     return new Promise((res) => {
       this._customerService.getCustomer().subscribe((data: Customer[]) => {
@@ -357,6 +349,7 @@ export class CustomersListComponent implements OnInit {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
+    // console.log('filled')
   };
 
   search() {
@@ -396,6 +389,62 @@ export class CustomersListComponent implements OnInit {
       this.countsDom.forEach((count) => {
         count.classList.remove('activeBox');
       });
+
+      this.searchDate = { from: '', to: '' };
+
+      this.sales_and_Purchases = [];
     }
+  }
+
+  openFilterDialog = (data: any) => {
+    let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
+        this.filterByDate(result.fromDate, result.toDate);
+      }
+    });
+  };
+
+  filterByDate(from: string, to: string) {
+    this.searchTxt = '';
+
+    if (from && to) {
+      this._glopal.loading = true;
+      this.getSalesAndPurshus_ByDate(from, to).then((data: any) => {
+        this.sales_and_Purchases = [
+          {
+            salesTitle: 'مبيعات',
+            sales: data[0].outCome,
+            purchasesTitle: 'تحصيلات',
+            purchases: data[1].inCome,
+            trClass: 'secondaryBadge'
+          },
+
+          {
+            salesTitle: 'مشتريات',
+            sales: data[0].inCome,
+            purchasesTitle: 'دفعات',
+            purchases: data[1].outCome,
+            trClass: 'tdborder_top_primary dangerBadge'
+          },
+        ];
+        this.isFiltered = true;
+
+        this._glopal.loading = false;
+      });
+    }
+  }
+
+  getSalesAndPurshus_ByDate(from: string, to: string) {
+    return new Promise((res) => {
+      this._customerService
+        .getSalesAndPurshus_ByDate(from, to)
+        .subscribe((data: any) => res(data));
+    });
   }
 }

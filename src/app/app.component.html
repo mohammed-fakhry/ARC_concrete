@@ -350,20 +350,20 @@
       <div class="d-flex justify-content-between">
         <div>
           <div class="textBolder textSecondary">شركة تاور للخرسانات الجاهزة</div>
-          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
+          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
             للمقاولات العمومية
           </div>
-          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
+          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
             و التـوريدات
           </div>
           <h2></h2>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt')">
+          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             رقم السجل التجارى : 426661
           </div>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt')">
+          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             ملف ضريبى رقم : 24_03_410_02967_5_247
           </div>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt')">
+          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             رقم التسجيل الضريبى: 479_358_726
           </div>
         </div>

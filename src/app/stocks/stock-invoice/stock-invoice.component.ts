@@ -732,6 +732,14 @@ export class StockInvoiceComponent implements OnInit {
     if (secondStock) {
       stockInfo = this.findStock(secondStock);
       if (stockInfo) {
+        /* if (this.stockInvoice.sndStockId == this.stockInvoice.stockId) {
+          this.inputValid.customerName = {
+            cond: false,
+            msg: 'لا يمكن تكرار نفس المخزن',
+          };
+        } else {
+          // this.inputValid.customerName.cond = true;
+        } */
         this.stockInvoice.sndStockId = stockInfo.stockId;
       }
     } else {

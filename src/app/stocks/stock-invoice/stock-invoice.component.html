@@ -16,7 +16,7 @@
                       name="date_time" [(ngModel)]="stockInvoice.date_time">
                   </mat-form-field>
                 </td>
-                <td>
+                <td class="printX">
                   <!-- <div class="textBold p-2 text-center infoCard fullWidth secondaryBadge borderLsecondary">
                     {{invoiceCond}}</div> -->
                   <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'"
@@ -35,12 +35,13 @@
                   </mat-form-field>
 
                   <mat-form-field [class.d-none]="!stockInvoice.truckName" class="w-25">
-                    <input matInput placeholder="المشال" name="metrPrice" type="number" [(ngModel)]="truckInfo.metrPrice">
+                    <input matInput placeholder="المشال" name="metrPrice" type="number"
+                      [(ngModel)]="truckInfo.metrPrice">
                   </mat-form-field>
                 </td>
               </tr>
 
-              <tr>
+              <tr class="printX">
                 <td *ngIf="_router.url != '/CaherReceipt'" class="pt-3">
                   <mat-form-field>
                     <mat-select placeholder="نوع الفاتورة" #transactionType name="transactionType"
@@ -93,6 +94,7 @@
                       <mat-option *ngFor="let stock of stocksList" [value]="stock.stockName">
                         {{stock.stockName}}</mat-option>
                     </mat-select>
+
                   </mat-form-field>
                 </td>
 
@@ -109,7 +111,7 @@
           <div class="col-lg-2 col-md-hide">
             <!-- just for space in col-lg -->
           </div>
-          <div class="col-md-9 col-lg-4">
+          <div class="col-md-9 col-lg-4 printX">
             <table class="fullWidth fullHeight">
               <tr style="height: 70%;">
                 <td class="textPrimary textBold pl-3" style="font-size: 1rem; text-align: left;">
@@ -150,8 +152,7 @@
               <th style="flex: 2;">اسم الصنف</th>
               <th style="flex: .75;">
                 <i class="fa fa-stop textSecondary"></i>
-                {{stockInvoice.truckCapacity  < 2 ? 'الكمية' : 'عدد النقلات'}}
-              </th>
+                {{stockInvoice.truckCapacity < 2 ? 'الكمية' : 'عدد النقلات' }} </th>
               <th style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
                 <i class="fa fa-th-large textSecondary"></i>
                 الحمولة
@@ -161,8 +162,7 @@
                 اجمالى عدد
               </th>
               <th>
-                {{stockInvoice.truckCapacity  < 2 ? 'السعر' : 'سعر المتر'}}
-              </th>
+                {{stockInvoice.truckCapacity < 2 ? 'السعر' : 'سعر المتر' }} </th>
               <th [class.d-none]="stockInvoice.truckCapacity  < 2">
                 سعر النقلة
               </th>
@@ -173,14 +173,16 @@
           </thead>
           <tbody class="tableBody inpTableBody" style="overflow-x: hidden !important;">
             <tr *ngFor="let inpt of stockTransaction; let i = index">
+
               <td style="flex: .25;" class="text-center">
                 <div class="pt-2">{{i + 1}}</div>
               </td>
+
               <td style="flex: 2;" class="tdBorder_left">
-                <input [disabled]="!stockInvoice.customerName" #product="ngModel" id="product{{i}}" type="search"
-                  class="form-control productInpDom" name="product{{i}}" id="product{{i}}"
-                  (click)="selectText('product',i)" [(ngModel)]='inpt.info.product' (change)="productChanged(i)"
-                  autocomplete="off" [attr.list]="inpt.info.product && product.dirty ? dataList[i] : ''">
+                <input #product="ngModel" id="product{{i}}" type="search" class="form-control productInpDom"
+                  name="product{{i}}" id="product{{i}}" (click)="selectText('product',i)"
+                  [(ngModel)]='inpt.info.product' (change)="productChanged(i)" autocomplete="off"
+                  [attr.list]="inpt.info.product && product.dirty ? dataList[i] : ''">
                 <datalist id="datalistproducts{{i}}">
                   <option *ngFor="let product of productsList" value="{{product.productName}}">
                   </option>
@@ -189,22 +191,19 @@
                   {{inputValid.product[i].msg}}</div>
               </td>
 
-              <!-- qty -->
-              <!-- matTooltip="وحدة الصنف {{stockInvoice.truckCapacity}} قطعة" matTooltipPosition="before"
-                matTooltipClass="secondaryBg"  matTooltipShowDelay="700" [matTooltipDisabled]="!inpt.info.productId" -->
               <td style="flex: .75;">
                 <input [disabled]="!stockInvoice.customerName" type="number" class="form-control textBold textDark"
                   name="loadTimes{{i}}" id="loadTimes{{i}}" [(ngModel)]="productQtys[i].loadTimes"
                   (ngModelChange)="calcQty(i)" (click)="selectText('loadTimes',i)">
               </td>
+
               <td style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
-                <input disabled type="number"
-                  class="form-control lightBg" name="truckCapacity{{i}}" id="truckCapacity{{i}}"
-                  (click)="selectText('truckCapacity',i)" [(ngModel)]="stockInvoice.truckCapacity"
-                  (ngModelChange)="calcQty(i)">
+                <input disabled type="number" class="form-control lightBg" name="truckCapacity{{i}}"
+                  id="truckCapacity{{i}}" (click)="selectText('truckCapacity',i)"
+                  [(ngModel)]="stockInvoice.truckCapacity" (ngModelChange)="calcQty(i)">
               </td>
+
               <td class="tdBorder_left">
-                <!-- <div class="py-2">{{(productQtys[i].backet * 50) + productQtys[i].unit}}</div> -->
                 <input type="number" class="form-control textBolder textSecondary" name="qty{{i}}" id="qty{{i}}"
                   (click)="selectText('qty',i)" [(ngModel)]="inpt.info.qty" disabled
                   [class.lightBg]="!inpt.info.product">
@@ -228,7 +227,9 @@
                   [(ngModel)]="inpt.info.discound" [disabled]="!inpt.info.product" [class.lightBg]="!inpt.info.product"
                   (ngModelChange)="calcTotal(i)" id="discound{{i}}" (click)="selectText('discound',i)">
               </td>
+
               <td class="textBold pt-2 textPrimary">{{inpt.info.total | number:'1.0-2'}}</td>
+
               <td>
                 <input type="text" class="form-control " name="notes{{i}}" id="notes{{i}}"
                   (click)="selectText('notes',i)" [(ngModel)]='inpt.info.notes'>
@@ -269,7 +270,7 @@
             <span class="pt-4">يجب مراجعة اخطاء الادخال قبل التسجيل</span>
           </div>
         </div>
-        <div>
+        <div class="printX">
           <div class="form-inline">
             <h3 class="my-auto ml-3 py-1 infoCard lightBg" [class.borderRight-alert]="stockInvoice.isUpdated"
               [class.textBtn]="_auth?.check.prem && stockInvoice.isUpdated"

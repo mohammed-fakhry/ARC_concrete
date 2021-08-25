@@ -111,7 +111,7 @@
   </div>
 
   <div class="box stickyBox">
-    <div class="d-flex justify-content-between px-3">
+    <div class="d-flex justify-content-between px-3 printX">
       <div class="form-inline">
         <mat-form-field class="searchForm" style="width: 400px;">
           <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
@@ -200,7 +200,7 @@
 
     <!-- paginator -->
     <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-      [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500]" class="printX">
+      [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
     </mat-paginator>
 
   </div>
