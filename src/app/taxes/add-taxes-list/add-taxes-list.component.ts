@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class AddTaxesListComponent implements OnInit {
   mainData: any;
   listData_invoices: MatTableDataSource<any> | any;
+  listData_invoices_toUs: MatTableDataSource<any> | any;
   listData_concretes: MatTableDataSource<any> | any;
 
   headerTotals = {
@@ -23,15 +24,18 @@ export class AddTaxesListComponent implements OnInit {
       header: ' اجماليات النشاط',
       totalVals: 0,
       addTaxesVal: 0,
+      addTaxesVal_toUs: 0,
     },
     taxesTotals: [
       {
-        header: 'اجماليات محطة الخرسانة',
+        header: 'اجماليات التوريدات',
         totalVals: 0,
         addTaxesVal: 0,
+        totalVals_toUs: 0,
+        addTaxesVal_toUs: 0,
       },
       {
-        header: 'اجماليات التوريدات',
+        header: 'اجماليات محطة الخرسانة',
         totalVals: 0,
         addTaxesVal: 0,
       },
@@ -48,16 +52,30 @@ export class AddTaxesListComponent implements OnInit {
 
   searchTxt_invoices: string = '';
   searchTxt_concretes: string = '';
+  searchTxt_invoices_toUs: string = '';
 
   isFiltered: boolean = false;
 
   searchDate: { from: string; to: string } = { from: '', to: '' };
 
-  @ViewChild(MatSort) sortInvoices!: MatSort;
+  /* @ViewChild(MatSort) sortInvoices!: MatSort;
   @ViewChild(MatPaginator) paginatorInvoices!: MatPaginator;
 
   @ViewChild(MatSort) sortConcrete!: MatSort;
-  @ViewChild(MatPaginator) paginatorConcrete!: MatPaginator;
+  @ViewChild(MatPaginator) paginatorConcrete!: MatPaginator; */
+
+  @ViewChild('sort_invoices', { static: true }) sort_invoices!: MatSort;
+  @ViewChild('paginator_invoices', { static: true })
+  paginator_invoices!: MatPaginator;
+
+  @ViewChild('sort_invoices_toUs', { static: true })
+  sort_invoices_toUs!: MatSort;
+  @ViewChild('paginator_invoices_toUs', { static: true })
+  paginator_invoices_toUs!: MatPaginator;
+
+  @ViewChild('sort_concretes', { static: true }) sort_concretes!: MatSort;
+  @ViewChild('paginator_concretes', { static: true })
+  paginator_concretes!: MatPaginator;
 
   constructor(
     public _mainService: MainService,
@@ -96,17 +114,30 @@ export class AddTaxesListComponent implements OnInit {
 
   fillListData = (data: any) => {
     this.listData_invoices = new MatTableDataSource(data.receiptTaxes);
-    this.listData_invoices.sort = this.sortInvoices;
-    this.listData_invoices.paginator = this.paginatorInvoices;
+    this.listData_invoices.sort = this.sort_invoices;
+    this.listData_invoices.paginator = this.paginator_invoices;
+
+    this.listData_invoices_toUs = new MatTableDataSource(
+      data.receiptTaxes_toUs
+    );
+    this.listData_invoices.sort = this.sort_invoices_toUs;
+    this.listData_invoices.paginator = this.paginator_invoices_toUs;
 
     this.listData_concretes = new MatTableDataSource(data.concreteTaxes);
-    this.listData_concretes.sort = this.sortConcrete;
-    this.listData_concretes.paginator = this.paginatorConcrete;
+    this.listData_concretes.sort = this.sort_concretes;
+    this.listData_concretes.paginator = this.paginator_concretes;
 
     this.setHeaderTotals(data);
   };
 
   setHeaderTotals(data: any) {
+    /*
+      header: 'اجماليات التوريدات',
+      totalVals: 0,
+      addTaxesVal: 0,
+      totalVals_toUs: 0,
+      addTaxesVal_toUs: 0,
+    */
     for (let i = 0; i < this.headerTotals.taxesTotals.length; i++) {
       if (this.headerTotals.taxesTotals[i].header == 'اجماليات محطة الخرسانة') {
         this.headerTotals.taxesTotals[i].addTaxesVal =
@@ -128,6 +159,21 @@ export class AddTaxesListComponent implements OnInit {
           (a: any, b: any) => a + b.invoiceTotal,
           0
         );
+
+        this.headerTotals.taxesTotals[i].addTaxesVal_toUs =
+          data.receiptTaxes_toUs.reduce(
+            (a: any, b: any) => a + b.addTaxesVal,
+            0
+          );
+
+        this.headerTotals.taxesTotals[i].totalVals_toUs =
+          data.receiptTaxes_toUs.reduce(
+            (a: any, b: any) => a + b.invoiceTotal,
+            0
+          );
+
+        this.headerTotals.mainTotals.addTaxesVal_toUs =
+          this.headerTotals.taxesTotals[i]?.addTaxesVal_toUs ?? 0;
       }
 
       this.headerTotals.mainTotals.addTaxesVal =
@@ -159,6 +205,9 @@ export class AddTaxesListComponent implements OnInit {
 
     if (cond == 'listData_concretes')
       this.listData_concretes.filter = this.searchTxt_concretes;
+
+    if (cond == 'listData_invoices_toUs')
+      this.listData_invoices_toUs.filter = this.searchTxt_invoices_toUs;
   }
 
   openFilterDialog = (data: any) => {

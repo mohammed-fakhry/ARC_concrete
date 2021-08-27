@@ -238,6 +238,8 @@
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
                     [(ngModel)]="safeReciept.receiptVal" (ngModelChange)="receiptValChanged(addSafeReciept)" required>
+
+                  <mat-hint class="textSmall" *ngIf="safeReciept.receiptVal > 999">{{safeReciept.receiptVal | number: '1.0-3'}}</mat-hint>
                   <mat-error *ngIf="!inputValid.receiptVal.cond">
                     {{inputValid.receiptVal.msg}}
                   </mat-error>
@@ -283,13 +285,15 @@
               <button [disabled]="_glopal.loading || !safeReciept.receiptKind" mat-raised-button color="primary"
                 type="submit">{{submitBtn}}</button>
 
-              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn" (click)="openSearchDialog(addSafeReciept, concreteReceiptCash.id)"
+              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn"
+                (click)="openSearchDialog(addSafeReciept, concreteReceiptCash.id)"
                 [ngClass]="concreteReceiptCash.id ? 'darkBadge borderLdark' :'dangerBadge borderLdanger'"
                 *ngIf="concreteReceiptCash.id || safeReciept.transactionAccKind === 'عميل خرسانة' && !safeReciept.recieptNote.includes(staticMixerNote)">
                 {{concreteReciptCash_btn}}
               </div>
 
-              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn darkBadge" (click)="safeReciept.recieptNote = staticMixerNote"
+              <div class="infoCard printX py-2 mr-2 textBtn badgeBtn darkBadge"
+                (click)="safeReciept.recieptNote = staticMixerNote"
                 *ngIf="safeReciept.transactionAccKind === 'عميل خرسانة' && !safeReciept.recieptNote.includes(staticMixerNote) && !concreteReceiptCash.id">
                 دفعة من مستخلص
               </div>

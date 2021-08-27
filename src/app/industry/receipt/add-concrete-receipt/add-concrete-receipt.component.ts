@@ -622,6 +622,7 @@ export class AddConcreteReceiptComponent implements OnInit {
       // console.log(receiptDetails.pumpCost - receiptDetails.concretePrice)
     } else {
       this.trucks[i] = new Truck();
+      this.concreteReceipt.receiptDetails[i].pumpCost = 0;
     }
 
     // console.log(receiptDetails);

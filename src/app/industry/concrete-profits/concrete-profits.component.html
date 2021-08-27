@@ -67,6 +67,11 @@
             <td class="p-2 tdBorder_right">{{workerExpences | number: '1.0-2'}}</td>
           </tr>
 
+          <tr class="lightBg" *ngIf="headerTotal.outSidePumpCost != 0">
+            <th class="p-2">استعمال مضخة خارجية</th>
+            <td class="p-2 tdBorder_right">{{headerTotal.outSidePumpCost | number: '1.0-2'}}</td>
+          </tr>
+
           <tr class="lightBg">
             <th class="p-2">النقل</th>
             <td class="p-2 tdBorder_right">{{truckExpences | number: '1.0-2'}}</td>
@@ -75,13 +80,14 @@
           <tr class="lightBg textBold">
             <th class="p-2" style="border-top: 1px solid black;">اجمالى مصاريف</th>
             <td class="p-2 tdBorder_right" style="border-top: 1px solid black;">
-              {{headerTotal.accExpences + workerExpences + truckExpences | number:'1.0-2'}}</td>
+              {{headerTotal.accExpences + workerExpences + truckExpences + headerTotal.outSidePumpCost | number:'1.0-2'}}</td>
           </tr>
 
           <tr class="textBold alert alert-danger">
             <th class="p-2 textBold">اجمالى مصاريف و تكاليف</th>
-            <td class="p-2 textBold tdBorder_right">{{headerTotal.accExpences + workerExpences + truckExpences +
-              headerTotal.totalExpences | number: '1.0-2'}}</td>
+            <td class="p-2 textBold tdBorder_right">
+              {{headerTotal.accExpences + workerExpences + truckExpences + headerTotal.totalExpences + headerTotal.outSidePumpCost | number: '1.0-2'}}
+            </td>
           </tr>
 
           <tr>
@@ -93,10 +99,10 @@
             [ngClass]="( headerTotal.concreteInvoiceTotal - workerExpences - truckExpences- headerTotal.accExpences - headerTotal.totalExpences) > 0 ? 'greenBadge borderLgreen' : 'dangerBadge borderLdanger'">
             <th class="p-2 textLarge">
               {{( headerTotal.concreteInvoiceTotal - workerExpences - truckExpences-headerTotal.accExpences -
-              headerTotal.totalExpences) > 0 ? 'ارباح' : 'خسائر'}}
+              headerTotal.totalExpences - headerTotal.outSidePumpCost) > 0 ? 'ارباح' : 'خسائر'}}
             </th>
             <td class="p-2 tdBorder_right textLarge">{{headerTotal.concreteInvoiceTotal - workerExpences -
-              truckExpences- headerTotal.accExpences - headerTotal.totalExpences | number: '1.0-2'}}</td>
+              truckExpences- headerTotal.accExpences - headerTotal.totalExpences - headerTotal.outSidePumpCost | number: '1.0-2'}}</td>
           </tr>
 
         </table>

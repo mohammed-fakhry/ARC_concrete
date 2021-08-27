@@ -166,9 +166,9 @@
               <th [class.d-none]="stockInvoice.truckCapacity  < 2">
                 سعر النقلة
               </th>
-              <th *ngIf="showDiscound" style="flex: .35;">خصم %</th>
+              <th *ngIf="showDiscound" style="flex: .35;" class="printX">خصم %</th>
               <th class="thCenter textBold">اجمالى</th>
-              <th>ملاحظات</th>
+              <th class="printX">ملاحظات</th>
             </tr>
           </thead>
           <tbody class="tableBody inpTableBody" style="overflow-x: hidden !important;">
@@ -222,15 +222,17 @@
                   [disabled]="!inpt.info.product" (ngModelChange)="packetPriceChange(i)">
               </td>
 
-              <td *ngIf="showDiscound" style="flex: .35;">
+              <td *ngIf="showDiscound" style="flex: .35;" class="printX">
                 <input type="number" class="form-control textDanger" name="discound{{i}}"
                   [(ngModel)]="inpt.info.discound" [disabled]="!inpt.info.product" [class.lightBg]="!inpt.info.product"
                   (ngModelChange)="calcTotal(i)" id="discound{{i}}" (click)="selectText('discound',i)">
               </td>
 
-              <td class="textBold pt-2 textPrimary">{{inpt.info.total | number:'1.0-2'}}</td>
+              <td class="textBold pt-2 textPrimary printX">{{inpt.info.total | number:'1.0-2'}}</td>
 
-              <td>
+              <td class="textBold pt-2 textPrimary printThis">{{(inpt.info.qty * inpt.info.price) | number:'1.0-2'}}</td>
+
+              <td class="printX">
                 <input type="text" class="form-control " name="notes{{i}}" id="notes{{i}}"
                   (click)="selectText('notes',i)" [(ngModel)]='inpt.info.notes'>
               </td>
@@ -239,7 +241,7 @@
         </table>
       </div>
 
-      <div class="panel-body panel-flex-table standTable mt-3">
+      <div class="panel-body panel-flex-table standTable mt-3 printX">
         <table class="flex-table table">
           <tbody>
             <tr class="noHover" style="border-bottom: none;">
@@ -259,6 +261,27 @@
               </td>
             </tr>
           </tbody>
+        </table>
+      </div>
+      <div class="printThis">
+        <table>
+          <tr *ngIf="stockInvoice.addtaxes">
+            <th class="py-2 px-3 tdBorder_left">اجمالى</th>
+            <td class="py-2 px-3">{{totalBFTaxes}}</td>
+          </tr>
+          <tr *ngIf="stockInvoice.addtaxes">
+            <th class="py-2 px-3 tdBorder_left">قيمة مضافة {{stockInvoice.addtaxes}} %</th>
+            <td class="py-2 px-3">{{taxesVal}}</td>
+          </tr>
+
+          <tr *ngIf="discoundVal">
+            <th class="py-2 px-3 textDanger tdBorder_left">خصم أ.ت.ص</th>
+            <td class="py-2 px-3 textDanger">{{discoundVal}}</td>
+          </tr>
+          <tr>
+            <th class="py-2 px-3 tdborder_top_primary tdBorder_left">اجمالى الفاتورة</th>
+            <td class="py-2 px-3 tdborder_top_primary">{{stockInvoice.invoiceTotal | number:'1.0-2'}}</td>
+          </tr>
         </table>
       </div>
       <div class="d-flex justify-content-between">

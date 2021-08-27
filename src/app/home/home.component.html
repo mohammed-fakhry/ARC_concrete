@@ -12,11 +12,11 @@
       </mat-form-field>
 
       <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
-        (click)="_mainService.scrollTo('activeUser')" class="mr-3">عملاء نشطين</button>
+        (click)="_mainService.scrollTo('generalReport')" class="mr-3">تقرير عام</button>
       <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('lastData')">اخر بيانات</button>
       <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
-        (click)="_mainService.scrollTo('generalReport')">تقرير عام</button>
+        (click)="_mainService.scrollTo('activeUser')">عملاء نشطين</button>
 
     </div>
 

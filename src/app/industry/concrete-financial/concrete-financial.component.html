@@ -112,19 +112,21 @@
             </thead>
             <tbody class="tableBody">
               <tr *ngFor="let section of totalVals.sections; let i = index">
-                <td style="flex: 2;" class="textBold" class="textBtn tBtn-dark pl-2 sectionFinancialBtn" id="sectionFinancialName{{i}}"
-                  (click)="search(section.name, 'sectionFinancialName', i)"
+                <td style="flex: 2;" class="textBold" class="textBtn tBtn-dark pl-2 sectionFinancialBtn"
+                  id="sectionFinancialName{{i}}" (click)="search(section.name, 'sectionFinancialName', i)"
                   [class.textDanger]="section.name == 'بدون موقف'">
                   {{section.name}}
                 </td>
-                <td [class.textDanger]="section.name == 'بدون موقف'">{{section.val | number: '1.0-2'}}</td>
+                <td [class.textDanger]="section.name == 'بدون موقف' || section.val < 0">{{section.val | number:
+                  '1.0-2'}}</td>
               </tr>
               <tr>
                 <td></td>
                 <td></td>
               </tr>
               <tr class="darkBadge">
-                <td style="flex: 2;" class="textBold py-2 textBtn tBtn-dark pl-2" (click)="search('all', '', 0)">الاجمالى</td>
+                <td style="flex: 2;" class="textBold py-2 textBtn tBtn-dark pl-2" (click)="search('all', '', 0)">
+                  الاجمالى</td>
                 <td class="textBold py-2">{{totalVals.sectionsTotal | number: '1.0-2'}}</td>
               </tr>
 
@@ -192,8 +194,9 @@
 
         <ng-container matColumnDef="receiptCondition">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة الفاتورة</th>
-          <td mat-cell *matCellDef="let row">
-            <input type="text" class="form-control noHover" [(ngModel)]="row.receiptCondition">
+          <td mat-cell *matCellDef="let row; let i = index">
+            <input type="text" class="form-control noHover" [(ngModel)]="row.receiptCondition"
+              id="receiptCondition{{i}}" (click)="_mainService.selectText('receiptCondition',i)">
           </td>
         </ng-container>
 
@@ -259,9 +262,10 @@
 
         <ng-container matColumnDef="notes">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات</th>
-          <td mat-cell *matCellDef="let row" matTooltip="{{row.notes}}" matTooltipClass="secondaryBg"
+          <td mat-cell *matCellDef="let row; let i = index" matTooltip="{{row.notes}}" matTooltipClass="secondaryBg"
             matTooltipPosition="after">
-            <input type="text" class="form-control noHover textSmall" [(ngModel)]="row.notes">
+            <input type="text" class="form-control noHover textSmall" [(ngModel)]="row.notes" id="financialNotes{{i}}"
+              (click)="_mainService.selectText('financialNotes',i)">
           </td>
         </ng-container>
 

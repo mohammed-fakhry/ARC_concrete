@@ -47,7 +47,7 @@ export class AddDiscoundDialogComponent implements OnInit {
         };
 
         this.accList = result.accList;
-        this.safeList = result.safeList;
+        this.safeList = result.safeList.filter((safe: any) => safe.safeName != 'خزنة مصاريف من فترة 22-3-2020 الى فترة 1-5-2021');
 
         if (this.data.customerId > 1) {
           this.header = this.data.customerName

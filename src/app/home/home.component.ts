@@ -403,6 +403,9 @@ export class HomeComponent implements OnInit {
           ],
         },
         options: {
+          legend: {
+            display: false,
+          },
           scales: {
             yAxes: [
               {

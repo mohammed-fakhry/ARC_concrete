@@ -55,18 +55,11 @@ export class ConcreteCustomerInformationComponent implements OnInit {
     'notes',
   ];
 
-  //@ViewChild(MatSort) sort!: MatSort;
-  //@ViewChild(MatPaginator) paginator!: MatPaginator;
-
   @ViewChild('mainTableSort', { static: true }) sort!: MatSort;
   @ViewChild('mainTable_paginator', { static: true }) paginator!: MatPaginator;
 
-  //@ViewChild(MatSort) sort_cement!: MatSort;
-  //@ViewChild(MatPaginator) paginator_cement!: MatPaginator;
-
   @ViewChild('cementTable_sort', { static: true }) sort_cement!: MatSort;
-  @ViewChild('cementTable_paginator', { static: true })
-  paginator_cement!: MatPaginator;
+  @ViewChild('cementTable_paginator', { static: true }) paginator_cement!: MatPaginator;
 
   searchTxt: string = '';
   searchDate: { from: string; to: string } = { from: '', to: '' };

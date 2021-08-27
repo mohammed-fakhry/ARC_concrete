@@ -135,6 +135,8 @@ export class CustomersListComponent implements OnInit {
       this.fillListData(this.customerList);
       this.counts = this.generateCustomerCounts(this.customerList);
 
+      console.log(this.counts)
+
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -237,6 +239,8 @@ export class CustomersListComponent implements OnInit {
         ),
       },
     };
+
+    console.log(filterd)
 
     return {
       activeCustomers: {
@@ -419,18 +423,26 @@ export class CustomersListComponent implements OnInit {
         this.sales_and_Purchases = [
           {
             salesTitle: 'مبيعات',
-            sales: data[0].outCome,
+            sales: data[0]?.outCome ?? 0,
             purchasesTitle: 'تحصيلات',
-            purchases: data[1].inCome,
+            purchases: data[1]?.inCome ?? 0,
             trClass: 'secondaryBadge'
           },
 
           {
             salesTitle: 'مشتريات',
-            sales: data[0].inCome,
+            sales: data[0]?.inCome ?? 0,
             purchasesTitle: 'دفعات',
-            purchases: data[1].outCome,
+            purchases: data[1]?.outCome ?? 0,
             trClass: 'tdborder_top_primary dangerBadge'
+          },
+
+          {
+            salesTitle: 'حراسة و غفرات',
+            sales: data[2]?.inCome ?? 0,
+            purchasesTitle: 'ايجارات',
+            purchases: data[2]?.outCome ?? 0,
+            trClass: 'tdborder_top_primary lightBg'
           },
         ];
         this.isFiltered = true;

@@ -100,6 +100,10 @@ export class StockInvoiceComponent implements OnInit {
   showDiscound: boolean = false;
   custInfo: Customer = new Customer();
 
+  totalBFTaxes: number = 0;
+  taxesVal: number = 0;
+  discoundVal: number = 0
+
   transactionTypeDom: HTMLElement = document.querySelector(
     '#transactionType'
   ) as HTMLElement;
@@ -473,6 +477,8 @@ export class StockInvoiceComponent implements OnInit {
       const oldDetails = this.saveOldData(details, result.stockTransaction);
       this.changedData.push(oldDetails);
     }
+
+    this.calcTaxes();
   }
 
   addRow() {
@@ -849,10 +855,19 @@ export class StockInvoiceComponent implements OnInit {
   }
 
   calcTaxes() {
-    const totalBFTaxes = this.totalsArry.reduce((a, b) => a + b);
-    const taxesVal = (this.stockInvoice.addtaxes * totalBFTaxes) / 100;
+    this.discoundVal = this.stockTransaction
+      .filter((trance: any) => trance.info.discound)
+      .map(
+        (trance: any) =>
+          (trance.info.qty * trance.info.price * trance.info.discound) / 100
+      )
+      .reduce((a: any, b: any) => a + b, 0);
 
-    this.stockInvoice.invoiceTotal = totalBFTaxes + taxesVal;
+    // console.log(discoundVal)
+    this.totalBFTaxes = this.totalsArry.reduce((a, b) => a + b) + this.discoundVal;
+    this.taxesVal = (this.stockInvoice.addtaxes * this.totalBFTaxes) / 100;
+
+    this.stockInvoice.invoiceTotal = this.totalBFTaxes + this.taxesVal - this.discoundVal;
   }
 
   calcQty(i: number) {

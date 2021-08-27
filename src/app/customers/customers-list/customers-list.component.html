@@ -45,6 +45,8 @@
         </h3>
       </div>
 
+      <!--  -->
+
       <div class="row" [class.d-none]="searchFor != 'indebtedness' && searchFor != 'collectible' && searchFor">
 
         <div class="col-md-12 mb-3" *ngIf="searchDate.from">
@@ -76,9 +78,11 @@
           </mat-card>
         </div>
 
-        <div class="col-md-12" *ngIf="counts?.allCustomers?.toUs?.count > 0">
+        <!-- <div>{{counts?.allCustomers?.toUs?.count}}</div> -->
+
+        <div class="col-md-12">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="counts?.allCustomers?.toUs?.count > 0">
               <mat-card class="box mb-3 counts" id="{{counts?.allCustomers?.toUs?.id}}"
                 [class.borderRight-alert]="counts?.allCustomers?.toUs?.uncompletedCond">
                 <mat-card-header>
@@ -105,7 +109,7 @@
               </mat-card>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="counts?.allCustomers?.onUs?.count > 0">
               <mat-card class="box mb-3 counts" id="{{counts?.allCustomers?.onUs?.id}}"
                 [class.borderRight-alert]="counts?.allCustomers?.onUs?.uncompletedCond">
                 <mat-card-header>

@@ -81,7 +81,7 @@ export class AddSafeReceiptComponent implements OnInit {
 
   concreteReciptCash_btn: string = '';
 
-  staticMixerNote: string = "من حساب مستخلص مضخة ثابتة -"
+  staticMixerNote: string = 'من حساب مستخلص مضخة ثابتة -';
 
   constructor(
     public activeRoute: ActivatedRoute,

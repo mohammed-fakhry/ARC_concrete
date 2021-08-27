@@ -1,0 +1,9 @@
+.printThis {
+  display: none !important;
+}
+
+@media print {
+  .printThis {
+    display: block !important;
+  }
+}

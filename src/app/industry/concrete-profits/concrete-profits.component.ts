@@ -52,6 +52,7 @@ export class ConcreteProfitsComponent implements OnInit {
     totalprofits: 0,
     accExpences: 0,
     concreteQty: 0,
+    outSidePumpCost: 0,
   };
 
   constructor(
@@ -84,10 +85,14 @@ export class ConcreteProfitsComponent implements OnInit {
         workerExpences: data[2],
       };
 
+      // console.log(result.concreteProfits)
+
       this.mainList = result.concreteProfits;
-      this.otherAcc = result.accList.filter((acc: any) => acc.currentAccVal != 0);
+      this.otherAcc = result.accList.filter(
+        (acc: any) => acc.currentAccVal != 0
+      );
       this.workerExpences = result.workerExpences.workersExpenses;
-      this.truckExpences = result.workerExpences.trucksExpenses
+      this.truckExpences = result.workerExpences.trucksExpenses;
       this.fillListData(result.concreteProfits);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
@@ -166,6 +171,10 @@ export class ConcreteProfitsComponent implements OnInit {
         0
       ),
       concreteQty: concreteQty,
+      outSidePumpCost: data.reduce(
+        (a: any, b: any) => a + b.outSidePumpCost,
+        0
+      ),
     };
   }
 
@@ -208,8 +217,9 @@ export class ConcreteProfitsComponent implements OnInit {
           workerExpences: data[1],
         };
 
-        this.otherAcc = result.otherAcc.filter((acc: OtherAcc) =>
-          acc.AccName.includes('المحطه') && acc.currentAccVal != 0
+        this.otherAcc = result.otherAcc.filter(
+          (acc: OtherAcc) =>
+            acc.AccName.includes('المحطه') && acc.currentAccVal != 0
         );
 
         this.workerExpences = result.workerExpences.workersExpenses;
@@ -229,7 +239,9 @@ export class ConcreteProfitsComponent implements OnInit {
             workerExpences: data[1],
           };
 
-          this.otherAcc = result.otherAcc.filter((acc: any) => acc.currentAccVal != 0);
+          this.otherAcc = result.otherAcc.filter(
+            (acc: any) => acc.currentAccVal != 0
+          );
           this.fillListData(this.mainList);
           this.isFiltered = false;
           this.searchDate = { from: '', to: '' };

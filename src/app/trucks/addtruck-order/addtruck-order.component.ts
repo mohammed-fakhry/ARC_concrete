@@ -74,6 +74,8 @@ export class AddtruckOrderComponent implements OnInit {
               this.truckOrder.date_time
             );
 
+            this.orderCondition = `تعديل اذن رقم (${this.id})`
+
             this.loadingTypeChanged();
             this.calcTotal();
 
@@ -87,6 +89,8 @@ export class AddtruckOrderComponent implements OnInit {
 
           this.dateExpires = false;
           this.truckOrder.madeBy = this._auth.uName.realName;
+
+          this.orderCondition = 'اذن جديد'
 
           this._glopal.loading = false;
         }
