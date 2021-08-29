@@ -1,6 +1,6 @@
 <div class="mainContainer mt-3">
 
-  <div class="row stickyBox">
+  <div class="row stickyBox" *ngIf="id">
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="box headerBox">
         <mat-card-header>
@@ -28,6 +28,27 @@
         </mat-card-actions>
       </mat-card>
     </div>
+
+    <div class="col-xl-4 col-lg-6 mb-3">
+      <div class="box px-3">
+        <table>
+
+          <tr *ngIf="!searchDate.from">
+            <td colspan="2" class="p-2 tdborder_bottom_primary">من اول المدة</td>
+          </tr>
+
+          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+            <th class="p-2 textPrimary tdborder_bottom_primary">من تاريخ | {{searchDate.from}}</th>
+            <td class="p-2 tdBorder_right textDanger tdborder_bottom_primary">الى تاريخ | {{searchDate.to}}</td>
+          </tr>
+
+          <tr *ngFor="let header of headerTotals">
+            <th class="p-2">{{header.type}}</th>
+            <td class="p-2 tdBorder_right">{{header.qty | number: '1.0-3'}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 
   <div class="box stickyBox">
@@ -39,11 +60,19 @@
           <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
         </mat-form-field>
 
-        <button mat-stroked-button color="primary" class="mr-2" (click)="openFilterDialog('filter')">
+        <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary" class="mr-2">
           <i class="fa fa-filter"></i>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="openFilterDialog('filter')">فرز بالتاريخ</button>
+          <button mat-menu-item (click)="onStart()">اظهار الكل</button>
+        </mat-menu>
 
-        <div *ngIf="searchDate.from" class="mr-3">من تاريخ | {{searchDate.from}} - الى تاريخ | {{searchDate.to}}</div>
+        <!-- <button mat-stroked-button color="primary" class="mr-2" (click)="openFilterDialog('filter')">
+          <i class="fa fa-filter"></i>
+        </button> -->
+
+        <!-- <div *ngIf="searchDate.from" class="mr-3">من تاريخ | {{searchDate.from}} - الى تاريخ | {{searchDate.to}}</div> -->
       </div>
 
       <div class="form-inline">
@@ -62,7 +91,7 @@
           اجمالى مصاريف | {{truckOtherAccInfo.currentAccVal | number:'1.0-2'}}
         </div>
 
-        <div class="infoCard py-2 mx-2"
+        <div *ngIf="id" class="infoCard py-2 mx-2"
           [ngClass]="(totalIncome - (truckOtherAccInfo?.currentAccVal ? truckOtherAccInfo.currentAccVal : 0)) < 0 ? 'dangerBadge borderLdanger' : 'greenBadge borderRight-success'">
           صافى | {{totalIncome - (truckOtherAccInfo?.currentAccVal ? truckOtherAccInfo.currentAccVal : 0) - totalCashIn
           | number:'1.0-2'}}

@@ -79,12 +79,30 @@ export class TruckOrdetListComponent implements OnInit {
     this.id = this.activeRoute.snapshot.paramMap.get('id');
     // const isId = this.id ?? undefined;
 
+    if (!from) {
+      this.searchDate = { from: '', to: '' };
+    }
+
     if (this.id) {
       this.getTruckList().then((data: Truck[]) => {
         this.truckInfo =
           data.find((truck: Truck) => this.id == truck.id) ?? new Truck();
 
-        if (this.truckInfo.truckType == 'مضخة') {
+        if (this.id) {
+          if (this.truckInfo.truckType == 'مضخة') {
+            this.getPumpOrderList(this.id, from, to).then(
+              (data: TruckOrder[]) => {
+                this.handleTruck_orders(data, from, to);
+              }
+            );
+          } else {
+            this.getOrderList(this.id, from, to).then((data: TruckOrder[]) => {
+              this.handleTruck_orders(data, from, to);
+            });
+          }
+        }
+
+        /* if (this.truckInfo.truckType == 'مضخة') {
           if (this.id)
             this.getPumpOrderList(this.id, from, to).then(
               (data: TruckOrder[]) => {
@@ -96,8 +114,15 @@ export class TruckOrdetListComponent implements OnInit {
             this.getOrderList(this.id, from, to).then((data: TruckOrder[]) => {
               this.handleTruck_orders(data, from, to);
             });
-        }
+        } */
       });
+    } else {
+      // console.log(this.truckInfo)
+      this._truckService
+        .all_truckOrderList()
+        .subscribe((data: TruckOrder[]) => {
+          this.handleTruck_orders(data);
+        });
     }
   }
 
@@ -105,6 +130,12 @@ export class TruckOrdetListComponent implements OnInit {
     this.fillListData(this.makeTruckAcc(data));
 
     this._mainService.handleTableHeight();
+
+    this._glopal.currentHeader = `${
+      this.truckInfo.name
+        ? 'حركة نقلات السيارة |' + this.truckInfo.name
+        : 'تفاصيل اذون المُعدات'
+    }`;
 
     if (this.id) {
       this.truckOtherAcc(from, to).then((responce: OtherAcc[]) => {
@@ -121,8 +152,6 @@ export class TruckOrdetListComponent implements OnInit {
             'notes',
           ];
         }
-
-        this._glopal.currentHeader = `حركة نقلات السيارة | ${this.truckInfo.name}`;
 
         this.truckOtherAccInfo = responce[0];
 
@@ -227,7 +256,106 @@ export class TruckOrdetListComponent implements OnInit {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
+
+    this.setHeaderTotals(data);
   };
+
+  headerTotals: { type: string | any; qty: number }[] = [];
+
+  setHeaderTotals(data: any) {
+    this.headerTotals = [];
+    const unique = [
+      ...new Set(
+        data
+          .filter((acc: any) => acc.loadingType)
+          .map((acc: any) => acc.loadingType)
+      ),
+    ];
+
+    for (let i = 0; i < unique.length; i++) {
+      const filtered = data.filter((acc: any) => acc.loadingType === unique[i]);
+
+      let qty = filtered.reduce((a: any, b: any) => a + b.LoadTimes, 0);
+
+      if (unique[i] == 'ساعة') {
+        const seperate = this.calcHours(qty);
+
+        let dailyIndx = this.headerTotals.findIndex(
+          (head: any) => head.type == 'يومية'
+        );
+
+        let rowHourly = {
+          type: 'ساعة',
+          qty: seperate.hours,
+        };
+
+        this.headerTotals.push(rowHourly);
+
+        if (dailyIndx == -1) {
+          let rowDaily = {
+            type: 'يومية',
+            qty: seperate.dayes,
+          };
+
+          this.headerTotals.push(rowDaily);
+
+        } else {
+          this.headerTotals[dailyIndx].qty =
+            this.headerTotals[dailyIndx].qty + seperate.dayes;
+        }
+
+        // يومية
+      } else if (unique[i] == 'يومية') {
+        let dailyIndx = this.headerTotals.findIndex(
+          (head: any) => head.type == 'يومية'
+        );
+
+        if (dailyIndx == -1) {
+          let rowDaily = {
+            type: 'يومية',
+            qty: qty,
+          };
+
+          this.headerTotals.push(rowDaily);
+        } else {
+          this.headerTotals[dailyIndx].qty =
+            this.headerTotals[dailyIndx].qty + qty;
+        }
+      } else {
+        const row = {
+          type: unique[i]
+            ? unique[i] == 'متر'
+              ? 'نقلات ' +
+                '(' +
+                filtered
+                  .reduce((a: any, b: any) => a + b.totalQty, 0)
+                  .toFixed(2) +
+                ')' +
+                ' متر'
+              : unique[i]
+            : '',
+          qty: qty,
+        };
+
+        this.headerTotals.push(row);
+      }
+
+    }
+  }
+
+  calcHours(qty: any) {
+    const qtyFloat = `${qty / 7}`;
+
+    let dot = qtyFloat.indexOf('.');
+
+    return {
+      dayes: dot > 0 ? parseInt(qtyFloat.slice(0, dot)) : qty / 7,
+      hours:
+        dot > 0
+          ? Number.parseFloat(qtyFloat.slice(dot, qtyFloat.length)) * 7
+          : 0,
+    };
+  }
 
   search(searchFor?: string) {
     if (searchFor) this.searchTxt = searchFor;

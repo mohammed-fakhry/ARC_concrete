@@ -72,10 +72,8 @@
   <mat-sidenav #sidenav mode="over" [(opened)]="opened" position="end" style="width: 240px">
     <mat-nav-list dense>
       <mat-accordion multi="false">
-        <mat-expansion-panel dense *ngIf="
-            _auth?.check?.workers || _auth?.check?.clients || _auth?.check?.unites
-          " [class.mainBg]="expansionPanel[0].opened" (opened)="expansionPanel[0].opened = true"
-          (closed)="expansionPanel[0].opened = false">
+        <mat-expansion-panel dense *ngIf="_auth?.check?.workers" [class.mainBg]="expansionPanel[0].opened"
+          (opened)="expansionPanel[0].opened = true" (closed)="expansionPanel[0].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-database my-auto pl-2"></i>
             البيانات
@@ -85,8 +83,8 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.customers" [class.mainBg]="expansionPanel[1].opened"
-          (opened)="expansionPanel[1].opened = true" (closed)="expansionPanel[1].opened = false">
+        <mat-expansion-panel [class.mainBg]="expansionPanel[1].opened" (opened)="expansionPanel[1].opened = true"
+          (closed)="expansionPanel[1].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-th my-auto pl-2"></i>
             الحسابات
@@ -94,10 +92,10 @@
           <mat-nav-list dense>
             <a mat-list-item routerLink="/CustomerList" (click)="opened = !opened"
               *ngIf="_auth?.check?.customers">موردين/مستهلكين</a>
-            <a mat-list-item routerLink="/otherAcc" (click)="opened = !opened" *ngIf="_auth?.check?.customers">
+            <a mat-list-item routerLink="/otherAcc" (click)="opened = !opened" *ngIf="_auth?.check?.otherAcc">
               المصاريف
             </a>
-            <div class="form-inline my-2" *ngIf="_auth?.check?.stockes">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.checksTrace">
               <button mat-button class="textSecondary textBold" style="width: 72%; text-align: right"
                 routerLink="/checkList" (click)="opened = !opened">
                 تتبع الشيكات
@@ -118,8 +116,8 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.safes" [class.mainBg]="expansionPanel[2].opened"
-          (opened)="expansionPanel[2].opened = true" (closed)="expansionPanel[2].opened = false">
+        <mat-expansion-panel [class.mainBg]="expansionPanel[2].opened" (opened)="expansionPanel[2].opened = true"
+          (closed)="expansionPanel[2].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-calculator my-auto pl-2"></i>
             المالية
@@ -153,7 +151,7 @@
             المخازن
           </mat-expansion-panel-header>
           <mat-nav-list dense>
-            <div class="form-inline my-2" *ngIf="_auth?.check?.stockes">
+            <div class="form-inline my-2" *ngIf="_auth?.check?.stockeInv">
               <button mat-flat-button (click)="openSearchDialog('stockInvoice')" color="accent"
                 style="width: 72%; text-align: right">
                 فاتورة بيع | شراء
@@ -177,12 +175,12 @@
             <a mat-list-item (click)="openSearchDialog('outInvoices')">تقرير فواتير البيع</a>
             <a mat-list-item (click)="openSearchDialog('inInvoices')">تقرير فواتير الشراء</a>
             <mat-divider></mat-divider>
-            <a mat-list-item (click)="openSearchDialog('ProductsProfits')" *ngIf="_auth?.check?.prem">تقرير الارباح</a>
+            <a mat-list-item (click)="openSearchDialog('ProductsProfits')">تقرير الارباح</a>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[4].opened"
-          (opened)="expansionPanel[4].opened = true" (closed)="expansionPanel[4].opened = false">
+        <mat-expansion-panel dense [class.mainBg]="expansionPanel[4].opened" (opened)="expansionPanel[4].opened = true"
+          (closed)="expansionPanel[4].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-industry my-auto pl-2"></i>
             محطة تاور للخرسانة
@@ -226,6 +224,7 @@
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
             <a mat-list-item routerLink="/TrucksList/pumps" (click)="opened = !opened">مضخات</a>
+            <a mat-list-item routerLink="/invoiceReport/productTransaction/7/11" (click)="opened = !opened">حركة الاسمنت</a>
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/OtherAccInformation/36" (click)="opened = !opened" class="textBold">
               <span class="textDanger">مصاريف المحطة</span>
@@ -241,8 +240,8 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.safes" [class.mainBg]="expansionPanel[5].opened"
-          (opened)="expansionPanel[5].opened = true" (closed)="expansionPanel[5].opened = false">
+        <mat-expansion-panel [class.mainBg]="expansionPanel[5].opened" (opened)="expansionPanel[5].opened = true"
+          (closed)="expansionPanel[5].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-truck my-auto pl-2"></i>
             المُعدات
@@ -275,8 +274,8 @@
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[6].opened"
-          (opened)="expansionPanel[6].opened = true" (closed)="expansionPanel[6].opened = false">
+        <mat-expansion-panel dense [class.mainBg]="expansionPanel[6].opened" (opened)="expansionPanel[6].opened = true"
+          (closed)="expansionPanel[6].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-cube my-auto pl-2"></i>
             تقارير التعديل و الحذف
@@ -289,12 +288,12 @@
               ايصالات النقدية
             </a>
 
-            <a mat-list-item *ngIf="_auth?.check?.unites" routerLink="Addtaxes" (click)="opened = !opened">تقرير ض</a>
+            <a mat-list-item *ngIf="_auth?.check?.taxes" routerLink="Addtaxes" (click)="opened = !opened">تقرير ض</a>
           </mat-nav-list>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="_auth?.check?.prem" dense [class.mainBg]="expansionPanel[7].opened"
-          (opened)="expansionPanel[7].opened = true" (closed)="expansionPanel[7].opened = false">
+        <mat-expansion-panel dense [class.mainBg]="expansionPanel[7].opened" (opened)="expansionPanel[7].opened = true"
+          (closed)="expansionPanel[7].opened = false">
           <mat-expansion-panel-header class="textBold textPrimary">
             <i class="fa fa-cogs my-auto pl-2"></i>
             الاعدادات العامة
@@ -304,7 +303,7 @@
               <i class="fa fa-download my-auto pl-2"></i>
               نسخة احتياطية
             </a>
-            <div class="form-inline my-2" *ngIf="_auth?.check?.prem">
+            <div class="form-inline my-2">
               <button mat-button class="textSecondary textBold" style="width: 72%; text-align: right"
                 (click)="openSearchDialog('users')">
                 <i class="fa fa-user my-auto pl-2"></i>
@@ -350,20 +349,25 @@
       <div class="d-flex justify-content-between">
         <div>
           <div class="textBolder textSecondary">شركة تاور للخرسانات الجاهزة</div>
-          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
+          <div class="textBolder mt-3"
+            [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
             للمقاولات العمومية
           </div>
-          <div class="textBolder mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
+          <div class="textBolder mt-3"
+            [class.d-none]="_router.url.includes('ConcreteReceipt') || _router.url.includes('StockInvoice')">
             و التـوريدات
           </div>
           <h2></h2>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
+          <div class="py-1"
+            [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             رقم السجل التجارى : 426661
           </div>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
+          <div class="py-1"
+            [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             ملف ضريبى رقم : 24_03_410_02967_5_247
           </div>
-          <div class="py-1" [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
+          <div class="py-1"
+            [class.d-none]="!_router.url.includes('ConcreteReceipt') && !_router.url.includes('StockInvoice')">
             رقم التسجيل الضريبى: 479_358_726
           </div>
         </div>
@@ -372,6 +376,15 @@
       <mat-divider class="my-3"></mat-divider>
     </div>
     <router-outlet #outlet="outlet"></router-outlet>
+    <div class="printThis mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
+      <mat-divider></mat-divider>
+      <div class="d-flex justify-content-between px-5">
+        <h3>اعداد</h3>
+        <h3>المالية</h3>
+        <h3>المتابعة</h3>
+        <h3>الاعتماد</h3>
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

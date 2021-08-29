@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { MainService } from '../services/main.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientsGuard implements CanActivate {
+export class AddConcGGuard implements CanActivate {
+
   constructor(
     public _auth: AuthService,
     public _router: Router,
@@ -17,7 +19,7 @@ export class ClientsGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this._auth.check) {
-      if (this._auth.check.clients) {
+      if (this._auth.check.addconc) {
         return true
       } else {
         this._snackBar.open(

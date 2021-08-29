@@ -189,14 +189,34 @@ export class SafeInformationComponent implements OnInit {
     let routeTo: string = '';
     let toolTip: string = '';
 
-    if (data.customerName) {
+    if (data.customerName && data.customerName?.includes('عهده')) {
+      receiptDetail = data.customerName;
+      routeTo = `/customerInformation/${data.customerId}`;
+      toolTip = 'العهد';
+    } else if (data.customerName && data.customerName?.includes('بنك')) {
+      receiptDetail = data.customerName;
+      routeTo = `/customerInformation/${data.customerId}`;
+      toolTip = 'بنك';
+    } else if (data.customerName) {
       receiptDetail = data.customerName;
       routeTo = `/customerInformation/${data.customerId}`;
       toolTip = 'مورد | مستهلك';
-    } else if (data.AccName) {
+    } else if (data.AccName && data.AccName?.includes('شيخ ايمن')) {
       receiptDetail = data.AccName;
       routeTo = `/OtherAccInformation/${data.accId}`;
-      toolTip = 'مصاريف';
+      toolTip = 'الشيخ ايمن';
+    } else if (data.AccName && data.AccName?.includes('محطه')) {
+      receiptDetail = data.AccName;
+      routeTo = `/OtherAccInformation/${data.accId}`;
+      toolTip = 'مصاريف المحطه';
+    } else if (
+      data.AccName &&
+      !data.AccName?.includes('الشيخ ايمن') &&
+      !data.AccName?.includes('محطه')
+    ) {
+      receiptDetail = data.AccName;
+      routeTo = `/OtherAccInformation/${data.accId}`;
+      toolTip = 'مصاريف التوريدات';
     } else if (data.concreteCustomerName) {
       routeTo = `/ConcreteCustomerInformation/${data.concreteCustomer_id}`;
       receiptDetail = data.concreteCustomerName;
@@ -238,14 +258,16 @@ export class SafeInformationComponent implements OnInit {
     return '';
   }
 
-  fillListData = (pureData: any) => {
+  fillListData = (pureData: any, noTotal?: boolean) => {
     const data = pureData.reverse();
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
     // this.searchResults(pureData);
-    this.tempAccArry = pureData;
-    this.setHeaderTotals(data.reverse());
+    if (!noTotal) {
+      this.tempAccArry = pureData;
+      this.setHeaderTotals(data.reverse());
+    }
   };
 
   search() {
@@ -323,9 +345,58 @@ export class SafeInformationComponent implements OnInit {
       };
     }
 
+    this.set_in_out_details(accArr);
+
     setTimeout(() => {
       this.setlogoHeight();
     }, 50);
+  }
+
+  in_out_details: {
+    details: any;
+    in: number;
+    out: number;
+  }[] = [];
+
+  set_in_out_details(accArr: any) {
+    this.in_out_details = [];
+
+    const mainSections = [...new Set(accArr.map((sec: any) => sec.toolTip))];
+
+    for (let i = 0; i < mainSections.length; i++) {
+      if (mainSections[i]) {
+        const filtered = accArr.filter(
+          (acc: any) => acc.toolTip == mainSections[i]
+        );
+
+        const row = {
+          details: mainSections[i],
+          in: filtered.reduce((a: any, b: any) => a + b.minVal, 0),
+          out: filtered.reduce((a: any, b: any) => a + b.addVal, 0),
+        };
+
+        this.in_out_details.push(row);
+      }
+    }
+    // console.log(mainSections);
+  }
+
+  filterBySection(details: any, i?: number) {
+    const inOutClass = document.querySelectorAll('.inOutClass');
+    inOutClass.forEach((e: HTMLElement | any) => {
+      return e.classList.remove('darkBadge');
+    });
+
+    if (details == 'all') {
+      this.fillListData(this.tempAccArry);
+    } else {
+      const inOutId = document.getElementById(`inOutId${i}`);
+      inOutId?.classList.add('darkBadge');
+      const filtered = this.tempAccArry.filter(
+        (acc: any) => acc.toolTip == details
+      );
+      this.fillListData(filtered, true);
+    }
   }
 
   toReceipt(id: string, receiptKind: string) {

@@ -161,13 +161,13 @@ export class AddTaxesListComponent implements OnInit {
         );
 
         this.headerTotals.taxesTotals[i].addTaxesVal_toUs =
-          data.receiptTaxes_toUs.reduce(
+          data?.receiptTaxes_toUs?.reduce(
             (a: any, b: any) => a + b.addTaxesVal,
             0
           );
 
         this.headerTotals.taxesTotals[i].totalVals_toUs =
-          data.receiptTaxes_toUs.reduce(
+          data?.receiptTaxes_toUs?.reduce(
             (a: any, b: any) => a + b.invoiceTotal,
             0
           );
@@ -239,11 +239,10 @@ export class AddTaxesListComponent implements OnInit {
         concreteTaxes: this.mainData.concreteTaxes.filter((acc: any) => {
           return acc.date_time >= start && acc.date_time <= end;
         }),
+        receiptTaxes_toUs: this.mainData.receiptTaxes_toUs.filter((acc: any) => {
+          return acc.date_time >= start && acc.date_time <= end;
+        }),
       };
-
-      /* let newArr = this.accArr.filter((acc) => {
-        return acc.date_time >= start && acc.date_time <= end;
-      }); */
 
       this.isFiltered = true;
       this.fillListData(tempData);

@@ -1,5 +1,5 @@
 <div class="container">
-  <form (ngSubmit)="onSubmit(addUserForm)" #addUserForm="ngForm">
+  <form (ngSubmit)="onSubmit(addUserForm)" #addUserForm="ngForm" class="mb-3">
     <div class="row">
       <div class="col-md-3">
         <div class="px-2">
@@ -47,7 +47,7 @@
               <td>
                 <mat-form-field class="example-full-width">
                   <mat-label>الرقم السرى</mat-label>
-                  <input required type="password" matInput name="auth" [(ngModel)]="user.auth">
+                  <input [required]="!id" type="password" matInput name="auth" [(ngModel)]="user.auth">
                   <mat-error>
                     الرقم السرى غير مطابق
                   </mat-error>
@@ -56,7 +56,7 @@
               <td>
                 <mat-form-field class="example-full-width">
                   <mat-label>تأكيد الرقم السرى</mat-label>
-                  <input required type="password" matInput name="reAuth" [(ngModel)]="reAuth">
+                  <input [required]="!id" type="password" matInput name="reAuth" [(ngModel)]="reAuth">
                   <mat-error>
                     الرقم السرى غير مطابق
                   </mat-error>
@@ -66,34 +66,6 @@
           </table>
         </div>
       </div>
-      <!-- <div class="col-md-12">
-        <div class="box box p-4">
-          <h3 class="cardHeader mb-4">بيانات كلمة السر</h3>
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>الرقم السرى</mat-label>
-                  <input required type="password" matInput name="auth" [(ngModel)]="user.auth">
-                  <mat-error>
-                    الرقم السرى غير مطابق
-                  </mat-error>
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>تأكيد الرقم السرى</mat-label>
-                  <input required type="password" matInput name="reAuth" [(ngModel)]="reAuth">
-                  <mat-error>
-                    الرقم السرى غير مطابق
-                  </mat-error>
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-      </div> -->
 
     </div>
 
@@ -101,80 +73,128 @@
     <div class="mt-3">
       <h3 class="cardHeader mb-4">صلاحيات المستخدم</h3>
       <div class="row">
-        <div class="col">
+
+        <div class="col-md-4 mb-3">
           <div class="panel-body panel-flex-table box standTable">
             <table class="flex-table table table-hover">
               <thead class="secondaryBg">
                 <tr>
-                  <th>العمليات الاساسية</th>
+                  <th colspan="2">العمليات الاساسية</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr class="textBold textPrimary">
-                  <td>صلاحيات الوصول</td>
+                  <td>رصيد اول</td>
                   <td class="text-center">
-                    <mat-slide-toggle name="prem" [(ngModel)]="user.prem" color="primary"
-                      (ngModelChange)="checkStatu()">
+                    <mat-slide-toggle name="prem" [(ngModel)]="user.prem" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>
+
                 <tr class="textBold textPrimary">
-                  <td>تعديل</td>
+                  <td [class.text-dark]="!user.edi">تعديل عام</td>
                   <td class="text-center">
                     <mat-slide-toggle name="edi" [(ngModel)]="user.edi" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>
-                <tr class="textBold dangerBadge">
-                  <td>حذف</td>
-                  <td class="text-center">
-                    <mat-slide-toggle name="del" [(ngModel)]="user.del" color="warn">
-                    </mat-slide-toggle>
-                  </td>
-                </tr>
-
-
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col">
-          <div class="panel-body panel-flex-table box standTable">
-            <table class="flex-table table table-hover">
-              <thead class="secondaryBg">
-                <tr>
-                  <th>البيانات</th>
-                </tr>
-              </thead>
-              <tbody class="tableBody">
-                <tr class="textBold textPrimary">
-                  <td>العاملين</td>
-                  <td class="text-center">
-                    <mat-slide-toggle name="workers" [(ngModel)]="user.workers" color="primary">
-                    </mat-slide-toggle>
-                  </td>
-                </tr>
-                <!-- <tr class="textBold textPrimary">
-                  <td>العملاء</td>
-                  <td class="text-center">
-                    <mat-slide-toggle name="clients" [(ngModel)]="user.clients" color="primary">
-                    </mat-slide-toggle>
-                  </td>
-                </tr> -->
 
                 <tr class="textBold dangerBadge">
-                  <td>تعديل بعد صلاحية التاريخ</td>
+                  <td [class.text-dark]="!user.expEdi">تعديل بعد صلاحية التاريخ</td>
                   <td class="text-center">
                     <mat-slide-toggle name="expEdi" [(ngModel)]="user.expEdi" color="warn">
                     </mat-slide-toggle>
                   </td>
                 </tr>
 
-
                 <tr class="textBold dangerBadge">
-                  <td>صلاحيات المدير</td>
-                  <td class="text-center ">
-                    <mat-slide-toggle name="unites" [(ngModel)]="user.unites" color="warn">
+                  <td [class.text-dark]="!user.del">حذف عام</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="del" [(ngModel)]="user.del" color="warn">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th colspan="2">البيانات</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.workers">العاملين</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="workers" [(ngModel)]="user.workers" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.customers">موردين | مستهلكين</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="customers" [(ngModel)]="user.customers" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.otherAcc">المصاريف</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="otherAcc" [(ngModel)]="user.otherAcc" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.checksTrace">تتبع الشيكات</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="checksTrace" [(ngModel)]="user.checksTrace" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th colspan="2">المخازن</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.stockes">قائمة المخازن</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="stockes" [(ngModel)]="user.stockes" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.stockeInv">فواتير شراء | بيع</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="stockeInv" [(ngModel)]="user.stockeInv" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.stockeProd">اصناف المخازن</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="stockeProd" [(ngModel)]="user.stockeProd" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>
@@ -182,33 +202,134 @@
             </table>
           </div>
         </div>
-        <div class="col">
+
+        <div class="col-md-4 mb-3">
           <div class="panel-body panel-flex-table box standTable">
             <table class="flex-table table table-hover">
               <thead class="secondaryBg">
                 <tr>
-                  <th>الحسابات</th>
+                  <th colspan="2">الخزنة</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr class="textBold textPrimary">
-                  <td>المخازن</td>
+                  <td [class.text-dark]="!user.addSafe">اضافة خزنة</td>
                   <td class="text-center">
-                    <mat-slide-toggle name="stockes" [(ngModel)]="user.stockes" color="primary">
+                    <mat-slide-toggle name="addSafe" [(ngModel)]="user.addSafe" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>
+
                 <tr class="textBold textPrimary">
-                  <td>الخزنة</td>
+                  <td [class.text-dark]="!user.safeInv">ايصال الخزنة (استلام | صرف)</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="safeInv" [(ngModel)]="user.safeInv" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.safes">قائمة الخزن</td>
                   <td class="text-center">
                     <mat-slide-toggle name="safes" [(ngModel)]="user.safes" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th colspan="2">المعدات</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
                 <tr class="textBold textPrimary">
-                  <td>موردين / مستهلكين</td>
+                  <td [class.text-dark]="!user.addtruck">اضافة و تعديل مُعدة</td>
                   <td class="text-center">
-                    <mat-slide-toggle name="customers" [(ngModel)]="user.customers" color="primary">
+                    <mat-slide-toggle name="addtruck" [(ngModel)]="user.addtruck" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.truckList">قائمة المعدات</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="truckList" [(ngModel)]="user.truckList" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.addTruckCust">اضافة و تعديل عميل</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="addTruckCust" [(ngModel)]="user.addTruckCust" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.truckCustList">قائمة عملاء المُعدات</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="truckCustList" [(ngModel)]="user.truckCustList" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="panel-body panel-flex-table box standTable">
+            <table class="flex-table table table-hover">
+              <thead class="secondaryBg">
+                <tr>
+                  <th colspan="2">محطة الخرسانة</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.addconc">اضافة جهد و محتوى</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="addconc" [(ngModel)]="user.addconc" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.concInv">فواتير الخرسانة</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="concInv" [(ngModel)]="user.concInv" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.concbon">بونات الخرسانة</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="concbon" [(ngModel)]="user.concbon" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.concCust">قائمة عملاء الخرسانة</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="concCust" [(ngModel)]="user.concCust" color="primary">
+                    </mat-slide-toggle>
+                  </td>
+                </tr>
+
+                <tr class="textBold textPrimary">
+                  <td [class.text-dark]="!user.concFinan">الموقف المالى</td>
+                  <td class="text-center">
+                    <mat-slide-toggle name="concFinan" [(ngModel)]="user.concFinan" color="primary">
                     </mat-slide-toggle>
                   </td>
                 </tr>

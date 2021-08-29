@@ -96,29 +96,29 @@ export class UserSettingsComponent implements OnInit {
     });
   }
 
-  checkStatu() {
+  /* checkStatu() {
     this.user.dev = false;
     if (this.user.prem) {
-      this.user.unites = false;
+      // this.user.unites = false;
       this.user.workers = true;
       this.user.stockes = true;
       this.user.safes = true;
       this.user.edi = true;
       this.user.del = false;
       this.user.customers = true;
-      this.user.clients = true;
+      // this.user.clients = true;
     } else {
-      this.user.unites = false;
+      // this.user.unites = false;
       this.user.workers = false;
       this.user.stockes = false;
       this.user.safes = false;
       this.user.edi = false;
       this.user.del = false;
       this.user.customers = false;
-      this.user.clients = false;
+      // this.user.clients = false;
     }
     //this.user.del = false
-  }
+  } */
 
   openDialog = () => {
     let dialogRef = this._dialog.open(DoneDialogComponent, {
@@ -176,31 +176,61 @@ export class UserSettingsComponent implements OnInit {
   };
 
   onSubmit(addUserForm: NgForm) {
-    if (addUserForm.valid && this.reAuth === this.user.auth) {
+    if (addUserForm.valid) {
       if (this._auth.uName.i === this.user.id) {
         let prems = {
-          clients: this.user.clients,
+          /* taxes */
+          taxes: this.user.taxes,
+          /* workers */
+          workers: this.user.workers,
+          /* customers */
           customers: this.user.customers,
-          del: this.user.del,
+          /* otherAcc */
+          otherAcc: this.user.otherAcc,
+          /* check */
+          checksTrace: this.user.checksTrace,
+          /* stock */
+          stockes: this.user.stockes,
+          stockeInv: this.user.stockeInv,
+          stockeProd: this.user.stockeProd,
+          /* trucks */
+          addtruck: this.user.addtruck,
+          truckList: this.user.truckList,
+          /* truckCust */
+          addTruckCust: this.user.addTruckCust,
+          truckCustList: this.user.truckCustList,
+          /* concrete */
+          addconc: this.user.addconc,
+          concInv: this.user.concInv,
+          concbon: this.user.concbon,
+          concCust: this.user.concCust,
+          concFinan: this.user.concFinan,
+          /* safe */
+          safes: this.user.safes,
+          addSafe: this.user.addSafe,
+          safeInv: this.user.safeInv,
+          /* premissions */
           edi: this.user.edi,
           expEdi: this.user.expEdi,
+          del: this.user.del,
           prem: this.user.prem,
-          safes: this.user.safes,
-          stockes: this.user.stockes,
-          unites: this.user.unites,
-          workers: this.user.workers,
-          userPic: this.user.userPic,
+          dev: this.user.dev,
         };
         sessionStorage.setItem('y', `${JSON.stringify(prems)}`);
         this._auth.check = sessionStorage.getItem('y');
         this._glopal.check = sessionStorage.getItem('y');
       }
 
+      //  && this.reAuth === this.user.auth
       if (this.id) {
-        this._auth.updateUser(this.user).subscribe(() => {
+        const noChangePass = !this.user.auth && !this.reAuth ? 'noChange' : '';
+
+        this._auth.updateUser(this.user, noChangePass).subscribe(() => {
           this.openDialog();
         });
       } else {
+        // if (!this.user.auth && !this.reAuth)
+
         this._auth.creatUser(this.user).subscribe(
           () => {
             this.openDialog();
@@ -213,7 +243,7 @@ export class UserSettingsComponent implements OnInit {
         );
       }
     } else {
-      if (this.reAuth !== this.user.auth) {
+      if (this.reAuth !== this.user.auth && !this.id) {
         this.authCond = true;
         addUserForm.form.controls['reAuth'].setErrors({ incorrect: true });
         addUserForm.form.controls['auth'].setErrors({ incorrect: true });

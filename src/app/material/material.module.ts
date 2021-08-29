@@ -24,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatIconModule } from '@angular/material/icon';
 
 const MaterialComponents = [
   MatTooltipModule,
@@ -50,7 +51,8 @@ const MaterialComponents = [
   MatSnackBarModule,
   MatProgressBarModule,
   MatStepperModule,
-  ScrollingModule
+  ScrollingModule,
+  MatIconModule
 ]
 
 @NgModule({

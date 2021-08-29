@@ -56,7 +56,7 @@
     <div class="row mb-3">
       <mat-divider class="my-3"></mat-divider>
       <div class="col-lg-5 col-md-12 mb-3">
-        <mat-card class="box" [class.d-none]="!_auth?.check.prem || !charts.showExpenses">
+        <mat-card class="box" [class.d-none]="!charts.showExpenses">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>المصاريف</mat-card-title>
             <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
@@ -122,7 +122,7 @@
             </mat-card>
           </div>
 
-          <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.safes">
+          <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.stockes">
             <mat-card class="box">
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
@@ -151,8 +151,8 @@
         </div>
       </div>
       <!-- *ngIf="charts.showExpenses" -->
-      <div class="col-lg-7 col-md-12 mb-3" [class.d-none]="!_auth?.check.customers || !charts.showSales">
-        <mat-card class="box" *ngIf="_auth?.check.prem">
+      <div class="col-lg-7 col-md-12 mb-3" [class.d-none]="!_auth?.check.stockeProd || !charts.showSales">
+        <mat-card class="box">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>تقرير المبيعات</mat-card-title>
             <mat-card-subtitle>{{salesReportHeader.subtitle}}</mat-card-subtitle>
@@ -259,7 +259,7 @@
           </mat-card>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.concCust">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
           <mat-card class="box lightShadow">
             <mat-card-header>
@@ -283,7 +283,7 @@
           </mat-card>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+        <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.truckCustList">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
           <mat-card class="box lightShadow">
             <mat-card-header>
@@ -446,7 +446,7 @@
         اخر بيانات
       </h2>
       <div class="row mb-3">
-        <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.stockes">
+        <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.stockeProd">
           <mat-card class="box">
             <div class="d-flex justify-content-between mb-2">
               <mat-card-header>
@@ -630,7 +630,7 @@
           </mat-card>
         </div>
 
-        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
+        <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.stockeProd">
           <mat-card class="box" [class.borderRight-alert]="counts?.ActiveInvoices?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/invoiceReport/invoiceOut/2/{{mainStock.stockId}}">

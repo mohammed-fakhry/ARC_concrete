@@ -62,7 +62,7 @@
             <td class="p-2 tdBorder_right dangerBadge">{{acc.currentAccVal | number: '1.0-2'}}</td>
           </tr>
 
-          <tr class="lightBg">
+          <tr class="lightBg" *ngIf="workerExpences != 0">
             <th class="p-2">رواتب موظفين</th>
             <td class="p-2 tdBorder_right">{{workerExpences | number: '1.0-2'}}</td>
           </tr>

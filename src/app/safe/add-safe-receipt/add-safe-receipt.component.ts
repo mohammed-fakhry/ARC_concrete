@@ -962,40 +962,55 @@ export class AddSafeReceiptComponent implements OnInit {
 
       if (addSafeReciept.valid) {
         this._glopal.loading = true;
+
+        // if id to update
         if (this.id) {
-          thedialog.discription = [
-            `ايصال رقم | (${this.id})`,
-            ...thedialog.discription,
-          ];
           // edit safereceipt
-          if (this._glopal.check.edi) {
-            if (this.isChanged(this.safeReciept, this.oldReciept)) {
-              this.safeReciept.isUpdated = true;
-            }
-            this._safeService.updateSafeReceipt(this.safeReciept).subscribe(
-              () => {
-                /* this.openDialog(thedialog);
-                this._glopal.loading = false; */
-                this.processUpdate(thedialog);
-                if (this.id) this.recordConcreteCash(this.id);
-              },
-              (error) => {
-                /* if data saved but some vars are undifined */
-                if (error.status == '201') {
-                  /* this._glopal.loading = false;
-                  this.openDialog(thedialog); */
-                  this.processUpdate(thedialog);
-                  if (this.id) this.recordConcreteCash(this.id);
-                }
-              }
-            );
-          } else {
-            this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
+
+          // check date if expired
+          if (this.dateExpires && !this._glopal.check.expEdi) {
+            this._snackBar.open('انتهت صلاحية التعديل', 'اخفاء', {
               duration: 2500,
             });
             this._glopal.loading = false;
             this._mainService.playDrumFail();
+          } else {
+            // check if can edit
+            if (this._glopal.check.edi) {
+              thedialog.discription = [
+                `ايصال رقم | (${this.id})`,
+                ...thedialog.discription,
+              ];
+
+              if (this.isChanged(this.safeReciept, this.oldReciept)) {
+                this.safeReciept.isUpdated = true;
+              }
+              this._safeService.updateSafeReceipt(this.safeReciept).subscribe(
+                () => {
+                  /* this.openDialog(thedialog);
+                  this._glopal.loading = false; */
+                  this.processUpdate(thedialog);
+                  if (this.id) this.recordConcreteCash(this.id);
+                },
+                (error) => {
+                  /* if data saved but some vars are undifined */
+                  if (error.status == '201') {
+                    /* this._glopal.loading = false;
+                    this.openDialog(thedialog); */
+                    this.processUpdate(thedialog);
+                    if (this.id) this.recordConcreteCash(this.id);
+                  }
+                }
+              );
+            } else {
+              this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
+                duration: 2500,
+              });
+              this._glopal.loading = false;
+              this._mainService.playDrumFail();
+            }
           }
+
         } else {
           // new safereceipt
           this.recordSafeReceipt(this.recieptData_forDb(this.safeReciept)).then(

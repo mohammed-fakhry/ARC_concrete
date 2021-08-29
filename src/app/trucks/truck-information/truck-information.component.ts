@@ -81,9 +81,6 @@ export class TruckInformationComponent implements OnInit {
             netIncome: a.truckOrderVals - a.otherAccVals - a.cashIn,
           };
         })
-        .sort((a: any, b: any) => {
-          return b.truckOrderVals - a.truckOrderVals;
-        });
 
       this.fillListData(sortedData);
       this.counts = this.setCounts(data);

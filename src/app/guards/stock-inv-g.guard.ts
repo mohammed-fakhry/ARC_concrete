@@ -7,7 +7,7 @@ import { MainService } from '../services/main.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ClientsGuard implements CanActivate {
+export class StockInvGGuard implements CanActivate {
   constructor(
     public _auth: AuthService,
     public _router: Router,
@@ -17,7 +17,7 @@ export class ClientsGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this._auth.check) {
-      if (this._auth.check.clients) {
+      if (this._auth.check.stockeInv) {
         return true
       } else {
         this._snackBar.open(

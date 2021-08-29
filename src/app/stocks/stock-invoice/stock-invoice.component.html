@@ -205,7 +205,7 @@
 
               <td class="tdBorder_left">
                 <input type="number" class="form-control textBolder textSecondary" name="qty{{i}}" id="qty{{i}}"
-                  (click)="selectText('qty',i)" [(ngModel)]="inpt.info.qty" disabled
+                  (click)="selectText('qty',i)" [(ngModel)]="inpt.info.qty"
                   [class.lightBg]="!inpt.info.product">
               </td>
 
@@ -216,7 +216,7 @@
                   [class.lightBg]="!inpt.info.product" (ngModelChange)="calcTotal(i)">
               </td>
 
-              <td [class.d-none]="stockInvoice.truckCapacity  < 2">
+              <td [class.d-none]="stockInvoice.truckCapacity < 2">
                 <input type="number" class="form-control textBold textDark" name="backetPrice{{i}}"
                   id="backetPrice{{i}}" (click)="selectText('backetPrice',i)" [(ngModel)]="productQtys[i].payLoadPrice"
                   [disabled]="!inpt.info.product" (ngModelChange)="packetPriceChange(i)">

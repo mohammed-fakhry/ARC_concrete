@@ -76,7 +76,7 @@
         <td>
           <mat-form-field cellspacing="0">
             <input [disabled]="loading" matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
-              [ngModel]="data.receiptVal" required>
+              [(ngModel)]="data.receiptVal" required>
               <mat-hint class="textSmall" *ngIf="data.receiptVal > 999">{{data.receiptVal | number: '1.0-3'}}</mat-hint>
           </mat-form-field>
         </td>

@@ -68,6 +68,22 @@ import { InstructionsComponent } from './instructions/instructions.component';
 import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
 import { ConcreteProfitsComponent } from './industry/concrete-profits/concrete-profits.component';
 import { StaticMixerFinancialComponent } from './industry/static-mixer-financial/static-mixer-financial.component';
+import { OtherAccGuard } from './guards/other-acc.guard';
+import { CheckGGuard } from './guards/check-g.guard';
+import { StockInvGGuard } from './guards/stock-inv-g.guard';
+import { StockProdGGuard } from './guards/stock-prod-g.guard';
+import { AddtruckGGuard } from './guards/addtruck-g.guard';
+import { TruckListGGuard } from './guards/truck-list-g.guard';
+import { TruckCustListGGuard } from './guards/truck-cust-list-g.guard';
+import { AddTruckCustGGuard } from './guards/add-truck-cust-g.guard';
+import { AddConcGGuard } from './guards/add-conc-g.guard';
+import { ConcinvGGuard } from './guards/concinv-g.guard';
+import { ConcBonGGuard } from './guards/conc-bon-g.guard';
+import { ConcCustGGuard } from './guards/conc-cust-g.guard';
+import { ConcfinanGGuard } from './guards/concfinan-g.guard';
+import { AddSafeGGuard } from './guards/add-safe-g.guard';
+import { SafeInvGGuard } from './guards/safe-inv-g.guard';
+import { TaxesGGuard } from './guards/taxes-g.guard';
 
 const routes: Routes = [
   // defult path
@@ -78,16 +94,13 @@ const routes: Routes = [
   { path: 'Home', component: HomeComponent, canActivate: [AuthGuard], },
 
   // instructions
-  { path: 'instructions/:searchFor', component: InstructionsComponent, canActivate: [MasterGuard] },
+  { path: 'instructions/:searchFor', component: InstructionsComponent, canActivate: [AuthGuard] },
 
   // workers
   { path: 'Workers', component: WorkersComponent, canActivate: [WorkerGuard], },
   { path: 'WorkerInformation/:id', component: WorkerInformationComponent, canActivate: [WorkerGuard], },
   { path: 'AddWorker', component: AddWorkerComponent, canActivate: [WorkerGuard], },
   { path: 'UpdateWorker/:id', component: AddWorkerComponent, canActivate: [WorkerGuard], },
-
-  // unites
-  { path: 'Unites', component: UnitesComponent, canActivate: [UnitesGuard] },
 
   // clients
   { path: 'Clients', component: LogInComponent, canActivate: [ClientsGuard] },
@@ -103,15 +116,15 @@ const routes: Routes = [
   { path: 'customerInformation/:id', component: CustomerInformationComponent, canActivate: [CustomersGuard] },
 
   // acc !! with customer guard AddOtherAcc
-  { path: 'otherAcc', component: OtherAccComponent, canActivate: [CustomersGuard] },
-  { path: 'OtherAccInformation/:id', component: OtherAccInformationComponent, canActivate: [CustomersGuard] },
-  { path: 'AddOtherAcc', component: AddOtherAccComponent, canActivate: [CustomersGuard] },
-  { path: 'AddOtherAcc/:id', component: AddOtherAccComponent, canActivate: [CustomersGuard] },
+  { path: 'otherAcc', component: OtherAccComponent, canActivate: [OtherAccGuard] },
+  { path: 'OtherAccInformation/:id', component: OtherAccInformationComponent, canActivate: [OtherAccGuard] },
+  { path: 'AddOtherAcc', component: AddOtherAccComponent, canActivate: [OtherAccGuard] },
+  { path: 'AddOtherAcc/:id', component: AddOtherAccComponent, canActivate: [OtherAccGuard] },
 
   // check
-  { path: 'checkList', component: CheckListComponent, canActivate: [CustomersGuard] },
-  { path: 'addCheck', component: AddCheckComponent, canActivate: [CustomersGuard] },
-  { path: 'editCheck/:id', component: AddCheckComponent, canActivate: [CustomersGuard] },
+  { path: 'checkList', component: CheckListComponent, canActivate: [CheckGGuard] },
+  { path: 'addCheck', component: AddCheckComponent, canActivate: [CheckGGuard] },
+  { path: 'editCheck/:id', component: AddCheckComponent, canActivate: [CheckGGuard] },
 
   // stockes
   { path: 'Stokes', component: StocksComponent, canActivate: [StocksGuard] },
@@ -119,63 +132,63 @@ const routes: Routes = [
   { path: 'Stocking/:id', component: StockingComponent, canActivate: [StocksGuard] },
   { path: 'StockingList', component: StockingListComponent, canActivate: [StocksGuard] },
   { path: 'StockInformation/:id', component: StockInformationComponent, canActivate: [StocksGuard] },
-  { path: 'StockInvoice', component: StockInvoiceComponent, canActivate: [StocksGuard] },
-  { path: 'StockInvoice/:id', component: StockInvoiceComponent, canActivate: [StocksGuard] },
-  { path: 'CaherReceipt', component: StockInvoiceComponent, canActivate: [StocksGuard] },
-  { path: 'invoiceReport/:searchFor/:invDirection/:id', component: InvoicesReportComponent, canActivate: [AuthGuard] },
-  { path: 'AddProduct', component: AddProductComponent, canActivate: [StocksGuard] },
-  { path: 'AddProduct/:id', component: AddProductComponent, canActivate: [StocksGuard] },
+  { path: 'StockInvoice', component: StockInvoiceComponent, canActivate: [StockInvGGuard] },
+  { path: 'StockInvoice/:id', component: StockInvoiceComponent, canActivate: [StockInvGGuard] },
+  { path: 'CaherReceipt', component: StockInvoiceComponent, canActivate: [StockInvGGuard] },
+  { path: 'invoiceReport/:searchFor/:invDirection/:id', component: InvoicesReportComponent, canActivate: [StockProdGGuard] },
+  { path: 'AddProduct', component: AddProductComponent, canActivate: [StockProdGGuard] },
+  { path: 'AddProduct/:id', component: AddProductComponent, canActivate: [StockProdGGuard] },
   { path: 'ProductsProfits/:id', component: ProductProfitsComponent, canActivate: [OwnerGuard] },
 
   // trucks
-  { path: 'AddTruck', component: AddTruckComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateTruck/:id', component: AddTruckComponent, canActivate: [MasterGuard] },
-  { path: 'TrucksList', component: TrucksListComponent, canActivate: [MasterGuard] },
-  { path: 'TrucksList/:searchFor', component: TrucksListComponent, canActivate: [MasterGuard] },
-  { path: 'AddTruckorder', component: AddtruckOrderComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateTruckorder/:id', component: AddtruckOrderComponent, canActivate: [MasterGuard] },
-  { path: 'trucksOrderLog', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
-  { path: 'truckLog/:id', component: TruckOrdetListComponent, canActivate: [MasterGuard] },
-  { path: 'ourTrucks', component: TruckInformationComponent, canActivate: [MasterGuard] },
+  { path: 'AddTruck', component: AddTruckComponent, canActivate: [AddtruckGGuard] },
+  { path: 'UpdateTruck/:id', component: AddTruckComponent, canActivate: [AddtruckGGuard] },
+  { path: 'TrucksList', component: TrucksListComponent, canActivate: [TruckListGGuard] },
+  { path: 'TrucksList/:searchFor', component: TrucksListComponent, canActivate: [TruckListGGuard] },
+  { path: 'AddTruckorder', component: AddtruckOrderComponent, canActivate: [TruckListGGuard] },
+  { path: 'UpdateTruckorder/:id', component: AddtruckOrderComponent, canActivate: [TruckListGGuard] },
+  { path: 'trucksOrderLog', component: TruckOrdetListComponent, canActivate: [TruckListGGuard] },
+  { path: 'truckLog/:id', component: TruckOrdetListComponent, canActivate: [TruckListGGuard] },
+  { path: 'ourTrucks', component: TruckInformationComponent, canActivate: [OwnerGuard] },
 
   // truckCustomers
-  { path: 'TruckCustomerList', component: TruckCustomersListComponent, canActivate: [MasterGuard] },
-  { path: 'AddTruckCustomer', component: AddTruckCustomerComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateTruckCustomer/:id', component: AddTruckCustomerComponent, canActivate: [MasterGuard] },
-  { path: 'TruckCustomerInformation/:id', component: TruckCustomerInformationComponent, canActivate: [MasterGuard] },
+  { path: 'TruckCustomerList', component: TruckCustomersListComponent, canActivate: [TruckCustListGGuard] },
+  { path: 'AddTruckCustomer', component: AddTruckCustomerComponent, canActivate: [AddTruckCustGGuard] },
+  { path: 'UpdateTruckCustomer/:id', component: AddTruckCustomerComponent, canActivate: [AddTruckCustGGuard] },
+  { path: 'TruckCustomerInformation/:id', component: TruckCustomerInformationComponent, canActivate: [TruckCustListGGuard] },
 
   // /* industry */
   // concrete
-  { path: 'AddConcrete', component: AddConcreteComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateConcrete/:id', component: AddConcreteComponent, canActivate: [MasterGuard] },
-  { path: 'ConcreteList', component: ConcreteListComponent, canActivate: [MasterGuard] },
+  { path: 'AddConcrete', component: AddConcreteComponent, canActivate: [AddConcGGuard] },
+  { path: 'UpdateConcrete/:id', component: AddConcreteComponent, canActivate: [AddConcGGuard] },
+  { path: 'ConcreteList', component: ConcreteListComponent, canActivate: [AddConcGGuard] },
   // ConcreteReceipt
-  { path: 'ConcreteReceipt', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateConcreteReceipt/:id', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
-  { path: 'AddConcreteBYBon/:date/:customerId/:customerProject', component: AddConcreteReceiptComponent, canActivate: [MasterGuard] },
-  { path: 'concreteReceiptList', component: ConcreteReceiptListComponent, canActivate: [MasterGuard] },
+  { path: 'ConcreteReceipt', component: AddConcreteReceiptComponent, canActivate: [ConcinvGGuard] },
+  { path: 'UpdateConcreteReceipt/:id', component: AddConcreteReceiptComponent, canActivate: [ConcinvGGuard] },
+  { path: 'AddConcreteBYBon/:date/:customerId/:customerProject', component: AddConcreteReceiptComponent, canActivate: [ConcinvGGuard] },
+  { path: 'concreteReceiptList', component: ConcreteReceiptListComponent, canActivate: [ConcinvGGuard] },
   // ConcreteBone
-  { path: 'AddConcreteBon', component: AddConcreteBonComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateConcreteBon/:id', component: AddConcreteBonComponent, canActivate: [MasterGuard] },
-  { path: 'ConcreteBonList', component: ConcreteBonListComponent, canActivate: [MasterGuard] },
+  { path: 'AddConcreteBon', component: AddConcreteBonComponent, canActivate: [ConcBonGGuard] },
+  { path: 'UpdateConcreteBon/:id', component: AddConcreteBonComponent, canActivate: [ConcBonGGuard] },
+  { path: 'ConcreteBonList', component: ConcreteBonListComponent, canActivate: [ConcBonGGuard] },
   // concreteCustomer
-  { path: 'AddConcreteCustomer', component: AddConcreteCustomerComponent, canActivate: [MasterGuard] },
-  { path: 'UpdateConcreteCustomer/:id', component: AddConcreteCustomerComponent, canActivate: [MasterGuard] },
-  { path: 'ConcreteCustomerList', component: ConcreteCustomerListComponent, canActivate: [MasterGuard] },
-  { path: 'ConcreteCustomerInformation/:id', component: ConcreteCustomerInformationComponent, canActivate: [MasterGuard] },
+  { path: 'AddConcreteCustomer', component: AddConcreteCustomerComponent, canActivate: [ConcCustGGuard] },
+  { path: 'UpdateConcreteCustomer/:id', component: AddConcreteCustomerComponent, canActivate: [ConcCustGGuard] },
+  { path: 'ConcreteCustomerList', component: ConcreteCustomerListComponent, canActivate: [ConcCustGGuard] },
+  { path: 'ConcreteCustomerInformation/:id', component: ConcreteCustomerInformationComponent, canActivate: [ConcCustGGuard] },
   // financial position
-  { path: 'ConcreteFinancialPosition', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
-  { path: 'ConcreteCustomerFinancial/:id', component: ConcreteFinancialComponent, canActivate: [MasterGuard] },
-  { path: 'StaticMixerFinancial/:id', component: StaticMixerFinancialComponent, canActivate: [MasterGuard] },
+  { path: 'ConcreteFinancialPosition', component: ConcreteFinancialComponent, canActivate: [ConcfinanGGuard] },
+  { path: 'ConcreteCustomerFinancial/:id', component: ConcreteFinancialComponent, canActivate: [ConcfinanGGuard] },
+  { path: 'StaticMixerFinancial/:id', component: StaticMixerFinancialComponent, canActivate: [ConcfinanGGuard] },
   // profits
-  { path: 'concreteProfits', component: ConcreteProfitsComponent, canActivate: [MasterGuard] },
+  { path: 'concreteProfits', component: ConcreteProfitsComponent, canActivate: [OwnerGuard] },
 
   // safe
   { path: 'Safe', component: SafeComponent, canActivate: [SafesGuard] },
-  { path: 'AddSafe', component: AddNewSafeComponent, canActivate: [SafesGuard] },
-  { path: 'AddSafe/:id', component: AddNewSafeComponent, canActivate: [SafesGuard] },
-  { path: 'SafeReceipt', component: AddSafeReceiptComponent, canActivate: [SafesGuard] },
-  { path: 'SafeReceipt/:id', component: AddSafeReceiptComponent, canActivate: [SafesGuard] },
+  { path: 'AddSafe', component: AddNewSafeComponent, canActivate: [AddSafeGGuard] },
+  { path: 'AddSafe/:id', component: AddNewSafeComponent, canActivate: [AddSafeGGuard] },
+  { path: 'SafeReceipt', component: AddSafeReceiptComponent, canActivate: [SafeInvGGuard] },
+  { path: 'SafeReceipt/:id', component: AddSafeReceiptComponent, canActivate: [SafeInvGGuard] },
   { path: 'SafeInformation/:id', component: SafeInformationComponent, canActivate: [SafesGuard] },
 
   // main settings
@@ -187,7 +200,7 @@ const routes: Routes = [
   { path: 'InvoiceChangesReport/:searchFor', component: InvoiceChangesReportComponent, canActivate: [MasterGuard] },
   { path: 'ReceiptsChangesReport', component: ReceiptChangesListComponent, canActivate: [MasterGuard] },
   { path: 'ReceiptsChangesReport/:searchFor', component: ReceiptChangesListComponent, canActivate: [MasterGuard] },
-  { path: 'Addtaxes', component: AddTaxesListComponent, canActivate: [UnitesGuard] },
+  { path: 'Addtaxes', component: AddTaxesListComponent, canActivate: [TaxesGGuard] },
 
   // fixes, canActivate: [DevelopmentGuard]
   { path: 'FixesComponent', component: FixesComponent, canActivate: [DevelopmentGuard] },

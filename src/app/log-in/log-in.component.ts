@@ -93,16 +93,41 @@ export class LogInComponent implements OnInit {
             );
             localStorage.setItem('tmpDB', `${linkInfo?.url()}`);
             let prems = {
-              clients: result.clients,
-              customers: result.customers,
-              del: result.del,
-              edi: result.edi,
-              expEdi: result.edi,
-              prem: result.prem,
-              safes: result.safes,
-              stockes: result.stockes,
-              unites: result.unites,
+              /* taxes */
+              taxes: result.taxes,
+              /* workers */
               workers: result.workers,
+              /* customers */
+              customers: result.customers,
+              /* otherAcc */
+              otherAcc: result.otherAcc,
+              /* check */
+              checksTrace: result.checksTrace,
+              /* stock */
+              stockes: result.stockes,
+              stockeInv: result.stockeInv,
+              stockeProd: result.stockeProd,
+              /* trucks */
+              addtruck: result.addtruck,
+              truckList: result.truckList,
+              /* truckCust */
+              addTruckCust: result.addTruckCust,
+              truckCustList: result.truckCustList,
+              /* concrete */
+              addconc: result.addconc,
+              concInv: result.concInv,
+              concbon: result.concbon,
+              concCust: result.concCust,
+              concFinan: result.concFinan,
+              /* safe */
+              safes: result.safes,
+              addSafe: result.addSafe,
+              safeInv: result.safeInv,
+              /* premissions */
+              edi: result.edi,
+              expEdi: result.expEdi,
+              del: result.del,
+              prem: result.prem,
               dev: result.dev,
             };
             let n = {

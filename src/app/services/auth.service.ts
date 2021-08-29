@@ -48,8 +48,8 @@ export class AuthService {
 
   theMainUrl() {
     return window.location.href.includes('localhost')
-      ? 'http://localhost/auth/'
-      : 'http://192.168.1.118/auth/';
+      ? 'http://localhost/auth_concrete/'
+      : 'http://192.168.1.118/auth_concrete/';
   }
 
   getUser = (name: string, auth: string) => {
@@ -70,13 +70,20 @@ export class AuthService {
     return this.http.post(`${url}postUser.php`, user);
   }
 
-  updateUser(user: UserData) {
+  updateUser(user: UserData, noChangePass?: string) {
     let url = this.theMainUrl();
+    if (noChangePass)
+      return this.http.put(
+        `${url}updateUser.php?id=${user.id}&noChangePass=1`,
+        user
+      );
     return this.http.put(`${url}updateUser.php?id=` + user.id, user);
   }
 
   backUp() {
     let url = this.theMainUrl();
-    return this.http.get<any>(`${url}backup.php?userName=${this.uName?.realName}`);
+    return this.http.get<any>(
+      `${url}backup.php?userName=${this.uName?.realName}`
+    );
   }
 }
