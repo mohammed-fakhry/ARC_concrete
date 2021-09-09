@@ -124,9 +124,10 @@
                   <!-- <td class="textPrimary textBold pl-3" style="font-size: 1rem; text-align: left;">
 
                   </td> -->
+                  <td></td>
                   <td class="textBold text-center infoCard boxShadow"
                     [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'"
-                    style="font-size: 1.15rem;" colspan="2">
+                    style="font-size: 1.15rem;">
                     {{stockInvoice.invoiceTotal | number:'1.0-2'}}
                   </td>
 
@@ -334,7 +335,7 @@
       </mat-card-actions> -->
   </mat-card>
 
-
+  <mat-divider class="my-3"></mat-divider>
 
   <mat-card class="mt-3 mb-5 detailTable">
     <mat-card-header class="d-flex justify-content-between">

@@ -605,8 +605,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
   checkIfOutsidePump(receiptDetails: ConcreteReceipDetails, i: number) {
     if (receiptDetails.concreteName.includes('استعمال مضخة')) {
-
-      console.log(receiptDetails.concreteName)
+      console.log(receiptDetails.concreteName);
       if (receiptDetails.concreteId)
         this._concrete
           .getPumpList(receiptDetails.concreteId)
@@ -1204,7 +1203,25 @@ export class AddConcreteReceiptComponent implements OnInit {
     }
   }
 
-  printDocument() {
-    window.print();
+  printDocument(cond: string = 'defult') {
+    const elementsExpensec = document.getElementById(
+      'elementsExpensec'
+    ) as HTMLElement;
+
+    const concreteInvoice = document.getElementById(
+      'concreteInvoice'
+    ) as HTMLElement;
+
+    if (cond == 'elementsExpensec') {
+      if (concreteInvoice) concreteInvoice.classList.add('printX');
+      // if (elementsExpensec) elementsExpensec.classList.add('printX');
+      window.print();
+      if (concreteInvoice) concreteInvoice.classList.remove('printX');
+    } else {
+      if (elementsExpensec) elementsExpensec.classList.add('printX');
+      // if (elementsExpensec) elementsExpensec.classList.add('printX');
+      window.print();
+      if (elementsExpensec) elementsExpensec.classList.remove('printX');
+    }
   }
 }

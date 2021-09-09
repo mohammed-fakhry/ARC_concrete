@@ -3,128 +3,144 @@
 
     <div class="col-lg-9 col-md-12">
       <div class="box">
-        <!-- search -->
-        <div class="d-flex justify-content-between px-3">
-          <div class="form-inline">
-            <mat-form-field class="searchForm" style="width: 500px;">
-              <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
-            </mat-form-field>
 
-            <div class="mr-2">
-              <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
-                <i class="fa fa-filter"></i>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
-                  بالتاريخ</button>
-                <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()"
-                  style="text-align: right;">اظهار الكل</button>
-              </mat-menu>
+        <mat-card>
+          <mat-card-header class="d-flex justify-content-between">
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title>سيارات الشركة</mat-card-title>
+            <mat-card-subtitle>بيان بتشغيل مُعدات الشركة</mat-card-subtitle>
+            <div class="form-inline">
+
+              <div class="mr-2">
+                <button mat-button [matMenuTriggerFor]="menu" color="primary">
+                  <i class="fa fa-filter"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+                    بالتاريخ</button>
+                  <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()"
+                    style="text-align: right;">اظهار الكل</button>
+                </mat-menu>
+              </div>
+              <mat-form-field class="searchForm" style="width: 500px;">
+                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+              </mat-form-field>
             </div>
-          </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="example-container">
+              <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
 
-        </div>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+                  <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2" routerLink="/truckLog/{{row.id}}">
+                    {{row.name}}</td>
+                </ng-container>
 
-        <div class="example-container">
-          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+                <ng-container matColumnDef="capacity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الحمولة</th>
+                  <td mat-cell *matCellDef="let row">{{row.capacity}}</td>
+                </ng-container>
 
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
-              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2" routerLink="/truckLog/{{row.id}}">
-                {{row.name}}</td>
-            </ng-container>
+                <ng-container matColumnDef="truckType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>النوع</th>
+                  <td mat-cell *matCellDef="let row">{{row.truckType}}</td>
+                </ng-container>
 
-            <ng-container matColumnDef="capacity">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الحمولة</th>
-              <td mat-cell *matCellDef="let row">{{row.capacity}}</td>
-            </ng-container>
+                <ng-container matColumnDef="truckOrderVals">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى تشغيل</th>
+                  <td mat-cell *matCellDef="let row" class="text-dark textBold tdBorder">
+                    <i *ngIf="row.truckOrderVals > 0" class="fa fa-arrow-left text-dark"></i>
+                    {{row.truckOrderVals | number: '1.0-2'}}
+                  </td>
+                </ng-container>
 
-            <ng-container matColumnDef="truckType">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>النوع</th>
-              <td mat-cell *matCellDef="let row">{{row.truckType}}</td>
-            </ng-container>
+                <ng-container matColumnDef="otherAccVals">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى مصاريف</th>
+                  <td mat-cell *matCellDef="let row" class="textDanger"
+                    [ngClass]="row.otherAccVals > 0 ? 'textBtn tBtn-danger' : ''"
+                    [routerLink]="row.otherAccVals > 0 ? '/OtherAccInformation/' + row.accId : '/ourTrucks'">
+                    <i *ngIf="row.otherAccVals > 0" class="fa fa-arrow-down textDanger"></i>
+                    {{row.otherAccVals | number: '1.0-2'}}
+                  </td>
+                </ng-container>
 
-            <ng-container matColumnDef="truckOrderVals">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى تشغيل</th>
-              <td mat-cell *matCellDef="let row" class="text-dark textBold tdBorder">
-                <i *ngIf="row.truckOrderVals > 0" class="fa fa-arrow-left text-dark"></i>
-                {{row.truckOrderVals | number: '1.0-2'}}
-              </td>
-            </ng-container>
+                <ng-container matColumnDef="cashIn">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>دفعات</th>
+                  <td mat-cell *matCellDef="let row" class="tdBorder">
+                    <i *ngIf="row.cashIn > 0" class="fa fa-arrow-up textGreen"></i>
+                    {{row.cashIn | number: '1.0-2'}}
+                  </td>
+                </ng-container>
 
-            <ng-container matColumnDef="otherAccVals">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى مصاريف</th>
-              <td mat-cell *matCellDef="let row" class="textDanger" [ngClass]="row.otherAccVals > 0 ? 'textBtn tBtn-danger' : ''"
-                [routerLink]="row.otherAccVals > 0 ? '/OtherAccInformation/' + row.accId : '/ourTrucks'">
-                <i *ngIf="row.otherAccVals > 0" class="fa fa-arrow-down textDanger"></i>
-                {{row.otherAccVals | number: '1.0-2'}}
-              </td>
-            </ng-container>
+                <ng-container matColumnDef="netIncome">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
+                  <td mat-cell *matCellDef="let row" class="textBold lightBg" [class.dangerBadge]="row.netIncome < 0">
+                    {{(row.netIncome) | number: '1.0-2'}}
+                  </td>
+                </ng-container>
 
-            <ng-container matColumnDef="cashIn">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>دفعات</th>
-              <td mat-cell *matCellDef="let row" class="tdBorder">
-                <i *ngIf="row.cashIn > 0" class="fa fa-arrow-up textGreen"></i>
-                {{row.cashIn | number: '1.0-2'}}
-              </td>
-            </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+                </tr>
 
-            <ng-container matColumnDef="netIncome">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
-              <td mat-cell *matCellDef="let row" class="textBold lightBg"
-                [class.dangerBadge]="row.netIncome < 0">
-                {{(row.netIncome) | number: '1.0-2'}}
-              </td>
-            </ng-container>
+              </table>
+            </div>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-            </tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-            </tr>
+            <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+              [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
+            </mat-paginator>
+          </mat-card-content>
 
-          </table>
-        </div>
+        </mat-card>
 
-        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-          [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
-        </mat-paginator>
+
+        <!-- search -->
+
       </div>
     </div>
 
     <div class="col-lg-3 col-md-12">
       <img class="sideLogo printX" src="assets/logos/garage.png" alt="">
 
-      <div class="box p-3 boxShadow">
+      <div class="box lightShadow">
 
-        <div class="p-3 text-center textBold">
-          <div *ngIf="!searchDate.from">من اول المدة</div>
+        <mat-card>
 
-          <div *ngIf="searchDate.from">
-            من تاريخ "{{searchDate.from}}" | الى تاريخ "{{searchDate.to}}"
-          </div>
-        </div>
+          <mat-card-content>
+            <div class="p-3 text-center textBold">
+              <div *ngIf="!searchDate.from">من اول المدة</div>
 
-        <div class="darkBadge borderLdark p-3 text-center textBold">
-          اجمالى تشغيل | {{counts.works | number: '1.0-2'}}
-        </div>
+              <div *ngIf="searchDate.from">
+                من تاريخ "{{searchDate.from}}" | الى تاريخ "{{searchDate.to}}"
+              </div>
+            </div>
 
-        <div class="dangerBadge borderLdanger p-3 text-center textBold mt-2">
-          اجمالى مصاريف | {{counts.expenses | number: '1.0-2'}}
-        </div>
+            <div class="darkBadge borderLdark p-3 text-center textBold">
+              اجمالى تشغيل | {{counts.works | number: '1.0-2'}}
+            </div>
 
-        <div class="py-2 px-3 text-center textBolder mt-2">
-          صافى انتاج المُعدات  | {{counts.works - counts.expenses | number: '1.0-2'}}
-        </div>
+            <div class="dangerBadge borderLdanger p-3 text-center textBold mt-2">
+              اجمالى مصاريف | {{counts.expenses | number: '1.0-2'}}
+            </div>
 
-        <mat-divider></mat-divider>
+            <div class="py-2 px-3 text-center textBolder mt-2">
+              صافى انتاج المُعدات | {{counts.works - counts.expenses | number: '1.0-2'}}
+            </div>
 
-        <div class="greenBadge borderLgreen p-3 text-center textBold mt-2">
-          وارد نقدية | {{counts.cashIn | number: '1.0-2'}}
-        </div>
+            <mat-divider></mat-divider>
 
-        <div class="py-3 px-3 text-center textBolder mt-2 lightBg">
-         مستحق التحصيل  | {{counts.works - counts.expenses - counts.cashIn | number: '1.0-2'}}
-        </div>
+            <div class="greenBadge borderLgreen p-3 text-center textBold mt-2">
+              وارد نقدية | {{counts.cashIn | number: '1.0-2'}}
+            </div>
+
+            <div class="py-3 px-3 text-center textBolder mt-2 lightBg">
+              مستحق التحصيل | {{counts.works - counts.expenses - counts.cashIn | number: '1.0-2'}}
+            </div>
+          </mat-card-content>
+
+        </mat-card>
 
       </div>
     </div>

@@ -1,45 +1,58 @@
 <div class="container">
-  <div class="box p-4">
-      <h3 class="cardHeader mb-4">بيانات الخزنة</h3>
-      <form (ngSubmit)="onSubmit(addSafeForm)" #addSafeForm="ngForm">
+  <div class="box">
+
+    <mat-card>
+      <mat-card-header class="d-flex justify-content-between">
+        <!-- <div mat-card-avatar>avatar</div> -->
+        <mat-card-title>بيانات الخزنة</mat-card-title>
+        <!-- <mat-card-subtitle>sub-header</mat-card-subtitle> -->
+
+      </mat-card-header>
+      <mat-card-content>
+        <form (ngSubmit)="onSubmit(addSafeForm)" #addSafeForm="ngForm">
           <table class="example-full-width" cellspacing="0">
-              <tr>
-                  <td>
-                      <mat-form-field class="example-full-width">
-                          <mat-label>اسم الخزنة</mat-label>
-                          <input required matInput name="safeName" [(ngModel)]="safe.safeName" #safeName (change)="safeChanged(addSafeForm)">
-                          <mat-error *ngIf="!inputValid.safe.cond">
-                              {{inputValid.safe.msg}}
-                          </mat-error>
-                      </mat-form-field>
-                  </td>
-                  <td>
-                      <mat-form-field class="example-full-width">
-                          <mat-label>امين االخزنة</mat-label>
-                          <input matInput list="workerList" class="mdb-autocomplete" #safeEmployee
-                              required name="safeEmployee" [(ngModel)]="safe.safeEmployee"
-                              (change)="employeeChanged(addSafeForm)">
-                          <datalist id="workerList">
-                              <option *ngFor="let worker of workersList" value="{{worker.workerName}}">
-                              </option>
-                          </datalist>
-                          <mat-error *ngIf="!inputValid.worker.cond">
-                              {{inputValid.worker.msg}}
-                          </mat-error>
-                      </mat-form-field>
-                  </td>
-                  <td>
-                      <mat-form-field class="example-full-width">
-                          <mat-label>رصيد اول</mat-label>
-                          <input [disabled]="!_auth?.check.prem" matInput required name="opendVal" [(ngModel)]="safe.opendVal">
-                      </mat-form-field>
-                  </td>
-              </tr>
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>اسم الخزنة</mat-label>
+                  <input required matInput name="safeName" [(ngModel)]="safe.safeName" #safeName
+                    (change)="safeChanged(addSafeForm)">
+                  <mat-error *ngIf="!inputValid.safe.cond">
+                    {{inputValid.safe.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>امين االخزنة</mat-label>
+                  <input matInput list="workerList" class="mdb-autocomplete" #safeEmployee required name="safeEmployee"
+                    [(ngModel)]="safe.safeEmployee" (change)="employeeChanged(addSafeForm)">
+                  <datalist id="workerList">
+                    <option *ngFor="let worker of workersList" value="{{worker.workerName}}">
+                    </option>
+                  </datalist>
+                  <mat-error *ngIf="!inputValid.worker.cond">
+                    {{inputValid.worker.msg}}
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>رصيد اول</mat-label>
+                  <input [disabled]="!_auth?.check.prem" matInput required name="opendVal" [(ngModel)]="safe.opendVal">
+                </mat-form-field>
+              </td>
+            </tr>
           </table>
           <div class="form-inline">
-              <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="mt-3" type="submit">{{submitBtn.val}}</button>
-              <div *ngIf="!inputValid.form" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
+            <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="mt-3"
+              type="submit">{{submitBtn.val}}</button>
+            <div *ngIf="!inputValid.form" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
           </div>
-      </form>
+        </form>
+      </mat-card-content>
+
+    </mat-card>
+
   </div>
 </div>

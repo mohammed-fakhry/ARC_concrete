@@ -59,6 +59,8 @@ export class TruckCustomersListComponent implements OnInit {
       this.fillListData(this.customerList);
       this._glopal.loading = false;
 
+      this._mainService.handleTableHeight()
+
       // currentVal
     });
   }

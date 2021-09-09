@@ -1,12 +1,14 @@
 <div class="mainContainer">
   <div class="row">
-    <div class="col-md-12 col-lg-7">
+    <div class="col-md-12 col-lg-7" id="concreteInvoice">
 
       <mat-card class="p-4 mb-3">
         <mat-card-header class="d-flex justify-content-between">
           <!-- <div mat-card-avatar>avatar</div> -->
           <mat-card-title class="printX">فاتورة خرسانة</mat-card-title>
+
           <div>
+            <button mat-button color="accent" class="mx-1" (click)="printDocument()"><i class="fa fa-print"></i></button>
 
           </div>
         </mat-card-header>
@@ -350,12 +352,12 @@
 
     </div>
 
-    <div class="col-md-12 col-lg-5 printX">
+    <div class="col-md-12 col-lg-5" id="elementsExpensec">
       <div class="secondaryBadge p-3 mx-1 mb-1">
         <div class="d-flex justify-content-between">
 
           <div class="form-inline">
-            <button mat-flat-button color="accent" class="mx-1" (click)="printDocument()"><i
+            <button mat-flat-button color="accent" class="mx-1" (click)="printDocument('elementsExpensec')"><i
                 class="fa fa-print"></i></button>
 
             <button *ngIf="concreteReceipt.stockTransactionId" mat-stroked-button color="primary"

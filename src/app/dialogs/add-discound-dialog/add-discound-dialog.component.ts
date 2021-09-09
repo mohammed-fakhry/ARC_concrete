@@ -47,21 +47,26 @@ export class AddDiscoundDialogComponent implements OnInit {
         };
 
         this.accList = result.accList;
-        this.safeList = result.safeList.filter((safe: any) => safe.safeName != 'خزنة مصاريف من فترة 22-3-2020 الى فترة 1-5-2021');
+        this.safeList = result.safeList.filter(
+          (safe: any) =>
+            safe.safeName != 'خزنة مصاريف من فترة 22-3-2020 الى فترة 1-5-2021'
+        );
 
         if (this.data.customerId > 1) {
-          this.header = this.data.customerName
+          this.header = this.data.customerName;
           this.receiptFor = 'acc';
         }
 
         if (this.data.workerId > '0') {
-          this.header = this.data.workerName
+          this.header = this.data.workerName;
           this.receiptFor = 'worker';
-        } else if (this.data.safeName == "دفعة لسداد ضريبة") {
-          this.header = "الضرائب"
-          this.receiptFor = 'taxes'
+        } else if (this.data.safeName == 'دفعة لسداد ضريبة') {
+          this.header = 'الضرائب';
+          this.receiptFor = 'taxes';
+          /* this.data.secSafeId =
+            this.data.secSafeId == 1 ? 0 : this.data.secSafeId; */
         } else {
-          this.header = this.data.customerName
+          this.header = this.data.customerName;
           this.receiptFor = 'acc';
         }
 
@@ -115,7 +120,7 @@ export class AddDiscoundDialogComponent implements OnInit {
       this.data.recieptNote = `${this.data.customerName} - ${this.data.AccName}`;
     } else {
       modalForm.form.controls['AccName'].setErrors({ incorrect: true });
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     }
   };
 }

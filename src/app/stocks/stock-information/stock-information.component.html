@@ -1,122 +1,123 @@
 <div class="mainContainer mx-4">
   <div class="box">
-    <div class="mat-elevation-z0 mt-3">
-      <div class="px-3">
-        <div class="d-flex justify-content-between">
+    <mat-card>
+      <mat-card-header class="d-flex justify-content-between">
+        <!-- <div mat-card-avatar>avatar</div> -->
+        <mat-card-title>قائمة بارصدة المخزن</mat-card-title>
+        <mat-card-subtitle>بيان باعداد و اسعار اصناف المخزن</mat-card-subtitle>
+        <div class="form-inline">
+
+          <div class="infoCard secondaryBadge borderLsecondary my-auto py-2">
+            اجمالى قيمة الاصناف | {{totalVal | number:'1.0-2'}}
+          </div>
+
+          <button *ngIf="minimunQtyAlert" mat-button color="warn" class="ml-3" (click)="minumumQtyFilter()">
+            {{filterBtn}}
+          </button>
 
           <mat-form-field class="searchForm" style="width: 500px;">
             <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
           </mat-form-field>
-
-          <div class="form-inline">
-            <button *ngIf="minimunQtyAlert" mat-flat-button color="warn" class="ml-3" (click)="minumumQtyFilter()">
-              {{filterBtn}}
-            </button>
-
-            <div class="infoCard secondaryBadge borderLsecondary my-auto py-2">
-              اجمالى قيمة الاصناف | {{totalVal | number:'1.0-2'}}
-            </div>
-          </div>
-
         </div>
-      </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="example-container">
 
-      <!-- routerLink="/StockInformation/{{row.stockId}}" class="textBtn tBtn-dark pl-2"-->
-      <div class="example-container">
+          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+            <ng-container matColumnDef="productName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم الصنف</th>
+              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                routerLink="/invoiceReport/productTransaction/{{row.productId}}/{{id}}"
+                [class.marked]="row.productName.includes(searchTxt) && searchTxt">
+                {{row.productName}}
+              </td>
+            </ng-container>
 
-        <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
-          <ng-container matColumnDef="productName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم الصنف</th>
-            <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-              routerLink="/invoiceReport/productTransaction/{{row.productId}}/{{id}}"
-              [class.marked]="row.productName.includes(searchTxt) && searchTxt">
-              {{row.productName}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="allQtyIn">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>وارد</th>
+              <td mat-cell *matCellDef="let row" class="tdBorder lightBg textBold">
+                {{row.allQtyIn | number: '1.0-2'}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="allQtyIn">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>وارد</th>
-            <td mat-cell *matCellDef="let row" class="tdBorder lightBg textBold">
-              {{row.allQtyIn | number: '1.0-2'}}</td>
-          </ng-container>
+            <ng-container matColumnDef="allQtyOut">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>منصرف</th>
+              <td mat-cell *matCellDef="let row">
+                {{row.allQtyOut | number: '1.0-2'}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="allQtyOut">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>منصرف</th>
-            <td mat-cell *matCellDef="let row">
-              {{row.allQtyOut | number: '1.0-2'}}</td>
-          </ng-container>
+            <!-- <ng-container matColumnDef="unitQty">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>عدد قطع</th>
+              <td mat-cell *matCellDef="let row" [class.textDanger]="row.unitQty < 0"
+                [class.dangerBadge]="row.Qty <= row.minimumQty">
+                {{row.unitQty}}</td>
+            </ng-container> -->
 
-          <!-- <ng-container matColumnDef="unitQty">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>عدد قطع</th>
-            <td mat-cell *matCellDef="let row" [class.textDanger]="row.unitQty < 0"
-              [class.dangerBadge]="row.Qty <= row.minimumQty">
-              {{row.unitQty}}</td>
-          </ng-container> -->
+            <ng-container matColumnDef="Qty">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>رصيد باقى</th>
+              <td mat-cell *matCellDef="let row" [class.textDanger]="row.Qty < 0" class="tdBorder_left textBold lightBg"
+                [ngClass]="row.Qty <= row.minimumQty ? 'dangerBadge borderLdanger' : 'lightBg'">
+                {{row.Qty | number: '1.0-2'}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="Qty">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>رصيد باقى</th>
-            <td mat-cell *matCellDef="let row" [class.textDanger]="row.Qty < 0" class="tdBorder_left textBold lightBg"
-              [ngClass]="row.Qty <= row.minimumQty ? 'dangerBadge borderLdanger' : 'lightBg'">
-              {{row.Qty | number: '1.0-2'}}</td>
-          </ng-container>
+            <ng-container matColumnDef="maxPriceOut">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اعلى سعر بيع</th>
+              <td mat-cell *matCellDef="let row" [class.lightBg]='row.maxPriceOut == 0' class="textBold">
+                <i class="fa fa-arrow-up textDanger"></i>
+                {{row.maxPriceOut}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="maxPriceOut">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اعلى سعر بيع</th>
-            <td mat-cell *matCellDef="let row" [class.lightBg]='row.maxPriceOut == 0' class="textBold">
-              <i class="fa fa-arrow-up textDanger"></i>
-              {{row.maxPriceOut}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="minPriceOut">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اقل سعر بيع</th>
+              <td mat-cell *matCellDef="let row" [class.lightBg]='row.minPriceOut == 0'>
+                <i class="fa fa-arrow-down textDanger"></i>
+                {{row.minPriceOut}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="minPriceOut">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اقل سعر بيع</th>
-            <td mat-cell *matCellDef="let row" [class.lightBg]='row.minPriceOut == 0'>
-              <i class="fa fa-arrow-down textDanger"></i>
-              {{row.minPriceOut}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="maxPriceIn">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اعلى سعر شراء</th>
+              <td mat-cell *matCellDef="let row" class="textBold" [class.lightBg]='row.maxPriceIn == 0'>
+                <i class="fa fa-arrow-up textGreen"></i>
+                {{row.maxPriceIn}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="maxPriceIn">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اعلى سعر شراء</th>
-            <td mat-cell *matCellDef="let row" class="textBold" [class.lightBg]='row.maxPriceIn == 0'>
-              <i class="fa fa-arrow-up textGreen"></i>
-              {{row.maxPriceIn}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="minPriceIn">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اقل سعر شراء</th>
+              <td mat-cell *matCellDef="let row" [class.lightBg]='row.minPriceIn == 0'>
+                <i class="fa fa-arrow-down textGreen"></i>
+                {{row.minPriceIn}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="minPriceIn">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اقل سعر شراء</th>
-            <td mat-cell *matCellDef="let row" [class.lightBg]='row.minPriceIn == 0'>
-              <i class="fa fa-arrow-down textGreen"></i>
-              {{row.minPriceIn}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="lastPrice">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اخر سعر شراء</th>
+              <td mat-cell *matCellDef="let row" [class.lightBg]='row.lastPrice == 0' class="tdBorder">
+                <i class="fa fa-arrow-left textBlue"></i>
+                {{row.lastPrice}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="lastPrice">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اخر سعر شراء</th>
-            <td mat-cell *matCellDef="let row" [class.lightBg]='row.lastPrice == 0' class="tdBorder">
-              <i class="fa fa-arrow-left textBlue"></i>
-              {{row.lastPrice}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="totalVal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
+              <td mat-cell *matCellDef="let row" class="textBold lightBg">{{row.lastPrice * row.Qty | number:'1.0-2'}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="totalVal">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>اجمالى</th>
-            <td mat-cell *matCellDef="let row" class="textBold lightBg">{{row.lastPrice * row.Qty | number:'1.0-2'}}
-            </td>
-          </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+            </tr>
+          </table>
+        </div>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-          </tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-          </tr>
-        </table>
-      </div>
+        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="50"
+          [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
+        </mat-paginator>
+      </mat-card-content>
 
-      <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="50"
-        [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
-      </mat-paginator>
+    </mat-card>
 
-    </div>
   </div>
 </div>

@@ -66,7 +66,7 @@ export class MainService {
         '.inpTableBody'
       ) as HTMLElement;
       if (this.inpTableBody)
-        this.inpTableBody.style.maxHeight = `${height - 320}px`;
+        this.inpTableBody.style.maxHeight = `${height - 380}px`;
 
       this.inTab = document.querySelector('.inTab') as HTMLElement;
       if (this.inTab) this.inTab.style.maxHeight = `${height - 95}px`;

@@ -15,6 +15,7 @@ import { SafeService } from 'src/app/services/safe.service';
 import { WorkerService } from 'src/app/services/worker.service';
 import { Worker } from '../../classes/worker';
 import { DeleteDialogComponent } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
+import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
 
 @Component({
   selector: 'app-worker-information',
@@ -52,6 +53,7 @@ export class WorkerInformationComponent implements OnInit {
 
   searchTxt: string = '';
   searchDate: { from: string; to: string } = { from: '', to: '' };
+  isFiltered: boolean = false;
 
   showCalcSalary: boolean = false;
   workedDayes: EmployeeWorkedDayes = new EmployeeWorkedDayes();
@@ -354,4 +356,43 @@ export class WorkerInformationComponent implements OnInit {
       }
     });
   };
+
+  openFilterDialog = (data: any) => {
+    let dialogRef = this._dialog.open(FilterByDateDialogComponent, data);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'cancel') {
+        this.searchDate = {
+          from: result.fromDate,
+          to: result.toDate,
+        };
+        this.filterByDate(result.fromDate, result.toDate);
+      }
+    });
+  };
+
+  filterByDate(from?: string, to?: string) {
+    if (from && to) {
+      let start = `${from} 00:00`;
+      let end = `${to} 23:59`;
+
+      let newArr = this.accArr
+        .filter((acc) => {
+          return acc.date_time >= start && acc.date_time <= end;
+        })
+        .reverse();
+
+      this.isFiltered = true;
+      this.fillListData(newArr);
+
+      this.isFiltered = true;
+
+      this.searchDate = { from: from, to: to };
+    } else {
+      this.searchDate = { from: '', to: '' };
+      this.searchTxt = '';
+      this.onStart();
+      this.isFiltered = false;
+    }
+  }
 }

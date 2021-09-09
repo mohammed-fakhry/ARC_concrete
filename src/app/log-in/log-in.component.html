@@ -2,29 +2,46 @@
   <div class="row fixedRow">
     <div class="col-lg-4 col-md-6 col-sm-12" style="margin:auto">
       <div class="p-1">
-        <div class="box py-2" [class.borderRight-alert]="!formData.valid.cond">
-          <form (ngSubmit)="goIn()" class="m-3">
-            <h3 class="textPrimary mb-3">تسجيل الدخول</h3>
-            <mat-form-field class="fullWidth">
-              <mat-label>اسم المستخدم</mat-label>
-              <input [disabled]="_glopal.loading" required matInput name="name" autocomplete="off"
-                [(ngModel)]="formData.val.uName" id="userName">
-            </mat-form-field>
-            <mat-form-field class="pt-2 fullWidth">
-              <mat-label>كلمة السر</mat-label>
-              <input [disabled]="_glopal.loading" required type="password" matInput name="uAuth"
-                [(ngModel)]="formData.val.uAuth">
-            </mat-form-field>
-            <div class="form-inline">
-              <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="my-auto" type="submit">سجل
-                دخولك</button>
-              <div *ngIf="!formData.valid.cond" class="infoCard dangerBadge borderLdanger mr-3 my-auto">
-                {{formData.valid.msg}}</div>
-            </div>
-            <div [class.d-none]="!_glopal.loading" style="width: 100%;" class="mt-3">
-              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </div>
-          </form>
+        <div class="box">
+
+          <mat-card class="borderLsecondary" [class.borderRight-alert]="!formData.valid.cond">
+            <mat-card-header class="d-flex justify-content-between">
+              <!-- <div mat-card-avatar>avatar</div> -->
+              <mat-card-title>تسجيل الدخول</mat-card-title>
+              <mat-card-subtitle>ادخل اسم المستخدم و كلمة السر</mat-card-subtitle>
+              <div class="form-inline">
+
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <form (ngSubmit)="goIn()" class="m-3">
+                <mat-form-field class="fullWidth">
+                  <mat-label>اسم المستخدم</mat-label>
+                  <input [disabled]="_glopal.loading" required matInput name="name" autocomplete="off"
+                    [(ngModel)]="formData.val.uName" id="userName">
+                </mat-form-field>
+                <mat-form-field class="pt-2 fullWidth">
+                  <mat-label>كلمة السر</mat-label>
+                  <input [disabled]="_glopal.loading" required type="password" matInput name="uAuth"
+                    [(ngModel)]="formData.val.uAuth">
+                </mat-form-field>
+                <div class="form-inline">
+                  <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="my-auto" type="submit">سجل
+                    دخولك</button>
+                  <div *ngIf="!formData.valid.cond" class="infoCard dangerBadge borderLdanger mr-3 my-auto">
+                    {{formData.valid.msg}}</div>
+                </div>
+                <div [class.d-none]="!_glopal.loading" style="width: 100%;" class="mt-3">
+                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+              </form>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+                  <button mat-button>actionOne</button>
+                  <button mat-button>actionTwo</button>
+            </mat-card-actions> -->
+          </mat-card>
+
         </div>
       </div>
 

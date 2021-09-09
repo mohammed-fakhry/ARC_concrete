@@ -3,7 +3,8 @@
   <div class="row">
     <div class="col-lg-10 col-md-12">
 
-      <mat-card class="mb-3 pr-3" [ngClass]="safeReciept.receiptKind == 'ايصال صرف نقدية' ? 'borderRight-alert' : 'borderRight-primary'">
+      <mat-card class="mb-3 pr-3"
+        [ngClass]="safeReciept.receiptKind == 'ايصال صرف نقدية' ? 'borderRight-alert' : 'borderRight-primary'">
         <mat-card-header class="d-flex justify-content-between">
           <!-- <div mat-card-avatar>avatar</div> -->
           <mat-card-title [class.textDanger]="safeReciept.receiptKind == 'ايصال صرف نقدية'">
@@ -354,23 +355,35 @@
       </div>
       <div *ngIf="!id" class="box mt-3">
 
-        <div class="text-center pb-2">{{safeReciept.safeName}}</div>
-        <div class="infoCard text-center mx-auto textBold py-3"
-          [ngClass]="valsRemain.safeRemain >= 0 ? 'blueBadge borderLblue' : 'dangerBadge borderLdanger'"
-          style="width: 80%; font-size: larger;">
-          {{valsRemain.safeRemain | number:'1.0-2'}}
-        </div>
+        <mat-card>
+          <mat-card-header class="d-flex justify-content-between">
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title>{{safeReciept.safeName}}</mat-card-title>
+            <mat-card-subtitle>sub-header</mat-card-subtitle>
+            <div class="form-inline">
 
-        <div *ngIf="valsRemain.otherValDetail">
-          <div class="text-center pt-3 pb-2">
-            {{valsRemain.otherValDetail}}
-          </div>
-          <div class="infoCard text-center mx-auto textBold py-3"
-            [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"
-            style="width: 80%; font-size: larger;">
-            {{valsRemain.otherValRemain | number:'1.0-2'}}
-          </div>
-        </div>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="infoCard text-center mx-auto textBold py-3"
+              [ngClass]="valsRemain.safeRemain >= 0 ? 'blueBadge borderLblue' : 'dangerBadge borderLdanger'"
+              style="width: 80%; font-size: larger;">
+              {{valsRemain.safeRemain | number:'1.0-2'}}
+            </div>
+
+            <div *ngIf="valsRemain.otherValDetail">
+              <div class="text-center pt-3 pb-2">
+                {{valsRemain.otherValDetail}}
+              </div>
+              <div class="infoCard text-center mx-auto textBold py-3"
+                [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"
+                style="width: 80%; font-size: larger;">
+                {{valsRemain.otherValRemain | number:'1.0-2'}}
+              </div>
+            </div>
+          </mat-card-content>
+
+        </mat-card>
 
       </div>
     </div>

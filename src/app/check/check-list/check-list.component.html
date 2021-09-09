@@ -158,99 +158,101 @@
           *ngIf="list.checkDetail.listData.toUs.data.length > 0">
 
           <div class="box">
-            <div class="d-flex justify-content-between px-3 printX">
+            <mat-card>
+              <mat-card-header class="d-flex justify-content-between">
+                <!-- <div mat-card-avatar>avatar</div> -->
+                <mat-card-title>{{list.header.toUs}}</mat-card-title>
+                <div class="form-inline">
 
-              <!-- header -->
-              <!-- search -->
-              <mat-form-field class="searchForm" style="width: 300px;">
-                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='list.searchTxt.toUs'
-                  (ngModelChange)="search(i, 'toUs')">
-              </mat-form-field>
+                  <mat-form-field class="searchForm" style="width: 300px;">
+                    <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='list.searchTxt.toUs'
+                      (ngModelChange)="search(i, 'toUs')">
+                  </mat-form-field>
 
-              <h3 class="my-auto pl-3 textSecondary">
-                <!-- <span>({{list.checkDetail.listData.toUs.data.length}})</span> -->
-                {{list.header.toUs}}
-              </h3>
-            </div>
 
-            <!-- table -->
-            <div class="example-container">
+                </div>
+              </mat-card-header>
+              <mat-card-content>
 
-              <table [dataSource]="list.checkDetail.listData.toUs" mat-table class="full-width-table" matSort
-                aria-label="Elements">
+                <div class="example-container">
 
-                <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الصرف</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    {{row.date}}
-                    <span class="{{(row.date | dateInDays).class}}">
-                      {{(row.date | dateInDays).messege}}
-                    </span>
-                  </td>
-                </ng-container>
+                  <table [dataSource]="list.checkDetail.listData.toUs" mat-table class="full-width-table" matSort
+                    aria-label="Elements">
 
-                <ng-container matColumnDef="checkNumber">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الشيك</th>
-                  <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-                    routerLink="/editCheck/{{row.checkId}}">
-                    {{row.checkNumber}}
-                  </td>
-                </ng-container>
+                    <ng-container matColumnDef="date">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الصرف</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        {{row.date}}
+                        <span class="{{(row.date | dateInDays).class}}">
+                          {{(row.date | dateInDays).messege}}
+                        </span>
+                      </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="bankName">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم البنك</th>
-                  <td mat-cell *matCellDef="let row">
-                    {{row.bankName}}</td>
-                </ng-container>
+                    <ng-container matColumnDef="checkNumber">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الشيك</th>
+                      <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                        routerLink="/editCheck/{{row.checkId}}">
+                        {{row.checkNumber}}
+                      </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="payFor">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>يصرف الى</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    {{row.payFor}}
-                  </td>
-                </ng-container>
+                    <ng-container matColumnDef="bankName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم البنك</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{row.bankName}}</td>
+                    </ng-container>
 
-                <ng-container matColumnDef="checkValue">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>القيمة</th>
-                  <td mat-cell *matCellDef="let row; let i = index" class="lightBg textBold textDark">
-                    {{row.checkValue | number: '1.0-2'}}
-                  </td>
-                </ng-container>
+                    <ng-container matColumnDef="payFor">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>يصرف الى</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        {{row.payFor}}
+                      </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="isPaid">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة السداد</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    <mat-slide-toggle name="workers{{i}}" [(ngModel)]="row.isPaid" color="primary"
-                      [disabled]="!_glopal.check.edi" (change)="togglePaid(row)">
-                    </mat-slide-toggle>
-                  </td>
-                </ng-container>
+                    <ng-container matColumnDef="checkValue">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>القيمة</th>
+                      <td mat-cell *matCellDef="let row; let i = index" class="lightBg textBold textDark">
+                        {{row.checkValue | number: '1.0-2'}}
+                      </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="paid_off_date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ السداد</th>
-                  <td mat-cell *matCellDef="let row">
-                    {{row.paid_off_date}}
-                    <span class="{{(row.paid_off_date | dateInDays).class}}">
-                      {{(row.paid_off_date | dateInDays).messege}}
-                    </span>
-                  </td>
-                </ng-container>
+                    <ng-container matColumnDef="isPaid">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة السداد</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <mat-slide-toggle name="workers{{i}}" [(ngModel)]="row.isPaid" color="primary"
+                          [disabled]="!_glopal.check.edi" (change)="togglePaid(row)">
+                        </mat-slide-toggle>
+                      </td>
+                    </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="list.checkDetail.displayedColumns; sticky: true"
-                  class="tableHeader">
-                </tr>
-                <tr mat-row *matRowDef="let row; columns: list.checkDetail.displayedColumns;"
-                  style="height: fit-content;">
-                </tr>
+                    <ng-container matColumnDef="paid_off_date">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ السداد</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{row.paid_off_date}}
+                        <span class="{{(row.paid_off_date | dateInDays).class}}">
+                          {{(row.paid_off_date | dateInDays).messege}}
+                        </span>
+                      </td>
+                    </ng-container>
 
-              </table>
+                    <tr mat-header-row *matHeaderRowDef="list.checkDetail.displayedColumns; sticky: true"
+                      class="tableHeader">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: list.checkDetail.displayedColumns;"
+                      style="height: fit-content;">
+                    </tr>
 
-            </div>
+                  </table>
 
-            <!-- paginator -->
-            <!-- <mat-paginator #paginatorTo[i] [length]="list.checkDetail.listData.toUs.data.length" [pageIndex]="0"
-              [pageSize]="100" [pageSizeOptions]="[10, 15, 20, 50, 100]" class="printX">
-            </mat-paginator> -->
+                </div>
+
+              </mat-card-content>
+              <!-- <mat-card-actions>
+                    <button mat-button>actionOne</button>
+                    <button mat-button>actionTwo</button>
+              </mat-card-actions> -->
+            </mat-card>
 
           </div>
 
@@ -259,95 +261,102 @@
         <div class="mb-3" [ngClass]="isPaidList ? 'col-md-12' : 'col-lg-6 col-md-12'"
           *ngIf="list.checkDetail.listData.onUs.data.length > 0">
 
-          <div class="box borderRight-alert-light">
-            <div class="d-flex justify-content-between px-3 printX">
+          <div class="box">
 
-              <!-- header -->
-              <!-- search -->
-              <mat-form-field class="searchForm" style="width: 300px;">
-                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='list.searchTxt.onUs'
-                  (ngModelChange)="search(i,'onUs')">
-              </mat-form-field>
+            <mat-card class="borderRight-alert-light">
+              <mat-card-header class="d-flex justify-content-between">
+                <!-- <div mat-card-avatar>avatar</div> -->
+                <mat-card-title>{{list.header.onUs}}</mat-card-title>
+                <div class="form-inline">
+                  <mat-form-field class="searchForm" style="width: 300px;">
+                    <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='list.searchTxt.onUs'
+                      (ngModelChange)="search(i,'onUs')">
+                  </mat-form-field>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
 
-              <h3 class="my-auto pl-3 textDanger">
-                <!-- <span>({{list.checkDetail.listData.onUs.data.length}})</span> -->
-                {{list.header.onUs}}
-              </h3>
-            </div>
+                <div class="example-container">
+
+                  <table [dataSource]="list.checkDetail.listData.onUs" mat-table class="full-width-table" matSort
+                    aria-label="Elements" id="onUsTable">
+
+                    <ng-container matColumnDef="date">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الصرف</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        {{row.date}}
+                        <span class="{{(row.date | dateInDays).class}}">
+                          {{(row.date | dateInDays).messege}}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="checkNumber">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الشيك</th>
+                      <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                        routerLink="/editCheck/{{row.checkId}}">
+                        {{row.checkNumber}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="bankName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم البنك</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{row.bankName}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="payFor">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>يصرف الى</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        {{row.payFor}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="checkValue">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>القيمة</th>
+                      <td mat-cell *matCellDef="let row; let i = index" class="lightBg textBold textDanger">
+                        {{row.checkValue | number: '1.0-2'}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isPaid">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة السداد</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <mat-slide-toggle name="workers{{i}}" [(ngModel)]="row.isPaid" color="primary"
+                          [disabled]="!_glopal.check.edi" (change)="togglePaid(row)">
+                        </mat-slide-toggle>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="paid_off_date">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ السداد</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{row.paid_off_date}}
+                        <span class="{{(row.paid_off_date | dateInDays).class}}">
+                          {{(row.paid_off_date | dateInDays).messege}}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="list.checkDetail.displayedColumns; sticky: true"
+                      class="dangerBg">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: list.checkDetail.displayedColumns;"
+                      style="height: fit-content;">
+                    </tr>
+
+                  </table>
+
+                </div>
+              </mat-card-content>
+              <!-- <mat-card-actions>
+                    <button mat-button>actionOne</button>
+                    <button mat-button>actionTwo</button>
+              </mat-card-actions> -->
+            </mat-card>
 
             <!-- table -->
-            <div class="example-container">
 
-              <table [dataSource]="list.checkDetail.listData.onUs" mat-table class="full-width-table" matSort
-                aria-label="Elements" id="onUsTable">
-
-                <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الصرف</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    {{row.date}}
-                    <span class="{{(row.date | dateInDays).class}}">
-                      {{(row.date | dateInDays).messege}}
-                    </span>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="checkNumber">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الشيك</th>
-                  <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-                    routerLink="/editCheck/{{row.checkId}}">
-                    {{row.checkNumber}}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="bankName">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم البنك</th>
-                  <td mat-cell *matCellDef="let row">
-                    {{row.bankName}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="payFor">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>يصرف الى</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    {{row.payFor}}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="checkValue">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>القيمة</th>
-                  <td mat-cell *matCellDef="let row; let i = index" class="lightBg textBold textDanger">
-                    {{row.checkValue | number: '1.0-2'}}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="isPaid">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>حالة السداد</th>
-                  <td mat-cell *matCellDef="let row; let i = index">
-                    <mat-slide-toggle name="workers{{i}}" [(ngModel)]="row.isPaid" color="primary"
-                      [disabled]="!_glopal.check.edi" (change)="togglePaid(row)">
-                    </mat-slide-toggle>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="paid_off_date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ السداد</th>
-                  <td mat-cell *matCellDef="let row">
-                    {{row.paid_off_date}}
-                    <span class="{{(row.paid_off_date | dateInDays).class}}">
-                      {{(row.paid_off_date | dateInDays).messege}}
-                    </span>
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="list.checkDetail.displayedColumns; sticky: true"
-                  class="dangerBg">
-                </tr>
-                <tr mat-row *matRowDef="let row; columns: list.checkDetail.displayedColumns;"
-                  style="height: fit-content;">
-                </tr>
-
-              </table>
-
-            </div>
 
             <!-- paginator -->
             <!-- <mat-paginator #paginator[i] [length]="list.checkDetail.listData.onUs.data.length" [pageIndex]="0"

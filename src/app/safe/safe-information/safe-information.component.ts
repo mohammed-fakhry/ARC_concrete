@@ -240,6 +240,12 @@ export class SafeInformationComponent implements OnInit {
         condition: () => data.AccName && data.AccName?.includes('مصاريف مكتب'),
       },
       {
+        toolTip: 'الشيخ ايمن',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () => data.AccName && data.AccName?.includes('الشيخ ايمن'),
+      },
+      {
         toolTip: 'مصروفات المقاولات',
         receiptDetail: data.AccName,
         routeTo: `/OtherAccInformation/${data.accId}`,

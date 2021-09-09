@@ -21,49 +21,65 @@
       <div class="col-md-9 mb-3">
         <div class="box p-4">
 
-          <h3 class="cardHeader mb-3">بيانات المستخدم</h3>
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>اسم الموظف</mat-label>
-                  <input matInput required name="realName" [(ngModel)]="user.realName">
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>اسم تسجيل الدخول</mat-label>
-                  <input required matInput name="name" [(ngModel)]="user.name">
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
+          <mat-card>
+            <mat-card-header class="d-flex justify-content-between">
+              <!-- <div mat-card-avatar>avatar</div> -->
+              <mat-card-title>بيانات المستخدم</mat-card-title>
+              <!-- <mat-card-subtitle>sub-header</mat-card-subtitle> -->
+              <div class="form-inline">
 
-          <mat-divider class="mt-4 mb-3"></mat-divider>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <table class="example-full-width" cellspacing="0">
+                <tr>
+                  <td>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>اسم الموظف</mat-label>
+                      <input matInput required name="realName" [(ngModel)]="user.realName">
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>اسم تسجيل الدخول</mat-label>
+                      <input required matInput name="name" [(ngModel)]="user.name">
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
 
-          <h3 class="cardHeader mb-3">بيانات كلمة السر</h3>
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>الرقم السرى</mat-label>
-                  <input [required]="!id" type="password" matInput name="auth" [(ngModel)]="user.auth">
-                  <mat-error>
-                    الرقم السرى غير مطابق
-                  </mat-error>
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>تأكيد الرقم السرى</mat-label>
-                  <input [required]="!id" type="password" matInput name="reAuth" [(ngModel)]="reAuth">
-                  <mat-error>
-                    الرقم السرى غير مطابق
-                  </mat-error>
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
+              <mat-divider></mat-divider>
+
+              <h3 class="cardHeader mb-3">بيانات كلمة السر</h3>
+              <table class="example-full-width" cellspacing="0">
+                <tr>
+                  <td>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>الرقم السرى</mat-label>
+                      <input [required]="!id" type="password" matInput name="auth" [(ngModel)]="user.auth">
+                      <mat-error>
+                        الرقم السرى غير مطابق
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>تأكيد الرقم السرى</mat-label>
+                      <input [required]="!id" type="password" matInput name="reAuth" [(ngModel)]="reAuth">
+                      <mat-error>
+                        الرقم السرى غير مطابق
+                      </mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+                  <button mat-button>actionOne</button>
+                  <button mat-button>actionTwo</button>
+            </mat-card-actions> -->
+          </mat-card>
+
         </div>
       </div>
 

@@ -4,65 +4,77 @@
     <div class="col-lg-7 col-md-12">
 
       <div class="box">
-        <div class="d-flex justify-content-between px-3">
-          <mat-form-field class="searchForm" style="width: 500px;">
-            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
-          </mat-form-field>
-          <div class="my-auto">
-            <a mat-flat-button color="accent" routerLink="/AddTruck" matTooltipPosition="above"
-              matTooltip="اضافة سيارة">
-              <i class="fa fa-plus fa-lg pt-1 textBold"></i>
-            </a>
-          </div>
-        </div>
-        <div class="example-container">
-          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
 
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
-              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2" routerLink="/truckLog/{{row.id}}">
-                {{row.name}}</td>
-            </ng-container>
+        <mat-card>
+          <mat-card-header class="d-flex justify-content-between">
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title>{{_glopal.currentHeader}}</mat-card-title>
+            <mat-card-subtitle>بيان بقائمة المُعدات</mat-card-subtitle>
+            <div class="form-inline">
 
-            <ng-container matColumnDef="number">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>اللوحة</th>
-              <td mat-cell *matCellDef="let row">{{row.number}}</td>
-            </ng-container>
+              <div class="my-auto">
+                <a mat-button color="accent" routerLink="/AddTruck" matTooltipPosition="above" matTooltip="اضافة سيارة">
+                  <i class="fa fa-plus fa-lg pt-1 textBold"></i>
+                </a>
+              </div>
+              <mat-form-field class="searchForm" style="width: 500px;">
+                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+              </mat-form-field>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="example-container">
+              <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
 
-            <ng-container matColumnDef="capacity">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الحمولة</th>
-              <td mat-cell *matCellDef="let row">{{row.capacity}} متر</td>
-            </ng-container>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
+                  <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2" routerLink="/truckLog/{{row.id}}">
+                    {{row.name}}</td>
+                </ng-container>
 
-            <ng-container matColumnDef="model">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الماركة</th>
-              <td mat-cell *matCellDef="let row">{{row.model}}</td>
-            </ng-container>
+                <ng-container matColumnDef="number">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اللوحة</th>
+                  <td mat-cell *matCellDef="let row">{{row.number}}</td>
+                </ng-container>
 
-            <ng-container matColumnDef="owner">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>المالك</th>
-              <td mat-cell *matCellDef="let row">{{row.owner}}</td>
-            </ng-container>
+                <ng-container matColumnDef="capacity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الحمولة</th>
+                  <td mat-cell *matCellDef="let row">{{row.capacity}} متر</td>
+                </ng-container>
 
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef class="printX text-center"
-                style="text-align: right; font-size: medium;">
-                تعديل</th>
-              <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue " *matCellDef="let row"
-                routerLink="/UpdateTruck/{{row.id}}"><i class="fa fa-pencil underLine"></i></td>
-            </ng-container>
+                <ng-container matColumnDef="model">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الماركة</th>
+                  <td mat-cell *matCellDef="let row">{{row.model}}</td>
+                </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-            </tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-            </tr>
+                <ng-container matColumnDef="owner">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>المالك</th>
+                  <td mat-cell *matCellDef="let row">{{row.owner}}</td>
+                </ng-container>
 
-          </table>
-        </div>
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                    style="text-align: right; font-size: medium;">
+                    تعديل</th>
+                  <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue " *matCellDef="let row"
+                    routerLink="/UpdateTruck/{{row.id}}"><i class="fa fa-pencil underLine"></i></td>
+                </ng-container>
 
-        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-          [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
-        </mat-paginator>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+                </tr>
+
+              </table>
+            </div>
+
+            <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+              [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
+            </mat-paginator>
+          </mat-card-content>
+
+        </mat-card>
+
       </div>
     </div>
 

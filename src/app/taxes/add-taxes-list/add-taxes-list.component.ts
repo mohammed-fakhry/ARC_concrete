@@ -390,6 +390,7 @@ export class AddTaxesListComponent implements OnInit {
       taxPayment.recieptNote = oldPayment.notes;
       taxPayment.receiptKind = oldPayment.receiptKind;
     } else {
+      taxPayment.secSafeId = 0;
       taxPayment.receiptKind = 'ايصال صرف نقدية';
       taxPayment.date_time = this._mainService.makeTime_date(
         new Date(Date.now())
@@ -413,10 +414,12 @@ export class AddTaxesListComponent implements OnInit {
         taxPayment.receiptKind = result.receiptKind;
 
         /* take action */
-        if (result.secSafeId) {
+        if (result.secSafeId != 0) {
+          // console.log(result);
           taxPayment.id = result.secSafeId;
           this.updateTaxPaymeny(taxPayment);
         } else {
+          console.log(taxPayment);
           this._taxesService
             .postTaxPayment(taxPayment)
             .subscribe(() => this.onStart());
