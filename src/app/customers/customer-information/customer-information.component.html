@@ -3,7 +3,7 @@
   <div class="row stickyBox">
 
     <div class="col-xl-4 col-lg-6 mb-3">
-      <mat-card class="box headerBox" [class.borderRight-alert]="customerInfo.uncompletedCond > 0">
+      <mat-card class="headerBox" [class.borderRight-alert]="customerInfo.uncompletedCond > 0">
         <mat-card-header>
           <div mat-card-avatar class="ml-4">
             <span class="dash-widget-icon textBtn" style="background-color: #5a73f329;"
@@ -39,209 +39,250 @@
 
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
 
-      <div class="box px-3">
-        <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+      <mat-card>
 
-          <tr *ngIf="!searchDate.from">
-            <td class="p-2">من اول المدة</td>
-          </tr>
+        <mat-card-content>
 
-          <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
-            <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
-            <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
-          </tr>
+          <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
 
-          <tr *ngIf="headerTotals.openedVal != 0" class="borderLdark">
-            <th class="p-2 darkBadge">رصيد اول</th>
-            <td class="p-2 tdBorder_right" [ngClass]="headerTotals.openedVal < 0 ? 'textDanger' : 'darkBadge'">
-              {{headerTotals.openedVal | number: '1.0-2'}}
-            </td>
-          </tr>
+            <tr *ngIf="!searchDate.from">
+              <td class="p-2">من اول المدة</td>
+            </tr>
 
-          <tr class="dangerBadge borderLdanger">
-            <th class="p-2">منصرف</th>
-            <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
-          </tr>
+            <tr *ngIf="searchDate.from" style="border-bottom: solid black 2px;">
+              <th class="p-2 textPrimary">من تاريخ | {{searchDate.from}}</th>
+              <td class="p-2 tdBorder_right textDanger">الى تاريخ | {{searchDate.to}}</td>
+            </tr>
 
-          <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
-            <th class="p-2">اجمالى</th>
-            <td class="p-2 tdBorder_right">{{headerTotals.outcome + headerTotals.openedVal | number: '1.0-2'}}</td>
-          </tr>
+            <tr *ngIf="headerTotals.openedVal != 0" class="borderLdark">
+              <th class="p-2 darkBadge">رصيد اول</th>
+              <td class="p-2 tdBorder_right" [ngClass]="headerTotals.openedVal < 0 ? 'textDanger' : 'darkBadge'">
+                {{headerTotals.openedVal | number: '1.0-2'}}
+              </td>
+            </tr>
 
-          <tr>
-            <th></th>
-            <td></td>
-          </tr>
+            <tr class="dangerBadge borderLdanger">
+              <th class="p-2">منصرف</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
+            </tr>
 
-          <tr class="secondaryBadge borderLsecondary">
-            <th class="p-2">وارد</th>
-            <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
-          </tr>
+            <tr *ngIf="headerTotals.openedVal != 0" class="lightBg" style="border-top: solid #00238d 2px;">
+              <th class="p-2">اجمالى</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.outcome + headerTotals.openedVal | number: '1.0-2'}}</td>
+            </tr>
 
-          <tr *ngIf="searchDate.from" class="lightBg" style="border-top: solid #00238d 2px;">
-            <th class="p-2">صافى</th>
-            <td class="p-2 tdBorder_right"
-              [class.textDanger]="headerTotals.openedVal - headerTotals.income  + headerTotals.outcome < 0">
-              {{(headerTotals.openedVal - headerTotals.income + headerTotals.outcome) | number: '1.0-2'}}
-            </td>
-          </tr>
+            <tr>
+              <th></th>
+              <td></td>
+            </tr>
 
-        </table>
-      </div>
+            <tr class="secondaryBadge borderLsecondary">
+              <th class="p-2">وارد</th>
+              <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr *ngIf="searchDate.from" class="lightBg" style="border-top: solid #00238d 2px;">
+              <th class="p-2">صافى</th>
+              <td class="p-2 tdBorder_right"
+                [class.textDanger]="headerTotals.openedVal - headerTotals.income  + headerTotals.outcome < 0">
+                {{(headerTotals.openedVal - headerTotals.income + headerTotals.outcome) | number: '1.0-2'}}
+              </td>
+            </tr>
+
+          </table>
+
+        </mat-card-content>
+        <!-- <mat-card-actions>
+                <button mat-button>actionOne</button>
+                <button mat-button>actionTwo</button>
+          </mat-card-actions> -->
+      </mat-card>
+
+
 
     </div>
 
     <div class="col-xl-4 col-lg-6 mb-3">
-      <div class="box px-2">
-        <h3 class="textBold pr-2">تفاصيل اعداد الاصناف</h3>
-        <div class="panel-body panel-flex-table standTable">
-          <table class="flex-table table table-hover">
-            <thead class="textSecondaryBg textSecondary">
-              <tr>
-                <th>الصنف</th>
-                <th>وارد</th>
-                <th>منصرف</th>
-              </tr>
-            </thead>
-            <tbody class="tableBody">
-              <tr *ngFor="let product of productsQty">
-                <td>{{product.productName}}</td>
-                <td>{{product.in | number: '1.0-3'}}</td>
-                <td class="textDanger">{{product.out | number: '1.0-3'}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+
+      <mat-card>
+        <mat-card-header class="d-flex justify-content-between">
+          <!-- <div mat-card-avatar>avatar</div> -->
+          <mat-card-title>تفاصيل اعداد الاصناف</mat-card-title>
+          <mat-card-subtitle>عرض كميات الاصناف الواردة و المنصرفة</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="panel-body panel-flex-table standTable">
+            <table class="flex-table table table-hover">
+              <thead class="textSecondaryBg textSecondary">
+                <tr>
+                  <th>الصنف</th>
+                  <th>وارد</th>
+                  <th>منصرف</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr *ngFor="let product of productsQty">
+                  <td>{{product.productName}}</td>
+                  <td>{{product.in | number: '1.0-3'}}</td>
+                  <td class="textDanger">{{product.out | number: '1.0-3'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
 
   </div>
 
-  <div class="box stickyBox" id="customerInformationTable">
-    <div class="mat-elevation-z0 mt-3">
-      <div class="d-flex justify-content-between px-3">
-        <div class="form-inline printX">
-          <mat-form-field class="searchForm" style="width: 500px;">
-            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
-          </mat-form-field>
-          <div class="mr-2">
-            <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
-              <i class="fa fa-filter"></i>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
-                بالتاريخ</button>
-              <button mat-menu-item [disabled]="isFiltered" (click)="filterList('filterUncomplete')"
-                style="text-align: right;">فرز حسابات غير
-                كاملة</button>
-              <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
-                style="text-align: right;">اظهار الكل</button>
-            </mat-menu>
+  <div class="box stickyBox">
+
+    <mat-card id="customerInformationTable">
+      <mat-card-header class="d-flex justify-content-between">
+        <!-- <div mat-card-avatar>avatar</div> -->
+        <mat-card-title>{{_glopal.currentHeader}}</mat-card-title>
+        <!-- <mat-card-subtitle>sub-header</mat-card-subtitle> -->
+        <div>
+          <div class="form-inline printX">
+
+            <div class="my-auto">
+              <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+                matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
+                [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
+                ميزان
+                |
+                {{calcArr.total | number:'1.0-2'}}</button>
+              <button mat-button color="accent" class="mx-1" (click)="printDocument()"><i
+                  class="fa fa-print"></i></button>
+              <button mat-button color="warn" (click)="addDiscound()" matTooltip="خصم من الحساب"
+                matTooltipPosition="above" matTooltipClass="dangerBadge borderLdanger">
+                <i class="fa fa-lg fa-tags my-auto"></i>
+              </button>
+            </div>
+
+            <div class="mr-2">
+              <button mat-button [matMenuTriggerFor]="menu" color="primary">
+                <i class="fa fa-filter"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
+                  بالتاريخ</button>
+                <button mat-menu-item [disabled]="isFiltered" (click)="filterList('filterUncomplete')"
+                  style="text-align: right;">فرز حسابات غير
+                  كاملة</button>
+                <button [disabled]="!isFiltered" mat-menu-item (click)="filterList('showAll')"
+                  style="text-align: right;">اظهار الكل</button>
+              </mat-menu>
+            </div>
+
+            <mat-form-field class="searchForm" style="width: 500px;">
+              <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+            </mat-form-field>
           </div>
         </div>
+      </mat-card-header>
+      <mat-card-content>
 
-        <div class="my-auto">
-          <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
-            matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
-            [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
-            ميزان
-            |
-            {{calcArr.total | number:'1.0-2'}}</button>
-          <button mat-flat-button color="accent" class="mx-1" (click)="printDocument()"><i
-              class="fa fa-print"></i></button>
-          <button mat-flat-button color="warn" (click)="addDiscound()" matTooltip="خصم من الحساب"
-            matTooltipPosition="above" matTooltipClass="dangerBadge borderLdanger">
-            <i class="fa fa-lg fa-tags my-auto"></i>
-          </button>
+        <div class="d-flex justify-content-between px-3">
+
+
+
         </div>
-      </div>
 
-      <div class="example-container">
-        <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+        <div class="example-container">
+          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
 
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
-            <td mat-cell *matCellDef="let row; let i = index">{{row.id}}</td>
-          </ng-container>
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
+              <td mat-cell *matCellDef="let row; let i = index">{{row.id}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="date_time">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
-            <td mat-cell *matCellDef="let row" [class.borderAround-danger]="row.uncompleted">
-              {{row.date_time}}</td>
-          </ng-container>
+            <ng-container matColumnDef="date_time">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>التاريخ</th>
+              <td mat-cell *matCellDef="let row" [class.borderAround-danger]="row.uncompleted">
+                {{row.date_time}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="recieptType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
-            <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-              [class.textDanger]="(row.recieptType.includes('صرف') || row.recieptType.includes('بيع'))"
-              [class.marked]="row.recieptType.includes(searchTxt) && searchTxt"
-              (click)="gotoReceipt(row.recieptType, row.receiptId)">
-              {{row.recieptType}}</td>
-          </ng-container>
+            <ng-container matColumnDef="recieptType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع المعاملة</th>
+              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                [class.textDanger]="(row.recieptType.includes('صرف') || row.recieptType.includes('بيع'))"
+                [class.marked]="row.recieptType.includes(searchTxt) && searchTxt"
+                (click)="gotoReceipt(row.recieptType, row.receiptId)">
+                {{row.recieptType}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="receiptDetail">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
-            <td mat-cell *matCellDef="let row"
-              [class.textDanger]="row.recieptType.includes('صرف') || row.recieptType.includes('بيع')"
-              [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt">
-              {{row.receiptDetail}}</td>
-          </ng-container>
+            <ng-container matColumnDef="receiptDetail">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>التفاصيل</th>
+              <td mat-cell *matCellDef="let row"
+                [class.textDanger]="row.recieptType.includes('صرف') || row.recieptType.includes('بيع')"
+                [class.marked]="row.receiptDetail.includes(searchTxt) && searchTxt">
+                {{row.receiptDetail}}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="minVal">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>دائن</th>
-            <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="minVal{{i}}" class="markVal"
-              (click)="markToCalc(row.minVal * -1,i,'minVal')"
-              [class.borderRight-success]="(row.discound > 0 && row.minVal > 0)"
-              [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'borderLsecondary' : ''"
-              matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
-              [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
-              [matTooltipDisabled]="row.addtaxes == 0 || row.minVal < 0">
-              <i *ngIf="row.minVal > 0" class="fa fa-arrow-down textGreen"></i>
-              {{row.minVal | number:'1.0-2'}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="minVal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>دائن</th>
+              <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="minVal{{i}}" class="markVal"
+                (click)="markToCalc(row.minVal * -1,i,'minVal')"
+                [class.borderRight-success]="(row.discound > 0 && row.minVal > 0)"
+                [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'borderLsecondary' : ''"
+                matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
+                [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
+                [matTooltipDisabled]="row.addtaxes == 0 || row.minVal < 0">
+                <i *ngIf="row.minVal > 0" class="fa fa-arrow-down textGreen"></i>
+                {{row.minVal | number:'1.0-2'}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="addVal">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>مدين</th>
-            <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="addVal{{i}}" class="markVal"
-              (click)="markToCalc(row.addVal,i,'addVal')"
-              [class.borderRight-success]="row.discound > 0 && row.addVal > 0"
-              [ngClass]="(row.addtaxes > 0 && row.addVal > 0) ? 'borderLsecondary' : ''"
-              [class.marked]="row.addVal.toString().includes(searchTxt) && searchTxt"
-              matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
-              [matTooltipDisabled]="row.addtaxes == 0 || row.addVal < 0">
-              <i *ngIf="row.addVal > 0" class="fa fa-arrow-up textDanger"></i>
-              {{row.addVal | number:'1.0-2'}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="addVal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>مدين</th>
+              <td mat-cell *matCellDef="let row; let i = index" style="cursor: grab;" id="addVal{{i}}" class="markVal"
+                (click)="markToCalc(row.addVal,i,'addVal')"
+                [class.borderRight-success]="row.discound > 0 && row.addVal > 0"
+                [ngClass]="(row.addtaxes > 0 && row.addVal > 0) ? 'borderLsecondary' : ''"
+                [class.marked]="row.addVal.toString().includes(searchTxt) && searchTxt"
+                matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
+                [matTooltipDisabled]="row.addtaxes == 0 || row.addVal < 0">
+                <i *ngIf="row.addVal > 0" class="fa fa-arrow-up textDanger"></i>
+                {{row.addVal | number:'1.0-2'}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="balance">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
-            <td mat-cell *matCellDef="let row" [class.textDanger]="row.balance < 0"
-              [class.marked]="row.balance.toString().includes(searchTxt) && searchTxt"
-              class="textBtn tBtn-danger pl-2 tdBorder" (click)="discoundThis(row.balance, row.date)">
-              {{row.balance | number:'1.0-2'}}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="balance">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>صافى</th>
+              <td mat-cell *matCellDef="let row" [class.textDanger]="row.balance < 0"
+                [class.marked]="row.balance.toString().includes(searchTxt) && searchTxt"
+                class="textBtn tBtn-danger pl-2 tdBorder" (click)="discoundThis(row.balance, row.date)">
+                {{row.balance | number:'1.0-2'}}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="note">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات</th>
-            <td mat-cell *matCellDef="let row" [class.marked]="row.note?.includes(searchTxt) && searchTxt">
-              {{row.note}}</td>
-          </ng-container>
+            <ng-container matColumnDef="note">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ملاحظات</th>
+              <td mat-cell *matCellDef="let row" [class.marked]="row.note?.includes(searchTxt) && searchTxt">
+                {{row.note}}</td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-          </tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-          </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+            </tr>
 
-        </table>
-      </div>
+          </table>
+        </div>
 
-      <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-        [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
-      </mat-paginator>
+        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+          [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
+        </mat-paginator>
 
-    </div>
+
+      </mat-card-content>
+      <!-- <mat-card-actions>
+            <button mat-button>actionOne</button>
+            <button mat-button>actionTwo</button>
+      </mat-card-actions> -->
+    </mat-card>
+
+
+
   </div>
-</div>

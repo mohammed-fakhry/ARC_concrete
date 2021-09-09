@@ -102,7 +102,7 @@ export class StockInvoiceComponent implements OnInit {
 
   totalBFTaxes: number = 0;
   taxesVal: number = 0;
-  discoundVal: number = 0
+  discoundVal: number = 0;
 
   transactionTypeDom: HTMLElement = document.querySelector(
     '#transactionType'
@@ -115,6 +115,8 @@ export class StockInvoiceComponent implements OnInit {
   moreMenu = {
     discound: 'اضافة خصم',
   };
+
+  notesArr: { product: string; qty: string; notes: string }[] = [];
 
   constructor(
     public activeRoute: ActivatedRoute,
@@ -864,10 +866,12 @@ export class StockInvoiceComponent implements OnInit {
       .reduce((a: any, b: any) => a + b, 0);
 
     // console.log(discoundVal)
-    this.totalBFTaxes = this.totalsArry.reduce((a, b) => a + b) + this.discoundVal;
+    this.totalBFTaxes =
+      this.totalsArry.reduce((a, b) => a + b) + this.discoundVal;
     this.taxesVal = (this.stockInvoice.addtaxes * this.totalBFTaxes) / 100;
 
-    this.stockInvoice.invoiceTotal = this.totalBFTaxes + this.taxesVal - this.discoundVal;
+    this.stockInvoice.invoiceTotal =
+      this.totalBFTaxes + this.taxesVal - this.discoundVal;
   }
 
   calcQty(i: number) {
@@ -1402,5 +1406,9 @@ export class StockInvoiceComponent implements OnInit {
   toEditReport() {
     if (this._auth?.check.prem && this.stockInvoice.isUpdated)
       this._router.navigate([`/InvoiceChangesReport/${this.id}`]);
+  }
+
+  printDocument() {
+    window.print();
   }
 }

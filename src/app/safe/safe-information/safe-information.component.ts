@@ -185,62 +185,117 @@ export class SafeInformationComponent implements OnInit {
     routeTo: string;
     toolTip: string;
   } => {
-    let receiptDetail: string = '';
-    let routeTo: string = '';
-    let toolTip: string = '';
+    const condArr = [
+      /* customers */
+      {
+        toolTip: 'عهده محطه',
+        receiptDetail: data.customerName,
+        routeTo: `/customerInformation/${data.customerId}`,
+        condition: () =>
+          data.customerName && data.customerName?.includes('عهده محطه'),
+      },
+      {
+        toolTip: 'عهده مقاولات',
+        receiptDetail: data.customerName,
+        routeTo: `/customerInformation/${data.customerId}`,
+        condition: () =>
+          data.customerName && data.customerName?.includes('عهده مقاولات'),
+      },
+      {
+        toolTip: 'بنك',
+        receiptDetail: data.customerName,
+        routeTo: `/customerInformation/${data.customerId}`,
+        condition: () =>
+          data.customerName && data.customerName?.includes('بنك'),
+      },
+      {
+        toolTip: 'مورد | مستهلك',
+        receiptDetail: data.customerName,
+        routeTo: `/customerInformation/${data.customerId}`,
+        condition: () => data.customerName,
+      },
+      /* other Acc */
+      {
+        toolTip: 'خصم عملاء المحطه',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () => data.AccName && data.AccName == 'خصم عملاء المحطه',
+      },
+      {
+        toolTip: 'مصاريف معدات',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () =>
+          data.AccName &&
+          (data.AccName?.includes('عربيه') ||
+            data.AccName?.includes('لودر') ||
+            data.AccName?.includes('حفار') ||
+            data.AccName?.includes('هراس') ||
+            data.AccName?.includes('مضخة')),
+      },
+      {
+        toolTip: 'مصاريف مكتب',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () => data.AccName && data.AccName?.includes('مصاريف مكتب'),
+      },
+      {
+        toolTip: 'مصروفات المقاولات',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () =>
+          data.AccName && data.AccName?.includes('مصروفات المقاولات'),
+      },
+      {
+        toolTip: 'مصاريف',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () => data.AccName,
+      },
+      /* concreteCustomer */
+      {
+        toolTip: 'عميل خرسانة',
+        receiptDetail: data.concreteCustomerName,
+        routeTo: `/ConcreteCustomerInformation/${data.concreteCustomer_id}`,
+        condition: () => data.concreteCustomerName,
+      },
+      /* truck Customer */
+      {
+        toolTip: 'عميل معدات',
+        receiptDetail: data.truckCustomerName,
+        routeTo: `/TruckCustomerInformation/${data.truckCustomerId}`,
+        condition: () => data.truckCustomerName,
+      },
+      /* trucks */
+      {
+        toolTip: 'دفعة من تشغيل معدة',
+        receiptDetail: data.truckName,
+        routeTo: `/truckLog/${data.truckId}`,
+        condition: () => data.truckName,
+      },
+      /* worker */
+      {
+        toolTip: 'موظف',
+        receiptDetail: data.workerName,
+        routeTo: `/WorkerInformation/${data.workerId}`,
+        condition: () => data.workerName,
+      },
+    ];
 
-    if (data.customerName && data.customerName?.includes('عهده')) {
-      receiptDetail = data.customerName;
-      routeTo = `/customerInformation/${data.customerId}`;
-      toolTip = 'العهد';
-    } else if (data.customerName && data.customerName?.includes('بنك')) {
-      receiptDetail = data.customerName;
-      routeTo = `/customerInformation/${data.customerId}`;
-      toolTip = 'بنك';
-    } else if (data.customerName) {
-      receiptDetail = data.customerName;
-      routeTo = `/customerInformation/${data.customerId}`;
-      toolTip = 'مورد | مستهلك';
-    } else if (data.AccName && data.AccName?.includes('شيخ ايمن')) {
-      receiptDetail = data.AccName;
-      routeTo = `/OtherAccInformation/${data.accId}`;
-      toolTip = 'الشيخ ايمن';
-    } else if (data.AccName && data.AccName?.includes('محطه')) {
-      receiptDetail = data.AccName;
-      routeTo = `/OtherAccInformation/${data.accId}`;
-      toolTip = 'مصاريف المحطه';
-    } else if (
-      data.AccName &&
-      !data.AccName?.includes('الشيخ ايمن') &&
-      !data.AccName?.includes('محطه')
-    ) {
-      receiptDetail = data.AccName;
-      routeTo = `/OtherAccInformation/${data.accId}`;
-      toolTip = 'مصاريف التوريدات';
-    } else if (data.concreteCustomerName) {
-      routeTo = `/ConcreteCustomerInformation/${data.concreteCustomer_id}`;
-      receiptDetail = data.concreteCustomerName;
-      toolTip = 'عميل خرسانة';
-    } else if (data.truckCustomerName) {
-      routeTo = `/TruckCustomerInformation/${data.truckCustomerId}`;
-      receiptDetail = data.truckCustomerName;
-      toolTip = 'عميل معدات';
-    } else if (data.truckName) {
-      routeTo = `/truckLog/${data.truckId}`;
-      receiptDetail = data.truckName;
-      toolTip = 'دفعة من تشغيل معدة';
-    } else if (data.workerName) {
-      routeTo = `/WorkerInformation/${data.workerId}`;
-      receiptDetail = data.workerName;
-      toolTip = 'موظف';
-    }
+    const foundDetail = condArr.find((detail: any) => detail.condition());
 
     return {
-      receiptDetail: receiptDetail,
-      routeTo: routeTo,
-      toolTip: toolTip,
+      receiptDetail: foundDetail?.receiptDetail ?? '',
+      routeTo: foundDetail?.routeTo ?? '',
+      toolTip: foundDetail?.toolTip ?? '',
     };
   };
+
+  safeInfoHeaderDetails: string = 'بيان';
+  safeInfoHeaderDetails_hover(cond: string) {
+    if (cond == 'enter') this.safeInfoHeaderDetails = 'اظهار الكل';
+    if (cond == 'leave') this.safeInfoHeaderDetails = 'بيان';
+  }
 
   routeTo(data: any): string {
     if (data.customerName) {

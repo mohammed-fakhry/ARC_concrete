@@ -26,9 +26,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    "ALTER TABLE `truckorder` ADD `concreteReceiptD_id` VARCHAR(100) NOT NULL DEFAULT '0' AFTER `concreteBonId`",
-    "ALTER TABLE `concretereceipt_detail` ADD `pumpCost` FLOAT(10.2) NOT NULL DEFAULT '0' AFTER `concretePrice`",
-    "INSERT INTO `truckorder` (`orderId`, `truckId`, `orderType`, `loadingType`, `truckCustomerId`, `LoadTimes`, `price`, `realPrice`, `date_time`, `notes`, `stockTransactionDetailsId`, `concreteBonId`, `concreteReceiptD_id`, `madeBy`) VALUES (NULL, '120', 'سيارة خارجية', 'متر', '1', '189', '30', '26.32', '2021-08-15T23:59', 'دجلة لاند مارك فاتورة رقم (247)', '1', '0', '1316', 'foto7')"
+    "ALTER TABLE `taxespayment` ADD `receiptKind` VARCHAR(100) NOT NULL DEFAULT 'ايصال صرف نقدية' AFTER `paymentVal`",
   ];
 
   url: string | null = localStorage.getItem('tmpDB');
@@ -285,15 +283,15 @@ export class FixesComponent implements OnInit {
 
     if (cond == 'post')
       return this.http.post(`${this.url}tempFix.php?post=1`, data);
-
     else
       return this.http.put(
         `${this.url}tempFix.php?id=${data.bonId}&put=1`,
-        data , {responseType: 'text'}
+        data,
+        { responseType: 'text' }
       );
   }
 
-  getTempData() : Promise<any[]> {
+  getTempData(): Promise<any[]> {
     return new Promise((res) => {
       this.tempFix_request('get').subscribe((data: any) => res(data));
     });
@@ -303,7 +301,7 @@ export class FixesComponent implements OnInit {
     return new Promise((res) => {
       this.tempFix_request(cond, data).subscribe((data: any) => res(data));
     });
-  };
+  }
 
   tempFix() {
     this.getTempData().then((data: any[]) => {
@@ -312,11 +310,10 @@ export class FixesComponent implements OnInit {
 
       const processLoop = async () => {
         for (let i = 0; i < data.length; i++) {
-
           const PostData = {
             bonId: data[i].bonId,
-            pumpId: data[i].pumpId
-          }
+            pumpId: data[i].pumpId,
+          };
 
           const respon = await this.post_put_TempData('put', PostData);
 

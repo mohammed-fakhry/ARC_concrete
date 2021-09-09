@@ -57,6 +57,9 @@ export class AddDiscoundDialogComponent implements OnInit {
         if (this.data.workerId > '0') {
           this.header = this.data.workerName
           this.receiptFor = 'worker';
+        } else if (this.data.safeName == "دفعة لسداد ضريبة") {
+          this.header = "الضرائب"
+          this.receiptFor = 'taxes'
         } else {
           this.header = this.data.customerName
           this.receiptFor = 'acc';

@@ -39,16 +39,16 @@ export class TruckService {
     return this.http.post(`${this.url}postTruckOrder.php`, truckOrder);
   }
 
-  updateTruckOrder(truckOrder: TruckOrder, cond: string) {
-    let updatebyId = '';
-    if (cond == 'id') updatebyId = truckOrder.orderId ?? '';
-    if (cond == 'transId') updatebyId = truckOrder.stockTransactionDetailsId;
-    if (cond == 'bonId') updatebyId = truckOrder.concreteBonId;
-    if (cond == 'concreteReceiptD_id')
-      updatebyId = truckOrder.concreteReceiptD_id;
+  updateTruckOrder(truckOrder: TruckOrder, updateBy: string) {
+    let id = '';
+    if (updateBy == 'id') id = truckOrder.orderId ?? '';
+    if (updateBy == 'transId') id = truckOrder.stockTransactionDetailsId;
+    if (updateBy == 'bonId') id = truckOrder.concreteBonId;
+    if (updateBy == 'concreteReceiptD_id')
+      id = truckOrder.concreteReceiptD_id;
 
     return this.http.put(
-      `${this.url}updateTruckOrder.php?${cond}=${updatebyId}`,
+      `${this.url}updateTruckOrder.php?${updateBy}=${id}`,
       truckOrder
     );
   }

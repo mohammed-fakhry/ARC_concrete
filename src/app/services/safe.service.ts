@@ -128,4 +128,5 @@ export class SafeService {
       `${this.url}receiptChangesList.php`
     );
   }
+
 }

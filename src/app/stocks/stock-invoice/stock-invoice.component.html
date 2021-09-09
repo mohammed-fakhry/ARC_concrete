@@ -1,319 +1,369 @@
 <div class="mainContainer">
 
-  <div class="box p-4" [class.borderRight-alert]="stockInvoice.transactionType == 'فاتورة بيع'"
+  <mat-card class="section p-4 borderLsecondary" [class.borderRight-alert]="stockInvoice.transactionType == 'فاتورة بيع'"
     [class.borderTop-primary]="stockInvoice.transactionType == 'اذن نقل'" [class.borderLeft-alert]="checkedStatue">
-    <form (ngSubmit)="onSubmit(stockInvoiceForm)" #stockInvoiceForm="ngForm">
-      <div class="invoiceHeader">
+    <mat-card-header class="d-flex justify-content-between">
+      <!-- <div mat-card-avatar>avatar</div> -->
+      <mat-card-title>{{invoiceCond}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
 
-        <div class="row">
-          <div class="col-lg-6 col-md-9">
-            <table class="fullWidth">
+      <form (ngSubmit)="onSubmit(stockInvoiceForm)" #stockInvoiceForm="ngForm">
+        <div class="invoiceHeader">
 
+          <div class="row">
+            <div class="col-lg-6 col-md-9">
+              <table class="fullWidth">
+
+                <tr>
+                  <td>
+                    <mat-form-field>
+                      <input [disabled]="_router.url == '/CaherReceipt' || dateExpires" matInput type="datetime-local"
+                        name="date_time" [(ngModel)]="stockInvoice.date_time">
+                    </mat-form-field>
+                  </td>
+                  <td class="printX">
+                    <!-- <div class="textBold p-2 text-center infoCard fullWidth secondaryBadge borderLsecondary">
+                        {{invoiceCond}}</div> -->
+                    <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'"
+                      [class.borderRight-alert]="stockInvoice.truckOwner == 'سيارة خارجية'" class="w-75 pl-2">
+                      <input matInput type="search" list="truckList" class="mdb-autocomplete"
+                        [(ngModel)]="stockInvoice.truckName" #truckName placeholder="اسم السيارة" name="truckName"
+                        autocomplete="off" (change)="truckNameChanged(stockInvoiceForm)">
+                      <mat-error>
+                        برجاء اختيار اسم صحيح
+                      </mat-error>
+                      <datalist id="truckList">
+                        <option *ngFor="let truck of truckList" value="{{truck.name}}">
+                          {{truck.number}}
+                        </option>
+                      </datalist>
+                    </mat-form-field>
+
+                    <mat-form-field [class.d-none]="!stockInvoice.truckName" class="w-25">
+                      <input matInput placeholder="المشال" name="metrPrice" type="number"
+                        [(ngModel)]="truckInfo.metrPrice">
+                    </mat-form-field>
+                  </td>
+                </tr>
+
+                <tr class="printX">
+                  <td *ngIf="_router.url != '/CaherReceipt'" class="pt-3">
+                    <mat-form-field>
+                      <mat-select placeholder="نوع الفاتورة" #transactionType name="transactionType"
+                        [(ngModel)]="stockInvoice.transactionType" id="transactionType">
+                        <mat-option value="فاتورة شراء" (click)="transactionTypeChanged('customerInvoice')">
+                          فاتورة شراء
+                        </mat-option>
+                        <mat-option value="فاتورة بيع" (click)="transactionTypeChanged('customerInvoice')">
+                          فاتورة بيع
+                        </mat-option>
+                        <mat-option value="اذن نقل" (click)="transactionTypeChanged('stockTrance')">
+                          اذن نقل
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                  <td *ngIf="_router.url != '/CaherReceipt'" class="pt-3">
+                    <mat-form-field>
+                      <mat-select placeholder="المخزن" required #transactionType name="stockName"
+                        [(ngModel)]="stockInvoice.stockName" (ngModelChange)="stockNameChanged()">
+                        <mat-option *ngFor="let stock of stocksList" [value]="stock.stockName">
+                          {{stock.stockName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </tr>
+
+                <tr>
+
+                  <td>
+                    <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'">
+                      <input [disabled]="stockInvoice.customerId == 100" matInput placeholder="placeholder"
+                        type="search" list="customerList" class="mdb-autocomplete"
+                        [(ngModel)]="stockInvoice.customerName" #customerName placeholder="اسم العميل"
+                        name="customerName" autocomplete="off" (change)="customerNameChanged(stockInvoiceForm)"
+                        [required]="invoiceType === 'customerInvoice'">
+                      <mat-error *ngIf="!inputValid.customerName.cond">
+                        {{inputValid.customerName.msg}}
+                      </mat-error>
+                      <datalist id="customerList">
+                        <option *ngFor="let customer of filteredCustomer" value="{{customer.customerName}}">
+                        </option>
+                      </datalist>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType == 'stockTrance'">
+                      <mat-select placeholder="نقل الى مخزن" [required]="invoiceType == 'stockTrance'" #transactionType
+                        name="sndStockName" [(ngModel)]="stockInvoice.sndStockName"
+                        (ngModelChange)="stockNameChanged(stockInvoice.sndStockName)">
+                        <mat-option *ngFor="let stock of stocksList" [value]="stock.stockName">
+                          {{stock.stockName}}</mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </td>
+
+                  <td>
+                    <mat-form-field>
+                      <input matInput name="notes" [(ngModel)]="stockInvoice.notes" placeholder="ملاحظات">
+                    </mat-form-field>
+                  </td>
+
+                </tr>
+
+              </table>
+            </div>
+            <div class="col-lg-2 col-md-hide">
+              <!-- just for space in col-lg -->
+            </div>
+            <div class="col-md-9 col-lg-4 printX">
+              <table class="fullWidth fullHeight">
+                <tr style="height: 70%;">
+                  <!-- <td class="textPrimary textBold pl-3" style="font-size: 1rem; text-align: left;">
+
+                  </td> -->
+                  <td class="textBold text-center infoCard boxShadow"
+                    [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'"
+                    style="font-size: 1.15rem;" colspan="2">
+                    {{stockInvoice.invoiceTotal | number:'1.0-2'}}
+                  </td>
+
+                </tr>
+                <tr>
+                  <td style="text-align: left;" class="pl-3">
+                    <mat-slide-toggle name="checkedStatue" [(ngModel)]="checkedStatue" color="warn" class="my-auto"
+                      (ngModelChange)="checkStatu()">
+                    </mat-slide-toggle>
+                  </td>
+                  <td class="pt-4">
+                    <mat-form-field>
+                      <input matInput type="text" [disabled]="!checkedStatue" placeholder="ملحوظة لبيانات لم تكتمل"
+                        name="uncompleted" [(ngModel)]="stockInvoice.uncompleted">
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body panel-flex-table standTable inpTable mt-3">
+          <table class="flex-table table invoiceTable"
+            [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'theadBorderDanger' : 'theadBorderPrimary'">
+            <thead class="textPrimary">
               <tr>
-                <td>
-                  <mat-form-field>
-                    <input [disabled]="_router.url == '/CaherReceipt' || dateExpires" matInput type="datetime-local"
-                      name="date_time" [(ngModel)]="stockInvoice.date_time">
-                  </mat-form-field>
+                <th class="thCenter" style="flex: .25;">م</th>
+                <th style="flex: 2;">اسم الصنف</th>
+                <th style="flex: .75;">
+                  <i class="fa fa-stop textSecondary"></i>
+                  {{stockInvoice.truckCapacity < 2 ? 'الكمية' : 'عدد النقلات' }} </th>
+                <th style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
+                  <i class="fa fa-th-large textSecondary"></i>
+                  الحمولة
+                </th>
+                <th>
+                  <i class="fa fa-th textSecondary"></i>
+                  اجمالى عدد
+                </th>
+                <th>
+                  {{stockInvoice.truckCapacity < 2 ? 'السعر' : 'سعر المتر' }} </th>
+                <th [class.d-none]="stockInvoice.truckCapacity  < 2">
+                  سعر النقلة
+                </th>
+                <th *ngIf="showDiscound" style="flex: .35;" class="printX">خصم %</th>
+                <th class="thCenter textBold">اجمالى</th>
+                <th class="printX">ملاحظات</th>
+              </tr>
+            </thead>
+            <tbody class="tableBody inpTableBody" style="overflow-x: hidden !important;">
+              <tr *ngFor="let inpt of stockTransaction; let i = index">
+
+                <td style="flex: .25;" class="text-center">
+                  <div class="pt-2">{{i + 1}}</div>
                 </td>
+
+                <td style="flex: 2;" class="tdBorder_left">
+                  <input #product="ngModel" id="product{{i}}" type="search" class="form-control productInpDom"
+                    name="product{{i}}" id="product{{i}}" (click)="selectText('product',i)"
+                    [(ngModel)]='inpt.info.product' (change)="productChanged(i)" autocomplete="off"
+                    [attr.list]="inpt.info.product && product.dirty ? dataList[i] : ''">
+                  <datalist id="datalistproducts{{i}}">
+                    <option *ngFor="let product of productsList" value="{{product.productName}}">
+                    </option>
+                  </datalist>
+                  <div *ngIf="!inputValid.product[i].cond" class="alert-danger infoCard" style="width:fit-content;">
+                    {{inputValid.product[i].msg}}</div>
+                </td>
+
+                <td style="flex: .75;">
+                  <input [disabled]="!stockInvoice.customerName" type="number" class="form-control textBold textDark"
+                    name="loadTimes{{i}}" id="loadTimes{{i}}" [(ngModel)]="productQtys[i].loadTimes"
+                    (ngModelChange)="calcQty(i)" (click)="selectText('loadTimes',i)">
+                </td>
+
+                <td style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
+                  <input disabled type="number" class="form-control lightBg" name="truckCapacity{{i}}"
+                    id="truckCapacity{{i}}" (click)="selectText('truckCapacity',i)"
+                    [(ngModel)]="stockInvoice.truckCapacity" (ngModelChange)="calcQty(i)">
+                </td>
+
+                <td class="tdBorder_left">
+                  <input type="number" class="form-control textBolder textSecondary" name="qty{{i}}" id="qty{{i}}"
+                    (click)="selectText('qty',i)" [(ngModel)]="inpt.info.qty" [class.lightBg]="!inpt.info.product">
+                </td>
+
+                <!-- price -->
+                <td class="tdBorder_left">
+                  <input type="number" class="form-control" name="price{{i}}" id="price{{i}}"
+                    (click)="selectText('price',i)" [(ngModel)]="inpt.info.price" [disabled]="!inpt.info.product"
+                    [class.lightBg]="!inpt.info.product" (ngModelChange)="calcTotal(i)">
+                </td>
+
+                <td [class.d-none]="stockInvoice.truckCapacity < 2">
+                  <input type="number" class="form-control textBold textDark" name="backetPrice{{i}}"
+                    id="backetPrice{{i}}" (click)="selectText('backetPrice',i)"
+                    [(ngModel)]="productQtys[i].payLoadPrice" [disabled]="!inpt.info.product"
+                    (ngModelChange)="packetPriceChange(i)">
+                </td>
+
+                <td *ngIf="showDiscound" style="flex: .35;" class="printX">
+                  <input type="number" class="form-control textDanger" name="discound{{i}}"
+                    [(ngModel)]="inpt.info.discound" [disabled]="!inpt.info.product"
+                    [class.lightBg]="!inpt.info.product" (ngModelChange)="calcTotal(i)" id="discound{{i}}"
+                    (click)="selectText('discound',i)">
+                </td>
+
+                <td class="textBold pt-2 textPrimary printX">{{inpt.info.total | number:'1.0-2'}}</td>
+
+                <td class="textBold pt-2 textPrimary printThis">{{(inpt.info.qty * inpt.info.price) | number:'1.0-2'}}
+                </td>
+
                 <td class="printX">
-                  <!-- <div class="textBold p-2 text-center infoCard fullWidth secondaryBadge borderLsecondary">
-                    {{invoiceCond}}</div> -->
-                  <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'"
-                    [class.borderRight-alert]="stockInvoice.truckOwner == 'سيارة خارجية'" class="w-75 pl-2">
-                    <input matInput type="search" list="truckList" class="mdb-autocomplete"
-                      [(ngModel)]="stockInvoice.truckName" #truckName placeholder="اسم السيارة" name="truckName"
-                      autocomplete="off" (change)="truckNameChanged(stockInvoiceForm)">
-                    <mat-error>
-                      برجاء اختيار اسم صحيح
-                    </mat-error>
-                    <datalist id="truckList">
-                      <option *ngFor="let truck of truckList" value="{{truck.name}}">
-                        {{truck.number}}
-                      </option>
-                    </datalist>
-                  </mat-form-field>
-
-                  <mat-form-field [class.d-none]="!stockInvoice.truckName" class="w-25">
-                    <input matInput placeholder="المشال" name="metrPrice" type="number"
-                      [(ngModel)]="truckInfo.metrPrice">
-                  </mat-form-field>
+                  <input type="text" class="form-control " name="notes{{i}}" id="notes{{i}}"
+                    (click)="selectText('notes',i)" [(ngModel)]='inpt.info.notes'>
                 </td>
               </tr>
-
-              <tr class="printX">
-                <td *ngIf="_router.url != '/CaherReceipt'" class="pt-3">
-                  <mat-form-field>
-                    <mat-select placeholder="نوع الفاتورة" #transactionType name="transactionType"
-                      [(ngModel)]="stockInvoice.transactionType" id="transactionType">
-                      <mat-option value="فاتورة شراء" (click)="transactionTypeChanged('customerInvoice')">
-                        فاتورة شراء
-                      </mat-option>
-                      <mat-option value="فاتورة بيع" (click)="transactionTypeChanged('customerInvoice')">
-                        فاتورة بيع
-                      </mat-option>
-                      <mat-option value="اذن نقل" (click)="transactionTypeChanged('stockTrance')">
-                        اذن نقل
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-                <td *ngIf="_router.url != '/CaherReceipt'" class="pt-3">
-                  <mat-form-field>
-                    <mat-select placeholder="المخزن" required #transactionType name="stockName"
-                      [(ngModel)]="stockInvoice.stockName" (ngModelChange)="stockNameChanged()">
-                      <mat-option *ngFor="let stock of stocksList" [value]="stock.stockName">
-                        {{stock.stockName}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-              </tr>
-
-              <tr>
-
-                <td>
-                  <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType != 'stockTrance'">
-                    <input [disabled]="stockInvoice.customerId == 100" matInput placeholder="placeholder" type="search"
-                      list="customerList" class="mdb-autocomplete" [(ngModel)]="stockInvoice.customerName" #customerName
-                      placeholder="اسم العميل" name="customerName" autocomplete="off"
-                      (change)="customerNameChanged(stockInvoiceForm)" [required]="invoiceType === 'customerInvoice'">
-                    <mat-error *ngIf="!inputValid.customerName.cond">
-                      {{inputValid.customerName.msg}}
-                    </mat-error>
-                    <datalist id="customerList">
-                      <option *ngFor="let customer of filteredCustomer" value="{{customer.customerName}}">
-                      </option>
-                    </datalist>
-                  </mat-form-field>
-
-                  <mat-form-field *ngIf="_router.url != '/CaherReceipt' && invoiceType == 'stockTrance'">
-                    <mat-select placeholder="نقل الى مخزن" [required]="invoiceType == 'stockTrance'" #transactionType
-                      name="sndStockName" [(ngModel)]="stockInvoice.sndStockName"
-                      (ngModelChange)="stockNameChanged(stockInvoice.sndStockName)">
-                      <mat-option *ngFor="let stock of stocksList" [value]="stock.stockName">
-                        {{stock.stockName}}</mat-option>
-                    </mat-select>
-
-                  </mat-form-field>
-                </td>
-
-                <td>
-                  <mat-form-field>
-                    <input matInput name="notes" [(ngModel)]="stockInvoice.notes" placeholder="ملاحظات">
-                  </mat-form-field>
-                </td>
-
-              </tr>
-
-            </table>
-          </div>
-          <div class="col-lg-2 col-md-hide">
-            <!-- just for space in col-lg -->
-          </div>
-          <div class="col-md-9 col-lg-4 printX">
-            <table class="fullWidth fullHeight">
-              <tr style="height: 70%;">
-                <td class="textPrimary textBold pl-3" style="font-size: 1rem; text-align: left;">
-                  {{invoiceCond}}
-                </td>
-                <td class="textBold text-center infoCard boxShadow"
-                  [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'"
-                  style="font-size: 1.15rem;width: 50%;">
-                  {{stockInvoice.invoiceTotal | number:'1.0-2'}}
-                </td>
-
-              </tr>
-              <tr>
-                <td style="text-align: left;" class="pl-3">
-                  <mat-slide-toggle name="checkedStatue" [(ngModel)]="checkedStatue" color="warn" class="my-auto"
-                    (ngModelChange)="checkStatu()">
-                  </mat-slide-toggle>
-                </td>
-                <td class="pt-4">
-                  <mat-form-field>
-                    <input matInput type="text" [disabled]="!checkedStatue" placeholder="ملحوظة لبيانات لم تكتمل"
-                      name="uncompleted" [(ngModel)]="stockInvoice.uncompleted">
-                  </mat-form-field>
-                </td>
-              </tr>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
 
-      </div>
+        <div class="panel-body panel-flex-table standTable mt-3 printX">
+          <table class="flex-table table">
+            <tbody>
+              <tr class="noHover" style="border-bottom: none;">
+                <td style="flex: .25;" (click)="addRow()">
+                  <button type="button" mat-stroked-button color="accent">+</button>
+                </td>
+                <td style="flex: 2;"></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <div class="form-inline secondaryBadge borderLsecondary">
+                    <div class="px-2 textPrimary">ق.مضافة %</div>
+                    <input type="number" name="addtaxes" class="form-control my-1 ml-1 textPrimary" style="width: 80px;"
+                      [(ngModel)]="stockInvoice.addtaxes" (ngModelChange)="calcTaxes()" id="addtaxes1"
+                      (click)="selectText('addtaxes',1)">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="printThis">
+          <table>
+            <tr *ngIf="stockInvoice.addtaxes">
+              <th class="py-2 px-3 tdBorder_left">اجمالى</th>
+              <td class="py-2 px-3">{{totalBFTaxes}}</td>
+            </tr>
+            <tr *ngIf="stockInvoice.addtaxes">
+              <th class="py-2 px-3 tdBorder_left">قيمة مضافة {{stockInvoice.addtaxes}} %</th>
+              <td class="py-2 px-3">{{taxesVal}}</td>
+            </tr>
 
-      <div class="panel-body panel-flex-table standTable inpTable mt-3">
-        <table class="flex-table table invoiceTable"
-          [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'theadBorderDanger' : 'theadBorderPrimary'">
-          <thead class="textPrimary">
+            <tr *ngIf="discoundVal">
+              <th class="py-2 px-3 textDanger tdBorder_left">خصم أ.ت.ص</th>
+              <td class="py-2 px-3 textDanger">{{discoundVal}}</td>
+            </tr>
             <tr>
-              <th class="thCenter" style="flex: .25;">م</th>
-              <th style="flex: 2;">اسم الصنف</th>
-              <th style="flex: .75;">
-                <i class="fa fa-stop textSecondary"></i>
-                {{stockInvoice.truckCapacity < 2 ? 'الكمية' : 'عدد النقلات' }} </th>
-              <th style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
-                <i class="fa fa-th-large textSecondary"></i>
-                الحمولة
-              </th>
-              <th>
-                <i class="fa fa-th textSecondary"></i>
-                اجمالى عدد
-              </th>
-              <th>
-                {{stockInvoice.truckCapacity < 2 ? 'السعر' : 'سعر المتر' }} </th>
-              <th [class.d-none]="stockInvoice.truckCapacity  < 2">
-                سعر النقلة
-              </th>
-              <th *ngIf="showDiscound" style="flex: .35;" class="printX">خصم %</th>
-              <th class="thCenter textBold">اجمالى</th>
-              <th class="printX">ملاحظات</th>
+              <th class="py-2 px-3 tdborder_top_primary tdBorder_left">اجمالى الفاتورة</th>
+              <td class="py-2 px-3 tdborder_top_primary">{{stockInvoice.invoiceTotal | number:'1.0-2'}}</td>
             </tr>
-          </thead>
-          <tbody class="tableBody inpTableBody" style="overflow-x: hidden !important;">
-            <tr *ngFor="let inpt of stockTransaction; let i = index">
-
-              <td style="flex: .25;" class="text-center">
-                <div class="pt-2">{{i + 1}}</div>
-              </td>
-
-              <td style="flex: 2;" class="tdBorder_left">
-                <input #product="ngModel" id="product{{i}}" type="search" class="form-control productInpDom"
-                  name="product{{i}}" id="product{{i}}" (click)="selectText('product',i)"
-                  [(ngModel)]='inpt.info.product' (change)="productChanged(i)" autocomplete="off"
-                  [attr.list]="inpt.info.product && product.dirty ? dataList[i] : ''">
-                <datalist id="datalistproducts{{i}}">
-                  <option *ngFor="let product of productsList" value="{{product.productName}}">
-                  </option>
-                </datalist>
-                <div *ngIf="!inputValid.product[i].cond" class="alert-danger infoCard" style="width:fit-content;">
-                  {{inputValid.product[i].msg}}</div>
-              </td>
-
-              <td style="flex: .75;">
-                <input [disabled]="!stockInvoice.customerName" type="number" class="form-control textBold textDark"
-                  name="loadTimes{{i}}" id="loadTimes{{i}}" [(ngModel)]="productQtys[i].loadTimes"
-                  (ngModelChange)="calcQty(i)" (click)="selectText('loadTimes',i)">
-              </td>
-
-              <td style="flex: .75;" [class.d-none]="stockInvoice.truckCapacity  < 2">
-                <input disabled type="number" class="form-control lightBg" name="truckCapacity{{i}}"
-                  id="truckCapacity{{i}}" (click)="selectText('truckCapacity',i)"
-                  [(ngModel)]="stockInvoice.truckCapacity" (ngModelChange)="calcQty(i)">
-              </td>
-
-              <td class="tdBorder_left">
-                <input type="number" class="form-control textBolder textSecondary" name="qty{{i}}" id="qty{{i}}"
-                  (click)="selectText('qty',i)" [(ngModel)]="inpt.info.qty"
-                  [class.lightBg]="!inpt.info.product">
-              </td>
-
-              <!-- price -->
-              <td class="tdBorder_left">
-                <input type="number" class="form-control" name="price{{i}}" id="price{{i}}"
-                  (click)="selectText('price',i)" [(ngModel)]="inpt.info.price" [disabled]="!inpt.info.product"
-                  [class.lightBg]="!inpt.info.product" (ngModelChange)="calcTotal(i)">
-              </td>
-
-              <td [class.d-none]="stockInvoice.truckCapacity < 2">
-                <input type="number" class="form-control textBold textDark" name="backetPrice{{i}}"
-                  id="backetPrice{{i}}" (click)="selectText('backetPrice',i)" [(ngModel)]="productQtys[i].payLoadPrice"
-                  [disabled]="!inpt.info.product" (ngModelChange)="packetPriceChange(i)">
-              </td>
-
-              <td *ngIf="showDiscound" style="flex: .35;" class="printX">
-                <input type="number" class="form-control textDanger" name="discound{{i}}"
-                  [(ngModel)]="inpt.info.discound" [disabled]="!inpt.info.product" [class.lightBg]="!inpt.info.product"
-                  (ngModelChange)="calcTotal(i)" id="discound{{i}}" (click)="selectText('discound',i)">
-              </td>
-
-              <td class="textBold pt-2 textPrimary printX">{{inpt.info.total | number:'1.0-2'}}</td>
-
-              <td class="textBold pt-2 textPrimary printThis">{{(inpt.info.qty * inpt.info.price) | number:'1.0-2'}}</td>
-
-              <td class="printX">
-                <input type="text" class="form-control " name="notes{{i}}" id="notes{{i}}"
-                  (click)="selectText('notes',i)" [(ngModel)]='inpt.info.notes'>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="panel-body panel-flex-table standTable mt-3 printX">
-        <table class="flex-table table">
-          <tbody>
-            <tr class="noHover" style="border-bottom: none;">
-              <td style="flex: .25;" (click)="addRow()">
-                <button type="button" mat-stroked-button color="accent">+</button>
-              </td>
-              <td style="flex: 2;"></td>
-              <td></td>
-              <td></td>
-              <td>
-                <div class="form-inline secondaryBadge borderLsecondary">
-                  <div class="px-2 textPrimary">ق.مضافة %</div>
-                  <input type="number" name="addtaxes" class="form-control my-1 ml-1 textPrimary" style="width: 80px;"
-                    [(ngModel)]="stockInvoice.addtaxes" (ngModelChange)="calcTaxes()" id="addtaxes1"
-                    (click)="selectText('addtaxes',1)">
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="printThis">
-        <table>
-          <tr *ngIf="stockInvoice.addtaxes">
-            <th class="py-2 px-3 tdBorder_left">اجمالى</th>
-            <td class="py-2 px-3">{{totalBFTaxes}}</td>
-          </tr>
-          <tr *ngIf="stockInvoice.addtaxes">
-            <th class="py-2 px-3 tdBorder_left">قيمة مضافة {{stockInvoice.addtaxes}} %</th>
-            <td class="py-2 px-3">{{taxesVal}}</td>
-          </tr>
-
-          <tr *ngIf="discoundVal">
-            <th class="py-2 px-3 textDanger tdBorder_left">خصم أ.ت.ص</th>
-            <td class="py-2 px-3 textDanger">{{discoundVal}}</td>
-          </tr>
-          <tr>
-            <th class="py-2 px-3 tdborder_top_primary tdBorder_left">اجمالى الفاتورة</th>
-            <td class="py-2 px-3 tdborder_top_primary">{{stockInvoice.invoiceTotal | number:'1.0-2'}}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div class="form-inline">
-          <button
-            [disabled]="dateExpires || _glopal.loading || (!stockInvoice.customerName && invoiceType === 'customerInvoice') || (!stockInvoice.sndStockName && invoiceType === 'stockTrance') || stockInvoice.customerId == 100"
-            mat-raised-button type="submit" color="primary">{{submitBtn}}</button>
-          <div *ngIf="!inputValid.formValid" class="infoCard dangerBadge borderLdanger mr-3 fullHeight">
-            <span class="pt-4">يجب مراجعة اخطاء الادخال قبل التسجيل</span>
-          </div>
+          </table>
         </div>
-        <div class="printX">
+        <div class="d-flex justify-content-between">
           <div class="form-inline">
-            <h3 class="my-auto ml-3 py-1 infoCard lightBg" [class.borderRight-alert]="stockInvoice.isUpdated"
-              [class.textBtn]="_auth?.check.prem && stockInvoice.isUpdated"
-              [class.borderRight-alert]="stockInvoice.isUpdated" (click)="toEditReport()">
-              مُدخل البيانات | <span class="textPrimary">{{stockInvoice.madeBy}}</span>
-            </h3>
-            <button *ngIf="_router.url != '/CaherReceipt'" type="button" mat-raised-button color="accent"
-              [matMenuTriggerFor]="more">
-              <i class="fa fa-chevron-down my-auto"></i>
-              المزيد
-            </button>
-            <mat-menu #more="matMenu">
-              <button type="button" mat-menu-item (click)="moreOptions('discound')">{{moreMenu.discound}}</button>
-            </mat-menu>
-            <button *ngIf="_router.url != '/CaherReceipt' && id"
-              [disabled]="!cantDel || _glopal.loading || stockInvoice.customerId == 100" type="button"
-              (click)="openDelDialog()" mat-stroked-button color="warn" class="mr-1">حذف</button>
+            <button
+              [disabled]="dateExpires || _glopal.loading || (!stockInvoice.customerName && invoiceType === 'customerInvoice') || (!stockInvoice.sndStockName && invoiceType === 'stockTrance') || stockInvoice.customerId == 100"
+              mat-raised-button type="submit" color="primary">{{submitBtn}}</button>
+            <div *ngIf="!inputValid.formValid" class="infoCard dangerBadge borderLdanger mr-3 fullHeight">
+              <span class="pt-4">يجب مراجعة اخطاء الادخال قبل التسجيل</span>
+            </div>
+          </div>
+          <div class="printX">
+            <div class="form-inline">
+              <h3 class="my-auto ml-3 py-1 infoCard lightBg" [class.borderRight-alert]="stockInvoice.isUpdated"
+                [class.textBtn]="_auth?.check.prem && stockInvoice.isUpdated"
+                [class.borderRight-alert]="stockInvoice.isUpdated" (click)="toEditReport()">
+                مُدخل البيانات | <span class="textPrimary">{{stockInvoice.madeBy}}</span>
+              </h3>
+              <button mat-stroked-button type="button" color="accent" class="mx-1" (click)="printDocument()"><i
+                  class="fa fa-print"></i></button>
+              <button *ngIf="_router.url != '/CaherReceipt'" type="button" mat-raised-button color="accent"
+                [matMenuTriggerFor]="more">
+                <i class="fa fa-chevron-down my-auto"></i>
+                المزيد
+              </button>
+              <mat-menu #more="matMenu">
+                <button type="button" mat-menu-item (click)="moreOptions('discound')">{{moreMenu.discound}}</button>
+              </mat-menu>
+              <button *ngIf="_router.url != '/CaherReceipt' && id"
+                [disabled]="!cantDel || _glopal.loading || stockInvoice.customerId == 100" type="button"
+                (click)="openDelDialog()" mat-stroked-button color="warn" class="mr-1">حذف</button>
+            </div>
           </div>
         </div>
+      </form>
+
+    </mat-card-content>
+    <!-- <mat-card-actions>
+            <button mat-button>actionOne</button>
+            <button mat-button>actionTwo</button>
+      </mat-card-actions> -->
+  </mat-card>
+
+
+
+  <mat-card class="mt-3 mb-5 detailTable">
+    <mat-card-header class="d-flex justify-content-between">
+      <!-- <div mat-card-avatar>avatar</div> -->
+      <mat-card-title>بيان بتفاصيل الاصناف</mat-card-title>
+      <mat-card-subtitle>يتم عرض تفاصيل الاصناف المدون لها ملاحظات</mat-card-subtitle>
+      <div>
+
       </div>
-    </form>
-  </div>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="w-100">
+        <thead>
+          <tr>
+            <th class="tdborder_bottom_primary">الصنف</th>
+            <td class="tdborder_bottom_primary">الكمية</td>
+            <td class="tdborder_bottom_primary">ملاحظات</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detail of stockTransaction" [class.d-none]="!detail.info.notes">
+            <th>{{detail.info.product}}</th>
+            <td>{{detail.info.qty}}</td>
+            <td>{{detail.info.notes}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+
 </div>

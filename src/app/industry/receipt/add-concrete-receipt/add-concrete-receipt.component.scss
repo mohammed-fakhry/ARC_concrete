@@ -3,7 +3,8 @@ mat-form-field {
 }
 
 @media print {
-  .box {
+  mat-card {
     page-break-after: always;
   }
 }
+

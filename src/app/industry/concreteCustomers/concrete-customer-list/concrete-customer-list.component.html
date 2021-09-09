@@ -2,57 +2,68 @@
   <div class="row">
     <div class="col-lg-7 col-md-12">
       <div class="box">
+
+        <mat-card class="borderLsecondary">
+          <mat-card-header class="d-flex justify-content-between">
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title>قائمة عملاء الخرسانة</mat-card-title>
+            <!-- <mat-card-subtitle>sub-header</mat-card-subtitle> -->
+            <div class="form-inline">
+              <!-- <button mat-button color="accent" routerLink="/AddConcreteCustomer">اضافة عميل</button> -->
+
+              <a mat-button color="accent" routerLink="/AddConcreteCustomer" matTooltipPosition="above"
+                matTooltip="اضافة عميل">
+                <i class="fa fa-plus fa-lg pt-1 textBold"></i>
+              </a>
+              <mat-form-field class="searchForm" style="width: 500px;">
+                <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
+              </mat-form-field>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- table -->
+            <div class="example-container">
+              <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
+
+                <ng-container matColumnDef="fullName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم العميل</th>
+                  <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
+                    routerLink="/ConcreteCustomerInformation/{{row.id}}">
+                    {{row.fullName}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="currentVal">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>الرصيد الحالى</th>
+                  <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentVal < 0">
+                    {{row.currentVal | number: '1.0-2'}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef class="printX text-center"
+                    style="text-align: right; font-size: medium;">
+                    تعديل
+                  </th>
+                  <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue" *matCellDef="let row"
+                    routerLink="/UpdateConcreteCustomer/{{row.id}}"><i class="fa fa-pencil underLine"></i></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+                </tr>
+              </table>
+            </div>
+            <!-- paginator -->
+            <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
+              [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
+            </mat-paginator>
+          </mat-card-content>
+        </mat-card>
+
         <!-- header -->
-        <div class="d-flex justify-content-between px-3">
-          <mat-form-field class="searchForm" style="width: 500px;">
-            <input matInput placeholder="بحث" name="searchTxt" [(ngModel)]='searchTxt' (ngModelChange)="search()">
-          </mat-form-field>
-          <div class="my-auto">
-            <!-- <a mat-flat-button color="accent" routerLink="/SafeReceipt" matTooltipPosition="above"
-              matTooltip="ايصال جديد">
-              <i class="fa fa-plus fa-lg pt-1 textBold"></i>
-            </a> -->
-            <button mat-stroked-button color="primary" routerLink="/AddConcreteCustomer">اضافة عميل</button>
-          </div>
-        </div>
-        <!-- table -->
-        <div class="example-container">
-          <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
 
-            <ng-container matColumnDef="fullName">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم العميل</th>
-              <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-                routerLink="/ConcreteCustomerInformation/{{row.id}}">
-                {{row.fullName}}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="currentVal">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>الرصيد الحالى</th>
-              <td mat-cell *matCellDef="let row" [class.textDanger]="row.currentVal < 0">
-                {{row.currentVal | number: '1.0-2'}}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef class="printX text-center"
-                style="text-align: right; font-size: medium;">
-                تعديل
-              </th>
-              <td mat-cell class="textBtn tBtn-dark pl-2 printX text-center textBlue" *matCellDef="let row"
-                routerLink="/UpdateConcreteCustomer/{{row.id}}"><i class="fa fa-pencil underLine"></i></td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
-            </tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
-            </tr>
-          </table>
-        </div>
-        <!-- paginator -->
-        <mat-paginator #paginator [length]="listData?.data.length" [pageIndex]="0" [pageSize]="100"
-          [pageSizeOptions]="[10, 15, 20, 50, 100, 300, 500, 1000]" class="printX">
-        </mat-paginator>
       </div>
     </div>
     <div class="col-lg-5 col-md-12 printX">

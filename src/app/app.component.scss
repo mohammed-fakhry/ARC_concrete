@@ -171,6 +171,8 @@ mat-toolbar {
 .change .bar1 {
   -webkit-transform: rotate(-45deg) translate(-9px, 6px);
   transform: rotate(-45deg) translate(-9px, 6px);
+  background-color: $dangerBg;
+  border-bottom: 1px whitesmoke solid;
 }
 
 .change .bar2 {
@@ -180,6 +182,9 @@ mat-toolbar {
 .change .bar3 {
   -webkit-transform: rotate(45deg) translate(-8px, -8px);
   transform: rotate(45deg) translate(-8px, -8px);
+  height: 3px;
+  background-color: $dangerBg;
+  // border-bottom: 1px whitesmoke solid;
 }
 
 footer {

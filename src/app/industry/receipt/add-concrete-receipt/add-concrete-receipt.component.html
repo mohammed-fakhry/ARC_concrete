@@ -1,316 +1,352 @@
 <div class="mainContainer">
   <div class="row">
     <div class="col-md-12 col-lg-7">
-      <div class="box p-4 mb-3">
-        <form (ngSubmit)="onSubmit(concreteReceiptForm)" #concreteReceiptForm="ngForm">
-          <table class="w-100">
-            <tr>
-              <td>
-                <mat-form-field class="printX">
-                  <input
-                    [disabled]="concreteUpdated || dateExpires || concreteReceipt.recordedByBon || addByBon?.date != null"
-                    matInput placeholder="التاريخ" type="datetime-local" name="date_time"
-                    [(ngModel)]="concreteReceipt.date_time">
-                </mat-form-field>
 
-                <div class="printThis">
-                  <label class="textPrimary">التاريخ</label>
-                  <div>{{concreteReceipt.date_time.replace('T', ' ')}}</div>
-                </div>
-              </td>
-              <td style="padding-top: 4px;">
-                <mat-form-field class="printX">
-                  <mat-select placeholder="المخزن" [required]="concreteReceipt.manualNum != 'مستخلص مضخة ثابتة'"
-                    #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName">
-                    <mat-option *ngFor="let stock of stockList" [value]="stock.stockName">
-                      {{stock.stockName}}
-                    </mat-option>
-                  </mat-select>
+      <mat-card class="p-4 mb-3">
+        <mat-card-header class="d-flex justify-content-between">
+          <!-- <div mat-card-avatar>avatar</div> -->
+          <mat-card-title class="printX">فاتورة خرسانة</mat-card-title>
+          <div>
 
-                </mat-form-field>
-              </td>
-              <td class="printX">
-                <mat-form-field>
-                  <input matInput placeholder="ملاحظات" #notes name="notes" [(ngModel)]="concreteReceipt.notes">
-                </mat-form-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <mat-form-field class="printX">
-                  <input required matInput placeholder="العميل" list="customerList" class="mdb-autocomplete"
-                    name="concreteCustomer_name" [(ngModel)]="concreteReceipt.concreteCustomer_name"
-                    (change)="customerNameChanged(concreteReceiptForm)"
-                    [disabled]="concreteReceipt.recordedByBon || addByBon?.date != null">
+          </div>
+        </mat-card-header>
+        <mat-card-content>
 
-                  <mat-error>
-                    هذا الاسم غير مسجل بقاعدة البيانات
-                  </mat-error>
-
-                  <datalist id="customerList">
-                    <option *ngFor="let customer of customerList" value="{{customer.fullName}}">
-                    </option>
-                  </datalist>
-                </mat-form-field>
-
-                <div class="printThis">
-                  <label class="textPrimary">العميل</label>
-                  <div>{{concreteReceipt.concreteCustomer_name}}</div>
-                </div>
-              </td>
-
-              <td>
-                <mat-form-field class="printX">
-                  <input matInput placeholder="اسم المشروع" name="customerProject"
-                    [(ngModel)]="concreteReceipt.customerProject">
-                </mat-form-field>
-
-                <div class="printThis">
-                  <label class="textPrimary">اسم المشروع</label>
-                  <div>{{concreteReceipt.customerProject}}</div>
-                </div>
-              </td>
-
-              <td>
-                <mat-form-field class="printX">
-                  <input [disabled]="concreteReceipt.manualNum == 'مستخلص مضخة ثابتة'" matInput
-                    placeholder="رقم الفاتورة" name="manualNum" #manualNum [(ngModel)]="concreteReceipt.manualNum"
-                    (change)="manualNumChanged(concreteReceiptForm)">
-
-                  <mat-error>
-                    هذا الرقم مسجل بالفعل
-                  </mat-error>
-                </mat-form-field>
-
-                <div class="printThis">
-                  <label class="textPrimary">رقم الفاتورة</label>
-                  <div>{{concreteReceipt.manualNum}}</div>
-                </div>
-              </td>
-            </tr>
-
-          </table>
-
-          <div class="panel-body panel-flex-table standTable inpTable mt-3">
-            <table class="flex-table table invoiceTable theadBorderPrimary">
-              <thead>
-                <tr>
-                  <th class="thCenter" style="flex: .25;">م</th>
-                  <th style="flex: 3">المنتج</th>
-                  <th>الكمية</th>
-                  <th>السعر</th>
-                  <th class="printX">ضرائب أ.ت.ص</th>
-                  <th class="thCenter printX">اجمالى</th>
-                  <th class="thCenter printThis d-none">اجمالى</th>
-                </tr>
-              </thead>
-              <tbody class="tableBody inpTableBody">
-                <tr *ngFor="let product of concreteReceipt.receiptDetails; let i = index" class="noHover"
-                  matTooltip="لا يمكن التعديل بعد تغيير مكونات الخرسانة" matTooltipPosition="below"
-                  matTooltipClass="dangerBg"
-                  [class.dangerBadge]="product.concreteInfo.lastUpdated > concreteReceipt.date_time"
-                  [matTooltipDisabled]="product.concreteInfo.lastUpdated < concreteReceipt.date_time">
-                  <td style="flex: .25;" class="text-center">
-                    <div class="pt-2">{{i + 1}}</div>
-                  </td>
-                  <td style="flex: 3">
-                    <!-- -->
+          <form (ngSubmit)="onSubmit(concreteReceiptForm)" #concreteReceiptForm="ngForm">
+            <table class="w-100">
+              <tr>
+                <td>
+                  <mat-form-field class="printX">
                     <input
-                      [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time || concreteReceipt.recordedByBon || addByBon?.date != null"
-                      type="text" class="form-control" name="productName{{i}}" [(ngModel)]="product.concreteName"
-                      #productName="ngModel" autocomplete="off" (change)="productNameChanged(i)" id="productName{{i}}"
-                      (click)="_mainService.selectText('productName',i)"
-                      [attr.list]="product.concreteName && productName.dirty ? dataList[i] : ''">
+                      [disabled]="concreteUpdated || dateExpires || concreteReceipt.recordedByBon || addByBon?.date != null"
+                      matInput placeholder="التاريخ" type="datetime-local" name="date_time"
+                      [(ngModel)]="concreteReceipt.date_time">
+                  </mat-form-field>
 
-                    <datalist id="datalistproducts{{i}}">
-                      <option *ngFor="let product of concreteList" value="{{product.name}}">
+                  <div class="printThis">
+                    <label class="textPrimary">التاريخ</label>
+                    <div>{{concreteReceipt.date_time.replace('T', ' ')}}</div>
+                  </div>
+                </td>
+                <td style="padding-top: 4px;">
+                  <mat-form-field class="printX">
+                    <mat-select placeholder="المخزن" [required]="concreteReceipt.manualNum != 'مستخلص مضخة ثابتة'"
+                      #transactionType name="stockName" [(ngModel)]="concreteReceipt.stockTransaction.stockName">
+                      <mat-option *ngFor="let stock of stockList" [value]="stock.stockName">
+                        {{stock.stockName}}
+                      </mat-option>
+                    </mat-select>
+
+                  </mat-form-field>
+                </td>
+                <td class="printX">
+                  <mat-form-field>
+                    <input matInput placeholder="ملاحظات" #notes name="notes" [(ngModel)]="concreteReceipt.notes">
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <mat-form-field class="printX">
+                    <input required matInput placeholder="العميل" list="customerList" class="mdb-autocomplete"
+                      name="concreteCustomer_name" [(ngModel)]="concreteReceipt.concreteCustomer_name"
+                      (change)="customerNameChanged(concreteReceiptForm)"
+                      [disabled]="concreteReceipt.recordedByBon || addByBon?.date != null">
+
+                    <mat-error>
+                      هذا الاسم غير مسجل بقاعدة البيانات
+                    </mat-error>
+
+                    <datalist id="customerList">
+                      <option *ngFor="let customer of customerList" value="{{customer.fullName}}">
                       </option>
                     </datalist>
+                  </mat-form-field>
 
-                    <div *ngIf="!formValid.concretes[i]?.concreteName" class="alert-danger infoCard"
-                      style="width:fit-content;">
-                      برجاء ادخال اسم منتج صحيح
-                    </div>
+                  <div class="printThis">
+                    <label class="textPrimary">العميل</label>
+                    <div>{{concreteReceipt.concreteCustomer_name}}</div>
+                  </div>
+                </td>
+
+                <td>
+                  <mat-form-field class="printX">
+                    <input matInput placeholder="اسم المشروع" name="customerProject"
+                      [(ngModel)]="concreteReceipt.customerProject">
+                  </mat-form-field>
+
+                  <div class="printThis">
+                    <label class="textPrimary">اسم المشروع</label>
+                    <div>{{concreteReceipt.customerProject}}</div>
+                  </div>
+                </td>
+
+                <td>
+                  <mat-form-field class="printX">
+                    <input [disabled]="concreteReceipt.manualNum == 'مستخلص مضخة ثابتة'" matInput
+                      placeholder="رقم الفاتورة" name="manualNum" #manualNum [(ngModel)]="concreteReceipt.manualNum"
+                      (change)="manualNumChanged(concreteReceiptForm)">
+
+                    <mat-error>
+                      هذا الرقم مسجل بالفعل
+                    </mat-error>
+                  </mat-form-field>
+
+                  <div class="printThis">
+                    <label class="textPrimary">رقم الفاتورة</label>
+                    <div>{{concreteReceipt.manualNum}}</div>
+                  </div>
+                </td>
+              </tr>
+
+            </table>
+
+            <div class="panel-body panel-flex-table standTable inpTable mt-3">
+              <table class="flex-table table invoiceTable theadBorderPrimary">
+                <thead>
+                  <tr>
+                    <th class="thCenter" style="flex: .25;">م</th>
+                    <th style="flex: 3">المنتج</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th class="printX">ضرائب أ.ت.ص</th>
+                    <th class="thCenter printX">اجمالى</th>
+                    <th class="thCenter printThis d-none">اجمالى</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody inpTableBody">
+                  <tr *ngFor="let product of concreteReceipt.receiptDetails; let i = index" class="noHover"
+                    matTooltip="لا يمكن التعديل بعد تغيير مكونات الخرسانة" matTooltipPosition="below"
+                    matTooltipClass="dangerBg"
+                    [class.dangerBadge]="product.concreteInfo.lastUpdated > concreteReceipt.date_time"
+                    [matTooltipDisabled]="product.concreteInfo.lastUpdated < concreteReceipt.date_time">
+                    <td style="flex: .25;" class="text-center">
+                      <div class="pt-2">{{i + 1}}</div>
+                    </td>
+                    <td style="flex: 3">
+                      <!-- -->
+                      <input
+                        [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time || concreteReceipt.recordedByBon || addByBon?.date != null"
+                        type="text" class="form-control" name="productName{{i}}" [(ngModel)]="product.concreteName"
+                        #productName="ngModel" autocomplete="off" (change)="productNameChanged(i)" id="productName{{i}}"
+                        (click)="_mainService.selectText('productName',i)"
+                        [attr.list]="product.concreteName && productName.dirty ? dataList[i] : ''">
+
+                      <datalist id="datalistproducts{{i}}">
+                        <option *ngFor="let product of concreteList" value="{{product.name}}">
+                        </option>
+                      </datalist>
+
+                      <div *ngIf="!formValid.concretes[i]?.concreteName" class="alert-danger infoCard"
+                        style="width:fit-content;">
+                        برجاء ادخال اسم منتج صحيح
+                      </div>
+
+                      <input *ngIf="product.concreteName.includes('استعمال مضخة')" type="text"
+                        class="form-control printX" disabled value="{{trucks[i]?.customerName}}">
+                    </td>
+                    <td>
+                      <input
+                        [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time || concreteReceipt.recordedByBon || addByBon?.date != null"
+                        type="number" class="form-control" name="materialQty{{i}}" [(ngModel)]="product.concreteQty"
+                        id="materialQty{{i}}" (click)="_mainService.selectText('materialQty',i)"
+                        (ngModelChange)="calcMaterial(i)">
+
+                      <input *ngIf="product.concreteName.includes('استعمال مضخة')" type="text"
+                        class="form-control printX" disabled value="تكلفة الضخ">
+                    </td>
+
+                    <td>
+                      <input [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time" type="number"
+                        class="form-control" name="concretePrice{{i}}" [(ngModel)]="product.concretePrice"
+                        id="concretePrice{{i}}" (click)="_mainService.selectText('concretePrice',i)"
+                        (ngModelChange)="calcTotal(i)">
+
+                      <input *ngIf="product.concreteName.includes('استعمال مضخة')" type="number"
+                        class="form-control printX" name="pumpCost{{i}}" [(ngModel)]="product.pumpCost"
+                        id="pumpCost{{i}}" (click)="_mainService.selectText('pumpCost',i)"
+                        (ngModelChange)="calcTotal(i)">
+                    </td>
+
+                    <td class="printX">
+                      <input [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time" type="number"
+                        class="form-control" name="discound{{i}}" id="discound{{i}}"
+                        (click)="_mainService.selectText('discound',i)" [(ngModel)]="product.discound"
+                        (ngModelChange)="calcTotal(i)">
+                    </td>
+
+                    <td class="printX">
+                      <div class="textPrimary textBold pt-2">{{product.total | number:'1.0-2'}}</div>
+                    </td>
+
+                    <td class="printThis d-none">
+                      <div class="textPrimary textBold pt-2">{{product.concretePrice * product.concreteQty |
+                        number:'1.0-2'}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <button [disabled]="concreteReceipt.recordedByBon || addByBon?.date != null" mat-stroked-button
+                type="button" (click)="addRow()">+</button>
+
+              <mat-divider class="my-3"></mat-divider>
+            </div>
+
+            <!-- <div class="my-4">
+
+            </div> -->
+
+            <div class="d-flex justify-content-between mt-4">
+              <div>
+                <!-- <div [class.d-none]="totalInAr == ''" class="darkBadge borderLdark py-2 px-3 mb-2 printX">
+                    {{totalInAr}} جنيه مصرى لا غير
+                  </div> -->
+
+                <textarea [class.d-none]="concreteReceipt.totalInAr == ''" type="text" class="form-control printX"
+                  name="totalInAr" [(ngModel)]="concreteReceipt.totalInAr" cols="30" rows="2"></textarea>
+                <!-- <input [class.d-none]="totalInAr == ''" type="text" class="form-control printX" name="totalInAr"
+                    [(ngModel)]="totalInAr"> -->
+
+                <div class="form-inline my-2 secondaryBadge printX" style="width: fit-content;">
+
+                  <div class="px-2 textPrimary">ق.مضافة %</div>
+
+                  <input type="number" name="totalDiscound" class="form-control my-1 ml-1 textPrimary"
+                    style="width: 60px;" [(ngModel)]="concreteReceipt.totalDiscound" id="totalDiscound1"
+                    (click)="_mainService.selectText('totalDiscound',1)" (ngModelChange)="calcTotalDiscound()">
+
+                  <div>
+                    <button [disabled]="id || addByBon?.date != null" mat-flat-button color="accent"
+                      [matMenuTriggerFor]="menu" type="button">
+                      {{concreteReceipt.concreteReceiptType}}
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="changeConcreteReceiptType('فاتورة خرسانة')">فاتورة
+                        خرسانة</button>
+                      <button mat-menu-item (click)="changeConcreteReceiptType('مستخلص مضخة ثابتة')">مستخلص مضخة
+                        ثابتة</button>
+                    </mat-menu>
+                  </div>
+
+                </div>
+
+                <div class="form-inline printX mt-3">
+                  <button mat-flat-button color="primary"
+                    [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires" type="submit">
+                    {{id ? 'تعديل' : 'تسجيل'}}
+                  </button>
+
+                  <button *ngIf="id && !concreteReceipt.recordedByBon" mat-stroked-button color="warn" type="button"
+                    class="mr-2" (click)="openDelDialog()">حذف</button>
+
+                  <div class="infoCard dangerBadge borderLdanger printX py-2 mr-2 textSmall"
+                    *ngIf="concreteReceipt.recordedByBon">
+                    تم تسجيل هذه الفاتورة بترحيل من بونات الخرسانة
+                  </div>
+
+                </div>
+              </div>
+              <div>
+                <table>
+
+                  <tr style="border-bottom: solid black 2px;">
+                    <th class="p-2">اجمالى المبيعات</th>
+                    <td class="p-2 tdBorder_right textBold">{{mainTotal | number: '1.0-2'}}</td>
+                  </tr>
+
+                  <tr [class.d-none]="concreteReceipt.addTaxesVal == 0">
+                    <th class="p-2">اجمالى قيمة مضافة</th>
+                    <td class="p-2 tdBorder_right">{{concreteReceipt.addTaxesVal | number: '1.0-2'}}</td>
+                  </tr>
+
+                  <tr *ngFor="let disc of discoundsArry " [class.d-none]="disc.val == 0"
+                    class="dangerBadge borderLdanger">
+                    <th class="p-2">{{disc.description}}</th>
+                    <td class="p-2 tdBorder_right">{{disc.val | number: '1.0-2'}}</td>
+                  </tr>
+
+                  <tr class="darkBadge borderLdark textBold" style="border-top: solid #00238d 2px;">
+                    <th class="p-2">صافى الفاتورة</th>
+                    <td class="p-2 tdBorder_right">{{concreteReceipt.total | number: '1.0-2'}}</td>
+                  </tr>
+                </table>
+
+              </div>
+            </div>
+          </form>
+
+          <div class="printThis mt-3">
+            <div class="py-2 border text-center">
+              <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
+                {{concreteReceipt.totalInAr}}
+              </div>
+            </div>
+            <mat-divider class="my-3"></mat-divider>
+            <div class="row mt-5">
+              <div class="col text-center">
+                اعداد
+              </div>
+
+              <div class="col text-center">
+                المراجعة
+              </div>
+
+              <div class="col text-center">
+                يعتمد
+              </div>
+            </div>
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
 
 
-                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="text" class="form-control printX"
-                      disabled value="{{trucks[i]?.customerName}}">
-                  </td>
-                  <td>
-                    <input
-                      [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time || concreteReceipt.recordedByBon || addByBon?.date != null"
-                      type="number" class="form-control" name="materialQty{{i}}" [(ngModel)]="product.concreteQty"
-                      id="materialQty{{i}}" (click)="_mainService.selectText('materialQty',i)"
-                      (ngModelChange)="calcMaterial(i)">
 
-                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="text" class="form-control printX"
-                      disabled value="تكلفة الضخ">
-                  </td>
 
-                  <td>
-                    <input [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time" type="number"
-                      class="form-control" name="concretePrice{{i}}" [(ngModel)]="product.concretePrice"
-                      id="concretePrice{{i}}" (click)="_mainService.selectText('concretePrice',i)"
-                      (ngModelChange)="calcTotal(i)">
 
-                    <input *ngIf="product.concreteName.includes('استعمال مضخه')" type="number"
-                      class="form-control printX" name="pumpCost{{i}}" [(ngModel)]="product.pumpCost" id="pumpCost{{i}}"
-                      (click)="_mainService.selectText('pumpCost',i)" (ngModelChange)="calcTotal(i)">
-                  </td>
 
-                  <td class="printX">
-                    <input [disabled]="product.concreteInfo.lastUpdated > concreteReceipt.date_time" type="number"
-                      class="form-control" name="discound{{i}}" id="discound{{i}}"
-                      (click)="_mainService.selectText('discound',i)" [(ngModel)]="product.discound"
-                      (ngModelChange)="calcTotal(i)">
-                  </td>
+      <mat-card *ngIf="concreteReceipt.recordedByBon" class="my-3">
+        <mat-progress-bar mode="buffer" *ngIf="elementLoading"></mat-progress-bar>
+        <mat-card-header class="d-flex justify-content-between">
+          <!-- <div mat-card-avatar>avatar</div> -->
+          <mat-card-title>بيان تفصيلى عن الفاتورة رقم ({{concreteReceipt.manualNum}})</mat-card-title>
+          <!-- <mat-card-subtitle>sub-header</mat-card-subtitle> -->
+          <div>
 
-                  <td class="printX">
-                    <div class="textPrimary textBold pt-2">{{product.total | number:'1.0-2'}}</div>
-                  </td>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
 
-                  <td class="printThis d-none">
-                    <div class="textPrimary textBold pt-2">{{product.concretePrice * product.concreteQty |
-                      number:'1.0-2'}}</div>
-                  </td>
+          <div class="panel-body panel-flex-table standTable mt-3">
+            <table class="flex-table table table-hover theadBorderPrimary">
+              <thead class="textPrimary">
+                <tr>
+                  <th class="py-2">الجهد و المحتوى</th>
+                  <th class="py-2" style="flex: .5;">الكمية</th>
+                  <th class="py-2">العنصر</th>
+                  <th class="py-2">طريقة الصب</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr *ngFor="let element of concreteElements">
+                  <td class="py-2">{{element.concrete}}</td>
+                  <td style="flex: .5;" class="py-2">{{element.qty}}</td>
+                  <td class="py-2">{{element.element}}</td>
+                  <td class="py-2">{{element.pump}}</td>
                 </tr>
               </tbody>
             </table>
-
-            <button [disabled]="concreteReceipt.recordedByBon || addByBon?.date != null" mat-stroked-button
-              type="button" (click)="addRow()">+</button>
           </div>
 
-          <mat-divider class="my-3"></mat-divider>
+        </mat-card-content>
+        <!-- <mat-card-actions>
+                <button mat-button>actionOne</button>
+                <button mat-button>actionTwo</button>
+          </mat-card-actions> -->
+      </mat-card>
 
-          <div class="d-flex justify-content-between">
-            <div>
-              <!-- <div [class.d-none]="totalInAr == ''" class="darkBadge borderLdark py-2 px-3 mb-2 printX">
-                {{totalInAr}} جنيه مصرى لا غير
-              </div> -->
-
-              <textarea [class.d-none]="concreteReceipt.totalInAr == ''" type="text" class="form-control printX"
-                name="totalInAr" [(ngModel)]="concreteReceipt.totalInAr" cols="30" rows="2"></textarea>
-              <!-- <input [class.d-none]="totalInAr == ''" type="text" class="form-control printX" name="totalInAr"
-                [(ngModel)]="totalInAr"> -->
-
-              <div class="form-inline my-2 secondaryBadge printX" style="width: fit-content;">
-
-                <div class="px-2 textPrimary">ق.مضافة %</div>
-
-                <input type="number" name="totalDiscound" class="form-control my-1 ml-1 textPrimary"
-                  style="width: 60px;" [(ngModel)]="concreteReceipt.totalDiscound" id="totalDiscound1"
-                  (click)="_mainService.selectText('totalDiscound',1)" (ngModelChange)="calcTotalDiscound()">
-
-                <div>
-                  <button [disabled]="id || addByBon?.date != null" mat-flat-button color="accent"
-                    [matMenuTriggerFor]="menu" type="button">
-                    {{concreteReceipt.concreteReceiptType}}
-                  </button>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="changeConcreteReceiptType('فاتورة خرسانة')">فاتورة خرسانة</button>
-                    <button mat-menu-item (click)="changeConcreteReceiptType('مستخلص مضخة ثابتة')">مستخلص مضخة
-                      ثابتة</button>
-                  </mat-menu>
-                </div>
-
-              </div>
-
-              <div class="form-inline printX mt-3">
-                <button mat-flat-button color="primary"
-                  [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires" type="submit">
-                  {{id ? 'تعديل' : 'تسجيل'}}
-                </button>
-
-                <button *ngIf="id && !concreteReceipt.recordedByBon" mat-stroked-button color="warn" type="button"
-                  class="mr-2" (click)="openDelDialog()">حذف</button>
-
-                <div class="infoCard dangerBadge borderLdanger printX py-2 mr-2 textSmall"
-                  *ngIf="concreteReceipt.recordedByBon">
-                  تم تسجيل هذه الفاتورة بترحيل من بونات الخرسانة
-                </div>
-
-              </div>
-            </div>
-            <div>
-              <table>
-
-                <tr style="border-bottom: solid black 2px;">
-                  <th class="p-2">اجمالى المبيعات</th>
-                  <td class="p-2 tdBorder_right textBold">{{mainTotal | number: '1.0-2'}}</td>
-                </tr>
-
-                <tr [class.d-none]="concreteReceipt.addTaxesVal == 0">
-                  <th class="p-2">اجمالى قيمة مضافة</th>
-                  <td class="p-2 tdBorder_right">{{concreteReceipt.addTaxesVal | number: '1.0-2'}}</td>
-                </tr>
-
-                <tr *ngFor="let disc of discoundsArry " [class.d-none]="disc.val == 0"
-                  class="dangerBadge borderLdanger">
-                  <th class="p-2">{{disc.description}}</th>
-                  <td class="p-2 tdBorder_right">{{disc.val | number: '1.0-2'}}</td>
-                </tr>
-
-                <tr class="darkBadge borderLdark textBold" style="border-top: solid #00238d 2px;">
-                  <th class="p-2">صافى الفاتورة</th>
-                  <td class="p-2 tdBorder_right">{{concreteReceipt.total | number: '1.0-2'}}</td>
-                </tr>
-              </table>
-
-            </div>
-          </div>
-        </form>
-
-        <div class="printThis mt-3">
-          <div class="py-2 border text-center">
-            <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
-              {{concreteReceipt.totalInAr}}
-            </div>
-          </div>
-          <mat-divider class="my-3"></mat-divider>
-          <div class="row mt-5">
-            <div class="col text-center">
-              اعداد
-            </div>
-
-            <div class="col text-center">
-              المراجعة
-            </div>
-
-            <div class="col text-center">
-              يعتمد
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="box my-3 px-2" *ngIf="concreteReceipt.recordedByBon">
-        <mat-progress-bar mode="buffer" *ngIf="elementLoading"></mat-progress-bar>
-        <div class="cardHeader py-3 mb-2">
-          بيان تفصيلى عن الفاتورة رقم ({{concreteReceipt.manualNum}})
-        </div>
-        <div class="panel-body panel-flex-table standTable">
-          <table class="flex-table table table-hover theadBorderPrimary">
-            <thead class="textPrimary">
-              <tr>
-                <th>الجهد و المحتوى</th>
-                <th style="flex: .5;">الكمية</th>
-                <th>العنصر</th>
-                <th>طريقة الصب</th>
-              </tr>
-            </thead>
-            <tbody class="tableBody">
-              <tr *ngFor="let element of concreteElements">
-                <td>{{element.concrete}}</td>
-                <td style="flex: .5;">{{element.qty}}</td>
-                <td>{{element.element}}</td>
-                <td>{{element.pump}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
     </div>
 
@@ -334,83 +370,99 @@
 
         </div>
       </div>
-      <div class="box mb-3 boxShadow stickyBox" style="overflow-x: hidden;">
-        <div class="darkBadge pt-3 px-3">
-          <div class="d-flex justify-content-between">
-            <h2>بيانات الخام</h2>
-            <h3 class="pt-1">اجمالى | {{invoiceTotal | number: '1.0-2'}}</h3>
-          </div>
-        </div>
+      <div>
+
+        <mat-card class="mb-3 stickyBox" style="overflow-x: hidden;">
+
+          <mat-card-content>
+            <div class="darkBadge pt-3 px-3">
+              <div class="d-flex justify-content-between">
+                <h2>بيانات الخام</h2>
+                <h3 class="pt-1">اجمالى | {{invoiceTotal | number: '1.0-2'}}</h3>
+              </div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable inpTable"
+              [class.d-none]="concreteReceipt.stockTransactionD.length == 0">
+              <table class="flex-table table invoiceTable theadBorderPrimary">
+                <thead>
+                  <tr>
+                    <th class="thCenter">الاسم</th>
+                    <th class="thCenter">الكمية</th>
+                    <th>تكلفة قياسية</th>
+                    <th class="thCenter">الاجمالى</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let material of concreteReceipt.stockTransactionD; let i = index">
+                    <td class="pt-3">{{material.productName}}</td>
+                    <td class="pt-3">{{material.Qty}}</td>
+                    <td>
+                      <input type="number" name="materialPrice{{i}}" class="form-control" [(ngModel)]="material.price"
+                        (ngModelChange)="calcInvoiceTotal()">
+                    </td>
+                    <td class="pt-3 textBold">{{(material.price * material.Qty) | number : '1.0-2'}}</td>
+                  </tr>
+
+                  <tr class="textBold" style="border-top: solid 1px rgba(0, 0, 0, 0.25);">
+                    <td class="pt-3">لودر</td>
+                    <td class="pt-3">{{totalConcreteQty}}</td>
+                    <td>
+                      <input type="text" value="5" class="form-control" disabled>
+                    </td>
+                    <td class="thCenter textBold pt-3">{{totalConcreteQty * 5}}</td>
+                  </tr>
+
+                  <tr class="textBold">
+                    <td class="pt-3">الخلط</td>
+                    <td class="pt-3">{{totalConcreteQty}}</td>
+                    <td>
+                      <input type="text" value="35" class="form-control" disabled>
+                    </td>
+                    <td class="thCenter textBold pt-3">{{totalConcreteQty * 35}}</td>
+                  </tr>
+
+                  <tr class="textBold">
+                    <td class="pt-3">النقل</td>
+                    <td class="pt-3">{{totalConcreteQty}}</td>
+                    <td>
+                      <input type="text" value="25" class="form-control" disabled>
+                    </td>
+                    <td class="thCenter textBold pt-3">{{totalConcreteQty * 25}}</td>
+                  </tr>
+
+                  <tr *ngFor="let pumpCost of pumpCosts" class="textBold">
+                    <td class="pt-3">{{pumpCost.name}}</td>
+                    <td class="pt-3">{{pumpCost.qty}}</td>
+                    <td>
+                      <input type="text" [value]="pumpCost.cost" class="form-control" disabled>
+                    </td>
+                    <td class="thCenter textBold pt-3" [class.textDanger]="pumpCost.totalCost < 0">{{pumpCost.totalCost
+                      |
+                      number: '1.0-3'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="width: fit-content;" class="mt-2">
+              <h3 class="mx-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteReceipt.madeBy">
+                مُدخل البيانات | <span class="textPrimary">{{concreteReceipt.madeBy}}</span>
+              </h3>
+            </div>
+          </mat-card-content>
+          <!-- <mat-card-actions>
+                <button mat-button>actionOne</button>
+                <button mat-button>actionTwo</button>
+          </mat-card-actions> -->
+        </mat-card>
+
+
 
         <!-- <mat-divider class="mb-3"></mat-divider> -->
 
-        <div class="panel-body panel-flex-table standTable inpTable"
-          [class.d-none]="concreteReceipt.stockTransactionD.length == 0">
-          <table class="flex-table table invoiceTable theadBorderPrimary">
-            <thead>
-              <tr>
-                <th class="thCenter">الاسم</th>
-                <th class="thCenter">الكمية</th>
-                <th>تكلفة قياسية</th>
-                <th class="thCenter">الاجمالى</th>
-              </tr>
-            </thead>
 
-            <tbody>
-              <tr *ngFor="let material of concreteReceipt.stockTransactionD; let i = index">
-                <td class="pt-3">{{material.productName}}</td>
-                <td class="pt-3">{{material.Qty}}</td>
-                <td>
-                  <input type="number" name="materialPrice{{i}}" class="form-control" [(ngModel)]="material.price"
-                    (ngModelChange)="calcInvoiceTotal()">
-                </td>
-                <td class="pt-3 textBold">{{(material.price * material.Qty) | number : '1.0-2'}}</td>
-              </tr>
-
-              <tr class="textBold" style="border-top: solid 1px rgba(0, 0, 0, 0.25);">
-                <td class="pt-3">لودر</td>
-                <td class="pt-3">{{totalConcreteQty}}</td>
-                <td>
-                  <input type="text" value="5" class="form-control" disabled>
-                </td>
-                <td class="thCenter textBold pt-3">{{totalConcreteQty * 5}}</td>
-              </tr>
-
-              <tr class="textBold">
-                <td class="pt-3">الخلط</td>
-                <td class="pt-3">{{totalConcreteQty}}</td>
-                <td>
-                  <input type="text" value="35" class="form-control" disabled>
-                </td>
-                <td class="thCenter textBold pt-3">{{totalConcreteQty * 35}}</td>
-              </tr>
-
-              <tr class="textBold">
-                <td class="pt-3">النقل</td>
-                <td class="pt-3">{{totalConcreteQty}}</td>
-                <td>
-                  <input type="text" value="25" class="form-control" disabled>
-                </td>
-                <td class="thCenter textBold pt-3">{{totalConcreteQty * 25}}</td>
-              </tr>
-
-              <tr *ngFor="let pumpCost of pumpCosts" class="textBold">
-                <td class="pt-3">{{pumpCost.name}}</td>
-                <td class="pt-3">{{pumpCost.qty}}</td>
-                <td>
-                  <input type="text" [value]="pumpCost.cost" class="form-control" disabled>
-                </td>
-                <td class="thCenter textBold pt-3" [class.textDanger]="pumpCost.totalCost < 0">{{pumpCost.totalCost | number: '1.0-3'}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div style="width: fit-content;" class="mt-2">
-          <h3 class="mx-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteReceipt.madeBy">
-            مُدخل البيانات | <span class="textPrimary">{{concreteReceipt.madeBy}}</span>
-          </h3>
-        </div>
       </div>
     </div>
   </div>

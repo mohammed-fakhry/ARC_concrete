@@ -252,13 +252,6 @@ export class ConcreteProfitsComponent implements OnInit {
           this._glopal.loading = false;
         }
       );
-      /* this.getAccList().then((data: OtherAcc[]) => {
-        this.otherAcc = data;
-        this.fillListData(this.mainList);
-        this.isFiltered = false;
-        this.searchDate = { from: '', to: '' };
-        this._glopal.loading = false;
-      }); */
     }
   }
 }

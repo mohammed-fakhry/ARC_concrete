@@ -92,8 +92,8 @@ export class WorkersComponent implements OnInit {
           : dateNow.getMonth() + 1;
       // 2021-07-06
 
-      dateFrom = `${dateNow.getFullYear()}-${month}-01`;
-      dateTo = `${dateNow.getFullYear()}-${month}-30`;
+      let dateFrom = `${dateNow.getFullYear()}-${month}-01`;
+      let dateTo = `${dateNow.getFullYear()}-${month}-30`;
 
       this.searchDate = { from: dateFrom, to: dateTo };
     }

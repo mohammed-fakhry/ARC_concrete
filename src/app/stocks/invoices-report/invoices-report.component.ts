@@ -156,6 +156,14 @@ export class InvoicesReportComponent implements OnInit {
     }
   }
 
+  getAllCementUses() {
+    return new Promise((res) => {
+      this._stockService
+        .getAllCementUses()
+        .subscribe((data: any[]) => res(data));
+    });
+  }
+
   productTransaction(data: any[]) {
     this.accArr = [];
 
@@ -168,6 +176,8 @@ export class InvoicesReportComponent implements OnInit {
 
     //اذن نقل اضافة
 
+    // console.log(data.length)
+
     for (let i = 0; i < data.length; i++) {
       let add =
         data[i].transactionType.includes('فاتورة شراء') ||
@@ -179,15 +189,7 @@ export class InvoicesReportComponent implements OnInit {
         data[i].transactionType.includes('اذن نقل خصم')
           ? data[i].Qty
           : 0;
-      let total = i == 0 ? add - min : add - min + this.accArr[i - 1].totalInt;
-
-      /* const mainCalc = this.calcUnits(
-        total,
-        data[i].productUnit,
-        data[i].price
-      ); */
-
-      // let totalInBacket = mainCalc.netQty;
+      let total = i == 0 ? add - min : this.accArr[i - 1].totalInt + add - min;
 
       let newData = {
         Qty: min,
@@ -198,8 +200,8 @@ export class InvoicesReportComponent implements OnInit {
         price: data[i].price,
         discound: data[i].discound,
         productId: data[i].productId,
-        /* change the productName to in qty when product transaction */
         productName: `${add}`,
+        addQty: add,
         stockName: data[i].stockName,
         stockTransactionId: data[i].stockTransactionId,
         stockTransactionDetailsId: data[i].stockTransactionDetailsId,
@@ -213,7 +215,130 @@ export class InvoicesReportComponent implements OnInit {
       this.accArr = [...this.accArr, newData];
     }
 
+    if (
+      this.url.searchFor === 'productTransaction' &&
+      this.url.invDirection == 7
+    ) {
+      this.cementReport(this.accArr);
+    }
+
     return this.accArr;
+  }
+
+  cementUses: {
+    concrete: {
+      data: {
+        concreteCustomer_id: any;
+        concreteCustomerName: string;
+        qtyIn: number;
+        qtyOut: number;
+        remain: number;
+      }[];
+      totals: {
+        supplier: { in: number; out: number };
+        nonSupplier: number;
+      };
+    };
+    outConcrete: {
+      in: number;
+      out: number;
+    };
+  } = {
+    concrete: {
+      data: [],
+      totals: { supplier: { in: 0, out: 0 }, nonSupplier: 0 },
+    },
+    outConcrete: { in: 0, out: 0 },
+  };
+
+  cementReport(accArr: any[]) {
+    this.cementUses = {
+      concrete: {
+        data: [],
+        totals: { supplier: { in: 0, out: 0 }, nonSupplier: 0 },
+      },
+      outConcrete: { in: 0, out: 0 },
+    };
+
+    this.getAllCementUses().then((data: any) => {
+      const uniqeData = [
+        ...new Set(data.map((d: any) => d.concreteCustomer_id)),
+      ];
+
+      for (let i = 0; i < uniqeData.length; i++) {
+        const concreteCustomer = data.filter(
+          (d: any) => d.concreteCustomer_id === uniqeData[i]
+        );
+        const qtyIn =
+          concreteCustomer.find((invoice: any) => invoice.transactionType == 1)
+            ?.qty ?? 0;
+        const qtyOut =
+          concreteCustomer.find((invoice: any) => invoice.transactionType == 2)
+            ?.qty ?? 0;
+
+        let row = {
+          concreteCustomer_id: uniqeData[i],
+          concreteCustomerName: concreteCustomer[0].concreteCustomerName,
+          qtyIn: qtyIn,
+          qtyOut: qtyOut,
+          remain: qtyIn - qtyOut,
+        };
+
+        this.cementUses.concrete.data = [...this.cementUses.concrete.data, row];
+
+        //console.log(accArr)
+      }
+
+      const supplierArr = this.cementUses.concrete.data.filter(
+        (cust: any) => cust.qtyIn > 0
+      );
+      const nonSupplierArr = this.cementUses.concrete.data.filter(
+        (cust: any) => cust.qtyIn === 0
+      );
+      this.cementUses.concrete.totals = {
+        supplier: {
+          in: supplierArr.reduce((a: any, b: any) => a + b.qtyIn, 0),
+          out: supplierArr.reduce((a: any, b: any) => a + b.qtyOut, 0),
+        },
+        nonSupplier: nonSupplierArr.reduce((a: any, b: any) => a + b.qtyOut, 0),
+      };
+
+      this.cementUses.outConcrete = {
+        in:
+          accArr.reduce((a: any, b: any) => a + b.addQty, 0) -
+          this.cementUses.concrete.totals.supplier.in,
+        out:
+          accArr.reduce((a: any, b: any) => a + b.Qty, 0) -
+          this.cementUses.concrete.totals.supplier.out -
+          this.cementUses.concrete.totals.nonSupplier,
+      };
+
+      /*
+        product: 'وارد',
+        qty: 'منصرف',
+        total: 'صافى',
+        productBtnClass: 'pl-2',
+
+        Qty: 101.45
+        customerId: "100"
+        customerName: "الخرسانة"
+        date_time: "2021-08-23 23:59"
+        discound: 0
+        madeBy: "foto7"
+        notes: "| دجلة مكس للمنتجات الخرسانية  "
+        price: 0
+        productId: "7"
+        productName: "0"
+        stockName: "مخزن محطة تاور"
+        stockTransactionDetailsId: "7767"
+        stockTransactionId: "3624"
+        total: -899.0624999999995
+        totalInt: -899.0624999999995
+        transactionType: "فاتورة بيع ( 3624 )"
+        truckId: "7"
+        uncompleted: ""
+      */
+    });
   }
 
   getTruckList(): Promise<Truck[]> {

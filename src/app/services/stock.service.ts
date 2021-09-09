@@ -198,4 +198,8 @@ export class StockService {
   getAddQtyFromTransactionStock(id: string) {
     return this.http.get<any[]>(`${this.url}getAddQtyFromTransactionStock.php?id=${id}`);
   }
+
+  getAllCementUses() {
+    return this.http.get<any[]>(`${this.url}getAllCementUses.php`);
+  }
 }

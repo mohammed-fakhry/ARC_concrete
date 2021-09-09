@@ -26,13 +26,19 @@
 
 .box {
   // box-shadow: $elevationZ;
-  background-color: $boxBg;
+  //background-color: $boxBg;
   z-index: 1;
   position: relative;
-  padding-bottom: 0.5rem;
+  //padding-bottom: 0.5rem;
   .form-control:not(.lightBg) {
     background-color: $boxBg;
   }
+}
+
+mat-card {
+  z-index: 1;
+  position: relative !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .activeBox {
@@ -47,6 +53,15 @@
 mat-card {
   z-index: 1;
   position: relative;
+  box-shadow: $lightShadow;
+  transition: 300ms;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+mat-card:hover {
+  box-shadow: $elvationZ_big;
+  z-index: 1;
 }
 
 .Zindex_one {
@@ -61,16 +76,16 @@ mat-card {
   flex-direction: column;
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
   transition: 0.3s;
-  border-radius: $boxRadios;
+  // border-radius: $boxRadios;
 }
 
-.box:not(.inpCard) {
+/* .box:not(.inpCard) {
   // border-top: solid 2px $primaryBg;
-  padding-top: 0.5rem;
+  // padding-top: 0.5rem;
   overflow-x: visible;
-}
+} */
 
-.box:not(.noAfter):before {
+mat-card:not(.noAfter):before {
   content: "";
   position: absolute;
   top: 0;
@@ -83,12 +98,11 @@ mat-card {
   z-index: -1;
 }
 
-
 // defult box border
-.box:not(.borderRight-alert):not(.primaryBorder):not(.inpCard):not(.borderRight-alert-light):not(.noBorder) {
+/* .box:not(.borderRight-alert):not(.primaryBorder):not(.inpCard):not(.borderRight-alert-light):not(.noBorder) {
   border-right: 3px solid $secondaryBg;
   // padding-right: -20px;
-}
+} */
 
 .blob {
   max-width: 250px;
@@ -113,17 +127,13 @@ mat-card {
 }
 
 /* On mouse-over, add a deeper shadow */
-.box:not(.whiteBox):not(.noHover):not(.activeBox):hover {
+/* .box:not(.whiteBox):not(.noHover):not(.activeBox):hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
+} */
 
 .headerBox {
   box-shadow: $lightShadow;
-}
-
-mat-card:hover {
-  box-shadow: $elvationZ_big;
-  z-index: 1;
+  border-right: 3px solid $secondaryBg;
 }
 
 .cardCircle {
@@ -144,7 +154,6 @@ mat-card:hover {
     z-index: -1;
   }
 } */
-
 
 /* .headerBox::after {
   content: "";
@@ -301,8 +310,14 @@ mat-card:hover {
 
 mat-card-title {
   color: $primaryBg;
-  font-weight: bold !important;
+  padding-top: 0.75rem;
+  // font-weight: bold !important;
 }
+/*
+mat-divider {
+  padding-top: 200px !important;
+  height: 220px !important;
+} */
 
 .marked {
   color: $primaryBg;
@@ -330,3 +345,23 @@ mat-card-title {
 .badgeBtn:hover {
   box-shadow: $elevationZ;
 }
+
+/*
+<mat-card>
+  <mat-card-header class="d-flex justify-content-between">
+    <!-- <div mat-card-avatar>avatar</div> -->
+    <mat-card-title>title</mat-card-title>
+    <mat-card-subtitle>sub-header</mat-card-subtitle>
+    <div class="form-inline">
+
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    content
+  </mat-card-content>
+  <!-- <mat-card-actions>
+        <button mat-button>actionOne</button>
+        <button mat-button>actionTwo</button>
+  </mat-card-actions> -->
+</mat-card>
+*/

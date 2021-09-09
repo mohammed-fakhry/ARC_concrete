@@ -11,11 +11,11 @@
         <input matInput type="date" name="reportDate" [(ngModel)]="reportDate" (change)="onStart(reportDate)">
       </mat-form-field>
 
-      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+      <button mat-button [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('generalReport')" class="mr-3">تقرير عام</button>
-      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+      <button mat-button [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('lastData')">اخر بيانات</button>
-      <button mat-stroked-button [class.d-none]="!showReports || privateLoading"
+      <button mat-button [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('activeUser')">عملاء نشطين</button>
 
     </div>
@@ -56,7 +56,7 @@
     <div class="row mb-3">
       <mat-divider class="my-3"></mat-divider>
       <div class="col-lg-5 col-md-12 mb-3">
-        <mat-card class="box" [class.d-none]="!charts.showExpenses">
+        <mat-card [class.d-none]="!charts.showExpenses" class="lightShadow">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>المصاريف</mat-card-title>
             <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
@@ -71,20 +71,20 @@
         <div class="row mt-3">
 
           <div class="col-md-4 col-sm-12 mb-3">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small headerBlueBg textBtn" routerLink="/CustomerList">
                     <i class="fa fa-users headerBlue iconBtn"></i>
                   </span>
                 </div>
-                <mat-card-title class="headerBlue" style="font-size: medium;">عملاء مخازن</mat-card-title>
+                <mat-card-title class="headerBlue" style="font-size: medium;">موردين | مستهلكين</mat-card-title>
               </mat-card-header>
             </mat-card>
           </div>
 
           <div class="col-md-4 col-sm-12 mb-3">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small textSecondaryBg textBtn" routerLink="/ConcreteCustomerList">
@@ -97,7 +97,7 @@
           </div>
 
           <div class="col-md-4 col-sm-12 mb-3">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small textSecondaryBg textBtn" routerLink="/TruckCustomerList">
@@ -110,7 +110,7 @@
           </div>
 
           <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.safes">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small textBtn textSecondaryBg" routerLink="/Safe">
@@ -123,7 +123,7 @@
           </div>
 
           <div class="col-md-4 col-sm-12 mb-3" *ngIf="_auth?.check.stockes">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small textBtn textSecondaryBg" routerLink="/Stokes">
@@ -136,7 +136,7 @@
           </div>
 
           <div class="col-md-4 col-sm-12 mb-3">
-            <mat-card class="box">
+            <mat-card>
               <mat-card-header>
                 <div mat-card-avatar class="ml-1">
                   <span class="dash-widget-small textBtn headerBrownBg" routerLink="/StockInvoice">
@@ -152,7 +152,7 @@
       </div>
       <!-- *ngIf="charts.showExpenses" -->
       <div class="col-lg-7 col-md-12 mb-3" [class.d-none]="!_auth?.check.stockeProd || !charts.showSales">
-        <mat-card class="box">
+        <mat-card class="lightShadow">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>تقرير المبيعات</mat-card-title>
             <mat-card-subtitle>{{salesReportHeader.subtitle}}</mat-card-subtitle>
@@ -193,7 +193,7 @@
       <div class="row mb-3">
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box lightShadow" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
+          <mat-card class="lightShadow" [class.borderRight-alert]="customersInfo?.onUs?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/indebtedness">
                 <span class="dash-widget-icon headerPinkBg">
@@ -226,7 +226,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box lightShadow" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
+          <mat-card class="lightShadow" [class.borderRight-alert]="customersInfo?.remain?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/collectible">
                 <span class="dash-widget-icon successBg">
@@ -261,7 +261,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.concCust">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box lightShadow">
+          <mat-card class="lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/ConcreteCustomerList">
                 <span class="dash-widget-icon headerDeepBlueBg">
@@ -285,7 +285,7 @@
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.truckCustList">
           <!-- [class.borderRight-alert]="customerInfo.uncompletedCond > 0" -->
-          <mat-card class="box lightShadow">
+          <mat-card class="lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/TruckCustomerList">
                 <span class="dash-widget-icon textSecondaryBg">
@@ -308,7 +308,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box lightShadow">
+          <mat-card class="lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/monthlyPaidCustomers">
                 <span class="dash-widget-icon textSecondaryBg">
@@ -331,7 +331,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box lightShadow">
+          <mat-card class="lightShadow">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/CustomerList/gaurdsCustomers">
                 <span class="dash-widget-icon textSecondaryBg">
@@ -354,7 +354,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.safes">
-          <mat-card class="box">
+          <mat-card>
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
                 <span class="dash-widget-icon textBtn textSecondaryBg"
@@ -391,7 +391,7 @@
         </div>
 
         <!-- <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box" [class.borderRight-alert]="counts?.invoices?.uncompletedCond">
+          <mat-card [class.borderRight-alert]="counts?.invoices?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
                 <span class="dash-widget-icon headerBrownBg">
@@ -413,7 +413,7 @@
         </div> -->
 
         <div class="col-lg-3 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box">
+          <mat-card>
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
                 <span class="dash-widget-icon headerBlueBg">
@@ -447,7 +447,7 @@
       </h2>
       <div class="row mb-3">
         <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.stockeProd">
-          <mat-card class="box">
+          <mat-card>
             <div class="d-flex justify-content-between mb-2">
               <mat-card-header>
                 <mat-card-title>اخر فواتير</mat-card-title>
@@ -498,7 +498,7 @@
           </mat-card>
         </div>
         <div class="col-lg-6 col-md-12 mb-3" *ngIf="_auth?.check.safes">
-          <mat-card class="box">
+          <mat-card>
             <div class="d-flex justify-content-between mb-2">
               <mat-card-header>
                 <mat-card-title>اخر ايصالات</mat-card-title>
@@ -562,7 +562,7 @@
       <div class="row mb-3">
 
         <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box" [class.borderRight-alert]="customersInfo?.activeCustomers?.onUs?.uncompletedCond">
+          <mat-card [class.borderRight-alert]="customersInfo?.activeCustomers?.onUs?.uncompletedCond">
             <!-- {{customersInfo?.activeCustomers?.onUs?.uncompletedCond}} -->
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
@@ -597,7 +597,7 @@
         </div>
 
         <div class="col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box" [class.borderRight-alert]="customersInfo?.activeCustomers?.remain?.uncompletedCond">
+          <mat-card [class.borderRight-alert]="customersInfo?.activeCustomers?.remain?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn">
                 <span class="dash-widget-icon successBg" routerLink="/CustomerList/ActiveCollectible">
@@ -631,7 +631,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.stockeProd">
-          <mat-card class="box" [class.borderRight-alert]="counts?.ActiveInvoices?.uncompletedCond">
+          <mat-card [class.borderRight-alert]="counts?.ActiveInvoices?.uncompletedCond">
             <mat-card-header>
               <div mat-card-avatar class="ml-4 textBtn" routerLink="/invoiceReport/invoiceOut/2/{{mainStock.stockId}}">
                 <span class="dash-widget-icon headerBrownBg">
@@ -655,7 +655,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box">
+          <mat-card>
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
                 <span class="dash-widget-icon headerBlueBg">
@@ -677,7 +677,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 mb-3" *ngIf="_auth?.check.customers">
-          <mat-card class="box">
+          <mat-card>
             <mat-card-header>
               <div mat-card-avatar class="ml-4">
                 <span class="dash-widget-icon headerDeepBlueBg">

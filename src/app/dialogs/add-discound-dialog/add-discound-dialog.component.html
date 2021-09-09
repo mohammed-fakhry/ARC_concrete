@@ -1,5 +1,9 @@
 <h3 class="textBold" [ngClass]="data.receiptKind == 'ايصال صرف نقدية' ? 'textPrimary' : 'textDanger'">
-  {{data.receiptKind == 'ايصال صرف نقدية' ? 'اضافة الى' : 'خصم من'}} حساب | {{header}}
+  {{data.receiptKind ==
+  'ايصال صرف نقدية' ?
+  'اضافة على'
+  : 'خصم من'
+  }} حساب | {{header}}
 </h3>
 <hr>
 <mat-dialog-content>
@@ -27,7 +31,7 @@
             </mat-select>
           </mat-form-field>
         </td>
-        <td>
+        <td *ngIf="receiptFor != 'taxes'">
           <mat-form-field>
             <mat-select [disabled]="loading" required #safeName name="safeName" [(ngModel)]="data.safeName"
               (ngModelChange)="safeChanged()">
@@ -63,7 +67,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="2">
+        <td colspan="2" [class.moreWidth]="receiptFor == 'taxes'">
           <mat-form-field class="w-100">
             <input [disabled]="loading" matInput placeholder="ملاحظات" maxlength='200' name="recieptNote" #recieptNote
               [ngModel]="data.recieptNote">
@@ -77,7 +81,7 @@
           <mat-form-field cellspacing="0">
             <input [disabled]="loading" matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
               [(ngModel)]="data.receiptVal" required>
-              <mat-hint class="textSmall" *ngIf="data.receiptVal > 999">{{data.receiptVal | number: '1.0-3'}}</mat-hint>
+            <mat-hint class="textSmall" *ngIf="data.receiptVal > 999">{{data.receiptVal | number: '1.0-3'}}</mat-hint>
           </mat-form-field>
         </td>
       </tr>

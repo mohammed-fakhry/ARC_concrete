@@ -326,7 +326,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
         this.checkIfOutsidePump(receiptDetails, i);
 
-        /* if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+        /* if (receiptDetails.concreteName.includes('استعمال مضخة')) {
           if (receiptDetails.concreteId)
             this._concrete
               .getPumpList(receiptDetails.concreteId)
@@ -476,7 +476,7 @@ export class AddConcreteReceiptComponent implements OnInit {
     this.totalsArry.push(0);
     this.totalsArryBfAddVal.push(0);
 
-    /* if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+    /* if (receiptDetails.concreteName.includes('استعمال مضخة')) {
       if (receiptDetails.concreteId)
         this._concrete
           .getPumpList(receiptDetails.concreteId)
@@ -604,7 +604,9 @@ export class AddConcreteReceiptComponent implements OnInit {
   }
 
   checkIfOutsidePump(receiptDetails: ConcreteReceipDetails, i: number) {
-    if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+    if (receiptDetails.concreteName.includes('استعمال مضخة')) {
+
+      console.log(receiptDetails.concreteName)
       if (receiptDetails.concreteId)
         this._concrete
           .getPumpList(receiptDetails.concreteId)
@@ -674,7 +676,7 @@ export class AddConcreteReceiptComponent implements OnInit {
 
     if (
       this.concreteReceipt.receiptDetails[i].concreteName.includes(
-        'استعمال مضخه'
+        'استعمال مضخة'
       )
     ) {
       this.calcPumpCost(this.concreteReceipt.receiptDetails[i]);
@@ -968,7 +970,7 @@ export class AddConcreteReceiptComponent implements OnInit {
           this._concrete
             .updateConcreteReceipt_d(receiptDetails)
             .subscribe(() => {
-              if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+              if (receiptDetails.concreteName.includes('استعمال مضخة')) {
                 let truckOrder = new TruckOrder();
                 truckOrder.realPrice = receiptDetails.pumpCost;
                 truckOrder.LoadTimes = receiptDetails.concreteQty;
@@ -985,7 +987,7 @@ export class AddConcreteReceiptComponent implements OnInit {
           this._concrete
             .postConcreteReceipt_d(receiptDetails)
             .subscribe((data: any) => {
-              if (receiptDetails.concreteName.includes('استعمال مضخه')) {
+              if (receiptDetails.concreteName.includes('استعمال مضخة')) {
                 const truckOrder = this.generatrtruckorder(
                   receiptDetails,
                   data[0],

@@ -6,4 +6,13 @@
   .printThis {
     display: block !important;
   }
+
+  .section {
+    page-break-after: always;
+  }
+}
+.detailTable {
+  th, td {
+    padding: .75rem;
+  }
 }

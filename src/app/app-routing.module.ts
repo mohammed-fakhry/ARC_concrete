@@ -8,7 +8,6 @@ import { WorkerGuard } from './guards/worker.guard';
 
 import { HomeComponent } from './home/home.component';
 import { LogInComponent } from './log-in/log-in.component';
-import { UnitesComponent } from './unites/unites.component';
 import { WorkerInformationComponent } from './workers/worker-information/worker-information.component';
 import { WorkersComponent } from './workers/workers.component';
 import { ClientInformationComponent } from './clients/client-information/client-information.component';
