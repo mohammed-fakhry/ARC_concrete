@@ -19,6 +19,7 @@ $alertBg: #f8d7da;
 $success: #e0ece4;
 $boxBg: rgb(245, 245, 245);//rgba(245,245,245,1);
 $mainBackground: #ffffff; //#e7e5e5;//rgb(245, 245, 245);//#f5f5f5; //rgba(27,26,24,1);
+$tableHeader_color: linear-gradient(#e1e4fa 0 90%, #a4b2f7 0 10%);//#e1e4fa;//7d93ff;//e4e7f4;
 
 // circleCardColors
 $headerBlue: #2ec5fb; //42cdff
@@ -63,7 +64,7 @@ $onTheTop: 99999999999999;
 
 //borders 0px 0px 30px 10px/0px 30px 2px 10px;
 $bottomBorderRadios: 0px 0px 0px 15px/15px 30px 10px 10px;
-$boxRadios: 0% 1% / 1% 60%;
+$boxRadios: .5% .5% / .5% 60%; //0% 1% / 1% 60%;
 $boxInpRadios: 10% 1% 10% 0.5% / 15% 60% 15% 60%;
 $blobRadios: 69% 31% 30% 70% / 46% 80% 20% 54%;
 /* 35% 20% / 10% 5% */

@@ -118,6 +118,8 @@ export class StockInvoiceComponent implements OnInit {
 
   notesArr: { product: string; qty: string; notes: string }[] = [];
 
+  notesDetailArr: any[] = []
+
   constructor(
     public activeRoute: ActivatedRoute,
     public _router: Router,
@@ -389,12 +391,7 @@ export class StockInvoiceComponent implements OnInit {
       StockTransactionDetails: data[1],
     };
 
-    /* const currentTime = this._mainService.makeTime_date(new Date(Date.now()));
-
-    this._mainService.updateExpired(
-      currentTime,
-      result.stockTransaction.date_time
-    ); */
+    this.notesDetailArr = []
 
     this.dateExpires = this._mainService.dateExpired(
       result.stockTransaction.date_time
@@ -470,6 +467,7 @@ export class StockInvoiceComponent implements OnInit {
 
       this.dataList.push(`datalistproducts${i}`);
       this.stockTransaction.push({ info: tranceDetail });
+      if (tranceDetail.notes) this.notesDetailArr.push({info: tranceDetail})
       this.inputValid.product.push({ cond: true, msg: '' });
       this.totalsArry.push(tranceDetail.total);
       this.productQtys.push(
@@ -1217,6 +1215,8 @@ export class StockInvoiceComponent implements OnInit {
     this.inputValid.formValid = true;
 
     this.productsList = this.productListFactory([], this.allProducts);
+
+    this.notesDetailArr = []
   }
 
   checkStatu() {

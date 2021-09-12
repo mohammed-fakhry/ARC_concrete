@@ -1,6 +1,6 @@
 <div class="mainContainer">
 
-  <mat-card class="section p-4 borderLsecondary" [class.borderRight-alert]="stockInvoice.transactionType == 'فاتورة بيع'"
+  <mat-card class="section p-4" [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
     [class.borderTop-primary]="stockInvoice.transactionType == 'اذن نقل'" [class.borderLeft-alert]="checkedStatue">
     <mat-card-header class="d-flex justify-content-between">
       <!-- <div mat-card-avatar>avatar</div> -->
@@ -329,15 +329,11 @@
       </form>
 
     </mat-card-content>
-    <!-- <mat-card-actions>
-            <button mat-button>actionOne</button>
-            <button mat-button>actionTwo</button>
-      </mat-card-actions> -->
   </mat-card>
 
-  <mat-divider class="my-3"></mat-divider>
+  <mat-divider *ngIf="notesDetailArr.length > 0" class="my-3"></mat-divider>
 
-  <mat-card class="mt-3 mb-5 detailTable">
+  <mat-card class="mt-3 mb-5 detailTable" *ngIf="notesDetailArr.length > 0">
     <mat-card-header class="d-flex justify-content-between">
       <!-- <div mat-card-avatar>avatar</div> -->
       <mat-card-title>بيان بتفاصيل الاصناف</mat-card-title>
@@ -356,7 +352,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let detail of stockTransaction" [class.d-none]="!detail.info.notes">
+          <tr *ngFor="let detail of notesDetailArr" [class.d-none]="!detail.info.notes">
             <th>{{detail.info.product}}</th>
             <td>{{detail.info.qty}}</td>
             <td>{{detail.info.notes}}</td>

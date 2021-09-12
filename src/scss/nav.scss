@@ -12,8 +12,8 @@
 }
 
 .tableHeader:not(.headerPink) {
-  color: white;
-  background-color: $primaryBg;
+  color: $secondaryBg !important;
+  background: $tableHeader_color;
 }
 
 #theNav {

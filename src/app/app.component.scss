@@ -39,9 +39,9 @@
 
 #currentHeader {
   font-size: medium;
-  border-right: solid 2px #f2e7fe;
+  border-right: solid 2px $secondaryBg;
   padding-right: 1em;
-  background-color: $boxBg; //#413d47;
+  background-color: $textSecondaryBg; //#413d47;
   color: $darkBg !important;
 }
 
@@ -126,7 +126,7 @@ mat-sidenav {
   border: none !important;
   .mat-expansion-panel {
     box-shadow: none !important;
-    //background-color: $mainBackground !important;
+    // background-color: $mainBackground !important;
     //border-bottom: solid 1px rgb(228, 228, 228);
     /*
     border-radius: $boxRadios; */
@@ -138,12 +138,13 @@ mat-toolbar {
   top: 0;
   font-weight: bold;
   z-index: 1000;
-  color: #f2e7fe;
+  color: $primaryBg;
   transition: 350ms;
-  background-color: #0049bed5;
+  // background-color: #0049bed5;
+  background-color: #f0f2fc;//6079f7;//5a73f3e0;
   box-shadow: $lightShadow;
   .fa {
-    color: #f2e7fe;
+    color: $primaryBg;
   }
 }
 
@@ -165,14 +166,14 @@ mat-toolbar {
   height: 2px;
   margin: 6px 0;
   transition: 0.5s;
-  background-color: #f2e7fe;
+  background-color: $primaryBg;
 }
 
 .change .bar1 {
   -webkit-transform: rotate(-45deg) translate(-9px, 6px);
   transform: rotate(-45deg) translate(-9px, 6px);
-  background-color: $dangerBg;
-  border-bottom: 1px whitesmoke solid;
+ /*  background-color: $dangerBg;
+  border-bottom: 1px whitesmoke solid; */
 }
 
 .change .bar2 {

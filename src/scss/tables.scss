@@ -234,9 +234,9 @@ th.mat-header-cell {
   padding-right: 1rem !important;
 }
 
-.mat-header-cell:not(.headerPink) {
+/* .mat-header-cell:not(.headerPink) {
   color: white !important;
-}
+} */
 
 tr.mat-header-row {
   height: fit-content !important;
@@ -339,19 +339,19 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .theadBorderPrimary {
   thead {
-    border-top: solid 2px $primaryBg;
+    border-top: solid 2px $secondaryBg;
   }
 }
 
 tr {
   .theadBorderPrimary {
-    border-top: solid 2px $primaryBg;
+    border-top: solid 2px $secondaryBg;
   }
 }
 
 .theadBorderDanger {
   thead {
-    border-top: solid 2px $dangerBg;
+    border-top: solid 2px $dangerBadge;
   }
 }
 

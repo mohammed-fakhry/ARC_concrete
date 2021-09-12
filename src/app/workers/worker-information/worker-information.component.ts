@@ -16,6 +16,7 @@ import { WorkerService } from 'src/app/services/worker.service';
 import { Worker } from '../../classes/worker';
 import { DeleteDialogComponent } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-worker-information',
@@ -74,6 +75,7 @@ export class WorkerInformationComponent implements OnInit {
     public _router: Router,
     public _safeService: SafeService,
     public _glopal: GlobalVarsService,
+    public _snackBar: MatSnackBar,
     public _auth: AuthService
   ) {
     this._glopal.currentHeader = 'معلومات شخصية لموظف';
@@ -98,6 +100,8 @@ export class WorkerInformationComponent implements OnInit {
         };
         this.worker = result.worker;
         this.fillListData(this.makeWorkerAcc(result.acc));
+
+        this._mainService.handleTableHeight();
         // this.accArr = result.acc;
         this._glopal.loading = false;
       }
@@ -303,15 +307,33 @@ export class WorkerInformationComponent implements OnInit {
 
   recordWorkedDayes() {
     if (this.workedDayes.id) {
+      /* if (
+        this._mainService.dateExpired(
+          this.workedDayes.date_time.replace(' ', 'T')
+        )
+      ) {
+        this._workerService
+          .updateEmployeeWorkedDayes(this.workedDayes)
+          .subscribe(() => this.onStart());
+        this._mainService.playMouseClickClose();
+      } else {
+        this._snackBar.open('انتهت صلاحية التعديل', 'اخفاء', {
+          duration: 2500,
+        });
+        this._mainService.playDrumFail();
+        this.showCalcSalary = false;
+      } */
+
       this._workerService
         .updateEmployeeWorkedDayes(this.workedDayes)
         .subscribe(() => this.onStart());
+      this._mainService.playMouseClickClose();
     } else {
       this._workerService
         .postEmployeeWorkedDayes(this.workedDayes)
         .subscribe(() => this.onStart());
+      this._mainService.playMouseClickClose();
     }
-    this._mainService.playMouseClickClose();
   }
 
   submitSalary(addSalaryForm: NgForm) {
@@ -335,26 +357,40 @@ export class WorkerInformationComponent implements OnInit {
   }
 
   openDelDialog = () => {
-    let dialogRef = this._dialog.open(DeleteDialogComponent, {
-      data: {
-        header: 'برجاء التأكد من بيانات الحساب قبل الحذف !',
-        info: `ايام العمل | ${this.workedDayes.workedDayes}`,
-        discription: [
-          `خصم نقدى | ${this.workedDayes.discoundDayes}`,
-          `ايام اضافى | ${this.workedDayes.overDayes}`,
-          `باجمالى | ${this.workedDayes.remainSalary} جنيه`,
-        ],
-      },
-    });
+    if (
+      this._mainService.dateExpired(
+        this.workedDayes.date_time.replace(' ', 'T')
+      )
+    ) {
+      let dialogRef = this._dialog.open(DeleteDialogComponent, {
+        data: {
+          header: 'برجاء التأكد من بيانات الحساب قبل الحذف !',
+          info: `ايام العمل | ${this.workedDayes.workedDayes}`,
+          discription: [
+            `خصم نقدى | ${this.workedDayes.discoundDayes}`,
+            `ايام اضافى | ${this.workedDayes.overDayes}`,
+            `باجمالى | ${this.workedDayes.remainSalary} جنيه`,
+          ],
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == 'true') {
-        if (this.workedDayes.id)
-          this._workerService
-            .deleteEmployeeWorkedDayes(this.workedDayes.id)
-            .subscribe(() => this.onStart());
-      }
-    });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result == 'true') {
+          {
+            if (this.workedDayes.id)
+              this._workerService
+                .deleteEmployeeWorkedDayes(this.workedDayes.id)
+                .subscribe(() => this.onStart());
+          }
+        }
+      });
+    } else {
+      this._snackBar.open('انتهت صلاحية الحذف', 'اخفاء', {
+        duration: 2500,
+      });
+      this._mainService.playDrumFail();
+      this.showCalcSalary = false;
+    }
   };
 
   openFilterDialog = (data: any) => {

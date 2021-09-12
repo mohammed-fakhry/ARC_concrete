@@ -1148,6 +1148,17 @@ export class AddSafeReceiptComponent implements OnInit {
           this._mainService.play_secondaryDone();
         }
       });
+    } else if (!this.safeReciept.concreteCustomerName) {
+      this.inputValid.concreteCustomerName = {
+        cond: false,
+        msg: 'العميل غير مسجل بقاعدة البيانات',
+        class: 'secondaryBadge',
+      };
+
+      addSafeReciept.form.controls['concreteCustomerName'].setErrors({
+        incorrect: true,
+      });
+      this._mainService.playshortFail();
     }
   };
 
