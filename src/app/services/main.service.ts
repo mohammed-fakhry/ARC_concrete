@@ -35,11 +35,11 @@ export class MainService {
     return this.http.get<any[]>(`${localUrl}`);
   }
 
-  handleTableHeight() {
+  handleTableHeight(decreaseHeight: number = 0) {
     let windowHeight = window.innerHeight;
     if (windowHeight > 700) {
       // 64 is navbar's hight
-      let height = window.innerHeight - 64 - 210;
+      let height = window.innerHeight - 64 - 210 - decreaseHeight;
 
       this.example_container = document.querySelectorAll(
         '.example-container'
@@ -209,11 +209,11 @@ export class MainService {
         });
 
         elmnt.style.transition = '350ms';
-        if (!noBg) elmnt?.classList.add('darkGrayBg');
+        if (!noBg) elmnt?.classList.add('smokeBg');
 
         setTimeout(() => {
           elmnt.style.transition = '700ms';
-          if (!noBg) elmnt?.classList.remove('darkGrayBg');
+          if (!noBg) elmnt?.classList.remove('smokeBg');
         }, 800);
       }
     }

@@ -45,6 +45,14 @@ export class CustomerInformationComponent implements OnInit {
 
   headerTotals: AccHeaderTotals = new AccHeaderTotals();
 
+  headerTotalDetail: {
+    income: { products: number; cash: number; truckUse: number };
+    outcome: { products: number; cash: number };
+  } = {
+    income: { products: 0, cash: 0, truckUse: 0 },
+    outcome: { products: 0, cash: 0 },
+  };
+
   customerInfo: Customer = new Customer();
 
   isFiltered: boolean = false;
@@ -59,6 +67,23 @@ export class CustomerInformationComponent implements OnInit {
   tempAccArry: any[] = [];
 
   productsQty: any[] = [];
+  productQty_remainVal: {
+    begainWith: number;
+    invoiceValues: number;
+    receiptsValues: number;
+    netQty: number;
+    priceAvrg: number;
+    paidQty: number;
+    remainQty: number;
+  } = {
+    begainWith: 0,
+    invoiceValues: 0,
+    receiptsValues: 0,
+    netQty: 0,
+    priceAvrg: 0,
+    paidQty: 0,
+    remainQty: 0,
+  };
 
   constructor(
     public _mainService: MainService,
@@ -242,6 +267,28 @@ export class CustomerInformationComponent implements OnInit {
         (acc: any) => acc.recieptType != 'رصيد اول'
       );
 
+      const productsTotals = filteredAcc.filter((acc: any) =>
+        acc.recieptType.includes('فاتورة')
+      );
+      const cashTotals = filteredAcc.filter((acc: any) =>
+        acc.recieptType.includes('ايصال')
+      );
+      const truckUses = filteredAcc.filter((acc: any) =>
+        acc.recieptType.includes('اذن تشغيل')
+      );
+
+      this.headerTotalDetail = {
+        income: {
+          products: productsTotals.reduce((a: any, b: any) => a + b.minVal, 0),
+          cash: cashTotals.reduce((a: any, b: any) => a + b.minVal, 0),
+          truckUse: truckUses.reduce((a: any, b: any) => a + b.minVal, 0),
+        },
+        outcome: {
+          products: productsTotals.reduce((a: any, b: any) => a + b.addVal, 0),
+          cash: cashTotals.reduce((a: any, b: any) => a + b.addVal, 0),
+        },
+      };
+
       this.headerTotals.income = filteredAcc
         //.map((a: any) => a.minVal)
         .reduce((a: any, b: any) => a + b.minVal, 0);
@@ -264,6 +311,8 @@ export class CustomerInformationComponent implements OnInit {
           recieptType: acc.recieptType,
           productName: acc.productName,
           productQty: acc.productQty,
+          addVal: acc.addVal,
+          minVal: acc.minVal,
         };
       });
 
@@ -274,27 +323,64 @@ export class CustomerInformationComponent implements OnInit {
     this.productsQty = [];
 
     for (let i = 0; i < products.length; i++) {
-      const allQty_out = productArr
-        .filter(
-          (product: any) =>
-            product.productName == products[i] &&
-            product.recieptType.includes('فاتورة بيع')
-        )
-        .reduce((a: any, b: any) => a + b.productQty, 0);
+      /* sold */
+      const sold = productArr.filter(
+        (product: any) =>
+          product.productName == products[i] &&
+          product.recieptType.includes('فاتورة بيع')
+      );
 
-      const allQty_in = productArr
-        .filter(
-          (product: any) =>
-            product.productName == products[i] &&
-            product.recieptType.includes('فاتورة شراء')
-        )
-        .reduce((a: any, b: any) => a + b.productQty, 0);
+      const allQty_out = sold.reduce((a: any, b: any) => a + b.productQty, 0);
 
+      /* purchused */
+      const purchused = productArr.filter(
+        (product: any) =>
+          product.productName == products[i] &&
+          product.recieptType.includes('فاتورة شراء')
+      );
+
+      const allQty_in = purchused.reduce(
+        (a: any, b: any) => a + b.productQty,
+        0
+      );
+
+      /* row */
       const row = {
         productName: products[i],
         out: allQty_out,
         in: allQty_in,
       };
+
+      /* if only one product */
+      if (products.length == 1 && !this.isFiltered) {
+        const invoiceValues =
+          this.headerTotalDetail.outcome.products -
+          this.headerTotalDetail.income.products;
+
+        const receiptsValues =
+          this.headerTotalDetail.income.cash -
+          this.headerTotalDetail.outcome.cash +
+          this.headerTotalDetail.income.truckUse;
+
+        const netQty = row.out - row.in;
+
+        const priceAvrg = invoiceValues / netQty;
+
+        const begainWith = this.isFiltered
+          ? this.headerTotals.openedVal / priceAvrg
+          : 0;
+
+        this.productQty_remainVal = {
+          begainWith: begainWith,
+          invoiceValues: invoiceValues,
+          receiptsValues: receiptsValues,
+          netQty: netQty,
+          priceAvrg: priceAvrg,
+          paidQty: receiptsValues / priceAvrg,
+          remainQty: begainWith + netQty - receiptsValues / priceAvrg,
+        };
+        console.log(this.productQty_remainVal);
+      }
 
       this.productsQty.push(row);
     }

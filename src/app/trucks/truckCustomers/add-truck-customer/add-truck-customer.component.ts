@@ -37,7 +37,9 @@ export class AddTruckCustomerComponent implements OnInit {
     public _dialog: MatDialog,
     public _snackBar: MatSnackBar,
     public _auth: AuthService
-  ) { }
+  ) {
+    this._glopal.currentHeader = "بيانات عميل مُعدات"
+  }
 
   ngOnInit(): void {
     this.onStart();

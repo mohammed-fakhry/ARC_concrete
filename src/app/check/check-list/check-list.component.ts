@@ -99,7 +99,7 @@ export class CheckListComponent implements OnInit {
         {
           title: 'شيكات متأخرة',
           elementId: 'lateChecks',
-          classes: { bg: 'headerPinkBg', text: 'headerPink' },
+          classes: { bg: 'dangerBadge', text: 'dangerBg' },
         },
         {
           title: 'شيكات اليوم',
@@ -137,22 +137,9 @@ export class CheckListComponent implements OnInit {
   ): CheckBankList {
     const checkList = new CheckBankList(data, timing);
 
-    // checkList.checkDetail.listData.onUs = this.newTable(checkList.checkDetail.mainData.onUs)
-    /* checkList.checkDetail.listData.onUs.sort = this.sort;
-    checkList.checkDetail.listData.onUs.paginator = this.paginator; */
-
-    // checkList.checkDetail.listData.toUs = this.newTable(checkList.checkDetail.mainData.toUs)
-    /*  checkList.checkDetail.listData.toUs.sort = this.sort;
-    checkList.checkDetail.listData.toUs.paginator = this.paginator; */
-
     return checkList;
   }
 
-  /* fillListData = (data: any) => {
-    this.listData = new MatTableDataSource(data);
-    this.listData.sort = this.sort;
-    this.listData.paginator = this.paginator;
-  }; */
 
   getCheckList(Paid?: string) {
     return new Promise<BankCheck[]>((res) => {

@@ -1,34 +1,33 @@
 <div class="container">
-  <div class="box">
-    <mat-card>
-      <mat-card-header class="d-flex justify-content-between">
-        <!-- <div mat-card-avatar>avatar</div> -->
-        <mat-card-title>بيانات حساب</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form (ngSubmit)="onSubmit(addOtherAccForm)" #addOtherAccForm="ngForm">
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>اسم الحساب</mat-label>
-                  <input required matInput name="AccName" [(ngModel)]="acc.AccName" #AccName
-                    (change)="accNameChanged(addOtherAccForm)">
-                  <mat-error *ngIf="!inputValid.acc.cond">
-                    {{inputValid.acc.msg}}
-                  </mat-error>
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
-          <div class="form-inline">
-            <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="mt-3"
-              type="submit">{{submitBtn}}</button>
-            <div *ngIf="!inputValid.form" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
-          </div>
-        </form>
-      </mat-card-content>
+  <mat-card class="boxBg">
+    <mat-card-header class="d-flex justify-content-between">
+      <!-- <div mat-card-avatar>avatar</div> -->
+      <mat-card-title>بيانات حساب</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mt-3">
+      <form (ngSubmit)="onSubmit(addOtherAccForm)" #addOtherAccForm="ngForm">
+        <table class="example-full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>اسم الحساب</mat-label>
+                <input [disabled]="acc.truckId > '0'" required matInput name="AccName" [(ngModel)]="acc.AccName"
+                  #AccName (change)="accNameChanged(addOtherAccForm)">
+                <div *ngIf="id != null && acc.truckId" class="textDanger textSmall">لايمكن تعديل اسم حساب مرتبط بمُعدة</div>
+                <mat-error *ngIf="!inputValid.acc.cond">
+                  {{inputValid.acc.msg}}
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+        <div class="form-inline">
+          <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="mt-3"
+            type="submit">{{submitBtn}}</button>
+          <div *ngIf="!inputValid.form" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
+        </div>
+      </form>
+    </mat-card-content>
 
-    </mat-card>
-  </div>
+  </mat-card>
 </div>

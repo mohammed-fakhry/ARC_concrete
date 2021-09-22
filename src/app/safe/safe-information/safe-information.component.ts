@@ -199,7 +199,9 @@ export class SafeInformationComponent implements OnInit {
         receiptDetail: data.customerName,
         routeTo: `/customerInformation/${data.customerId}`,
         condition: () =>
-          data.customerName && data.customerName?.includes('عهده مقاولات'),
+          data.customerName &&
+          data.customerName?.includes('عهده') &&
+          !data.customerName?.includes('عهده محطه'),
       },
       {
         toolTip: 'بنك',
@@ -207,6 +209,13 @@ export class SafeInformationComponent implements OnInit {
         routeTo: `/customerInformation/${data.customerId}`,
         condition: () =>
           data.customerName && data.customerName?.includes('بنك'),
+      },
+      {
+        toolTip: 'استهلاك المعدات',
+        receiptDetail: data.customerName,
+        routeTo: `/customerInformation/${data.customerId}`,
+        condition: () =>
+          data.customerName && data.customerName?.includes('استهلاك المعدات'),
       },
       {
         toolTip: 'مورد | مستهلك',
@@ -228,6 +237,7 @@ export class SafeInformationComponent implements OnInit {
         condition: () =>
           data.AccName &&
           (data.AccName?.includes('عربيه') ||
+            data.AccName?.includes('عربية') ||
             data.AccName?.includes('لودر') ||
             data.AccName?.includes('حفار') ||
             data.AccName?.includes('هراس') ||
@@ -240,18 +250,24 @@ export class SafeInformationComponent implements OnInit {
         condition: () => data.AccName && data.AccName?.includes('مصاريف مكتب'),
       },
       {
+        toolTip: 'مصاريف محطه',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () => data.AccName && data.AccName?.includes('محطه'),
+      },
+      {
         toolTip: 'الشيخ ايمن',
         receiptDetail: data.AccName,
         routeTo: `/OtherAccInformation/${data.accId}`,
         condition: () => data.AccName && data.AccName?.includes('الشيخ ايمن'),
       },
-      {
+      /* {
         toolTip: 'مصروفات المقاولات',
         receiptDetail: data.AccName,
         routeTo: `/OtherAccInformation/${data.accId}`,
         condition: () =>
           data.AccName && data.AccName?.includes('مصروفات المقاولات'),
-      },
+      }, */
       {
         toolTip: 'مصاريف',
         receiptDetail: data.AccName,
@@ -369,6 +385,13 @@ export class SafeInformationComponent implements OnInit {
     }
   }
 
+  searchThisDate(date: string) {
+    const spaceInd = date.indexOf(' ');
+    const onlyDate = date.slice(0, spaceInd);
+
+    this.filterByDate(onlyDate, onlyDate);
+  }
+
   setlogoHeight() {
     const safeInfoHeader = document.querySelector(
       '#safeInfoHeader'
@@ -420,8 +443,8 @@ export class SafeInformationComponent implements OnInit {
   }[] = [];
 
   set_in_out_details(accArr: any) {
-    this.in_out_details = [];
-
+    //this.in_out_details = [];
+    let tempArr = [];
     const mainSections = [...new Set(accArr.map((sec: any) => sec.toolTip))];
 
     for (let i = 0; i < mainSections.length; i++) {
@@ -436,10 +459,25 @@ export class SafeInformationComponent implements OnInit {
           out: filtered.reduce((a: any, b: any) => a + b.addVal, 0),
         };
 
-        this.in_out_details.push(row);
+        tempArr.push(row);
+        // this.in_out_details.push(row);
       }
     }
-    // console.log(mainSections);
+
+    this.in_out_details = tempArr.sort((a: any, b: any) => {
+      let nameA = a.details; // ignore upper and lowercase
+      let nameB = b.details; // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
+    // this.discoundsArry.sort((a, b) => a.discVal - b.discVal);
   }
 
   filterBySection(details: any, i?: number) {

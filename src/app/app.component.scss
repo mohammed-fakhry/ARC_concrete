@@ -46,7 +46,7 @@
 }
 
 .righttBorder {
-  border-right: solid 1px #f2e7fe;
+  border-right: solid 2px #a4b2f7;
 }
 
 /* "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", */
@@ -141,7 +141,7 @@ mat-toolbar {
   color: $primaryBg;
   transition: 350ms;
   // background-color: #0049bed5;
-  background-color: #f0f2fc;//6079f7;//5a73f3e0;
+  background-color: #f0f2fc; //6079f7;//5a73f3e0;
   box-shadow: $lightShadow;
   .fa {
     color: $primaryBg;
@@ -172,8 +172,8 @@ mat-toolbar {
 .change .bar1 {
   -webkit-transform: rotate(-45deg) translate(-9px, 6px);
   transform: rotate(-45deg) translate(-9px, 6px);
- /*  background-color: $dangerBg;
-  border-bottom: 1px whitesmoke solid; */
+  background-color: $dangerBg;
+  /*  border-bottom: 1px whitesmoke solid; */
 }
 
 .change .bar2 {

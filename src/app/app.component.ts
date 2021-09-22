@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterOutlet } from '@angular/router';
 import { SearchInvoiceDialogComponent } from './dialogs/search-invoice-dialog/search-invoice-dialog.component';
 import { AuthService } from './services/auth.service';
-import { CheckService } from './services/check.service';
 import { GlobalVarsService } from './services/global-vars.service';
 import { MainService } from './services/main.service';
 
@@ -13,6 +12,7 @@ import { MainService } from './services/main.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
+
 export class AppComponent {
   title = 'ARC';
   opened = false;
@@ -52,6 +52,7 @@ export class AppComponent {
         if (!this._glopal.loading) this.backUp();
       }
     });
+
 
     if (this._glopal.check) this._mainService.setNotification();
 
@@ -133,7 +134,7 @@ export class AppComponent {
         duration: 2500,
       });
       this._glopal.loading = false;
-      this._mainService.playLongPop()
+      this._mainService.playLongPop();
     });
     this.opened = false;
   }

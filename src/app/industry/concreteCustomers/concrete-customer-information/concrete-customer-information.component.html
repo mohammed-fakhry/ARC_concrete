@@ -1,6 +1,6 @@
 <div class="mainContainer">
   <!-- <div class="col-lg-9 col-md-12"> -->
-  <div class="row stickyBox" id="concreteCustomerInfoHeader">
+  <div class="row" id="concreteCustomerInfoHeader">
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="box headerBox">
         <mat-card-header>
@@ -186,7 +186,7 @@
     </div>
   </div>
 
-  <div class="box stickyBox" id="concreteCustomerInfoMainTable">
+  <div class="box" id="concreteCustomerInfoMainTable">
 
     <mat-card>
       <mat-card-header class="d-flex justify-content-between">
@@ -196,7 +196,7 @@
         <div class="form-inline">
 
           <div class="my-auto">
-            <button *ngIf="marked" mat-button class="textBold" matTooltip="الغاء"
+            <button *ngIf="marked" mat-button class="textBold balnceBtn" matTooltip="الغاء"
               matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
               [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
               ميزان

@@ -386,6 +386,20 @@ tr {
 .form-control:disabled {
   background-color: $lightBg;
 }
+/*
+.dateBtn {
+  cursor: pointer;
+} */
+
+.dateBtn:hover {
+  background-color: $textDarkBg;
+  color: $darkBg;
+}
+
+/* .dateBtn:active {
+  background-color: $darkBg;
+  color: white;
+} */
 /* Ready Table
 <div class="box mt-3">
     <div class="panel-body panel-flex-table">

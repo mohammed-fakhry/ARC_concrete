@@ -2,6 +2,8 @@
 
   <div class="row stickyBox">
 
+
+
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="headerBox" [class.borderRight-alert]="customerInfo.uncompletedCond > 0">
         <mat-card-header>
@@ -39,11 +41,15 @@
 
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
 
-      <mat-card>
+      <mat-card class="box">
+
+        <mat-card-header class="d-flex justify-content-between">
+          <mat-card-title>اجماليات الحساب</mat-card-title>
+          <mat-card-subtitle>توصيف لاجمالى الدفعات و الفواتير وارد و منصرف عن المدة</mat-card-subtitle>
+        </mat-card-header>
 
         <mat-card-content>
-
-          <table [class.d-none]="_glopal.loading" class="textBold w-100 mt-2">
+          <table [class.d-none]="_glopal.loading" class="textBold w-100">
 
             <tr *ngIf="!searchDate.from">
               <td class="p-2">من اول المدة</td>
@@ -61,8 +67,26 @@
               </td>
             </tr>
 
+            <!-- outCome -->
+            <tr *ngIf="headerTotalDetail.outcome.products != 0" class="textDanger borderLdanger"
+              style="font-weight: normal;">
+              <th class="p-2">منصرف فواتير</th>
+              <td class="p-2 tdBorder_right">{{headerTotalDetail.outcome.products | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr *ngIf="headerTotalDetail.outcome.cash != 0" class="textDanger borderLdanger"
+              style="font-weight: normal;">
+              <th class="p-2">
+                {{customerInfo.customerAdd.includes('حراسة وغفرات') || customerInfo.customerAdd.includes('ايجار')
+                ? 'اجمالى مستحقات '
+                : 'منصرف نقدية'
+                }}
+              </th>
+              <td class="p-2 tdBorder_right">{{headerTotalDetail.outcome.cash | number: '1.0-2'}}</td>
+            </tr>
+
             <tr class="dangerBadge borderLdanger">
-              <th class="p-2">منصرف</th>
+              <th class="p-2">اجمالى منصرف</th>
               <td class="p-2 tdBorder_right">{{headerTotals.outcome | number: '1.0-2'}}</td>
             </tr>
 
@@ -76,8 +100,27 @@
               <td></td>
             </tr>
 
+            <!-- inCome -->
+            <tr *ngIf="headerTotalDetail.income.products != 0" class="textPrimary borderLsecondary"
+              style="font-weight: normal;">
+              <th class="p-2">وارد فواتير</th>
+              <td class="p-2 tdBorder_right">{{headerTotalDetail.income.products | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr *ngIf="headerTotalDetail.income.cash != 0" class="textPrimary borderLsecondary"
+              style="font-weight: normal;">
+              <th class="p-2">وارد نقدية</th>
+              <td class="p-2 tdBorder_right">{{headerTotalDetail.income.cash | number: '1.0-2'}}</td>
+            </tr>
+
+            <tr *ngIf="headerTotalDetail.income.truckUse != 0" class="textPrimary borderLsecondary"
+              style="font-weight: normal;">
+              <th class="p-2">ايجار مُعدات</th>
+              <td class="p-2 tdBorder_right">{{headerTotalDetail.income.truckUse | number: '1.0-2'}}</td>
+            </tr>
+
             <tr class="secondaryBadge borderLsecondary">
-              <th class="p-2">وارد</th>
+              <th class="p-2">اجمالى وارد</th>
               <td class="p-2 tdBorder_right">{{headerTotals.income | number: '1.0-2'}}</td>
             </tr>
 
@@ -90,15 +133,9 @@
             </tr>
 
           </table>
-
         </mat-card-content>
-        <!-- <mat-card-actions>
-                <button mat-button>actionOne</button>
-                <button mat-button>actionTwo</button>
-          </mat-card-actions> -->
+
       </mat-card>
-
-
 
     </div>
 
@@ -107,11 +144,15 @@
       <mat-card>
         <mat-card-header class="d-flex justify-content-between">
           <!-- <div mat-card-avatar>avatar</div> -->
-          <mat-card-title>تفاصيل اعداد الاصناف</mat-card-title>
-          <mat-card-subtitle>عرض كميات الاصناف الواردة و المنصرفة</mat-card-subtitle>
+          <mat-card-title>
+            تفاصيل اعداد اصناف
+          </mat-card-title>
+          <mat-card-subtitle>
+            عرض كميات الاصناف الواردة و المنصرفة
+          </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <div class="panel-body panel-flex-table standTable">
+          <div *ngIf="productsQty.length > 1" class="panel-body panel-flex-table standTable">
             <table class="flex-table table table-hover">
               <thead class="textSecondaryBg textSecondary">
                 <tr>
@@ -129,6 +170,94 @@
               </tbody>
             </table>
           </div>
+
+          <!-- if only one product -->
+          <div *ngIf="productsQty.length == 1">
+
+            <table class="w-100 text-center mb-3">
+              <thead class="textSecondary">
+                <tr>
+                  <th>الصنف</th>
+                  <th>وارد</th>
+                  <th class="textDanger">منصرف</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+                <tr>
+                  <td class="py-2 textPrimary">{{productsQty[0].productName}}</td>
+                  <td class="py-2">{{productsQty[0].in | number: '1.0-3'}}</td>
+                  <td class="textDanger py-2">{{productsQty[0].out | number: '1.0-3'}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <mat-divider></mat-divider>
+
+            <table class="w-100">
+              <thead class="tdborder_bottom_primary textPrimary">
+                <th class="p-2">بيان</th>
+                <th class="p-2">كمية</th>
+                <!-- <th class="p-2">متوسط سعر</th> -->
+                <th class="p-2">قيمة</th>
+              </thead>
+              <tbody>
+                <!--    <tr>
+                  <th class="p-2">رصيد اول</th>
+                  <td class="p-2">{{productQty_remainVal.begainWith | number: '1.0-3'}}</td>
+                  <td class="p-2">
+                    {{productQty_remainVal.begainWith * productQty_remainVal.priceAvrg | number: '1.0-3'}}
+                  </td>
+                </tr> -->
+                <tr>
+                  <th class="p-2">صافى الكمية</th>
+                  <td class="p-2">{{productQty_remainVal.netQty | number: '1.0-3'}}</td>
+                  <!-- <td class="p-2">{{productQty_remainVal.priceAvrg | number: '1.0-3'}}</td> -->
+                  <td class="p-2">{{productQty_remainVal.invoiceValues | number: '1.0-3'}}</td>
+                </tr>
+                <tr>
+                  <th class="p-2 textDanger">مدفوع</th>
+                  <td class="p-2 textDanger">{{productQty_remainVal.paidQty | number: '1.0-3'}}</td>
+                  <!-- <td class="p-2">{{productQty_remainVal.priceAvrg | number: '1.0-3'}}</td> -->
+                  <td class="p-2 textDanger">{{productQty_remainVal.receiptsValues | number: '1.0-3'}}</td>
+                </tr>
+                <tr
+                  [ngClass]="productQty_remainVal.remainQty >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'">
+                  <th class="p-2">
+                    مستحق {{productQty_remainVal.remainQty > 0 ? 'التحصيل' : 'الدفع'}}
+                  </th>
+                  <td class="p-2">{{productQty_remainVal.remainQty | number: '1.0-3'}}</td>
+                  <!-- <td class="p-2">{{productQty_remainVal.priceAvrg | number: '1.0-3'}}</td> -->
+                  <td class="p-2">{{productQty_remainVal.remainQty * productQty_remainVal.priceAvrg | number: '1.0-3'}}
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+
+
+          <!--     <div class="panel-body panel-flex-table standTable">
+            <table class="flex-table table table-hover">
+
+              <tbody class="tableBody">
+                <tr>
+                  <th>صافى الكمية</th>
+                  <td>{{productQty_remainVal.netQty | number: '1.0-3'}}</td>
+                </tr>
+
+                <tr>
+                  <th>قيمة الكمية</th>
+                  <td>{{productQty_remainVal.invoiceValues | number: '1.0-3'}}</td>
+                </tr>
+
+                <tr>
+                  <th>صافى نقدية</th>
+                  <td>{{productQty_remainVal.receiptsValues | number: '1.0-3'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div> -->
         </mat-card-content>
       </mat-card>
     </div>
@@ -146,7 +275,7 @@
           <div class="form-inline printX">
 
             <div class="my-auto">
-              <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+              <button *ngIf="marked" mat-button class="textBold balnceBtn" matTooltip="الغاء"
                 matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
                 [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
                 ميزان

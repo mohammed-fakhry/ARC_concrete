@@ -2,13 +2,27 @@
   <div class="row">
     <div class="col-md-12 col-lg-7" id="concreteInvoice">
 
-      <mat-card class="p-4 mb-3">
+      <mat-card class="p-4 mb-3 box">
         <mat-card-header class="d-flex justify-content-between">
           <!-- <div mat-card-avatar>avatar</div> -->
           <mat-card-title class="printX">فاتورة خرسانة</mat-card-title>
 
-          <div>
-            <button mat-button color="accent" class="mx-1" (click)="printDocument()"><i class="fa fa-print"></i></button>
+          <div class="form-inline">
+            <button mat-button color="{{concreteReceipt.receiptDirection == 'بيع' ? 'warn' : 'accent'}}"
+              [matMenuTriggerFor]="menu">فاتورة {{concreteReceipt.receiptDirection}}</button>
+            <mat-menu #menu="matMenu">
+              <button [disabled]="concreteReceipt.receiptDirection == 'بيع'" mat-menu-item
+                (click)="concreteReceipt.receiptDirection = 'بيع'">
+                فاتورة بيع
+              </button>
+              <button [disabled]="concreteReceipt.receiptDirection == 'شراء'" mat-menu-item
+                (click)="concreteReceipt.receiptDirection = 'شراء'">
+                فاتورة شراء
+              </button>
+            </mat-menu>
+
+            <button mat-button color="accent" class="mx-1 mt-1" (click)="printDocument()"><i
+                class="fa fa-print"></i></button>
 
           </div>
         </mat-card-header>
@@ -235,7 +249,8 @@
 
                 <div class="form-inline printX mt-3">
                   <button mat-flat-button color="primary"
-                    [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires" type="submit">
+                    [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires || _glopal.loading"
+                    type="submit">
                     {{id ? 'تعديل' : 'تسجيل'}}
                   </button>
 
@@ -304,11 +319,6 @@
 
       </mat-card>
 
-
-
-
-
-
       <mat-card *ngIf="concreteReceipt.recordedByBon" class="my-3">
         <mat-progress-bar mode="buffer" *ngIf="elementLoading"></mat-progress-bar>
         <mat-card-header class="d-flex justify-content-between">
@@ -343,12 +353,8 @@
           </div>
 
         </mat-card-content>
-        <!-- <mat-card-actions>
-                <button mat-button>actionOne</button>
-                <button mat-button>actionTwo</button>
-          </mat-card-actions> -->
-      </mat-card>
 
+      </mat-card>
 
     </div>
 
@@ -357,17 +363,17 @@
         <div class="d-flex justify-content-between">
 
           <div class="form-inline">
-            <button mat-flat-button color="accent" class="mx-1" (click)="printDocument('elementsExpensec')"><i
+            <button mat-button color="accent" class="mx-1 pt-1" (click)="printDocument('elementsExpensec')"><i
                 class="fa fa-print"></i></button>
 
-            <button *ngIf="concreteReceipt.stockTransactionId" mat-stroked-button color="primary"
+            <button *ngIf="concreteReceipt.stockTransactionId" mat-button color="primary"
               routerLink="/StockInvoice/{{concreteReceipt.stockTransactionId}}">
               فاتورة مخزن رقم ( {{concreteReceipt.stockTransactionId}} )
             </button>
           </div>
 
-          <div class="textBold">
-            {{id ? 'فاتورة رقم ' + id : 'فاتورة جديدة'}}
+          <div class="textBold my-auto">
+            {{id ? 'فاتورة خرسانة رقم ' + id : 'فاتورة جديدة'}}
           </div>
 
         </div>
@@ -440,9 +446,9 @@
                     <td>
                       <input type="text" [value]="pumpCost.cost" class="form-control" disabled>
                     </td>
-                    <td class="thCenter textBold pt-3" [class.textDanger]="pumpCost.totalCost < 0">{{pumpCost.totalCost
-                      |
-                      number: '1.0-3'}}</td>
+                    <td class="thCenter textBold pt-3" [class.textDanger]="pumpCost.totalCost < 0">
+                      {{pumpCost.totalCost | number: '1.0-3'}}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -454,16 +460,8 @@
               </h3>
             </div>
           </mat-card-content>
-          <!-- <mat-card-actions>
-                <button mat-button>actionOne</button>
-                <button mat-button>actionTwo</button>
-          </mat-card-actions> -->
+
         </mat-card>
-
-
-
-        <!-- <mat-divider class="mb-3"></mat-divider> -->
-
 
       </div>
     </div>

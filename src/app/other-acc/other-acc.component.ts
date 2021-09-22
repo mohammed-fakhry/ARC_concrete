@@ -42,7 +42,7 @@ export class OtherAccComponent implements OnInit {
 
   ngOnInit(): void {
     window.addEventListener('resize', () => {
-      this._mainService.handleTableHeight();
+      this._mainService.handleTableHeight(40);
     });
 
     this.onStart();
@@ -54,7 +54,7 @@ export class OtherAccComponent implements OnInit {
       this.otherAcc = data;
       this.fillListData(data);
       this.generateChart(data.filter((acc: OtherAcc) => acc.currentAccVal > 0));
-      this._mainService.handleTableHeight();
+      this._mainService.handleTableHeight(40);
       this._glopal.loading = false;
     });
   }
@@ -149,7 +149,7 @@ export class OtherAccComponent implements OnInit {
         this.otherAcc = data;
         this.fillListData(data);
         this.updateChart(data.filter((acc: OtherAcc) => acc.currentAccVal > 0));
-        this._mainService.handleTableHeight();
+        this._mainService.handleTableHeight(40);
         this._glopal.loading = false;
         this.isFiltered = true;
       });

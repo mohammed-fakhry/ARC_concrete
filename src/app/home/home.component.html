@@ -7,16 +7,17 @@
         <i class="fa {{showReports ? 'fa-eye-slash' : 'fa-eye'}} mt-1 pl-1"></i>
         {{showReports? 'اخفاء التقرير' : 'اظهار التقرير'}}
       </button>
+
+      <button mat-button color="primary" [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('generalReport')" class="mr-3">تقرير عام</button>
+      <button mat-button color="primary" [class.d-none]="!showReports || privateLoading" (click)="_mainService.scrollTo('lastData')">اخر
+        بيانات</button>
+      <button mat-button color="primary" [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('activeUser')">عملاء نشطين</button>
+
       <mat-form-field class="mr-4">
         <input matInput type="date" name="reportDate" [(ngModel)]="reportDate" (change)="onStart(reportDate)">
       </mat-form-field>
-
-      <button mat-button [class.d-none]="!showReports || privateLoading"
-        (click)="_mainService.scrollTo('generalReport')" class="mr-3">تقرير عام</button>
-      <button mat-button [class.d-none]="!showReports || privateLoading"
-        (click)="_mainService.scrollTo('lastData')">اخر بيانات</button>
-      <button mat-button [class.d-none]="!showReports || privateLoading"
-        (click)="_mainService.scrollTo('activeUser')">عملاء نشطين</button>
 
     </div>
 
@@ -56,7 +57,7 @@
     <div class="row mb-3">
       <mat-divider class="my-3"></mat-divider>
       <div class="col-lg-5 col-md-12 mb-3">
-        <mat-card [class.d-none]="!charts.showExpenses" class="lightShadow">
+        <mat-card [class.d-none]="!charts.showExpenses" class="lightShadow box">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>المصاريف</mat-card-title>
             <mat-card-subtitle>تحليل المصاريف العامة</mat-card-subtitle>
@@ -78,7 +79,7 @@
                     <i class="fa fa-users headerBlue iconBtn"></i>
                   </span>
                 </div>
-                <mat-card-title class="headerBlue" style="font-size: medium;">موردين | مستهلكين</mat-card-title>
+                <mat-card-title class="headerBlue" style="font-size: medium;">عملاء توريدات</mat-card-title>
               </mat-card-header>
             </mat-card>
           </div>
@@ -152,12 +153,12 @@
       </div>
       <!-- *ngIf="charts.showExpenses" -->
       <div class="col-lg-7 col-md-12 mb-3" [class.d-none]="!_auth?.check.stockeProd || !charts.showSales">
-        <mat-card class="lightShadow">
+        <mat-card class="lightShadow box">
           <mat-card-header class="d-flex justify-content-between">
             <mat-card-title>تقرير المبيعات</mat-card-title>
             <mat-card-subtitle>{{salesReportHeader.subtitle}}</mat-card-subtitle>
             <div class="mr-5">
-              <button mat-raised-button color="accent" routerLink="/ProductsProfits/{{mainStock.stockId}}"
+              <button mat-flat-button color="accent" routerLink="/ProductsProfits/{{mainStock.stockId}}"
                 class="mx-2">الارباح</button>
               <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">المزيد</button>
               <mat-menu #menu="matMenu">

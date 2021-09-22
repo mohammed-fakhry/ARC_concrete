@@ -103,7 +103,7 @@
         <div class="form-inline printX">
           <div class="my-auto">
 
-            <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+            <button *ngIf="marked" mat-button class="textBold balnceBtn" matTooltip="الغاء"
               matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
               [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
               ميزان

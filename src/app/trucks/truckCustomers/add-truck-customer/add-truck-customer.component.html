@@ -1,66 +1,64 @@
 <div class="container">
-  <div class="box">
 
-    <mat-card>
-      <mat-card-header class="d-flex justify-content-between">
-        <!-- <div mat-card-avatar>avatar</div> -->
-        <mat-card-title>بيانات العميل</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form (ngSubmit)="onSubmit(addCustomerForm)" #addCustomerForm="ngForm" class="mt-3">
-          <table class="example-full-width" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>الاسم</mat-label>
-                  <input required matInput name="fullName" [(ngModel)]="customer.fullName" #fullName
-                    (change)="isCustomerRecorded(addCustomerForm)">
-                  <mat-error *ngIf="!inputValid.customerName.cond">
-                    {{inputValid.customerName.msg}}
-                  </mat-error>
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>العنوان</mat-label>
-                  <input matInput name="adress" [(ngModel)]="customer.adress">
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
+  <mat-card class="boxBg">
+    <mat-card-header class="d-flex justify-content-between">
+      <!-- <div mat-card-avatar>avatar</div> -->
+      <mat-card-title>بيانات العميل</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit(addCustomerForm)" #addCustomerForm="ngForm" class="mt-3">
+        <table class="example-full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>الاسم</mat-label>
+                <input required matInput name="fullName" [(ngModel)]="customer.fullName" #fullName
+                  (change)="isCustomerRecorded(addCustomerForm)">
+                <mat-error *ngIf="!inputValid.customerName.cond">
+                  {{inputValid.customerName.msg}}
+                </mat-error>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>العنوان</mat-label>
+                <input matInput name="adress" [(ngModel)]="customer.adress">
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
 
-          <table class="example-full-width mt-3" cellspacing="0">
-            <tr>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>هاتف</mat-label>
-                  <input matInput #tell minlength="11" maxlength="11" name="tell" [(ngModel)]="customer.tell">
-                  <mat-hint align="end">{{tell.value.length}} / 11</mat-hint>
-                  <mat-error *ngIf="tell.value.length != 11 && tell.value">
-                    يجب ادخال 11 رقم
-                  </mat-error>
-                </mat-form-field>
-              </td>
-              <td>
-                <mat-form-field class="example-full-width">
-                  <mat-label>رصيد اول</mat-label>
-                  <input matInput required name="openedVal" [(ngModel)]="customer.openedVal"
-                    [disabled]="!_auth?.check.prem">
-                </mat-form-field>
-              </td>
-            </tr>
-          </table>
+        <table class="example-full-width mt-3" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>هاتف</mat-label>
+                <input matInput #tell minlength="11" maxlength="11" name="tell" [(ngModel)]="customer.tell">
+                <mat-hint align="end">{{tell.value.length}} / 11</mat-hint>
+                <mat-error *ngIf="tell.value.length != 11 && tell.value">
+                  يجب ادخال 11 رقم
+                </mat-error>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>رصيد اول</mat-label>
+                <input matInput required name="openedVal" [(ngModel)]="customer.openedVal"
+                  [disabled]="!_auth?.check.prem">
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
 
-          <div class="form-inline">
-            <button mat-flat-button color="primary" class="mt-3" type="submit">
-              {{id ? 'تعديل' : 'تسجيل'}}
-            </button>
-            <div *ngIf="!formValid" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
-          </div>
-        </form>
-      </mat-card-content>
+        <div class="form-inline">
+          <button mat-flat-button color="primary" class="mt-3" type="submit">
+            {{id ? 'تعديل' : 'تسجيل'}}
+          </button>
+          <div *ngIf="!formValid" class="dangerAlert mt-3 mr-3">يجب مراجعة اخطاء الادخال قبل التسجيل</div>
+        </div>
+      </form>
+    </mat-card-content>
 
-    </mat-card>
+  </mat-card>
 
-  </div>
 </div>

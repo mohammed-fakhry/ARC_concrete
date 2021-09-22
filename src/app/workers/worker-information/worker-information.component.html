@@ -17,7 +17,7 @@
             <mat-list-item role="listitem">الادارة | {{worker.workerJopCateg}}</mat-list-item>
             <mat-list-item role="listitem">الوظيفة | {{worker.workerJop}}</mat-list-item>
             <!-- <mat-list-item role="listitem">تاريخ التوظيف | {{worker.workerJopDate}}</mat-list-item> -->
-            <mat-list-item role="listitem" class="lightBg">
+            <mat-list-item role="listitem" class="textBold">
               الراتب الشهرى | {{worker.workerSalary}} <span class="textPrimary pr-2"> | {{(worker.workerSalary / 30) |
                 number: '1.0-2'}}</span>
             </mat-list-item>
@@ -40,7 +40,7 @@
       <!--  -->
       <div *ngIf="showCalcSalary" class="box mt-3">
 
-        <mat-card class="boxShadow">
+        <mat-card class="boxShadow box">
           <mat-card-header class="d-flex justify-content-between">
             <!-- <div mat-card-avatar>avatar</div> -->
             <mat-card-title>حساب ايام العمل</mat-card-title>
@@ -129,7 +129,7 @@
             <div class="form-inline">
 
               <div class="my-auto">
-                <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+                <button *ngIf="marked" mat-button class="textBold balnceBtn" matTooltip="الغاء"
                   matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
                   [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
                   ميزان

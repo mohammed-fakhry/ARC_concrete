@@ -534,6 +534,11 @@ export class AddConcreteReceiptComponent implements OnInit {
     }
   }
 
+  /* receiptDirectionChanged(receiptDirection: string) {
+    this.concreteReceipt.receiptDirection = receiptDirection
+    this.concreteReceipt.stockTransaction.transactionType
+  } */
+
   customerNameChanged(concreteReceiptForm?: NgForm) {
     const isCustomer = this.customerList.find(
       (customer) =>
@@ -884,7 +889,7 @@ export class AddConcreteReceiptComponent implements OnInit {
       truckOwner: 'سيارة الشركة',
       customerId: 100,
       customerName: 'الخرسانة',
-      transactionType: 2,
+      transactionType: this.concreteReceipt.receiptDirection == 'بيع' ? 2 : 1,
       invoiceTotal: this.concreteReceipt.stockTransaction.invoiceTotal,
       date_time: this.concreteReceipt.date_time,
       notes: `${this.concreteReceipt.notes} | ${this.concreteReceipt.concreteCustomer_name}`,
@@ -899,7 +904,7 @@ export class AddConcreteReceiptComponent implements OnInit {
     if (this.concreteReceipt.concreteReceiptType != 'مستخلص مضخة ثابتة') {
       if (this.id) {
         this._stockService
-          .UpdateStockTransaction(this.fillStockTransAction(this.id))
+          .UpdateStockTransaction(this.fillStockTransAction(this.concreteReceipt.stockTransaction.stockTransactionId))
           .subscribe(() => {
             this.openDialog();
             this.recordStockTransaction_d(

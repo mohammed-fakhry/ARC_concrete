@@ -19,15 +19,16 @@ mat-sidenav-content {
 #mat-sidenav {
   width: 80%;
   height: 100%;
-  background-color: $mainBackground !important;
+  background-color: $boxBg !important;
   border: none;
 }
 
 #productsTable {
   th:not(.thCenter) {
     text-align: right;
-    background-color: $secondaryBg !important;
-    color: white !important;
+    //background-color: $ta !important;
+    background: $tableHeader_color;
+    color: $primaryBg !important;
   }
 }
 

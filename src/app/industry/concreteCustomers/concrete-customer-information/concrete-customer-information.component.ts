@@ -59,7 +59,8 @@ export class ConcreteCustomerInformationComponent implements OnInit {
   @ViewChild('mainTable_paginator', { static: true }) paginator!: MatPaginator;
 
   @ViewChild('cementTable_sort', { static: true }) sort_cement!: MatSort;
-  @ViewChild('cementTable_paginator', { static: true }) paginator_cement!: MatPaginator;
+  @ViewChild('cementTable_paginator', { static: true })
+  paginator_cement!: MatPaginator;
 
   searchTxt: string = '';
   searchDate: { from: string; to: string } = { from: '', to: '' };
@@ -210,11 +211,16 @@ export class ConcreteCustomerInformationComponent implements OnInit {
 
       const netTotal = data[i].receiptDetail.includes('ايصال صرف نقدية')
         ? data[i].concretePrice
-        : totalBeforDiscound + totalDiscound - detailDiscound;
+        : data[i].receiptDirection == 'بيع'
+        ? totalBeforDiscound + totalDiscound - detailDiscound
+        : 0;
 
       const minVal = data[i].receiptDetail.includes('ايصال استلام نقدية')
         ? data[i].concretePrice
+        : data[i].receiptDirection == 'شراء'
+        ? totalBeforDiscound + totalDiscound - detailDiscound
         : 0;
+
       const addVal = netTotal;
 
       const balance = addVal - minVal + this.accArr[i].balance;
@@ -224,9 +230,11 @@ export class ConcreteCustomerInformationComponent implements OnInit {
         date_time: data[i].date_time.replace('T', ' '),
         date: data[i].date_time.replace(' ', 'T'),
         concretereceiptcash_id: data[i].concretereceiptcash_id,
-        receiptSerial: `${isReceipt ? 'ايصال' : 'فاتورة'} ${
-          data[i].receiptSerial
-        }${data[i].customerProject ? ' | ' + data[i].customerProject : ''}`,
+        receiptSerial: `${
+          isReceipt ? 'ايصال' : `فاتورة ${data[i].receiptDirection}`
+        } ${data[i].receiptSerial}${
+          data[i].customerProject ? ' | ' + data[i].customerProject : ''
+        }`,
         //customerProject: data[i].customerProject,
         receiptDetail: `${data[i].receiptDetail}`,
         concreteQty: data[i].concreteQty,
@@ -359,7 +367,6 @@ export class ConcreteCustomerInformationComponent implements OnInit {
   };
 
   generatConcretesTotals(pureData: any) {
-
     const concreteArr = pureData.filter(
       (d: any) => d.concreteName && !d.concreteName.includes('مضخ')
     );

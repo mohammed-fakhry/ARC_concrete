@@ -1,6 +1,6 @@
 <div class="mainContainer">
 
-  <mat-card class="section p-4" [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
+  <mat-card class="section p-4 box" [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
     [class.borderTop-primary]="stockInvoice.transactionType == 'اذن نقل'" [class.borderLeft-alert]="checkedStatue">
     <mat-card-header class="d-flex justify-content-between">
       <!-- <div mat-card-avatar>avatar</div> -->
@@ -310,9 +310,9 @@
                 [class.borderRight-alert]="stockInvoice.isUpdated" (click)="toEditReport()">
                 مُدخل البيانات | <span class="textPrimary">{{stockInvoice.madeBy}}</span>
               </h3>
-              <button mat-stroked-button type="button" color="accent" class="mx-1" (click)="printDocument()"><i
+              <button mat-button type="button" color="accent" class="pt-1" (click)="printDocument()"><i
                   class="fa fa-print"></i></button>
-              <button *ngIf="_router.url != '/CaherReceipt'" type="button" mat-raised-button color="accent"
+              <button *ngIf="_router.url != '/CaherReceipt'" type="button" mat-button color="accent"
                 [matMenuTriggerFor]="more">
                 <i class="fa fa-chevron-down my-auto"></i>
                 المزيد

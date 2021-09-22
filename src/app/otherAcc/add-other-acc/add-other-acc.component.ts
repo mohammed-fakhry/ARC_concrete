@@ -53,7 +53,9 @@ export class AddOtherAccComponent implements OnInit {
     this.getOtherAcc().then((data: any) => {
       this.accList = data;
       if (this.id) {
-        this.getOtherAcc(this.id).then((data: any) => (this.acc = data[0]));
+        this.getOtherAcc(this.id).then((data: any) => {
+          this.acc = data[0];
+        });
         this._glopal.currentHeader = 'تعديل بيانات حساب';
         this.submitBtn = 'تعديل';
       }

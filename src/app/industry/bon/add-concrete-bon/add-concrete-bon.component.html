@@ -1,201 +1,198 @@
 <div class="mainContainer px-5">
 
-  <div class="box mb-3">
 
-    <mat-card>
-      <mat-card-content>
-        <form #concreteBonForm="ngForm" (ngSubmit)="onSubmit(concreteBonForm)">
+  <mat-card class="boxBg">
+    <mat-card-content>
+      <form #concreteBonForm="ngForm" (ngSubmit)="onSubmit(concreteBonForm)">
 
-          <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
+          <table class="w-100">
+            <tr>
+              <td>
+                <mat-form-field style="width: 200px;">
+                  <input [disabled]="concreteUpdated || dateExpires" matInput placeholder="التاريخ" type="date"
+                    name="date" [(ngModel)]="concreteBon.date">
+                </mat-form-field>
+
+                <mat-form-field class="pr-2" style="width: 150px;">
+                  <input [disabled]="concreteUpdated || dateExpires" matInput placeholder="الوقت" type="time"
+                    name="time" [(ngModel)]="concreteBon.time">
+                </mat-form-field>
+              </td>
+
+            </tr>
+          </table>
+
+          <div class="darkBadge borderLdark w-25 text-center">
+            <h2 class="mt-3">
+              {{id ? 'بون خرسانة رقم ' + id : 'بون خرسانة جديد'}}
+            </h2>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-9 col-lg-10 col-md-12">
             <table class="w-100">
               <tr>
+
                 <td>
-                  <mat-form-field style="width: 200px;">
-                    <input [disabled]="concreteUpdated || dateExpires" matInput placeholder="التاريخ" type="date"
-                      name="date" [(ngModel)]="concreteBon.date">
+                  <mat-form-field class="w-50">
+                    <input required matInput placeholder="العميل" list="customerList" class="mdb-autocomplete"
+                      name="concreteCustomer_name" [(ngModel)]="concreteBon.concreteCustomer_name"
+                      (change)="customerNameChanged(concreteBonForm)">
+
+                    <mat-error>
+                      هذا الاسم غير مسجل بقاعدة البيانات
+                    </mat-error>
+
+                    <datalist id="customerList">
+                      <option *ngFor="let customer of customerList" value="{{customer.fullName}}">
+                      </option>
+                    </datalist>
                   </mat-form-field>
 
-                  <mat-form-field class="pr-2" style="width: 150px;">
-                    <input [disabled]="concreteUpdated || dateExpires" matInput placeholder="الوقت" type="time"
-                      name="time" [(ngModel)]="concreteBon.time">
+                  <mat-form-field class="w-25 pr-1">
+                    <input matInput placeholder="اسم المشروع" name="customerProject"
+                      [(ngModel)]="concreteBon.customerProject">
                   </mat-form-field>
                 </td>
 
               </tr>
-            </table>
 
-            <div class="darkBadge borderLdark w-25 text-center">
-              <h2 class="mt-3">
-                {{id ? 'بون خرسانة رقم ' + id : 'بون خرسانة جديد'}}
-              </h2>
-            </div>
-          </div>
+              <tr>
+                <td class="py-2"></td>
+              </tr>
 
-          <div class="row">
-            <div class="col-xl-9 col-lg-10 col-md-12">
-              <table class="w-100">
-                <tr>
-
-                  <td>
-                    <mat-form-field class="w-50">
-                      <input required matInput placeholder="العميل" list="customerList" class="mdb-autocomplete"
-                        name="concreteCustomer_name" [(ngModel)]="concreteBon.concreteCustomer_name"
-                        (change)="customerNameChanged(concreteBonForm)">
-
-                      <mat-error>
-                        هذا الاسم غير مسجل بقاعدة البيانات
-                      </mat-error>
-
-                      <datalist id="customerList">
-                        <option *ngFor="let customer of customerList" value="{{customer.fullName}}">
-                        </option>
-                      </datalist>
-                    </mat-form-field>
-
-                    <mat-form-field class="w-25 pr-1">
-                      <input matInput placeholder="اسم المشروع" name="customerProject"
-                        [(ngModel)]="concreteBon.customerProject">
-                    </mat-form-field>
-                  </td>
-
-                </tr>
-
-                <tr>
-                  <td class="py-2"></td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <mat-form-field class="w-25">
-                      <input required matInput placeholder="السائق" name="driverName"
-                        [(ngModel)]="concreteBon.driverName">
-                      <mat-error>
-                        يجب ادخال اسم السائق
-                      </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field class="w-25 px-1">
-                      <input required matInput placeholder="الخلاطة" list="trucksList" class="mdb-autocomplete"
-                        name="truckName" [(ngModel)]="concreteBon.truckName"
-                        (change)="truckNameChanged(concreteBonForm)">
-
-                      <mat-error>
-                        الخلاطة غير مسجلة بقاعدة البيانات
-                      </mat-error>
-
-                      <datalist id="trucksList">
-                        <option *ngFor="let truck of truckList" value="{{truck.name}}">
-                        </option>
-                      </datalist>
-                    </mat-form-field>
-
-                    <mat-form-field class="w-25 px-1">
-                      <input matInput type="number" placeholder="المشال" name="metrPrice"
-                        [(ngModel)]="truckInfo.metrPrice">
-                    </mat-form-field>
-
-                    <mat-form-field class="w-25">
-                      <input matInput placeholder="اللوحات" name="truckNumber" [(ngModel)]="truckInfo.number" disabled>
-                    </mat-form-field>
-
-                  </td>
-
-                </tr>
-
-                <tr>
-                  <td class="py-2"></td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <mat-form-field class="w-25">
-                      <input matInput placeholder="م.البون" name="bonManualNum" [(ngModel)]="concreteBon.bonManualNum">
-                    </mat-form-field>
-
-                    <mat-form-field class="w-75 pr-1">
-                      <input matInput placeholder="ملاحظات" #notes name="notes" [(ngModel)]="concreteBon.notes">
-                    </mat-form-field>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-          <mat-divider></mat-divider>
-
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <div class="textSecondary textBold my-3">بيانات الخرسانة</div>
-              <table class="w-100">
+              <tr>
                 <td>
-                  <mat-form-field class="w-50 pl-2">
-                    <input required matInput placeholder="نوع الخرسانة" list="concreteList" class="mdb-autocomplete"
-                      name="concreteName" [(ngModel)]="concreteBon.concreteName"
-                      (change)="concreteNameChanged(concreteBonForm)">
+                  <mat-form-field class="w-25">
+                    <input required matInput placeholder="السائق" name="driverName"
+                      [(ngModel)]="concreteBon.driverName">
+                    <mat-error>
+                      يجب ادخال اسم السائق
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="w-25 px-1">
+                    <input required matInput placeholder="الخلاطة" list="trucksList" class="mdb-autocomplete"
+                      name="truckName" [(ngModel)]="concreteBon.truckName" (change)="truckNameChanged(concreteBonForm)">
 
                     <mat-error>
-                      الخرسانة غير مسجلة بقاعدة البيانات
+                      الخلاطة غير مسجلة بقاعدة البيانات
                     </mat-error>
 
-                    <datalist id="concreteList">
-                      <option *ngFor="let concrete of concreteList" value="{{concrete.name}}">
+                    <datalist id="trucksList">
+                      <option *ngFor="let truck of truckList" value="{{truck.name}}">
                       </option>
                     </datalist>
                   </mat-form-field>
 
                   <mat-form-field class="w-25 px-1">
-                    <input matInput placeholder="الكمية" required name="concreteQty" type="number"
-                      [(ngModel)]="concreteBon.concreteQty" id="concreteQty1"
-                      (click)="_mainService.selectText('concreteQty1',1)">
+                    <input matInput type="number" placeholder="المشال" name="metrPrice"
+                      [(ngModel)]="truckInfo.metrPrice">
                   </mat-form-field>
 
                   <mat-form-field class="w-25">
-                    <input required matInput placeholder="طريقة الصب" name="pump" list="pumpsList"
-                      class="mdb-autocomplete" [(ngModel)]="concreteBon.pump" (change)="pumpChanged()">
+                    <input matInput placeholder="اللوحات" name="truckNumber" [(ngModel)]="truckInfo.number" disabled>
+                  </mat-form-field>
 
-                    <datalist id="pumpsList">
-                      <option *ngFor="let pump of pumpsList" value="{{pump.name}}">
-                      </option>
-                    </datalist>
+                </td>
 
-                    <mat-error>
-                      يجب ادخال طريقة الصب
-                    </mat-error>
+              </tr>
+
+              <tr>
+                <td class="py-2"></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <mat-form-field class="w-25">
+                    <input matInput placeholder="م.البون" name="bonManualNum" [(ngModel)]="concreteBon.bonManualNum">
+                  </mat-form-field>
+
+                  <mat-form-field class="w-75 pr-1">
+                    <input matInput placeholder="ملاحظات" #notes name="notes" [(ngModel)]="concreteBon.notes">
                   </mat-form-field>
                 </td>
-              </table>
-            </div>
+              </tr>
+            </table>
           </div>
+        </div>
 
-          <mat-divider class="my-3"></mat-divider>
+        <mat-divider></mat-divider>
 
-          <div class="form-inline printX mt-3">
-            <button mat-raised-button color="primary"
-              [disabled]="!concreteBonForm.valid || dateExpires || concreteBon.concreteReceipt_id > '0'" type="submit">
-              {{id ? 'تعديل' : 'تسجيل'}}
-            </button>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="textSecondary textBold my-3">بيانات الخرسانة</div>
+            <table class="w-100">
+              <td>
+                <mat-form-field class="w-50 pl-2">
+                  <input required matInput placeholder="نوع الخرسانة" list="concreteList" class="mdb-autocomplete"
+                    name="concreteName" [(ngModel)]="concreteBon.concreteName"
+                    (change)="concreteNameChanged(concreteBonForm)">
 
-            <h3 class="mr-3 py-1 infoCard dangerBadge borderLdanger my-auto badgeBtn textBtn"
-              [class.d-none]="concreteBon.concreteReceipt_id == '0'"
-              routerLink="/UpdateConcreteReceipt/{{concreteBon.concreteReceipt_id}}">
-              تم الترحيل الى فاتورة خرسانة رقم ({{concreteBon.concreteReceipt_id}})
-            </h3>
+                  <mat-error>
+                    الخرسانة غير مسجلة بقاعدة البيانات
+                  </mat-error>
 
-            <h3 class="mr-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteBon.madeBy">
-              مُدخل البيانات | <span class="textPrimary">{{concreteBon.madeBy}}</span>
-            </h3>
+                  <datalist id="concreteList">
+                    <option *ngFor="let concrete of concreteList" value="{{concrete.name}}">
+                    </option>
+                  </datalist>
+                </mat-form-field>
+
+                <mat-form-field class="w-25 px-1">
+                  <input matInput placeholder="الكمية" required name="concreteQty" type="number"
+                    [(ngModel)]="concreteBon.concreteQty" id="concreteQty1"
+                    (click)="_mainService.selectText('concreteQty1',1)">
+                </mat-form-field>
+
+                <mat-form-field class="w-25">
+                  <input required matInput placeholder="طريقة الصب" name="pump" list="pumpsList"
+                    class="mdb-autocomplete" [(ngModel)]="concreteBon.pump" (change)="pumpChanged()">
+
+                  <datalist id="pumpsList">
+                    <option *ngFor="let pump of pumpsList" value="{{pump.name}}">
+                    </option>
+                  </datalist>
+
+                  <mat-error>
+                    يجب ادخال طريقة الصب
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </table>
           </div>
+        </div>
 
-        </form>
-      </mat-card-content>
-      <!-- <mat-card-actions>
+        <mat-divider class="my-3"></mat-divider>
+
+        <div class="form-inline printX mt-3">
+          <button mat-raised-button color="primary"
+            [disabled]="!concreteBonForm.valid || dateExpires || concreteBon.concreteReceipt_id > '0'" type="submit">
+            {{id ? 'تعديل' : 'تسجيل'}}
+          </button>
+
+          <h3 class="mr-3 py-1 infoCard dangerBadge borderLdanger my-auto badgeBtn textBtn"
+            [class.d-none]="concreteBon.concreteReceipt_id == '0'"
+            routerLink="/UpdateConcreteReceipt/{{concreteBon.concreteReceipt_id}}">
+            تم الترحيل الى فاتورة خرسانة رقم ({{concreteBon.concreteReceipt_id}})
+          </h3>
+
+          <h3 class="mr-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteBon.madeBy">
+            مُدخل البيانات | <span class="textPrimary">{{concreteBon.madeBy}}</span>
+          </h3>
+        </div>
+
+      </form>
+    </mat-card-content>
+    <!-- <mat-card-actions>
             <button mat-button>actionOne</button>
             <button mat-button>actionTwo</button>
       </mat-card-actions> -->
-    </mat-card>
+  </mat-card>
 
 
 
-  </div>
 
 </div>

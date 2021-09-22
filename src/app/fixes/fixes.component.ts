@@ -26,7 +26,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    "ALTER TABLE `taxespayment` ADD `receiptKind` VARCHAR(100) NOT NULL DEFAULT 'ايصال صرف نقدية' AFTER `paymentVal`",
+    "ALTER TABLE `concretereceipt` ADD `receiptDirection` VARCHAR(100) NOT NULL DEFAULT 'بيع' AFTER `customerProject`",
   ];
 
   url: string | null = localStorage.getItem('tmpDB');

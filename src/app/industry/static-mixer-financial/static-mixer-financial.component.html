@@ -153,7 +153,7 @@
         <mat-card-subtitle>يتم عرض موقف المضخة الثابتة طبقاً لتسجيل البونات</mat-card-subtitle>
         <div class="form-inline">
           <div class="my-auto">
-            <button *ngIf="marked" mat-raised-button class="textBold" matTooltip="الغاء"
+            <button *ngIf="marked" mat-button class="textBold balnceBtn" matTooltip="الغاء"
               matTooltipClass="dangerBadge borderLdanger" matTooltipPosition="after"
               [ngClass]="calcArr.total > 0 ? 'textPrimary' : 'textDanger'" type="button" (click)="clearCalcArr()">
               ميزان

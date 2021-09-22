@@ -286,6 +286,8 @@ export class InvoicesReportComponent implements OnInit {
 
         this.cementUses.concrete.data = [...this.cementUses.concrete.data, row];
 
+        if (concreteCustomer[0].concreteCustomerName?.includes('سهمود')) console.log(concreteCustomer)
+
         //console.log(accArr)
       }
 
@@ -300,7 +302,7 @@ export class InvoicesReportComponent implements OnInit {
           in: supplierArr.reduce((a: any, b: any) => a + b.qtyIn, 0),
           out: supplierArr.reduce((a: any, b: any) => a + b.qtyOut, 0),
         },
-        nonSupplier: nonSupplierArr.reduce((a: any, b: any) => a + b.qtyOut, 0),
+        nonSupplier: nonSupplierArr.reduce((a: any, b: any) => a + b.qtyOut - b.qtyIn, 0),
       };
 
       this.cementUses.outConcrete = {

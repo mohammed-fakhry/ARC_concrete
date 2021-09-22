@@ -5,6 +5,7 @@ import { StockTransactionD } from './stock-transaction-d';
 export class ConcreteReceipt {
   concreteReceipt_id!: string | null;
   concreteReceiptType: string = 'فاتورة خرسانة';
+  receiptDirection: string = 'بيع';
   concreteCustomer_id!: string | null;
   concreteCustomer_name: string = '';
   customerProject: string = '';

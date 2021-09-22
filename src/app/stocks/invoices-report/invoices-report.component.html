@@ -1,6 +1,6 @@
 <div class="mainContainer">
 
-  <div class="col-lg-4 col-md-6 mb-3 stickyBox">
+  <div [class.d-none]="url.searchFor === 'productTransaction' && url.invDirection == 7" class="col-lg-4 col-md-6 mb-3 stickyBox">
     <div class="box">
       <mat-card class="headerBox">
         <mat-card-header>
@@ -24,9 +24,123 @@
 
   </div>
 
-  <div *ngIf="url.searchFor === 'productTransaction' && url.invDirection == 7" class="row">
+  <div *ngIf="url.searchFor === 'productTransaction' && url.invDirection == 7 && !_glopal.loading" class="row">
+
+    <div class="col-md-6">
+
+      <mat-card class="headerBox">
+        <mat-card-header>
+          <div mat-card-avatar class="ml-4">
+            <span class="dash-widget-icon textBtn" style="background-color: #a9afcc29;"
+              routerLink="/StockInformation/{{url.id}}">
+              <i class="fa fa-archive textSecondary iconBtn"></i>
+            </span>
+          </div>
+          <mat-card-title class="textSecondary">
+            {{_glopal.currentHeader}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <h3 class="homeSubtitle">
+              {{searchedFor}}
+            </h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+
+      <mat-card class="box my-3 lightShadow">
+        <mat-card-header class="d-flex justify-content-between">
+          <!-- <div mat-card-avatar>avatar</div> -->
+          <mat-card-title>تفاصيل الاستهلاك</mat-card-title>
+          <mat-card-subtitle>تفاصيل اجمالى الوارد و المنصرف لحركة الاسمنت</mat-card-subtitle>
+          <div class="form-inline">
+
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="panel-body panel-flex-table standTable">
+            <table class="flex-table table table-hover">
+              <thead class="textPrimary tdborder_bottom_primary">
+                <tr>
+                  <th style="flex: 2;" class="p-2">بيان</th>
+                  <th class="p-2">وارد</th>
+                  <th class="p-2">منصرف</th>
+                  <th class="p-2">متبقى</th>
+                </tr>
+              </thead>
+              <tbody class="tableBody">
+
+                <tr>
+                  <td style="flex: 2;" class="textBold p-2">موردين | مستهلكين</td>
+                  <td class="p-2">{{cementUses.outConcrete.in | number: '1.0-3'}}</td>
+                  <td class="p-2">{{cementUses.outConcrete.out | number: '1.0-3'}}</td>
+                  <td class="p-2 tdBorder_right textBold"
+                    [class.textDanger]="(cementUses.outConcrete.in - cementUses.outConcrete.out) < 0">
+                    {{cementUses.outConcrete.in - cementUses.outConcrete.out | number:
+                    '1.0-3'}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="flex: 2;" class="textBold p-2 tdborder_bottom_primary">مستخدمين لاسمنت المحطة</td>
+                  <td class="p-2 tdborder_bottom_primary">0</td>
+                  <td class="p-2 tdborder_bottom_primary">{{cementUses.concrete.totals.nonSupplier | number: '1.0-3'}}
+                  </td>
+                  <td class="p-2 tdborder_bottom_primary tdBorder_right textBold"
+                    [class.textDanger]="cementUses.concrete.totals.nonSupplier > 0">
+                    {{- cementUses.concrete.totals.nonSupplier | number: '1.0-3'}}
+                  </td>
+                </tr>
+
+                <tr class="lightBg textBold">
+                  <td style="flex: 2;" class="p-2">متبقى</td>
+                  <td class="p-2"></td>
+                  <td class="p-2"></td>
+                  <td class="p-2 tdBorder_right textBold"
+                    [class.textDanger]="cementUses.concrete.totals.nonSupplier > 0">
+                    {{cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier
+                    |
+                    number: '1.0-3'}}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="flex: 2;" class="textBold p-2">مستخدمين لاسمنتهم الخاص</td>
+                  <td class="p-2">{{cementUses.concrete.totals.supplier.in | number: '1.0-3'}}</td>
+                  <td class="p-2">{{cementUses.concrete.totals.supplier.out | number: '1.0-3'}}</td>
+                  <td class="p-2 tdBorder_right textBold"
+                    [class.textDanger]="(cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out) < 0">
+                    {{cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out | number:
+                    '1.0-3'}}
+                  </td>
+                </tr>
+
+                <tr
+                  [ngClass]="(cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier +
+                  cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out) < 0 ? 'dangerBadge' : 'darkbadge'"
+                  class="textBold">
+                  <td style="flex: 2;" class="textBold p-2">صافى</td>
+                  <td class="p-2"></td>
+                  <td class="p-2"></td>
+                  <td class="p-2 tdBorder_right textBold">
+                    {{ cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier
+                    +
+                    cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out | number:
+                    '1.0-3'}}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+
+      </mat-card>
+
+
+    </div>
+
     <div class="col-md-6 stickyBox">
-      <div class="box my-3 lightShadow">
+      <div class="box lightShadow">
 
         <mat-card>
           <mat-card-header class="d-flex justify-content-between">
@@ -46,7 +160,7 @@
                     <th class="p-2">متبقى</th>
                   </tr>
                 </thead>
-                <tbody class="tableBody">
+                <tbody class="tableBody boxBg">
                   <tr *ngFor="let cUses of cementUses.concrete.data">
                     <td style="flex: 2;" class="textBold textBtn tBtn-dark p-2"
                       routerLink="/ConcreteCustomerInformation/{{cUses.concreteCustomer_id}}">
@@ -73,101 +187,7 @@
       </div>
     </div>
 
-    <div class="col-md-6 stickyBox">
-      <div class="box my-3 lightShadow">
 
-        <mat-card>
-          <mat-card-header class="d-flex justify-content-between">
-            <!-- <div mat-card-avatar>avatar</div> -->
-            <mat-card-title>تفاصيل الاستهلاك</mat-card-title>
-            <mat-card-subtitle>تفاصيل اجمالى الوارد و المنصرف لحركة الاسمنت</mat-card-subtitle>
-            <div class="form-inline">
-
-            </div>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="panel-body panel-flex-table standTable">
-              <table class="flex-table table table-hover">
-                <thead class="textPrimary tdborder_bottom_primary">
-                  <tr>
-                    <th style="flex: 2;" class="p-2">بيان</th>
-                    <th class="p-2">وارد</th>
-                    <th class="p-2">منصرف</th>
-                    <th class="p-2">متبقى</th>
-                  </tr>
-                </thead>
-                <tbody class="tableBody">
-
-                  <tr>
-                    <td style="flex: 2;" class="textBold p-2">موردين | مستهلكين</td>
-                    <td class="p-2">{{cementUses.outConcrete.in | number: '1.0-3'}}</td>
-                    <td class="p-2">{{cementUses.outConcrete.out | number: '1.0-3'}}</td>
-                    <td class="p-2 tdBorder_right textBold"
-                      [class.textDanger]="(cementUses.outConcrete.in - cementUses.outConcrete.out) < 0">
-                      {{cementUses.outConcrete.in - cementUses.outConcrete.out | number:
-                      '1.0-3'}}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="flex: 2;" class="textBold p-2 tdborder_bottom_primary">مستخدمين لاسمنت المحطة</td>
-                    <td class="p-2 tdborder_bottom_primary">0</td>
-                    <td class="p-2 tdborder_bottom_primary">{{cementUses.concrete.totals.nonSupplier | number: '1.0-3'}}
-                    </td>
-                    <td class="p-2 tdborder_bottom_primary tdBorder_right textBold"
-                      [class.textDanger]="cementUses.concrete.totals.nonSupplier > 0">
-                      {{- cementUses.concrete.totals.nonSupplier | number: '1.0-3'}}
-                    </td>
-                  </tr>
-
-                  <tr class="lightBg textBold">
-                    <td style="flex: 2;" class="p-2">متبقى</td>
-                    <td class="p-2"></td>
-                    <td class="p-2"></td>
-                    <td class="p-2 tdBorder_right textBold"
-                      [class.textDanger]="cementUses.concrete.totals.nonSupplier > 0">
-                      {{cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier
-                      |
-                      number: '1.0-3'}}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style="flex: 2;" class="textBold p-2">مستخدمين لاسمنتهم الخاص</td>
-                    <td class="p-2">{{cementUses.concrete.totals.supplier.in | number: '1.0-3'}}</td>
-                    <td class="p-2">{{cementUses.concrete.totals.supplier.out | number: '1.0-3'}}</td>
-                    <td class="p-2 tdBorder_right textBold"
-                      [class.textDanger]="(cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out) < 0">
-                      {{cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out | number:
-                      '1.0-3'}}
-                    </td>
-                  </tr>
-
-                  <tr
-                    [ngClass]="(cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier +
-                  cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out) < 0 ? 'dangerBadge' : 'darkbadge'"
-                    class="textBold">
-                    <td style="flex: 2;" class="textBold p-2">صافى</td>
-                    <td class="p-2"></td>
-                    <td class="p-2"></td>
-                    <td class="p-2 tdBorder_right textBold">
-                      {{ cementUses.outConcrete.in - cementUses.outConcrete.out - cementUses.concrete.totals.nonSupplier
-                      +
-                      cementUses.concrete.totals.supplier.in - cementUses.concrete.totals.supplier.out | number:
-                      '1.0-3'}}
-                    </td>
-                  </tr>
-
-                </tbody>
-              </table>
-            </div>
-          </mat-card-content>
-
-        </mat-card>
-
-      </div>
-
-    </div>
   </div>
 
 

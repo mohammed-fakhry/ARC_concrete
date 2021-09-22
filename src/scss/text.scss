@@ -20,23 +20,23 @@
 
 .textBlue {
   color: $blue;
-};
+}
 
 .textYellow {
   color: $Yellow;
-};
+}
 
 .textGreen {
   color: $Green;
-};
+}
 
 .textPurple {
   color: $Purple;
-};
+}
 
 .textOrange {
   color: $Orange;
-};
+}
 
 .cardHeader {
   color: $primaryBg;
@@ -65,11 +65,11 @@
 
 .textBolder {
   font-weight: bolder;
-};
+}
 
 .line-through {
   text-decoration: line-through;
-};
+}
 
 .underLine {
   text-decoration: underline;
@@ -101,4 +101,12 @@
   border-bottom: 1px solid $secondaryBg; */
   border-left: 1rem solid $secondaryBg;
   border-right: 5px solid $secondaryBg;
+}
+
+.balnceBtn {
+  text-shadow: 1px 1px 12px rgba(0, 0, 0, 0.25);
+}
+
+.balnceBtn:hover {
+  text-shadow: none;
 }
