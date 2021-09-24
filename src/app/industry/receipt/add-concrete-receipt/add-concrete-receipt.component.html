@@ -378,6 +378,8 @@
 
         </div>
       </div>
+
+      <!-- elements table -->
       <div>
 
         <mat-card class="mb-3 stickyBox" style="overflow-x: hidden;">
@@ -414,7 +416,20 @@
                   </tr>
 
                   <tr class="textBold" style="border-top: solid 1px rgba(0, 0, 0, 0.25);">
-                    <td class="pt-3">لودر</td>
+                    <td>
+                      <input #loaderName="ngModel" id="loaderName0" class="form-control productInpDom text-center textBold"
+                        name="loaderName" (click)="_mainService.selectText('loaderName',0)"
+                        [(ngModel)]='concreteReceipt.loaderName' (change)="loaderChanged()" autocomplete="off"  list="loaderList">
+                      <datalist id="loaderList">
+                        <option *ngFor="let loader of loaders" value="{{loader.name}}">
+                          {{loader.number}}
+                        </option>
+                      </datalist>
+
+                      <div *ngIf="!formValid.loader.cond" class="textDanger textSmall">
+                        {{formValid.loader.msg}}
+                      </div>
+                    </td>
                     <td class="pt-3">{{totalConcreteQty}}</td>
                     <td>
                       <input type="text" value="5" class="form-control" disabled>

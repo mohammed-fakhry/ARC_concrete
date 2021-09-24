@@ -2,6 +2,10 @@ mat-form-field {
   width: 100%;
 }
 
+#loaderName0:hover {
+  box-shadow: none;
+}
+
 @media print {
   mat-card {
     page-break-after: always;

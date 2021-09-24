@@ -780,6 +780,7 @@ export class HomeComponent implements OnInit {
     }
   };
 
+  /* get from dataBase */
   getLastInvoices() {
     return new Promise((res) => {
       this._stockService

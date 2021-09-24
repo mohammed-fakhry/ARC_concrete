@@ -180,14 +180,12 @@ export class TruckCustomerInformationComponent implements OnInit {
 
         this.truckList = result.trucks;
         this.customerInfo = result.customer;
-        this.pureAcc = result.acc;
+
+        /* remove 0 price from data */
+        this.pureAcc = result.acc.filter((acc: any) => acc.orderPrice > 0);
 
         this.tempAccArry = [...this.pureAcc];
-        this.fillListData(
-          this.makeCustomerAcc(
-            this.pureAcc.filter((acc: any) => acc.orderPrice > 0)
-          )
-        );
+        this.fillListData(this.makeCustomerAcc(this.pureAcc));
 
         // this.maketTruckWorks(result.acc);
       })
@@ -197,7 +195,7 @@ export class TruckCustomerInformationComponent implements OnInit {
       });
   }
 
-  maketTruckWorks() {
+  clearTruckTypes() {
     this.truckTypes = {
       meter: {
         trucks: [],
@@ -232,7 +230,83 @@ export class TruckCustomerInformationComponent implements OnInit {
         harrasTotal: 0,
       },
     };
+  }
 
+  setTruckWorksByType(
+    truckInfo: Truck,
+    values: { truck_meter: any; truck_daily: any; truck_hourly: any }
+  ) {
+    if (truckInfo.truckType == 'سيارة') {
+      this.truckTypes.meter.trucks = [
+        ...this.truckTypes.meter.trucks,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.trucks = [
+        ...this.truckTypes.daily.trucks,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.trucks = [
+        ...this.truckTypes.hourly.trucks,
+        values.truck_hourly,
+      ];
+    }
+
+    if (truckInfo.truckType == 'لودر') {
+      this.truckTypes.meter.loaders = [
+        ...this.truckTypes.meter.loaders,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.loaders = [
+        ...this.truckTypes.daily.loaders,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.loaders = [
+        ...this.truckTypes.hourly.loaders,
+        values.truck_hourly,
+      ];
+    }
+
+    if (truckInfo.truckType == 'حفار') {
+      this.truckTypes.meter.diggers = [
+        ...this.truckTypes.meter.diggers,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.diggers = [
+        ...this.truckTypes.daily.diggers,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.diggers = [
+        ...this.truckTypes.hourly.diggers,
+        values.truck_hourly,
+      ];
+    }
+
+    if (truckInfo.truckType == 'هراس') {
+      this.truckTypes.meter.harras = [
+        ...this.truckTypes.meter.harras,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.harras = [
+        ...this.truckTypes.daily.harras,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.harras = [
+        ...this.truckTypes.hourly.harras,
+        values.truck_hourly,
+      ];
+    }
+  }
+
+  maketTruckWorks() {
+    this.clearTruckTypes();
     const trucksIds = [
       ...new Set(this.tempAccArry.map((truck: any) => truck.truckId)),
     ];
@@ -273,114 +347,64 @@ export class TruckCustomerInformationComponent implements OnInit {
             .reduce((a: any, b: any) => a + b, 0),
         };
 
-        if (truckInfo.truckType == 'سيارة') {
-          this.truckTypes.meter.trucks = [
-            ...this.truckTypes.meter.trucks,
-            truck_meter,
-          ];
-
-          this.truckTypes.daily.trucks = [
-            ...this.truckTypes.daily.trucks,
-            truck_daily,
-          ];
-
-          this.truckTypes.hourly.trucks = [
-            ...this.truckTypes.hourly.trucks,
-            truck_hourly,
-          ];
-        }
-
-        if (truckInfo.truckType == 'لودر') {
-          this.truckTypes.meter.loaders = [
-            ...this.truckTypes.meter.loaders,
-            truck_meter,
-          ];
-
-          this.truckTypes.daily.loaders = [
-            ...this.truckTypes.daily.loaders,
-            truck_daily,
-          ];
-
-          this.truckTypes.hourly.loaders = [
-            ...this.truckTypes.hourly.loaders,
-            truck_hourly,
-          ];
-        }
-
-        if (truckInfo.truckType == 'حفار') {
-          this.truckTypes.meter.diggers = [
-            ...this.truckTypes.meter.diggers,
-            truck_meter,
-          ];
-
-          this.truckTypes.daily.diggers = [
-            ...this.truckTypes.daily.diggers,
-            truck_daily,
-          ];
-
-          this.truckTypes.hourly.diggers = [
-            ...this.truckTypes.hourly.diggers,
-            truck_hourly,
-          ];
-        }
-
-        if (truckInfo.truckType == 'هراس') {
-          this.truckTypes.meter.harras = [
-            ...this.truckTypes.meter.harras,
-            truck_meter,
-          ];
-
-          this.truckTypes.daily.harras = [
-            ...this.truckTypes.daily.harras,
-            truck_daily,
-          ];
-
-          this.truckTypes.hourly.harras = [
-            ...this.truckTypes.hourly.harras,
-            truck_hourly,
-          ];
-        }
+        this.setTruckWorksByType(truckInfo, {
+          truck_meter: truck_meter,
+          truck_daily: truck_daily,
+          truck_hourly: truck_hourly,
+        });
       }
     }
 
-    this.truckTypes.meter.diggersTotal = this.truckTypes.meter.diggers
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.meter.harrasTotal = this.truckTypes.meter.harras
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.meter.loadersTotal = this.truckTypes.meter.loaders
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.meter.truckTotal = this.truckTypes.meter.trucks
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
+    this.truckTypes.meter.diggersTotal = this.truckTypes.meter.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.harrasTotal = this.truckTypes.meter.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.loadersTotal = this.truckTypes.meter.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.truckTotal = this.truckTypes.meter.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
 
-    this.truckTypes.daily.diggersTotal = this.truckTypes.daily.diggers
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.daily.harrasTotal = this.truckTypes.daily.harras
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.daily.loadersTotal = this.truckTypes.daily.loaders
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.daily.truckTotal = this.truckTypes.daily.trucks
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
+    this.truckTypes.daily.diggersTotal = this.truckTypes.daily.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.harrasTotal = this.truckTypes.daily.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.loadersTotal = this.truckTypes.daily.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.truckTotal = this.truckTypes.daily.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
 
-    this.truckTypes.hourly.diggersTotal = this.truckTypes.hourly.diggers
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.hourly.harrasTotal = this.truckTypes.hourly.harras
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.hourly.loadersTotal = this.truckTypes.hourly.loaders
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
-    this.truckTypes.hourly.truckTotal = this.truckTypes.hourly.trucks
-      .map((d: any) => d.totalWork)
-      .reduce((a: any, b: any) => a + b, 0);
+    this.truckTypes.hourly.diggersTotal = this.truckTypes.hourly.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.harrasTotal = this.truckTypes.hourly.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.loadersTotal = this.truckTypes.hourly.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.truckTotal = this.truckTypes.hourly.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
 
     this.countTotals = {
       daily:
@@ -400,7 +424,9 @@ export class TruckCustomerInformationComponent implements OnInit {
         this.truckTypes.meter.truckTotal,
     };
 
-    setTimeout(() => (this.showTruckWorks = true), 100);
+    setTimeout(() => {
+      this.showTruckWorks = true;
+    }, 100);
   }
 
   makeCustomerAcc(data: any[]) {
@@ -481,6 +507,8 @@ export class TruckCustomerInformationComponent implements OnInit {
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
     this.setHeaderTotals(data.reverse());
+
+    this.maketTruckWorks()
   };
 
   setHeaderTotals(accArr: any) {
@@ -556,9 +584,15 @@ export class TruckCustomerInformationComponent implements OnInit {
 
       const col = document.querySelectorAll('.col-lg-3');
 
-      const truckworkes = document.querySelector('#truckworkes') as HTMLElement;
+      const headerBox = document.querySelector('.headerBox') as HTMLElement;
 
-      truckworkes.style.top = '170px';
+      const customerInformationTable = document.querySelector(
+        '#customerInformationTable'
+      ) as HTMLElement;
+
+      customerInformationTable.classList.add('d-none');
+
+      headerBox.style.display = 'none';
 
       if (cond == 'all') {
         col.forEach((e: HTMLElement | any) => {
@@ -566,6 +600,8 @@ export class TruckCustomerInformationComponent implements OnInit {
         });
 
         window.print();
+
+        customerInformationTable.classList.remove('d-none');
 
         col.forEach((e: HTMLElement | any) => {
           return e.classList.remove('col-md-6');
@@ -578,12 +614,28 @@ export class TruckCustomerInformationComponent implements OnInit {
         // truckworkes
         const trucksDom = document.querySelector(`#${cond}`) as HTMLElement;
 
+        const cardHeader = document.querySelectorAll('.cardHeader');
+
+        cardHeader.forEach((e: HTMLElement | any) => {
+          return e.classList.add('d-none');
+        });
+
         trucksDom.classList.remove('d-none');
         trucksDom.classList.add('col-md-6');
 
         window.print();
 
+        customerInformationTable.classList.remove('d-none');
+
+        cardHeader.forEach((e: HTMLElement | any) => {
+          return e.classList.remove('d-none');
+        });
+
         col.forEach((e: HTMLElement | any) => {
+          return e.classList.remove('d-none');
+        });
+
+        cardHeader.forEach((e: HTMLElement | any) => {
           return e.classList.remove('d-none');
         });
 
@@ -591,7 +643,7 @@ export class TruckCustomerInformationComponent implements OnInit {
         trucksDom.classList.remove('col-md-6');
       }
 
-      truckworkes.style.top = '52px';
+      headerBox.style.display = 'block';
     } else {
       window.print();
     }
@@ -736,13 +788,16 @@ export class TruckCustomerInformationComponent implements OnInit {
 
       let newArr = this.accArr.filter((acc) => {
         return (
-          acc.date_time >= start && acc.date_time <= end && acc.orderPrice > 0
+          acc.date_time >= start &&
+          acc.date_time <= end /* && acc.orderPrice > 0 */
         );
       });
 
       this.tempAccArry = this.pureAcc.filter((acc) => {
         return acc.date_time >= start && acc.date_time <= end;
       });
+
+      // console.log(this.tempAccArry)
 
       this.isFiltered = true;
       this.fillListData(newArr);

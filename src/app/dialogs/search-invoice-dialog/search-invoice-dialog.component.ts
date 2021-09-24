@@ -104,6 +104,16 @@ export class SearchInvoiceDialogComponent implements OnInit {
         },
         method: () => this.concreteRecipts_Cash_Method(),
       },
+      {
+        searchFor: 'oly_input',
+        placeHolder: `اهلاً ${this.data.concreteCashId} برجاء ادخال سبب التعديل`,
+        btns: {
+          edit: 'تعديل',
+          new: '',
+          newBtnDisabled: true,
+        },
+        method: () => this.oly_input_method(),
+      },
     ];
 
     /* texts effect */
@@ -127,18 +137,33 @@ export class SearchInvoiceDialogComponent implements OnInit {
     }
   }
 
+  oly_input_method() {
+    this.searchList = [];
+  }
+
   searchVal(searchForm: NgForm) {
-    let recVal = this.searchList.find(
-      (s) => s.searchVal === this.searchVals.searchVal
-    );
-    if (recVal) {
-      this.searchValid = true;
-      searchForm.form.controls['searchVal'].setErrors(null);
-      this.searchVals.id = recVal.id;
-      if (recVal?.manualNum) this.searchVals.detail = recVal.manualNum
+    if (this.data?.specialSearch == 'oly_input') {
+      if (this.searchVals.searchVal) {
+        this.searchVals.detail = this.searchVals.searchVal
+        this.searchValid = true;
+        searchForm.form.controls['searchVal'].setErrors(null);
+      } else {
+        this.searchValid = false;
+        searchForm.form.controls['searchVal'].setErrors({ incorrect: true });
+      }
     } else {
-      this.searchValid = false;
-      searchForm.form.controls['searchVal'].setErrors({ incorrect: true });
+      let recVal = this.searchList.find(
+        (s) => s.searchVal === this.searchVals.searchVal
+      );
+      if (recVal) {
+        this.searchValid = true;
+        searchForm.form.controls['searchVal'].setErrors(null);
+        this.searchVals.id = recVal.id;
+        if (recVal?.manualNum) this.searchVals.detail = recVal.manualNum;
+      } else {
+        this.searchValid = false;
+        searchForm.form.controls['searchVal'].setErrors({ incorrect: true });
+      }
     }
   }
 
@@ -249,10 +274,10 @@ export class SearchInvoiceDialogComponent implements OnInit {
     if (this.data?.specialSearch) {
       return {
         concreteReceipt_id: this.searchVals.id,
-        manualNum: this.searchVals.detail
+        manualNum: this.searchVals.detail,
       };
     }
-    return this.searchVals.id
+    return this.searchVals.id;
   }
 
   onSubmit_new() {
@@ -260,7 +285,7 @@ export class SearchInvoiceDialogComponent implements OnInit {
       return {
         header: 'discound',
         concreteReceipt_id: this.searchVals.id,
-        manualNum: this.searchVals.detail
+        manualNum: this.searchVals.detail,
       };
     }
     return 'newReciept';

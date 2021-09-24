@@ -76,7 +76,7 @@ export class AppComponent {
   }
 
   openSearchDialog = (cond: string) => {
-    this._glopal.loading = true;
+    // this._glopal.loading = true;
 
     let dialogRef = this._dialog.open(SearchInvoiceDialogComponent, {
       data: `${cond}`,

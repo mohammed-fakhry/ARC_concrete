@@ -15,6 +15,9 @@ import { AddDiscoundDialogComponent } from 'src/app/dialogs/add-discound-dialog/
 import { SafeReceipt } from 'src/app/classes/safe-receipt';
 import { AuthService } from 'src/app/services/auth.service';
 import { AccHeaderTotals } from 'src/app/classes/acc-header-totals';
+import { TruckService } from 'src/app/services/truck.service';
+import { Truck } from 'src/app/classes/truck';
+import { TruckCustomer } from 'src/app/classes/truck-customer';
 
 @Component({
   selector: 'app-customer-information',
@@ -64,6 +67,84 @@ export class CustomerInformationComponent implements OnInit {
 
   accArr: any[] = [];
 
+  /* truckCustomerInfo */
+  pureTruckAcc: any[] = [];
+
+  countTotals = {
+    meter: 0,
+    daily: 0,
+    hourly: 0,
+  };
+  truckList: Truck[] = [];
+  truckTypes: {
+    meter: {
+      trucks: any[];
+      truckTotal: number;
+      loaders: any[];
+      loadersTotal: number;
+      diggers: any[];
+      diggersTotal: number;
+      harras: any[];
+      harrasTotal: number;
+    };
+
+    daily: {
+      trucks: any[];
+      truckTotal: number;
+      loaders: any[];
+      loadersTotal: number;
+      diggers: any[];
+      diggersTotal: number;
+      harras: any[];
+      harrasTotal: number;
+    };
+
+    hourly: {
+      trucks: any[];
+      truckTotal: number;
+      loaders: any[];
+      loadersTotal: number;
+      diggers: any[];
+      diggersTotal: number;
+      harras: any[];
+      harrasTotal: number;
+    };
+  } = {
+    meter: {
+      trucks: [],
+      truckTotal: 0,
+      loaders: [],
+      loadersTotal: 0,
+      diggers: [],
+      diggersTotal: 0,
+      harras: [],
+      harrasTotal: 0,
+    },
+
+    daily: {
+      trucks: [],
+      truckTotal: 0,
+      loaders: [],
+      loadersTotal: 0,
+      diggers: [],
+      diggersTotal: 0,
+      harras: [],
+      harrasTotal: 0,
+    },
+
+    hourly: {
+      trucks: [],
+      truckTotal: 0,
+      loaders: [],
+      loadersTotal: 0,
+      diggers: [],
+      diggersTotal: 0,
+      harras: [],
+      harrasTotal: 0,
+    },
+  };
+  truckCustomerInfo: TruckCustomer = new TruckCustomer();
+
   tempAccArry: any[] = [];
 
   productsQty: any[] = [];
@@ -94,6 +175,7 @@ export class CustomerInformationComponent implements OnInit {
     public _snackBar: MatSnackBar,
     public _safeService: SafeService,
     public _auth: AuthService,
+    public _truckService: TruckService,
     public _dialog: MatDialog
   ) {
     this._glopal.loading = true;
@@ -125,14 +207,292 @@ export class CustomerInformationComponent implements OnInit {
           customerAcc: data[1],
         };
         this.customerInfo = result.customer;
+
+        /* if linked with truckCustomer */
+        if (
+          this.customerInfo.truckCustomerId != '0' &&
+          this.customerInfo.truckCustomerId
+        ) {
+          this.setTruckCustomer(
+            this.customerInfo.truckCustomerId,
+            result.customerAcc
+          );
+        } else {
+          this.fillListData(this.makeCustomerAcc(result.customerAcc));
+          this.truckCustomerInfo.currentVal = 0;
+          this._mainService.handleTableHeight();
+          this._glopal.loading = false;
+        }
+
         this._glopal.currentHeader = `تفاصيل حساب | ${this.customerInfo.customerName}`;
-
-        this.fillListData(this.makeCustomerAcc(result.customerAcc));
-
-        this._mainService.handleTableHeight();
-        this._glopal.loading = false;
       }
     );
+  }
+
+  clearTruckTypes() {
+    this.truckTypes = {
+      meter: {
+        trucks: [],
+        truckTotal: 0,
+        loaders: [],
+        loadersTotal: 0,
+        diggers: [],
+        diggersTotal: 0,
+        harras: [],
+        harrasTotal: 0,
+      },
+
+      daily: {
+        trucks: [],
+        truckTotal: 0,
+        loaders: [],
+        loadersTotal: 0,
+        diggers: [],
+        diggersTotal: 0,
+        harras: [],
+        harrasTotal: 0,
+      },
+
+      hourly: {
+        trucks: [],
+        truckTotal: 0,
+        loaders: [],
+        loadersTotal: 0,
+        diggers: [],
+        diggersTotal: 0,
+        harras: [],
+        harrasTotal: 0,
+      },
+    };
+  }
+
+  setTruckWorksByType(
+    truckInfo: Truck,
+    values: { truck_meter: any; truck_daily: any; truck_hourly: any }
+  ) {
+    if (truckInfo.truckType == 'سيارة') {
+      this.truckTypes.meter.trucks = [
+        ...this.truckTypes.meter.trucks,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.trucks = [
+        ...this.truckTypes.daily.trucks,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.trucks = [
+        ...this.truckTypes.hourly.trucks,
+        values.truck_hourly,
+      ];
+
+      // console.log(values)
+    }
+
+    if (truckInfo.truckType == 'لودر') {
+      this.truckTypes.meter.loaders = [
+        ...this.truckTypes.meter.loaders,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.loaders = [
+        ...this.truckTypes.daily.loaders,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.loaders = [
+        ...this.truckTypes.hourly.loaders,
+        values.truck_hourly,
+      ];
+    }
+
+    if (truckInfo.truckType == 'حفار') {
+      this.truckTypes.meter.diggers = [
+        ...this.truckTypes.meter.diggers,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.diggers = [
+        ...this.truckTypes.daily.diggers,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.diggers = [
+        ...this.truckTypes.hourly.diggers,
+        values.truck_hourly,
+      ];
+    }
+
+    if (truckInfo.truckType == 'هراس') {
+      this.truckTypes.meter.harras = [
+        ...this.truckTypes.meter.harras,
+        values.truck_meter,
+      ];
+
+      this.truckTypes.daily.harras = [
+        ...this.truckTypes.daily.harras,
+        values.truck_daily,
+      ];
+
+      this.truckTypes.hourly.harras = [
+        ...this.truckTypes.hourly.harras,
+        values.truck_hourly,
+      ];
+    }
+  }
+
+  makeTruckWorks(tempTruckAccArry: any) {
+    this.clearTruckTypes();
+    const trucksIds = [
+      ...new Set(tempTruckAccArry.map((truck: any) => truck.truckId)),
+    ];
+
+    // console.log(trucksIds);
+
+    for (let i = 0; i < trucksIds.length; i++) {
+      const truckInfo = this.truckList.find(
+        (truck) => truck.id == trucksIds[i]
+      );
+
+      if (truckInfo) {
+        const truck_daily = {
+          truckInfo: truckInfo,
+          totalWork: tempTruckAccArry
+            .filter(
+              (d: any) => d.truckId == trucksIds[i] && d.loadingType == 'يومية'
+            )
+            .map((d: any) => d.LoadTimes)
+            .reduce((a: any, b: any) => a + b, 0),
+        };
+
+        const truck_hourly = {
+          truckInfo: truckInfo,
+          totalWork: tempTruckAccArry
+            .filter(
+              (d: any) => d.truckId == trucksIds[i] && d.loadingType == 'ساعة'
+            )
+            .map((d: any) => d.LoadTimes)
+            .reduce((a: any, b: any) => a + b, 0),
+        };
+
+        const truck_meter = {
+          truckInfo: truckInfo,
+          totalWork: tempTruckAccArry
+            .filter(
+              (d: any) => d.truckId == trucksIds[i] && d.loadingType == 'متر'
+            )
+            .map((d: any) => d.LoadTimes * d.truckCapacity)
+            .reduce((a: any, b: any) => a + b, 0),
+        };
+
+        // if (truckInfo.name == 'عربية 3681') console.log({truck_daily, truck_hourly, truck_meter})
+
+        this.setTruckWorksByType(truckInfo, {
+          truck_meter: truck_meter,
+          truck_daily: truck_daily,
+          truck_hourly: truck_hourly,
+        });
+      }
+    }
+
+    this.truckTypes.meter.diggersTotal = this.truckTypes.meter.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.harrasTotal = this.truckTypes.meter.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.loadersTotal = this.truckTypes.meter.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.meter.truckTotal = this.truckTypes.meter.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+
+    this.truckTypes.daily.diggersTotal = this.truckTypes.daily.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.harrasTotal = this.truckTypes.daily.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.loadersTotal = this.truckTypes.daily.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.daily.truckTotal = this.truckTypes.daily.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+
+    this.truckTypes.hourly.diggersTotal = this.truckTypes.hourly.diggers.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.harrasTotal = this.truckTypes.hourly.harras.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.loadersTotal = this.truckTypes.hourly.loaders.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+    this.truckTypes.hourly.truckTotal = this.truckTypes.hourly.trucks.reduce(
+      (a: any, b: any) => a + b.totalWork,
+      0
+    );
+
+    this.countTotals = {
+      daily:
+        this.truckTypes.daily.harrasTotal +
+        this.truckTypes.daily.diggersTotal +
+        this.truckTypes.daily.loadersTotal +
+        this.truckTypes.daily.truckTotal,
+      hourly:
+        this.truckTypes.hourly.harrasTotal +
+        this.truckTypes.hourly.diggersTotal +
+        this.truckTypes.hourly.loadersTotal +
+        this.truckTypes.hourly.truckTotal,
+      meter:
+        this.truckTypes.meter.harrasTotal +
+        this.truckTypes.meter.diggersTotal +
+        this.truckTypes.meter.loadersTotal +
+        this.truckTypes.meter.truckTotal,
+    };
+
+    // this.makeTruckWorks_asProduct();
+    // console.log(tempTruckAccArry)
+  }
+
+  setTruckCustomer(truckCustomerId: string, customerAcc: any) {
+    this.fillListData(this.makeCustomerAcc(customerAcc));
+
+    Promise.all([
+      this.getTruckCustomerAcc(truckCustomerId),
+      this.gettruckCustomer(truckCustomerId),
+      this.getTruckList(),
+    ]).then((data: any) => {
+      const result = {
+        acc: data[0],
+        truckCustomer: data[1][0],
+        trucks: data[2],
+      };
+      this.pureTruckAcc = result.acc.filter((acc: any) => acc.orderPrice > 0);
+      this.truckList = result.trucks;
+      // this.tempAccArry = result.acc;
+
+      this.truckCustomerInfo = result.truckCustomer;
+
+      this.makeTruckWorks(this.pureTruckAcc);
+
+      this._mainService.handleTableHeight();
+
+      this._glopal.loading = false;
+    });
   }
 
   makeCustomerAcc(data: any[]) {
@@ -242,6 +602,30 @@ export class CustomerInformationComponent implements OnInit {
           .subscribe((data: any[]) => {
             res(data);
           });
+    });
+  }
+
+  getTruckList(): Promise<Truck[]> {
+    return new Promise((res) => {
+      this._truckService.trucksList().subscribe((data: Truck[]) => {
+        res(data);
+      });
+    });
+  }
+
+  gettruckCustomer(truckCustomerId: string): Promise<TruckCustomer[]> {
+    return new Promise((res) => {
+      this._truckService
+        .truckCustomersList(truckCustomerId)
+        .subscribe((data: TruckCustomer[]) => res(data));
+    });
+  }
+
+  getTruckCustomerAcc(truckCustomerId: string) {
+    return new Promise((res) => {
+      this._truckService
+        .getTruckCustomerAcc(truckCustomerId)
+        .subscribe((data: any[]) => res(data));
     });
   }
 
@@ -379,7 +763,6 @@ export class CustomerInformationComponent implements OnInit {
           paidQty: receiptsValues / priceAvrg,
           remainQty: begainWith + netQty - receiptsValues / priceAvrg,
         };
-        console.log(this.productQty_remainVal);
       }
 
       this.productsQty.push(row);
@@ -420,7 +803,7 @@ export class CustomerInformationComponent implements OnInit {
   filterByDate(from?: string, to?: string) {
     this.searchTxt = '';
 
-    if (from) {
+    if (from && to) {
       let start = `${from} 00:00`;
       let end = `${to} 23:59`;
 
@@ -430,6 +813,17 @@ export class CustomerInformationComponent implements OnInit {
 
       this.isFiltered = true;
       this.fillListData(newArr);
+
+      /* if linked truckCustomer */
+      if (
+        this.customerInfo.truckCustomerId != '0' &&
+        this.customerInfo.truckCustomerId
+      ) {
+        const tempTruckAcc = this.pureTruckAcc.filter((acc) => {
+          return acc.date_time >= start && acc.date_time <= end;
+        });
+        this.makeTruckWorks(tempTruckAcc);
+      }
     }
   }
 

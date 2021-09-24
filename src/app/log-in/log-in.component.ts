@@ -21,6 +21,8 @@ export class LogInComponent implements OnInit {
   };
   userNameDom: HTMLElement = document.querySelector('#userName') as HTMLElement;
 
+  dateExpired: boolean = false;
+
   constructor(
     private _auth: AuthService,
     public _router: Router,
@@ -33,15 +35,52 @@ export class LogInComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userNameDom = document.querySelector('#userName') as HTMLElement;
-    window.onload = () => this.userNameDom.focus();
+    // window.onload = () => this.userNameDom.focus();
   }
+
+  getAppVersion() {
+    return new Promise((res, rej) => {
+      this._auth.readVersion().subscribe(
+        (data: any[]) => {
+          res(data);
+        },
+        (error) => rej('no data')
+      );
+    });
+  }
+
+  appVersion: string = '';
 
   resetAuth() {
     sessionStorage.removeItem('y');
     sessionStorage.removeItem('n');
     this._auth.isAuth = false;
     this._auth.check = null;
+
+    this.getAppVersion()
+      .then((data: any) => {
+        const currentVersion = localStorage.getItem('versionDate');
+        this.appVersion = data;
+        if (currentVersion) {
+          if (currentVersion < this.appVersion) {
+            this.dateExpired = true;
+          } else {
+            this.userNameDom = document.querySelector(
+              '#userName'
+            ) as HTMLElement;
+          }
+        } else {
+          this.dateExpired = true;
+        }
+      })
+      .catch(() => {
+        this.dateExpired = true;
+      });
+  }
+
+  updateVersion() {
+    localStorage.setItem('versionDate', `${this.appVersion}`);
+    location.reload()
   }
 
   linksArry(url: string, users: UserData[]) {

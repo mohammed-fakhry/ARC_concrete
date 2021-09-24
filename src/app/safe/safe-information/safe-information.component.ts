@@ -269,7 +269,7 @@ export class SafeInformationComponent implements OnInit {
           data.AccName && data.AccName?.includes('مصروفات المقاولات'),
       }, */
       {
-        toolTip: 'مصاريف',
+        toolTip: 'مصاريف مقاولات',
         receiptDetail: data.AccName,
         routeTo: `/OtherAccInformation/${data.accId}`,
         condition: () => data.AccName,
@@ -358,10 +358,6 @@ export class SafeInformationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'cancel') {
-        this.searchDate = {
-          from: result.fromDate,
-          to: result.toDate,
-        };
 
         this.filterByDate(result.fromDate, result.toDate);
       }
@@ -369,7 +365,7 @@ export class SafeInformationComponent implements OnInit {
   };
 
   filterByDate(from?: string, to?: string) {
-    if (from) {
+    if (from && to) {
       let start = `${from} 00:00`;
       let end = `${to} 23:59`;
 
@@ -377,6 +373,12 @@ export class SafeInformationComponent implements OnInit {
         return acc.date_time >= start && acc.date_time <= end;
       });
       this.isFiltered = true;
+
+      this.searchDate = {
+        from: from,
+        to: to,
+      };
+
       this.fillListData(newArr);
     } else {
       this.isFiltered = false;

@@ -55,20 +55,8 @@
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
-<!-- sci-fi-click -->
-<div id="audios" class="d-none">
-  <audio src="assets/audio/alert.wav" controls id="alertAudio"></audio>
-  <audio src="assets/audio/longPop.wav" controls id="longPop"></audio>
-  <audio src="assets/audio/popAlert.mp3" controls id="popAlert"></audio>
-  <audio src="assets/audio/mouseClickClose.wav" controls id="mouseClickClose"></audio>
-  <audio src="assets/audio/secondaryDone.wav" controls id="secondaryDone"></audio>
-  <audio src="assets/audio/shortFail.mp3" controls id="shortFail"></audio>
-  <audio src="assets/audio/intro.mp3" controls id="intro"></audio>
-  <audio src="assets/audio/drumFail.wav" controls id="drumFail"></audio>
-  <!-- <audio src="assets/audio/sweepTransition.wav" controls id="sweepTransition"></audio> -->
-</div>
-
 <mat-sidenav-container *ngIf="_auth?.check != null">
+  <!-- sideNave -->
   <mat-sidenav #sidenav mode="over" [(opened)]="opened" position="end" style="width: 240px">
     <mat-nav-list dense>
       <mat-accordion multi="false">
@@ -224,7 +212,8 @@
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/TrucksList/mixers" (click)="opened = !opened">خلاطات</a>
             <a mat-list-item routerLink="/TrucksList/pumps" (click)="opened = !opened">مضخات</a>
-            <a mat-list-item routerLink="/invoiceReport/productTransaction/7/11" (click)="opened = !opened">حركة الاسمنت</a>
+            <a mat-list-item routerLink="/invoiceReport/productTransaction/7/11" (click)="opened = !opened">حركة
+              الاسمنت</a>
             <mat-divider></mat-divider>
             <a mat-list-item routerLink="/OtherAccInformation/36" (click)="opened = !opened" class="textBold">
               <span class="textDanger">مصاريف المحطة</span>
@@ -342,6 +331,7 @@
       </mat-accordion>
     </mat-nav-list>
   </mat-sidenav>
+  <!-- content -->
   <mat-sidenav-content id="sideNavContent">
 
     <!-- printHeader -->
@@ -375,7 +365,9 @@
       </div>
       <mat-divider class="my-3"></mat-divider>
     </div>
+    <!-- outlet -->
     <router-outlet #outlet="outlet"></router-outlet>
+    <!-- printFooter -->
     <div class="printThis mt-3" [class.d-none]="_router.url.includes('ConcreteReceipt')">
       <mat-divider class="my-3"></mat-divider>
       <div class="d-flex justify-content-between px-5">
@@ -385,7 +377,21 @@
         <h3>الاعتماد</h3>
       </div>
     </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>
 
 <app-log-in *ngIf="_router.url === '/LogIn'"></app-log-in>
+
+<!-- sci-fi-click -->
+<div id="audios" class="d-none">
+  <audio src="assets/audio/alert.wav" controls id="alertAudio"></audio>
+  <audio src="assets/audio/longPop.wav" controls id="longPop"></audio>
+  <audio src="assets/audio/popAlert.mp3" controls id="popAlert"></audio>
+  <audio src="assets/audio/mouseClickClose.wav" controls id="mouseClickClose"></audio>
+  <audio src="assets/audio/secondaryDone.wav" controls id="secondaryDone"></audio>
+  <audio src="assets/audio/shortFail.mp3" controls id="shortFail"></audio>
+  <audio src="assets/audio/intro.mp3" controls id="intro"></audio>
+  <audio src="assets/audio/drumFail.wav" controls id="drumFail"></audio>
+  <!-- <audio src="assets/audio/sweepTransition.wav" controls id="sweepTransition"></audio> -->
+</div>

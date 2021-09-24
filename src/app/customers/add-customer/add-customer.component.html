@@ -33,7 +33,23 @@
         <table class="example-full-width mt-3" cellspacing="0">
           <tr>
             <td>
-              <mat-form-field class="example-full-width">
+              <!-- truckCustomerName -->
+              <mat-form-field class="w-50">
+                <mat-label>تشغيل المُعدات لحساب</mat-label>
+                <input matInput #truckCustomerName name="truckCustomerName" list="truckCustomerList"
+                  [(ngModel)]="customer.truckCustomerName" (change)="truckCustomerChanged(addCustomerForm)">
+
+                <datalist id="truckCustomerList">
+                  <option *ngFor="let truckCustomer of truckCustomerList" value="{{truckCustomer.fullName}}">
+                  </option>
+                </datalist>
+
+                <mat-error>
+                  هذا الاسم غير مسجل بقاعدة البيانات
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-50 pr-2">
                 <mat-label>هاتف</mat-label>
                 <input matInput #customerTell minlength="11" maxlength="11" name="customerTell"
                   [(ngModel)]="customer.customerTell">

@@ -1,5 +1,5 @@
 <div class="mainContainer">
-  <!-- <div class="col-lg-9 col-md-12"> -->
+  <!-- concreteCustomerInfoHeader -->
   <div class="row" id="concreteCustomerInfoHeader">
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="box headerBox">
@@ -38,6 +38,7 @@
       </mat-card>
     </div>
 
+    <!-- acc totals -->
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
       <div class="box textBold">
 
@@ -129,6 +130,7 @@
       </div>
     </div>
 
+    <!-- static pump finantial -->
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
       <div class="box textBold">
 
@@ -186,8 +188,8 @@
     </div>
   </div>
 
+  <!-- concreteCustomerInfoMainTable -->
   <div class="box" id="concreteCustomerInfoMainTable">
-
     <mat-card>
       <mat-card-header class="d-flex justify-content-between">
         <!-- <div mat-card-avatar>avatar</div> -->
@@ -330,9 +332,9 @@
             <button mat-button>actionTwo</button>
       </mat-card-actions> -->
     </mat-card>
-
   </div>
 
+  <!-- cementQty -->
   <div class="row" [class.d-none]="customerInfo.cementCustomerId == '1'" id="cementQty">
 
     <div class="col-lg-4 col-md-6">

@@ -68,11 +68,20 @@
               </td>
             </tr>
           </table> -->
-          <button mat-flat-button color="warn" (click)="tempFix()" [disabled]="loopDetails.length > 0">
-            {{loadCond}}
-            <span *ngIf="loopDetails.length > 0"> {{loopDetails.length}} | {{loopDetails.loop}}</span>
-          </button>
+
           </mat-card-content>
+          <mat-card-actions>
+            <!-- <button mat-button>actionOne</button> -->
+            <button mat-flat-button color="warn" (click)="tempFix()" [disabled]="loopDetails.length > 0">
+              {{loadCond}}
+              <span *ngIf="loopDetails.length > 0"> {{loopDetails.length}} | {{loopDetails.loop}}</span>
+            </button>
+
+            <button mat-flat-button color="warn" class="ml-2" (click)="setVersion()">set version</button>
+          </mat-card-actions>
+
+          <input *ngIf="nowDate" type="text" class="form-control w-25" name="nowDate" [(ngModel)]="nowDate">
+          <!-- <div *ngIf="now">{{now}}</div> -->
         </mat-card>
 
         <mat-card class="around-danger mb-3">

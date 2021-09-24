@@ -187,8 +187,8 @@ mat-card:not(.noAfter):before {
 }
 
 .homeSubtitle {
-  padding-top: 8px;
-  font-size: 1.4rem !important;
+  padding-top: 1px;
+  font-size: 1.3rem !important;
 }
 
 .stickyBox {
@@ -281,6 +281,10 @@ mat-card:not(.noAfter):before {
   border-bottom: solid 1px $primaryBg;
 }
 
+.borderTsecondary {
+  border-top: solid 2px $secondryBorder_color;
+}
+
 .borderAround {
   padding-top: 0.5rem;
   border-top: 2px solid #dee2e6;
@@ -328,6 +332,9 @@ mat-divider {
 .calcMark {
   background-color: #1d6bacb4; // #1d6cace0; //#3f51b5dc;
   color: white;
+  .fa {
+    color: white;
+  }
 }
 
 .sideLogo {

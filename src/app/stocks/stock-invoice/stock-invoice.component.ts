@@ -22,6 +22,7 @@ import { CasherDialogComponent } from 'src/app/dialogs/casher-dialog/casher-dial
 import { TruckService } from 'src/app/services/truck.service';
 import { Truck } from 'src/app/classes/truck';
 import { TruckOrder } from 'src/app/classes/truck-order';
+import { SearchInvoiceDialogComponent } from 'src/app/dialogs/search-invoice-dialog/search-invoice-dialog.component';
 
 @Component({
   selector: 'app-stock-invoice',
@@ -118,7 +119,7 @@ export class StockInvoiceComponent implements OnInit {
 
   notesArr: { product: string; qty: string; notes: string }[] = [];
 
-  notesDetailArr: any[] = []
+  notesDetailArr: any[] = [];
 
   constructor(
     public activeRoute: ActivatedRoute,
@@ -391,7 +392,7 @@ export class StockInvoiceComponent implements OnInit {
       StockTransactionDetails: data[1],
     };
 
-    this.notesDetailArr = []
+    this.notesDetailArr = [];
 
     this.dateExpires = this._mainService.dateExpired(
       result.stockTransaction.date_time
@@ -467,7 +468,7 @@ export class StockInvoiceComponent implements OnInit {
 
       this.dataList.push(`datalistproducts${i}`);
       this.stockTransaction.push({ info: tranceDetail });
-      if (tranceDetail.notes) this.notesDetailArr.push({info: tranceDetail})
+      if (tranceDetail.notes) this.notesDetailArr.push({ info: tranceDetail });
       this.inputValid.product.push({ cond: true, msg: '' });
       this.totalsArry.push(tranceDetail.total);
       this.productQtys.push(
@@ -957,13 +958,19 @@ export class StockInvoiceComponent implements OnInit {
     });
   }
 
-  recordStockTransactionD(stockTransactionId: string) {
+  recordStockTransactionD(stockTransactionId: string, resonforEdit?: string) {
     for (let i = 0; i < this.stockTransaction.length; i++) {
-      const oldData = this.changedData.find(
+      let oldData = this.changedData.find(
         (s) =>
           s.stockTransactionDetailsId ===
           this.stockTransaction[i].info.stockTransactionDetailsId
       );
+
+      if (oldData) {
+        oldData.oldNotes = resonforEdit ?? '';
+      }
+
+      console.log(oldData?.oldNotes);
       if (
         !this.stockTransaction[i].info.productId &&
         this.stockTransaction[i].info.stockTransactionDetailsId
@@ -977,7 +984,7 @@ export class StockInvoiceComponent implements OnInit {
           oldData.date_time = this._mainService
             .makeTime_date(new Date(Date.now()))
             .replace('T', ' ');
-          oldData.notes = oldData.oldNotes;
+          oldData.oldNotes = resonforEdit ?? '';
           this._stockService.postChangedInvoice(oldData).subscribe(
             () => {
               this._stockService
@@ -1079,7 +1086,7 @@ export class StockInvoiceComponent implements OnInit {
     oldData.date_time = this._mainService
       .makeTime_date(new Date(Date.now()))
       .replace('T', ' ');
-    oldData.notes = this.stockInvoice.notes;
+    // oldData.notes = resonforEdit;
     oldData.customerId = this.stockInvoice.customerId;
     oldData.changedType = 1;
     oldData.productId = tranceDetail.productId;
@@ -1216,7 +1223,7 @@ export class StockInvoiceComponent implements OnInit {
 
     this.productsList = this.productListFactory([], this.allProducts);
 
-    this.notesDetailArr = []
+    this.notesDetailArr = [];
   }
 
   checkStatu() {
@@ -1311,17 +1318,42 @@ export class StockInvoiceComponent implements OnInit {
     });
   }
 
+  askForUpdate = () => {
+    this._glopal.loading = false;
+    const passVals = {
+      specialSearch: 'oly_input',
+      customerId: '',
+      concreteCashId: this._auth.uName.realName,
+    };
+
+    let dialogRef = this._dialog.open(SearchInvoiceDialogComponent, {
+      data: passVals,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.manualNum) {
+        this.begainUpdate(result.manualNum);
+      }
+    });
+  };
+
+  begainUpdate(resonforEdit: string) {
+    if (this.id) {
+      this._stockService
+        .UpdateStockTransaction(this.fillStockTransAction(this.id))
+        .subscribe();
+      this.recordStockTransactionD(this.id, resonforEdit);
+
+      this.passDialog(this.id);
+    }
+  }
+
   recordInvoice(stockInvoiceForm: NgForm) {
     this.isFormValid(stockInvoiceForm);
     this._glopal.loading = true;
     if (this.id) {
       if (this._glopal.check.edi) {
-        this._stockService
-          .UpdateStockTransaction(this.fillStockTransAction(this.id))
-          .subscribe();
-        this.recordStockTransactionD(this.id);
-
-        this.passDialog(this.id);
+        this.askForUpdate();
       } else {
         this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
           duration: 2500,

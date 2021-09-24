@@ -2,8 +2,6 @@
 
   <div class="row stickyBox">
 
-
-
     <div class="col-xl-4 col-lg-6 mb-3">
       <mat-card class="headerBox" [class.borderRight-alert]="customerInfo.uncompletedCond > 0">
         <mat-card-header>
@@ -16,29 +14,45 @@
           <mat-card-title class="textSecondary">
             {{customerInfo.customerName}}
           </mat-card-title>
-          <mat-card-subtitle>
-            <h3 class="homeSubtitle"
-              [class.textDanger]="customerInfo.customerRemain < 0 || customerInfo.uncompletedCond > 0">
-              {{(customerInfo.uncompletedCond > 0) ? 'برجاء استكمال بيانات الحساب' : customerInfo.customerRemain |
-              number:'1.0-2'}}
-            </h3>
+          <mat-card-subtitle class="homeSubtitle"
+            [class.textDanger]="customerInfo.customerRemain < 0 || customerInfo.uncompletedCond > 0">
+            {{(customerInfo.uncompletedCond > 0) ? 'برجاء استكمال بيانات الحساب' : customerInfo.customerRemain +
+            truckCustomerInfo.currentVal |
+            number:'1.0-2'}}
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <h4 class="homeSubtitle textSecondary">
             {{customerInfo.customerAdd}}
           </h4>
+
+          <mat-divider></mat-divider>
+
+          <table class="w-100" *ngIf="truckCustomerInfo.fullName">
+            <tr class="lightBg">
+              <td class="p-2">حساب {{customerInfo.customerName}}</td>
+              <th class="p-2">{{customerInfo.customerRemain | number: '1.0-2'}}</th>
+            </tr>
+            <tr class="secondaryBadge">
+              <td class="p-2">حساب {{truckCustomerInfo.fullName}}</td>
+              <th class="p-2">{{truckCustomerInfo.currentVal | number: '1.0-2'}}</th>
+            </tr>
+          </table>
+
         </mat-card-content>
         <mat-card-actions>
           <button *ngIf="customerInfo.uncompletedCond > 0" [disabled]="isFiltered" mat-raised-button color="warn"
             (click)="filterList('filterUncomplete')">
             تحديث البيانات
           </button>
+          <button *ngIf="customerInfo.truckCustomerId != '0' && customerInfo.truckCustomerId" mat-stroked-button
+            routerLink="/TruckCustomerInformation/{{customerInfo.truckCustomerId}}">
+            عميل المُعدات | {{customerInfo.truckCustomerName}}
+          </button>
           <button mat-button routerLink="/CustomerList">العملاء</button>
         </mat-card-actions>
       </mat-card>
     </div>
-
     <div *ngIf="!_glopal.loading" class="col-xl-4 col-lg-6 mb-3">
 
       <mat-card class="box">
@@ -138,9 +152,7 @@
       </mat-card>
 
     </div>
-
     <div *ngIf="productsQty.length > 0" class="col-xl-4 col-lg-6 mb-3">
-
       <mat-card>
         <mat-card-header class="d-flex justify-content-between">
           <!-- <div mat-card-avatar>avatar</div> -->
@@ -261,10 +273,378 @@
         </mat-card-content>
       </mat-card>
     </div>
-
   </div>
 
   <div class="box stickyBox">
+    <!-- if linked with truck customer -->
+    <mat-expansion-panel *ngIf="customerInfo.truckCustomerId != '0' && customerInfo.truckCustomerId" class="mb-2 borderTsecondary">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="textPrimary">
+          {{truckCustomerInfo.fullName}}
+        </mat-panel-title>
+        <mat-panel-description>
+          تفاصيل استهلاك العميل للمُعدات
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="col-md-6 col-lg-3" id="trucks" *ngIf="truckTypes.meter.truckTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">السيارات | امتار</div>
+            </div>
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الامتار</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.meter.trucks" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الامتار</td>
+                    <td class="textBold border-top">{{truckTypes.meter.truckTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="loaders" *ngIf="truckTypes.meter.loadersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">اللودرات | امتار</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الامتار</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.meter.loaders" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الامتار</td>
+                    <td class="textBold border-top">{{truckTypes.meter.loadersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="diggers" *ngIf="truckTypes.meter.diggersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">حفارات | امتار</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الامتار</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.meter.diggers" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الامتار</td>
+                    <td class="textBold border-top">{{truckTypes.meter.diggersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="harasses" *ngIf="truckTypes.meter.harrasTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">هراسات | امتار</div>
+            </div>
+
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الامتار</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.meter.harras" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الامتار</td>
+                    <td class="textBold border-top">{{truckTypes.meter.harrasTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="trucksHour" *ngIf="truckTypes.hourly.truckTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+            <div class="d-flex justify-content-between">
+              <button mat-stroked-button color="accent" class="m-1"><i class="fa fa-print"></i></button>
+              <div class="cardHeader pb-2 my-auto pl-2">السيارات | ساعات</div>
+            </div>
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الساعات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.hourly.trucks" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الساعات</td>
+                    <td class="textBold border-top">{{truckTypes.hourly.truckTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="loadersHour" *ngIf="truckTypes.hourly.loadersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">اللودرات | ساعات</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الساعات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.hourly.loaders" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الساعات</td>
+                    <td class="textBold border-top">{{truckTypes.hourly.loadersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="diggersHour" *ngIf="truckTypes.hourly.diggersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+
+              <div class="cardHeader pb-2 my-auto pl-2">حفارات | ساعات</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الساعات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.hourly.diggers" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الساعات</td>
+                    <td class="textBold border-top">{{truckTypes.hourly.diggersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="harassesHour" *ngIf="truckTypes.hourly.harrasTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">هراسات | ساعات</div>
+            </div>
+
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى الساعات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.hourly.harras" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى الساعات</td>
+                    <td class="textBold border-top">{{truckTypes.hourly.harrasTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="trucksDaily" *ngIf="truckTypes.daily.truckTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">السيارات | يومية</div>
+            </div>
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى اليوميات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.daily.trucks" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى اليوميات</td>
+                    <td class="textBold border-top">{{truckTypes.daily.truckTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="loadersDaily" *ngIf="truckTypes.daily.loadersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">اللودرات | يومية</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى اليوميات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.daily.loaders" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى اليوميات</td>
+                    <td class="textBold border-top">{{truckTypes.daily.loadersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="diggersDaily" *ngIf="truckTypes.daily.diggersTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">حفارات | يومية</div>
+            </div>
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى اليوميات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.daily.diggers" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى اليوميات</td>
+                    <td class="textBold border-top">{{truckTypes.daily.diggersTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" id="harassesDaily" *ngIf="truckTypes.daily.harrasTotal > 0">
+          <div class="box pt-2 mt-3 boxShadow">
+
+            <div class="d-flex justify-content-between">
+              <div class="cardHeader pb-2 my-auto pl-2">هراسات | يومية</div>
+            </div>
+
+
+            <div class="panel-body panel-flex-table standTable">
+              <table class="flex-table table table-hover">
+                <thead class="navHeader">
+                  <tr>
+                    <th>اسم السيارة</th>
+                    <th>اجمالى اليوميات</th>
+                  </tr>
+                </thead>
+                <tbody class="tableBody">
+                  <tr *ngFor="let truck of truckTypes.daily.harras" [class.d-none]="truck.totalWork == 0">
+                    <td>{{truck.truckInfo.name}}</td>
+                    <td>{{truck.totalWork | number: '1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td class="textBold border-top">اجمالى اليوميات</td>
+                    <td class="textBold border-top">{{truckTypes.daily.harrasTotal | number: '1.0-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
 
     <mat-card id="customerInformationTable">
       <mat-card-header class="d-flex justify-content-between">
@@ -311,12 +691,6 @@
         </div>
       </mat-card-header>
       <mat-card-content>
-
-        <div class="d-flex justify-content-between px-3">
-
-
-
-        </div>
 
         <div class="example-container">
           <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
@@ -411,7 +785,5 @@
             <button mat-button>actionTwo</button>
       </mat-card-actions> -->
     </mat-card>
-
-
-
   </div>
+</div>

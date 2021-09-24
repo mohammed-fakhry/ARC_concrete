@@ -12,4 +12,6 @@ export class Customer {
   lastPaidReciept: string = '';
   lastSoldInvoice: string = '';
   lastBoughtInvoice: string = '';
+  truckCustomerId!: string | null;
+  truckCustomerName: string = '';
 }

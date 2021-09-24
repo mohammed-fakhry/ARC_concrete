@@ -4,7 +4,10 @@
       <div class="p-1">
         <div class="box">
 
-          <mat-card class="borderLsecondary" [class.borderRight-alert]="!formData.valid.cond">
+          <button mat-button *ngIf="dateExpired" (click)="updateVersion()">
+            تم تحديث النظام | برجاء الضغط لتحديث الاصدار الحالى
+          </button>
+          <mat-card *ngIf="!dateExpired" class="borderLsecondary" [class.borderRight-alert]="!formData.valid.cond">
             <mat-card-header class="d-flex justify-content-between">
               <!-- <div mat-card-avatar>avatar</div> -->
               <mat-card-title>تسجيل الدخول</mat-card-title>

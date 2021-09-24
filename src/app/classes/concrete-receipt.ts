@@ -18,6 +18,8 @@ export class ConcreteReceipt {
   totalInAr: string = '';
   madeBy: string = '';
   addTaxesVal: number = 0;
+  loaderId: string = '8';
+  loaderName: string = 'لودر e1';
   recordedByBon: boolean = false;
   // receiptRemainCash: number = 0;
 

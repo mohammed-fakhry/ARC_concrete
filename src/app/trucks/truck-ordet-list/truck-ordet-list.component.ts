@@ -162,7 +162,13 @@ export class TruckOrdetListComponent implements OnInit {
     }
   }
 
-  makeTruckAcc(data: TruckOrder[]) {
+  makeTruckAcc(mainData: TruckOrder[]) {
+    const data = mainData.filter((order: TruckOrder) => {
+      if (order.realPrice == 0 && order.truckCustomerName == 'نقلات من المخزن')
+        return false;
+      else return true;
+    });
+
     this.accArr = [];
 
     this.totalCashIn = data
@@ -298,7 +304,6 @@ export class TruckOrdetListComponent implements OnInit {
           };
 
           this.headerTotals.push(rowDaily);
-
         } else {
           this.headerTotals[dailyIndx].qty =
             this.headerTotals[dailyIndx].qty + seperate.dayes;
@@ -339,7 +344,6 @@ export class TruckOrdetListComponent implements OnInit {
 
         this.headerTotals.push(row);
       }
-
     }
   }
 

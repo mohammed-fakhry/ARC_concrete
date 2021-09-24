@@ -39,6 +39,8 @@ export class AddConcreteReceiptComponent implements OnInit {
   };
 
   trucks: Truck[] = [];
+  loaders: Truck[] = [];
+  defultLoader: Truck = new Truck();
 
   productList: Product[] = [];
   concreteList: Concrete[] = [];
@@ -70,6 +72,7 @@ export class AddConcreteReceiptComponent implements OnInit {
   formValid = {
     mainForm: false,
     concretes: [{ concreteName: true, qty: true }],
+    loader: { cond: true, msg: '' },
   };
 
   invoiceTotal: number = 0;
@@ -138,6 +141,7 @@ export class AddConcreteReceiptComponent implements OnInit {
       this.getProducts(),
       this.getConcreteCustomers(),
       this.getStocks(),
+      this.getLoaders(),
     ])
       .then((data: any) => {
         const result = {
@@ -145,8 +149,18 @@ export class AddConcreteReceiptComponent implements OnInit {
           products: data[1],
           concreteCustomers: data[2],
           stocks: data[3],
+          loaders: data[4],
         };
 
+        this.loaders = result.loaders;
+
+        /* defult Loader by now is Loader 36 */
+        /* you must change the defult loader id in the main receipt class */
+        /* this.defultLoader =
+          this.loaders.find((loader: Truck) => loader.id == '102') ??
+          new Truck(); */
+
+        /* main lists */
         this.concreteList = result.concretes;
         this.productList = result.products;
         this.customerList = result.concreteCustomers;
@@ -175,7 +189,6 @@ export class AddConcreteReceiptComponent implements OnInit {
             new Date(Date.now())
           );
           this.concreteReceipt.madeBy = this._auth.uName.realName;
-
           this._glopal.loading = false;
 
           this.startForm();
@@ -186,6 +199,14 @@ export class AddConcreteReceiptComponent implements OnInit {
         this.calcTotalDiscound();
       });
   }
+
+ /*  setLoader(id: string = '102'): Truck {
+    return (
+      this.loaders.find(
+        (loader: Truck) => loader.id == this.concreteReceipt.loaderId
+      ) ?? new Truck()
+    );
+  } */
 
   fillByBons(date: string, customerId: string, customerProject: string) {
     this.concreteReceipt = new ConcreteReceipt();
@@ -210,6 +231,9 @@ export class AddConcreteReceiptComponent implements OnInit {
         const stockInfo = this.stockList[1];
 
         this.concreteReceipt.date_time = `${date}T23:59`;
+        /* const loader = this.loaders.find((loader: Truck) => loader.truckType == 'لودر')
+
+        console.log(loader) */
         // customerInfo
         this.concreteReceipt.concreteCustomer_name = this.customerInfo.fullName;
         this.concreteReceipt.concreteCustomer_id = this.customerInfo.id;
@@ -512,6 +536,16 @@ export class AddConcreteReceiptComponent implements OnInit {
     });
   }
 
+  getLoaders() {
+    return new Promise((res) => {
+      this._truckService
+        .trucksList()
+        .subscribe((data: Truck[]) =>
+          res(data.filter((truck: Truck) => truck.truckType == 'لودر' && truck.owner == 'سيارة الشركة'))
+        );
+    });
+  }
+
   manualNumChanged(concreteReceiptForm: NgForm) {
     if (
       this.concreteReceipt.manualNum != 'مستخلص مضخة ثابتة' &&
@@ -644,6 +678,22 @@ export class AddConcreteReceiptComponent implements OnInit {
     } else {
       this.concreteReceipt.manualNum = '';
       this.concreteReceipt.totalDiscound = 14;
+    }
+  }
+
+  loaderChanged() {
+    const loader = this.loaders.find(
+      (truck: Truck) => truck.name == this.concreteReceipt.loaderName
+    );
+
+    if (loader) {
+      this.concreteReceipt.loaderId = loader.id;
+      this.formValid.loader.cond = true
+    } else {
+      this.formValid.loader = {
+        cond: false,
+        msg: 'يجب ادخال اسم صحيح'
+      }
     }
   }
 
@@ -904,7 +954,11 @@ export class AddConcreteReceiptComponent implements OnInit {
     if (this.concreteReceipt.concreteReceiptType != 'مستخلص مضخة ثابتة') {
       if (this.id) {
         this._stockService
-          .UpdateStockTransaction(this.fillStockTransAction(this.concreteReceipt.stockTransaction.stockTransactionId))
+          .UpdateStockTransaction(
+            this.fillStockTransAction(
+              this.concreteReceipt.stockTransaction.stockTransactionId
+            )
+          )
           .subscribe(() => {
             this.openDialog();
             this.recordStockTransaction_d(

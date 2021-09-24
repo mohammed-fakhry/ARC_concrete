@@ -26,7 +26,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    "ALTER TABLE `concretereceipt` ADD `receiptDirection` VARCHAR(100) NOT NULL DEFAULT 'بيع' AFTER `customerProject`",
+    "ALTER TABLE `customers` ADD `truckCustomerId` INT(11) NOT NULL AFTER `uncompletedCond`",
   ];
 
   url: string | null = localStorage.getItem('tmpDB');
@@ -304,7 +304,9 @@ export class FixesComponent implements OnInit {
   }
 
   tempFix() {
-    this.getTempData().then((data: any[]) => {
+
+    console.log('tempFix')
+    /* this.getTempData().then((data: any[]) => {
       this.loadCond = '...loading';
       this.loopDetails.length = data.length;
 
@@ -322,6 +324,11 @@ export class FixesComponent implements OnInit {
       };
 
       processLoop().then(() => (this.loadCond = 'done.'));
-    });
+    }); */
+  }
+
+  nowDate: string = '';
+  setVersion() {
+    this.nowDate = this._mainService.makeTime_date(new Date(Date.now()))
   }
 }

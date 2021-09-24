@@ -52,6 +52,11 @@ export class AuthService {
       : 'http://192.168.1.118/auth_concrete/';
   }
 
+  readVersion() {
+    let url = this.theMainUrl();
+    return this.http.get<any>(`${url}readVersionDocument.php`);
+  }
+
   getUser = (name: string, auth: string) => {
     let url = this.theMainUrl();
     return this.http.get<UserData[]>(

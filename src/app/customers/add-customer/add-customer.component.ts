@@ -4,11 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/app/classes/customer';
+import { TruckCustomer } from 'src/app/classes/truck-customer';
 import { DoneDialogComponent } from 'src/app/dialogs/done-dialog/done-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
 import { MainService } from 'src/app/services/main.service';
+import { TruckService } from 'src/app/services/truck.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -19,6 +21,7 @@ export class AddCustomerComponent implements OnInit {
   id: string | null = null;
   customer: Customer = new Customer();
   customersList: Customer[] = [];
+  truckCustomerList: TruckCustomer[] = [];
 
   inputValid = {
     customerName: { cond: true, msg: '' },
@@ -38,7 +41,8 @@ export class AddCustomerComponent implements OnInit {
     public _dialog: MatDialog,
     public _customerService: CustomerService,
     public _snackBar: MatSnackBar,
-    public _auth: AuthService,
+    public _truckService: TruckService,
+    public _auth: AuthService
   ) {
     this._glopal.currentHeader = 'اضافة بيانات مورد | مستهلك';
     this._glopal.loading = true;
@@ -48,16 +52,28 @@ export class AddCustomerComponent implements OnInit {
     this.id = this.activeRoute.snapshot.paramMap.get('id');
     this.customer = new Customer();
 
-    this.getCustomers().then((data: any) => {
-      this.customersList = data;
-      if (this.id) {
-        this.getCustomer().then((data: any) => {
-          this.customer = data[0];
-        });
-        this.submitBtn.val = 'تعديل';
+    this.onStart();
+  }
+
+  onStart() {
+    Promise.all([this.getCustomers(), this.getTruckCustomers()]).then(
+      (data: any) => {
+        const result = {
+          customers: data[0],
+          truckcustomers: data[1],
+        };
+        this.customersList = result.customers;
+        this.truckCustomerList = result.truckcustomers;
+
+        if (this.id) {
+          this.getCustomer().then((data: any) => {
+            this.customer = data[0];
+          });
+          this.submitBtn.val = 'تعديل';
+        }
+        this._glopal.loading = false;
       }
-      this._glopal.loading = false;
-    });
+    );
   }
 
   getCustomers() {
@@ -79,10 +95,45 @@ export class AddCustomerComponent implements OnInit {
     });
   }
 
+  getTruckCustomers(): Promise<TruckCustomer[]> {
+    return new Promise((res) => {
+      this._truckService
+        .truckCustomersList()
+        .subscribe((data: TruckCustomer[]) => res(data));
+    });
+  }
+
   isCustomerRecorded(input: string) {
     return this.customersList.find(
       (customer) => customer.customerName === input
     );
+  }
+
+  truckCustomerChanged(addCustomerForm: NgForm) {
+    if (this.customer.truckCustomerName) {
+      const truckCustomer = this.truckCustomerList.find(
+        (customer: TruckCustomer) =>
+          customer.fullName == this.customer.truckCustomerName
+      );
+
+      if (truckCustomer) {
+        this.customer.truckCustomerId = truckCustomer.id;
+        addCustomerForm.form.controls['truckCustomerName'].setErrors(null);
+        /* addCustomerForm.form.controls['truckCustomerName'].setErrors({
+          incorrect: true,
+        }); */
+      } else {
+        this.customer.truckCustomerId = null;
+        addCustomerForm.form.controls['truckCustomerName'].setErrors({
+          incorrect: true,
+        });
+
+        this._mainService.playshortFail();
+      }
+    } else {
+      this.customer.truckCustomerId = null;
+      addCustomerForm.form.controls['truckCustomerName'].setErrors(null);
+    }
   }
 
   clearInputs() {
@@ -102,9 +153,9 @@ export class AddCustomerComponent implements OnInit {
         info: dataVals.info,
         discription: dataVals.discription,
         btns: {
-          addNew: "اضافة بيانات جديدة",
-          goHome: "موردين | مستهلكين"
-        }
+          addNew: 'اضافة بيانات جديدة',
+          goHome: 'موردين | مستهلكين',
+        },
       },
     });
 
@@ -126,7 +177,7 @@ export class AddCustomerComponent implements OnInit {
         this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
           duration: 2500,
         });
-        this._mainService.playDrumFail()
+        this._mainService.playDrumFail();
       }
     } else {
       this._customerService.creatCustomer(this.customer).subscribe();
@@ -153,7 +204,7 @@ export class AddCustomerComponent implements OnInit {
         addCustomerForm.form.controls['customerName'].setErrors({
           incorrect: true,
         });
-        this._mainService.playshortFail()
+        this._mainService.playshortFail();
         this.formValid = false;
         return;
       }
@@ -162,7 +213,7 @@ export class AddCustomerComponent implements OnInit {
     // check if form Valid
     if (!addCustomerForm.valid) {
       this.formValid = false;
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
       return;
     }
 

@@ -160,7 +160,7 @@ export class AddSafeReceiptComponent implements OnInit {
       this.getWorkers(),
     ]).then((data: any[]) => {
       const result = {
-        safes: data[0].filter((safe: any) => safe.safeId != 17),
+        safes: data[0], //.filter((safe: any) => safe.safeId != 17),
         customers: data[1],
         acc: data[2],
         concreteCustomers: data[3],
@@ -290,7 +290,8 @@ export class AddSafeReceiptComponent implements OnInit {
       safeReciept.receiptVal != oldReciept.oldReceiptVal ||
       safeReciept.receiptKind != oldReciept.oldReceiptKind ||
       safeReciept.transactionAccKind != oldReciept.oldTransactionAccKind ||
-      oldReciept.oldAccOrCustomer != oldReciept.accOrCustomer
+      oldReciept.oldAccOrCustomer != oldReciept.accOrCustomer ||
+      safeReciept.safeName != oldReciept.oldSafeName
     ) {
       return true;
     } else {
@@ -494,7 +495,29 @@ export class AddSafeReceiptComponent implements OnInit {
   }
 
   getSafeInfo = (safeName: string) =>
-    this.safeList.find((safe) => safe.safeName == safeName);
+    this.safeList.find((safe) => safe.safeName === safeName);
+
+  findCustomer_byName = (customerName: string): Customer | undefined =>
+    this.customerList.find((c) => c.customerName === customerName);
+
+  findAcc_byName = (accName: string): OtherAcc | undefined =>
+    this.accList.find((acc) => acc.AccName === accName);
+
+  findTruck_byName = (truckName: string): Truck | undefined =>
+    this.truckList.find((truck) => truck.name === truckName);
+
+  findWorker_byName = (workerName: string): Worker | undefined =>
+    this.workerList.find((worker) => worker.workerName === workerName);
+
+  findTruckCustomerByName = (fullName: string): TruckCustomer | undefined =>
+    this.truckCustomerList.find((customer) => customer.fullName === fullName);
+
+  findConcreteCustomer_byName = (
+    fullName: string
+  ): ConcreteCustomer | undefined =>
+    this.concreteCustomerList.find(
+      (customer) => customer.fullName === fullName
+    );
 
   safeChanged(cond: string) {
     let safeInfo = this.getSafeInfo(this.safeReciept.safeName);
@@ -683,28 +706,6 @@ export class AddSafeReceiptComponent implements OnInit {
       this.otherRecieptVals.push({ val: 0, note: '' });
     }
   }
-
-  findCustomer_byName = (customerName: string): Customer | undefined =>
-    this.customerList.find((c) => c.customerName === customerName);
-
-  findAcc_byName = (accName: string): OtherAcc | undefined =>
-    this.accList.find((acc) => acc.AccName === accName);
-
-  findTruck_byName = (truckName: string): Truck | undefined =>
-    this.truckList.find((truck) => truck.name === truckName);
-
-  findWorker_byName = (workerName: string): Worker | undefined =>
-    this.workerList.find((worker) => worker.workerName === workerName);
-
-  findConcreteCustomer_byName = (
-    fullName: string
-  ): ConcreteCustomer | undefined =>
-    this.concreteCustomerList.find(
-      (customer) => customer.fullName === fullName
-    );
-
-  findTruckCustomerByName = (fullName: string): TruckCustomer | undefined =>
-    this.truckCustomerList.find((customer) => customer.fullName == fullName);
 
   customerNameChanged = (addSafeReciept: NgForm) => {
     let custInfo = this.findCustomer_byName(this.safeReciept.customerName);
@@ -920,6 +921,53 @@ export class AddSafeReceiptComponent implements OnInit {
       });
   }
 
+  askForUpdate = (thedialog: any) => {
+    this._glopal.loading = false;
+    const passVals = {
+      specialSearch: 'oly_input',
+      customerId: this.safeReciept.concreteCustomer_id,
+      concreteCashId: this._auth.uName.realName,
+    };
+
+    let dialogRef = this._dialog.open(SearchInvoiceDialogComponent, {
+      data: passVals,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.manualNum) {
+        this.begainUpdate(thedialog, result.manualNum)
+      }
+    });
+  };
+
+  begainUpdate(thedialog: any, resonforEdit: string) {
+    thedialog.discription = [
+      `ايصال رقم | (${this.id})`,
+      ...thedialog.discription,
+    ];
+
+    if (this.isChanged(this.safeReciept, this.oldReciept)) {
+      this.safeReciept.isUpdated = true;
+    }
+    this._safeService.updateSafeReceipt(this.safeReciept).subscribe(
+      () => {
+        /* this.openDialog(thedialog);
+                    this._glopal.loading = false; */
+        this.processUpdate(thedialog, resonforEdit);
+        if (this.id) this.recordConcreteCash(this.id);
+      },
+      (error) => {
+        /* if data saved but some vars are undifined */
+        if (error.status == '201') {
+          /* this._glopal.loading = false;
+                      this.openDialog(thedialog); */
+          this.processUpdate(thedialog, resonforEdit);
+          if (this.id) this.recordConcreteCash(this.id);
+        }
+      }
+    );
+  }
+
   recordSafeReceipt(safeReciept: SafeReceipt) {
     return new Promise((res) => {
       this._safeService.creatSafeReceipt(safeReciept).subscribe((data: any) => {
@@ -976,32 +1024,9 @@ export class AddSafeReceiptComponent implements OnInit {
             this._mainService.playDrumFail();
           } else {
             // check if can edit
-            if (this._glopal.check.edi) {
-              thedialog.discription = [
-                `ايصال رقم | (${this.id})`,
-                ...thedialog.discription,
-              ];
 
-              if (this.isChanged(this.safeReciept, this.oldReciept)) {
-                this.safeReciept.isUpdated = true;
-              }
-              this._safeService.updateSafeReceipt(this.safeReciept).subscribe(
-                () => {
-                  /* this.openDialog(thedialog);
-                  this._glopal.loading = false; */
-                  this.processUpdate(thedialog);
-                  if (this.id) this.recordConcreteCash(this.id);
-                },
-                (error) => {
-                  /* if data saved but some vars are undifined */
-                  if (error.status == '201') {
-                    /* this._glopal.loading = false;
-                    this.openDialog(thedialog); */
-                    this.processUpdate(thedialog);
-                    if (this.id) this.recordConcreteCash(this.id);
-                  }
-                }
-              );
+            if (this._glopal.check.edi) {
+              this.askForUpdate(thedialog);
             } else {
               this._snackBar.open('لا توجد صلاحية للتعديل', 'اخفاء', {
                 duration: 2500,
@@ -1010,7 +1035,6 @@ export class AddSafeReceiptComponent implements OnInit {
               this._mainService.playDrumFail();
             }
           }
-
         } else {
           // new safereceipt
           this.recordSafeReceipt(this.recieptData_forDb(this.safeReciept)).then(
@@ -1081,7 +1105,7 @@ export class AddSafeReceiptComponent implements OnInit {
     }
   }
 
-  processUpdate(theDialog: any) {
+  processUpdate(theDialog: any, resonforEdit: string) {
     if (this.isChanged(this.safeReciept, this.oldReciept)) {
       this.oldReciept.receiptKind = this.safeReciept.receiptKind;
       this.oldReciept.receiptVal = this.safeReciept.receiptVal;
@@ -1089,7 +1113,7 @@ export class AddSafeReceiptComponent implements OnInit {
         ? this.safeReciept.AccName
         : this.safeReciept.customerName;
       this.oldReciept.safeName = this.safeReciept.safeName;
-      this.oldReciept.recieptNote = this.safeReciept.recieptNote;
+      this.oldReciept.recieptNote = resonforEdit;
       this.oldReciept.transactionAccKind = this.safeReciept.transactionAccKind;
       this.oldReciept.date_time = this._mainService
         .makeTime_date(new Date(Date.now()))
