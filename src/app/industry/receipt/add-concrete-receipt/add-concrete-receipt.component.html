@@ -2,33 +2,33 @@
   <div class="row">
     <div class="col-md-12 col-lg-7" id="concreteInvoice">
 
-      <mat-card class="p-4 mb-3 box">
-        <mat-card-header class="d-flex justify-content-between">
-          <!-- <div mat-card-avatar>avatar</div> -->
-          <mat-card-title class="printX">فاتورة خرسانة</mat-card-title>
+      <form (ngSubmit)="onSubmit(concreteReceiptForm)" #concreteReceiptForm="ngForm">
+        <mat-card class="p-4 mb-3 box">
+          <mat-card-header class="d-flex justify-content-between">
+            <!-- <div mat-card-avatar>avatar</div> -->
+            <mat-card-title class="printX">فاتورة خرسانة</mat-card-title>
 
-          <div class="form-inline">
-            <button mat-button color="{{concreteReceipt.receiptDirection == 'بيع' ? 'warn' : 'accent'}}"
-              [matMenuTriggerFor]="menu">فاتورة {{concreteReceipt.receiptDirection}}</button>
-            <mat-menu #menu="matMenu">
-              <button [disabled]="concreteReceipt.receiptDirection == 'بيع'" mat-menu-item
-                (click)="concreteReceipt.receiptDirection = 'بيع'">
-                فاتورة بيع
-              </button>
-              <button [disabled]="concreteReceipt.receiptDirection == 'شراء'" mat-menu-item
-                (click)="concreteReceipt.receiptDirection = 'شراء'">
-                فاتورة شراء
-              </button>
-            </mat-menu>
+            <div class="form-inline">
+              <button mat-button type="button" color="{{concreteReceipt.receiptDirection == 'بيع' ? 'warn' : 'accent'}}"
+                [matMenuTriggerFor]="menu">فاتورة {{concreteReceipt.receiptDirection}}</button>
+              <mat-menu #menu="matMenu">
+                <button [disabled]="concreteReceipt.receiptDirection == 'بيع'" mat-menu-item
+                  (click)="receiptDirection('بيع',concreteReceiptForm)">
+                  فاتورة بيع
+                </button>
+                <button [disabled]="concreteReceipt.receiptDirection == 'شراء'" mat-menu-item
+                  (click)="receiptDirection('شراء',concreteReceiptForm)">
+                  فاتورة شراء
+                </button>
+              </mat-menu>
 
-            <button mat-button color="accent" class="mx-1 mt-1" (click)="printDocument()"><i
-                class="fa fa-print"></i></button>
+              <button mat-button type="button" color="accent" class="mx-1 mt-1" (click)="printDocument()"><i
+                  class="fa fa-print"></i></button>
 
-          </div>
-        </mat-card-header>
-        <mat-card-content>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
 
-          <form (ngSubmit)="onSubmit(concreteReceiptForm)" #concreteReceiptForm="ngForm">
             <table class="w-100">
               <tr>
                 <td>
@@ -249,7 +249,7 @@
 
                 <div class="form-inline printX mt-3">
                   <button mat-flat-button color="primary"
-                    [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires || _glopal.loading"
+                    [disabled]="!concreteReceiptForm.valid || !formValid.mainForm || dateExpires || _glopal.loading || !concreteReceiptForm.dirty"
                     type="submit">
                     {{id ? 'تعديل' : 'تسجيل'}}
                   </button>
@@ -291,33 +291,33 @@
 
               </div>
             </div>
-          </form>
 
-          <div class="printThis mt-3">
-            <div class="py-2 border text-center">
-              <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
-                {{concreteReceipt.totalInAr}}
+            <div class="printThis mt-3">
+              <div class="py-2 border text-center">
+                <div [class.d-none]="concreteReceipt.totalInAr == ''" class="py-2 px-3 mb-2">
+                  {{concreteReceipt.totalInAr}}
+                </div>
+              </div>
+              <mat-divider class="my-3"></mat-divider>
+              <div class="row mt-5">
+                <div class="col text-center">
+                  اعداد
+                </div>
+
+                <div class="col text-center">
+                  المراجعة
+                </div>
+
+                <div class="col text-center">
+                  يعتمد
+                </div>
               </div>
             </div>
-            <mat-divider class="my-3"></mat-divider>
-            <div class="row mt-5">
-              <div class="col text-center">
-                اعداد
-              </div>
 
-              <div class="col text-center">
-                المراجعة
-              </div>
+          </mat-card-content>
 
-              <div class="col text-center">
-                يعتمد
-              </div>
-            </div>
-          </div>
-
-        </mat-card-content>
-
-      </mat-card>
+        </mat-card>
+      </form>
 
       <mat-card *ngIf="concreteReceipt.recordedByBon" class="my-3">
         <mat-progress-bar mode="buffer" *ngIf="elementLoading"></mat-progress-bar>
@@ -359,33 +359,48 @@
     </div>
 
     <div class="col-md-12 col-lg-5" id="elementsExpensec">
-      <div class="secondaryBadge p-3 mx-1 mb-1">
-        <div class="d-flex justify-content-between">
 
-          <div class="form-inline">
-            <button mat-button color="accent" class="mx-1 pt-1" (click)="printDocument('elementsExpensec')"><i
-                class="fa fa-print"></i></button>
+      <!-- <div class="row">
+        <div class="col-md-9">
+          <div class="p-3 mx-1 mb-1"
+            [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'dangerBadge' : 'secondaryBadge'">
+            <div class="d-flex justify-content-between">
 
-            <button *ngIf="concreteReceipt.stockTransactionId" mat-button color="primary"
-              routerLink="/StockInvoice/{{concreteReceipt.stockTransactionId}}">
-              فاتورة مخزن رقم ( {{concreteReceipt.stockTransactionId}} )
-            </button>
+              <div class="form-inline">
+                <button mat-button color="{{concreteReceipt.receiptDirection == 'بيع' ? 'warn' : 'accent'}}"
+                  class="mx-1 pt-1" (click)="printDocument('elementsExpensec')"><i class="fa fa-print"></i></button>
+
+                <button *ngIf="concreteReceipt.stockTransactionId" mat-button color="primary"
+                  routerLink="/StockInvoice/{{concreteReceipt.stockTransactionId}}">
+                  فاتورة مخزن رقم ( {{concreteReceipt.stockTransactionId}} )
+                </button>
+              </div>
+
+              <div class="textBold my-auto">
+                {{id ? 'فاتورة خرسانة رقم ' + id : 'فاتورة جديدة'}}
+              </div>
+
+            </div>
           </div>
-
-          <div class="textBold my-auto">
-            {{id ? 'فاتورة خرسانة رقم ' + id : 'فاتورة جديدة'}}
-          </div>
-
         </div>
-      </div>
+        <div class="col-md-3">
+          <div class="arcPointer arcPointer-smaller"
+            [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'arcPointer-danger' : 'arcPointer-accent'">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div> -->
+
 
       <!-- elements table -->
       <div>
 
-        <mat-card class="mb-3 stickyBox" style="overflow-x: hidden;">
+        <mat-card class="mb-3" style="overflow-x: hidden;">
 
           <mat-card-content>
-            <div class="darkBadge pt-3 px-3">
+            <div class="px-3" [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'dangerBadge' : 'darkBadge'">
               <div class="d-flex justify-content-between">
                 <h2>بيانات الخام</h2>
                 <h3 class="pt-1">اجمالى | {{invoiceTotal | number: '1.0-2'}}</h3>
@@ -417,9 +432,10 @@
 
                   <tr class="textBold" style="border-top: solid 1px rgba(0, 0, 0, 0.25);">
                     <td>
-                      <input #loaderName="ngModel" id="loaderName0" class="form-control productInpDom text-center textBold"
-                        name="loaderName" (click)="_mainService.selectText('loaderName',0)"
-                        [(ngModel)]='concreteReceipt.loaderName' (change)="loaderChanged()" autocomplete="off"  list="loaderList">
+                      <input #loaderName="ngModel" id="loaderName0"
+                        class="form-control productInpDom text-center textBold" name="loaderName"
+                        (click)="_mainService.selectText('loaderName',0)" [(ngModel)]='concreteReceipt.loaderName'
+                        (change)="loaderChanged()" autocomplete="off" list="loaderList">
                       <datalist id="loaderList">
                         <option *ngFor="let loader of loaders" value="{{loader.name}}">
                           {{loader.number}}
@@ -469,11 +485,42 @@
               </table>
             </div>
 
-            <div style="width: fit-content;" class="mt-2">
-              <h3 class="mx-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteReceipt.madeBy">
-                مُدخل البيانات | <span class="textPrimary">{{concreteReceipt.madeBy}}</span>
-              </h3>
+            <div class="d-flex justify-content-between">
+
+              <div class="form-inline">
+                <div style="width: fit-content;">
+                  <h3 class="mx-3 py-1 infoCard lightBg my-auto" [class.d-none]="!concreteReceipt.madeBy">
+                    مُدخل البيانات | <span class="textPrimary">{{concreteReceipt.madeBy}}</span>
+                  </h3>
+                </div>
+                <button *ngIf="concreteReceipt.stockTransactionId" mat-button color="primary"
+                  routerLink="/StockInvoice/{{concreteReceipt.stockTransactionId}}">
+                  فاتورة مخزن رقم ( {{concreteReceipt.stockTransactionId}} )
+                </button>
+                <button mat-button color="accent"
+                  class="mx-1 pt-1" (click)="printDocument('elementsExpensec')"><i class="fa fa-print"></i></button>
+              </div>
+
+              <!-- <div class="textBold my-auto">
+                {{id ? 'فاتورة خرسانة رقم ' + id : 'فاتورة جديدة'}}
+              </div> -->
+
+              <div class="arcPointer arcPointer-smaller"
+                [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'arcPointer-danger' : 'arcPointer-accent'">
+                <span></span>
+                <span></span>
+                <span></span>
+                <!--
+
+
+                 -->
+                 <div class="arcPointer-content">
+                  <h2>{{id ? id : 'جديد'}}</h2>
+                </div>
+              </div>
+
             </div>
+
           </mat-card-content>
 
         </mat-card>

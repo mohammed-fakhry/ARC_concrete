@@ -45,10 +45,6 @@
             (click)="filterList('filterUncomplete')">
             تحديث البيانات
           </button>
-          <button *ngIf="customerInfo.truckCustomerId != '0' && customerInfo.truckCustomerId" mat-stroked-button
-            routerLink="/TruckCustomerInformation/{{customerInfo.truckCustomerId}}">
-            عميل المُعدات | {{customerInfo.truckCustomerName}}
-          </button>
           <button mat-button routerLink="/CustomerList">العملاء</button>
         </mat-card-actions>
       </mat-card>
@@ -277,7 +273,8 @@
 
   <div class="box stickyBox">
     <!-- if linked with truck customer -->
-    <mat-expansion-panel *ngIf="customerInfo.truckCustomerId != '0' && customerInfo.truckCustomerId" class="mb-2 borderTsecondary">
+    <mat-expansion-panel *ngIf="customerInfo.truckCustomerId != '0' && customerInfo.truckCustomerId"
+      class="mb-2 borderTsecondary">
       <mat-expansion-panel-header>
         <mat-panel-title class="textPrimary">
           {{truckCustomerInfo.fullName}}
@@ -286,6 +283,11 @@
           تفاصيل استهلاك العميل للمُعدات
         </mat-panel-description>
       </mat-expansion-panel-header>
+
+      <button mat-raised-button color="primary" class="mt-3" routerLink="/TruckCustomerInformation/{{customerInfo.truckCustomerId}}">
+        تفاصيل الحساب
+      </button>
+      <mat-divider class="my-3"></mat-divider>
       <div class="row">
         <div class="col-md-6 col-lg-3" id="trucks" *ngIf="truckTypes.meter.truckTotal > 0">
           <div class="box pt-2 mt-3 boxShadow">

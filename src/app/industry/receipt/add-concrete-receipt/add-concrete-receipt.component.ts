@@ -642,6 +642,11 @@ export class AddConcreteReceiptComponent implements OnInit {
     }
   }
 
+  receiptDirection(direction: string, concreteReceiptForm: NgForm) {
+    this.concreteReceipt.receiptDirection = direction
+    concreteReceiptForm.form.markAsDirty()
+  }
+
   checkIfOutsidePump(receiptDetails: ConcreteReceipDetails, i: number) {
     if (receiptDetails.concreteName.includes('استعمال مضخة')) {
       console.log(receiptDetails.concreteName);

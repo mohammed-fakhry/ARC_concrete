@@ -21,7 +21,7 @@ export class LogInComponent implements OnInit {
   };
   userNameDom: HTMLElement = document.querySelector('#userName') as HTMLElement;
 
-  dateExpired: boolean = false;
+  dateExpired: boolean = true;
 
   constructor(
     private _auth: AuthService,
@@ -40,7 +40,7 @@ export class LogInComponent implements OnInit {
 
   getAppVersion() {
     return new Promise((res, rej) => {
-      this._auth.readVersion().subscribe(
+      this._auth.read_write_Version().subscribe(
         (data: any[]) => {
           res(data);
         },
@@ -57,30 +57,33 @@ export class LogInComponent implements OnInit {
     this._auth.isAuth = false;
     this._auth.check = null;
 
+    this._glopal.loading = true;
     this.getAppVersion()
       .then((data: any) => {
         const currentVersion = localStorage.getItem('versionDate');
         this.appVersion = data;
         if (currentVersion) {
-          if (currentVersion < this.appVersion) {
+          if (currentVersion != this.appVersion) {
             this.dateExpired = true;
           } else {
+            this.dateExpired = false;
             this.userNameDom = document.querySelector(
               '#userName'
             ) as HTMLElement;
+            if (this.userNameDom) this.userNameDom.focus();
           }
-        } else {
-          this.dateExpired = true;
         }
+        this._glopal.loading = false;
       })
       .catch(() => {
         this.dateExpired = true;
+        this._glopal.loading = false;
       });
   }
 
   updateVersion() {
     localStorage.setItem('versionDate', `${this.appVersion}`);
-    location.reload()
+    location.reload();
   }
 
   linksArry(url: string, users: UserData[]) {
@@ -117,14 +120,6 @@ export class LogInComponent implements OnInit {
       .getUser(this.formData.val.uName, this.formData.val.uAuth)
       .subscribe(
         (data: UserData[]) => {
-          /* if (data.length > 0) {
-            this._auth.isAuth = true;
-            this._glopal.loading = false;
-            this._router
-              .navigate(['/Home'])
-              .then(() => this._mainService.setNotification());
-          } */
-
           if (data.length > 0) {
             const result = data[0];
             let linkInfo = this.linksArry(url, data).find(

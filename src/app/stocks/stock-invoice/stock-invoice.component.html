@@ -1,6 +1,7 @@
 <div class="mainContainer">
 
-  <mat-card class="section p-4 box" [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
+  <mat-card class="section p-4 box"
+    [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
     [class.borderTop-primary]="stockInvoice.transactionType == 'اذن نقل'" [class.borderLeft-alert]="checkedStatue">
     <mat-card-header class="d-flex justify-content-between">
       <!-- <div mat-card-avatar>avatar</div> -->
@@ -125,12 +126,19 @@
 
                   </td> -->
                   <td></td>
-                  <td class="textBold text-center infoCard boxShadow"
-                    [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'"
-                    style="font-size: 1.15rem;">
-                    {{stockInvoice.invoiceTotal | number:'1.0-2'}}
-                  </td>
+                  <td style="font-size: 1.15rem;">
 
+                    <div class="arcPointer arcPointer-sm"
+                      [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'arcPointer-danger' : 'arcPointer-accent'">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <div class="arcPointer-content">
+                        <h2>{{stockInvoice.invoiceTotal | number:'1.0-2'}}</h2>
+                      </div>
+                    </div>
+
+                  </td>
                 </tr>
                 <tr>
                   <td style="text-align: left;" class="pl-3">
@@ -296,9 +304,13 @@
         </div>
         <div class="d-flex justify-content-between">
           <div class="form-inline">
-            <button
-              [disabled]="dateExpires || _glopal.loading || (!stockInvoice.customerName && invoiceType === 'customerInvoice') || (!stockInvoice.sndStockName && invoiceType === 'stockTrance') || stockInvoice.customerId == 100"
-              mat-raised-button type="submit" color="primary">{{submitBtn}}</button>
+            <button [disabled]="dateExpires || _glopal.loading
+              || (!stockInvoice.customerName && invoiceType === 'customerInvoice')
+              || (!stockInvoice.sndStockName && invoiceType === 'stockTrance')
+              || stockInvoice.customerId == 100 || !stockInvoiceForm.dirty" mat-raised-button type="submit"
+              color="primary">
+              {{submitBtn}}
+            </button>
             <div *ngIf="!inputValid.formValid" class="infoCard dangerBadge borderLdanger mr-3 fullHeight">
               <span class="pt-4">يجب مراجعة اخطاء الادخال قبل التسجيل</span>
             </div>

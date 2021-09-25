@@ -1,13 +1,26 @@
 <div class="mainContainer">
   <div class="row fixedRow">
     <div class="col-lg-4 col-md-6 col-sm-12" style="margin:auto">
-      <div class="p-1">
-        <div class="box">
 
-          <button mat-button *ngIf="dateExpired" (click)="updateVersion()">
+      <div *ngIf="dateExpired && !_glopal.loading" id="updateVersion" class="m-auto">
+        <span></span>
+        <span></span>
+        <span></span>
+        <div id="updateVersion-content">
+          <h2>تم تحديث النظام</h2>
+          <button mat-button color="primary" (click)="updateVersion()">برجاء الضغط للتحديث</button>
+        </div>
+      </div>
+
+
+      <div class="p-1">
+        <div class="box" style="background-color: transparent;">
+
+          <!-- <button mat-button *ngIf="dateExpired" (click)="updateVersion()">
             تم تحديث النظام | برجاء الضغط لتحديث الاصدار الحالى
-          </button>
-          <mat-card *ngIf="!dateExpired" class="borderLsecondary" [class.borderRight-alert]="!formData.valid.cond">
+          </button> -->
+
+          <mat-card *ngIf="!dateExpired" class="borderLsecondary lightShadow" [class.borderRight-alert]="!formData.valid.cond">
             <mat-card-header class="d-flex justify-content-between">
               <!-- <div mat-card-avatar>avatar</div> -->
               <mat-card-title>تسجيل الدخول</mat-card-title>
@@ -25,7 +38,7 @@
                     [(ngModel)]="formData.val.uAuth">
                 </mat-form-field>
                 <div class="form-inline">
-                  <button [disabled]="_glopal.loading" mat-flat-button color="primary" class="my-auto" type="submit">سجل
+                  <button [disabled]="_glopal.loading" mat-flat-button color="accent" class="my-auto" type="submit">سجل
                     دخولك</button>
                   <div *ngIf="!formData.valid.cond" class="infoCard dangerBadge borderLdanger mr-3 my-auto">
                     {{formData.valid.msg}}</div>

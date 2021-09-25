@@ -1,5 +1,6 @@
 import { HttpClient, JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserData } from '../classes/user-data';
 
@@ -13,7 +14,11 @@ export class AuthService {
   uName: any = JSON.parse(this.checkUName);
   isAuth = false;
 
-  constructor(private http: HttpClient, public _router: Router) {}
+  constructor(
+    private http: HttpClient,
+    public _router: Router,
+    public _snackBar: MatSnackBar
+  ) {}
 
   getUsersPromise() {
     return new Promise((res, rej) => {
@@ -52,8 +57,12 @@ export class AuthService {
       : 'http://192.168.1.118/auth_concrete/';
   }
 
-  readVersion() {
+  read_write_Version(textTowrite?: string) {
     let url = this.theMainUrl();
+    if (textTowrite)
+      return this.http.get<any>(
+        `${url}readVersionDocument.php?textTowrite=${textTowrite}`
+      );
     return this.http.get<any>(`${url}readVersionDocument.php`);
   }
 

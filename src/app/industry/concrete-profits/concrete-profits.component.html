@@ -119,6 +119,18 @@
     </div>
 
     <div class="col-xl-7 col-lg-6 col-md-hide printX">
+      <div class="arcPointer arcPointer-md"
+      [ngClass]="( headerTotal.concreteInvoiceTotal - workerExpences - truckExpences- headerTotal.accExpences - headerTotal.totalExpences) > 0 ? 'arcPointer-accent' : 'arcPointer-danger'">
+        <span></span>
+        <span></span>
+        <span></span>
+        <!-- <div class="arcPointer-content">
+          <h2>title</h2>
+          <div>
+            content
+          </div>
+        </div> -->
+      </div>
       <img class="sideLogo" src="assets/logos/concreteCustomers.gif" alt="">
     </div>
 

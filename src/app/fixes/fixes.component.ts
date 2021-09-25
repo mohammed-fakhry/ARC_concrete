@@ -12,6 +12,8 @@ import { SafeReceipt } from '../classes/safe-receipt';
 import { DeleteDialogComponent } from '../dialogs/delete-dialog/delete-dialog.component';
 import { MainService } from '../services/main.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-fixes',
@@ -26,7 +28,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    "ALTER TABLE `customers` ADD `truckCustomerId` INT(11) NOT NULL AFTER `uncompletedCond`",
+    'ALTER TABLE `customers` ADD `truckCustomerId` INT(11) NOT NULL AFTER `uncompletedCond`',
   ];
 
   url: string | null = localStorage.getItem('tmpDB');
@@ -39,7 +41,9 @@ export class FixesComponent implements OnInit {
     public _location: Location,
     public _mainService: MainService,
     private http: HttpClient,
-    public _router: Router
+    public _router: Router,
+    public _snackBar: MatSnackBar,
+    private _auth: AuthService
   ) {
     this._glopal.currentHeader = 'SystemFixes';
   }
@@ -304,8 +308,7 @@ export class FixesComponent implements OnInit {
   }
 
   tempFix() {
-
-    console.log('tempFix')
+    console.log('tempFix');
     /* this.getTempData().then((data: any[]) => {
       this.loadCond = '...loading';
       this.loopDetails.length = data.length;
@@ -327,8 +330,14 @@ export class FixesComponent implements OnInit {
     }); */
   }
 
-  nowDate: string = '';
+  // nowDate: string = '';
   setVersion() {
-    this.nowDate = this._mainService.makeTime_date(new Date(Date.now()))
+    const nowDate = this._mainService.makeTime_date(new Date(Date.now()));
+
+    this._auth.read_write_Version(nowDate).subscribe((data: any) =>
+      this._snackBar.open(`${data} | ${nowDate}`, 'اخفاء', {
+        duration: 2500,
+      })
+    );
   }
 }

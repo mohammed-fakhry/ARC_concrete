@@ -264,7 +264,7 @@
                 </td>
                 <td style="width: 70%;">
                   <mat-form-field class="example-full-width" cellspacing="0">
-                    <input matInput placeholder="ملاحظات" name="notes" [(ngModel)]="safeReciept.recieptNote">
+                    <input matInput placeholder="ملاحظات" id="notes" name="notes" [(ngModel)]="safeReciept.recieptNote">
                     <mat-hint align="end">{{safeReciept?.recieptNote?.length || 0}} / 200</mat-hint>
                   </mat-form-field>
                 </td>
@@ -303,8 +303,8 @@
             <!-- receipt footer -->
             <div class="d-flex justify-content-between mt-3">
               <div class="form-inline">
-                <button [disabled]="_glopal.loading || !safeReciept.receiptKind" mat-raised-button color="primary"
-                  type="submit">{{submitBtn}}</button>
+                <button [disabled]="_glopal.loading || !safeReciept.receiptKind ||!addSafeReciept.dirty"
+                  mat-raised-button color="primary" type="submit">{{submitBtn}}</button>
 
                 <div class="infoCard printX py-2 mr-2 textBtn badgeBtn"
                   (click)="openSearchDialog(addSafeReciept, concreteReceiptCash.id)"
@@ -314,7 +314,7 @@
                 </div>
 
                 <div class="infoCard printX py-2 mr-2 textBtn badgeBtn darkBadge"
-                  (click)="safeReciept.recieptNote = staticMixerNote"
+                  (click)="transeTo_statickpump_financial(addSafeReciept)"
                   *ngIf="safeReciept.transactionAccKind === 'عميل خرسانة' && !safeReciept.recieptNote.includes(staticMixerNote) && !concreteReceiptCash.id">
                   دفعة من مستخلص
                 </div>
@@ -350,44 +350,46 @@
     <!-- logo -->
     <div class="col-lg-2 col-md-12 printX">
       <div class="container text-center">
-        <img class="sideLogo"
+        <div class="arcPointer arcPointer-sm"
+          [ngClass]="safeReciept.receiptKind == 'ايصال صرف نقدية' ? 'arcPointer-danger' : 'arcPointer-accent'">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <!-- <img class="sideLogo"
           src="assets/logos/safeReciept-Logo{{safeReciept.receiptKind == 'ايصال صرف نقدية' ? '-min' : ''}}.png"
           style="max-width: 75%;">
-      </div>
-      <div *ngIf="!id" class="box mt-3">
+      </div> -->
+        <div *ngIf="!id" class="box mt-3">
 
-        <mat-card>
-          <mat-card-header class="d-flex justify-content-between">
-            <!-- <div mat-card-avatar>avatar</div> -->
-            <mat-card-title>{{safeReciept.safeName}}</mat-card-title>
-            <mat-card-subtitle>sub-header</mat-card-subtitle>
-            <div class="form-inline">
-
-            </div>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="infoCard text-center mx-auto textBold py-3"
-              [ngClass]="valsRemain.safeRemain >= 0 ? 'blueBadge borderLblue' : 'dangerBadge borderLdanger'"
-              style="width: 80%; font-size: larger;">
-              {{valsRemain.safeRemain | number:'1.0-2'}}
-            </div>
-
-            <div *ngIf="valsRemain.otherValDetail">
-              <div class="text-center pt-3 pb-2">
-                {{valsRemain.otherValDetail}}
-              </div>
+          <mat-card>
+            <mat-card-header class="d-flex justify-content-between">
+              <!-- <div mat-card-avatar>avatar</div> -->
+              <mat-card-title>{{safeReciept.safeName}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
               <div class="infoCard text-center mx-auto textBold py-3"
-                [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"
+                [ngClass]="valsRemain.safeRemain >= 0 ? 'blueBadge borderLblue' : 'dangerBadge borderLdanger'"
                 style="width: 80%; font-size: larger;">
-                {{valsRemain.otherValRemain | number:'1.0-2'}}
+                {{valsRemain.safeRemain | number:'1.0-2'}}
               </div>
-            </div>
-          </mat-card-content>
 
-        </mat-card>
+              <div *ngIf="valsRemain.otherValDetail">
+                <div class="text-center pt-3 pb-2">
+                  {{valsRemain.otherValDetail}}
+                </div>
+                <div class="infoCard text-center mx-auto textBold py-3"
+                  [ngClass]="valsRemain.otherValRemain >= 0 ? 'secondaryBadge borderLsecondary' : 'dangerBadge borderLdanger'"
+                  style="width: 80%; font-size: larger;">
+                  {{valsRemain.otherValRemain | number:'1.0-2'}}
+                </div>
+              </div>
+            </mat-card-content>
 
+          </mat-card>
+
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>

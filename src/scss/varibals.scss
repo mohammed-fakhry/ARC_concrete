@@ -11,16 +11,23 @@ $elvationZ_big: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
 $lightBg: rgba(195, 195, 195, 0.2);
 $primaryBg: #0049be;
 $secondaryBg: #5a73f3;
-$secondryBorder_color: rgba(90, 115, 243, .5);
+$secondryBorder_color: rgba(90, 115, 243, 0.5);
 $darkBg: #00238d;
 $infoBg: rgb(2, 107, 121);
 $dangerBg: #e0455fe3; //e0455fe3
 $textAlert: #721c24;
 $alertBg: #f8d7da;
 $success: #e0ece4;
-$boxBg: rgb(245, 245, 245);//rgba(245,245,245,1);
-$mainBackground: rgb(252, 252, 252); //#e7e5e5;//rgb(245, 245, 245);//#f5f5f5; //rgba(27,26,24,1);
-$tableHeader_color: linear-gradient(#e7eaf8 0 94%, #a4b2f7 0 6%);//#e1e4fa;//7d93ff;//e4e7f4;
+$boxBg: rgb(245, 245, 245); //rgba(245,245,245,1);
+$mainBackground: rgb(
+  252,
+  252,
+  252
+); //#e7e5e5;//rgb(245, 245, 245);//#f5f5f5; //rgba(27,26,24,1);
+$tableHeader_color: linear-gradient(
+  #e7eaf8 0 94%,
+  #a4b2f7 0 6%
+); //#e1e4fa;//7d93ff;//e4e7f4;
 
 // circleCardColors
 $headerBlue: #2ec5fb; //42cdff
@@ -33,16 +40,17 @@ $textPrimaryBg: #0049be36;
 $textSecondaryBg: #5a73f329;
 $textDangerBg: #e0455f4f;
 $textDarkBg: #00238d44;
+$dangerPointer_color: #e0455f4f;
 
 $headerPink: #c952ce;
 $headerPinkBg: #ebadebab;
 
 $headerBrown: #8f6600;
-$headerBrownBg: #f8e5b6;//ffeec3
+$headerBrownBg: #f8e5b6; //ffeec3
 
 // padges
 $greenBadge: #26af48 !important;
-$greenBadgeBg : rgba(15, 183, 107, 0.12) !important;
+$greenBadgeBg: rgba(15, 183, 107, 0.12) !important;
 
 $blueBadge: #1db9aa !important;
 $blueBadgeBg: rgba(2, 182, 179, 0.12) !important;
@@ -65,7 +73,7 @@ $onTheTop: 99999999999999;
 
 //borders 0px 0px 30px 10px/0px 30px 2px 10px;
 $bottomBorderRadios: 0px 0px 0px 15px/15px 30px 10px 10px;
-$boxRadios: .5% .5% / .5% 60%; //0% 1% / 1% 60%;
+$boxRadios: 0.5% 0.5% / 0.5% 60%; //0% 1% / 1% 60%;
 $boxInpRadios: 10% 1% 10% 0.5% / 15% 60% 15% 60%;
 $blobRadios: 69% 31% 30% 70% / 46% 80% 20% 54%;
 /* 35% 20% / 10% 5% */

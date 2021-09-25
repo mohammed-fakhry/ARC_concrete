@@ -1,5 +1,6 @@
 <div class="mainContainer mt-3">
-  <mat-card class="borderLsecondary boxBg" [class.borderRight-alert]="truckOrder.orderType == 'سيارة خارجية'">
+  <mat-card class="boxBg"
+    [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'borderRight-alert' : 'borderLsecondary' ">
     <mat-card-header class="d-flex justify-content-between">
       <!-- <div mat-card-avatar>avatar</div> -->
       <mat-card-title>اذن تشغيل معدة</mat-card-title>
@@ -11,9 +12,10 @@
 
           <div class="form-inline">
 
-            <div class="px-3 infoCard"
+
+            <div class="infoCard px-3"
               [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'">
-              <h1 class="my-3">{{truckOrder.truckId ? truckOrder.orderType : ''}}</h1>
+              <h2 class="my-3 textBold">{{orderCondition}}</h2>
             </div>
 
             <div class="infoCard px-3 mr-3"
@@ -23,10 +25,21 @@
 
           </div>
 
-          <div class="infoCard boxShadow px-3"
+          <!-- <div class="px-3 infoCard"
             [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'dangerBadge borderLdanger' : 'darkBadge borderLdark'">
-            <h2 class="my-3 textBold">{{orderCondition}}</h2>
+            <h1 class="my-3">{{truckOrder.truckId ? truckOrder.orderType : ''}}</h1>
+          </div> -->
+
+          <div class="arcPointer arcPointer-smaller"
+            [ngClass]="truckOrder.orderType == 'سيارة خارجية' ? 'arcPointer-danger' : 'arcPointer-accent'">
+            <span></span>
+            <span></span>
+            <span></span>
+            <div class="arcPointer-content">
+              <h2>{{truckOrder.truckId ? truckOrder.orderType == 'سيارة خارجية' ? 'خارجى' : 'الشركة' : ''}}</h2>
+            </div>
           </div>
+
         </div>
 
         <mat-divider class="my-3"></mat-divider>
@@ -152,7 +165,8 @@
                       </option>
                     </datalist>
 
-                    <mat-error>ادخل اسم صحيح</mat-error>
+                    <mat-error>{{truckOrder.truckCustomerName ? 'العميل غير مسجل بقاعدة البيانات' : 'برجاء ادخال اسم
+                      العميل'}}</mat-error>
                   </mat-form-field>
                 </td>
 
@@ -172,7 +186,7 @@
 
         <div class="d-flex justify-content-between">
           <button
-            [disabled]="truckOrder.stockTransactionDetailsId > '1' || truckOrder.concreteBonId > '0' || truckOrder.concreteReceiptD_id > '0' || dateExpires"
+            [disabled]="truckOrder.stockTransactionDetailsId > '1' || truckOrder.concreteBonId > '0' || truckOrder.concreteReceiptD_id > '0' || dateExpires || !truckOrderForm.dirty"
             mat-flat-button color="primary" type="submit">
             {{id ? 'تعديل' : 'تسجيل'}}
           </button>

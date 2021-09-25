@@ -935,7 +935,7 @@ export class AddSafeReceiptComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.manualNum) {
-        this.begainUpdate(thedialog, result.manualNum)
+        this.begainUpdate(thedialog, result.manualNum);
       }
     });
   };
@@ -1166,6 +1166,7 @@ export class AddSafeReceiptComponent implements OnInit {
               this.concreteReceiptCash.safeReceiptKind = 'فاتورة';
             }
           }
+          addSafeReciept.form.markAsDirty()
           this.concreteReceiptCash.concreteReceipt_id =
             result.concreteReceipt_id;
           this.concreteReciptCash_btn = `تم ربط الايصال بالفاتورة رقم (${result?.manualNum}) | ${result?.concreteReceipt_id} | تعديل`;
@@ -1185,6 +1186,16 @@ export class AddSafeReceiptComponent implements OnInit {
       this._mainService.playshortFail();
     }
   };
+
+  transeTo_statickpump_financial(addSafeReciept: NgForm) {
+    const notes = document.querySelector('#notes') as HTMLElement;
+
+    if (notes) {
+      notes.focus();
+      this.safeReciept.recieptNote = this.staticMixerNote;
+      addSafeReciept.form.controls['notes'].markAsDirty(); //setValue(this.staticMixerNote)
+    }
+  }
 
   recieptData_forDb(receipt: SafeReceipt): SafeReceipt {
     return {
