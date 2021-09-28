@@ -1,3 +1,9 @@
 h1 {
   font-weight: bolder !important;
 }
+
+@media print {
+  mat-expansion-panel {
+    display: none;
+  }
+}

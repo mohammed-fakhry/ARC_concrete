@@ -20,7 +20,7 @@
             تم تحديث النظام | برجاء الضغط لتحديث الاصدار الحالى
           </button> -->
 
-          <mat-card *ngIf="!dateExpired" class="borderLsecondary lightShadow" [class.borderRight-alert]="!formData.valid.cond">
+          <mat-card *ngIf="!dateExpired" class="lightShadow" style="border-right: 5px solid #c7cdf5 ;" [class.borderRight-alert]="!formData.valid.cond">
             <mat-card-header class="d-flex justify-content-between">
               <!-- <div mat-card-avatar>avatar</div> -->
               <mat-card-title>تسجيل الدخول</mat-card-title>
@@ -60,15 +60,18 @@
     </div>
 
     <div class="col-lg-8 col-md-6 col-sm-12 m-auto">
-      <div class="pt-5" id="welcom">
-        <div class="pt-5 fade-in text-center" id="homeLogo">
-          <img src="assets/programLogo.png" alt="">
-          <a href="http://facebook.com/mohammed.fakhry">
-            <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">Powerd by | Mohammed Fakhry</h6>
-          </a>
-          <h6 class="mt-2 text-center" style="font-size: small; color: black;">
-            Special Edition for | Tower Ready Mix Concrete
-          </h6>
+      <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
+        <span></span>
+        <span class="d-none"></span>
+        <span></span>
+        <div class="arcPointer-content noShadow">
+          <div id="welcom">
+            <div class="fade-in text-center" id="homeLogo">
+              <img src="assets/theProgramLogo.png" style="height: 500px;">
+              <h3 class="text-dark">special edition for tower ready mix</h3>
+              <h6 class="text-center" style="color: #006699; font-size: small;">Powerd by | Mohammed Fakhry</h6>
+            </div>
+          </div>
         </div>
       </div>
     </div>

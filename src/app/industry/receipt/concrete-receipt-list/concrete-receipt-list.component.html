@@ -35,7 +35,7 @@
             <ng-container matColumnDef="concreteReceipt_id">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الاذن</th>
               <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-                [class.marked]="row.receiptDirection.includes(searchTxt)  && searchTxt"
+                [class.marked]="row.receiptDirection?.includes(searchTxt)  && searchTxt"
                 routerLink="/UpdateConcreteReceipt/{{row.concreteReceipt_id}}"
                 [class.textDanger]="row.receiptDirection == 'بيع'">
                 {{row.concreteReceipt_id}} | فاتورة {{row.receiptDirection}} ({{row.manualNum}})

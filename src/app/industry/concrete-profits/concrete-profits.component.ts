@@ -85,8 +85,6 @@ export class ConcreteProfitsComponent implements OnInit {
         workerExpences: data[2],
       };
 
-      // console.log(result.concreteProfits)
-
       this.mainList = result.concreteProfits;
       this.otherAcc = result.accList.filter(
         (acc: any) => acc.currentAccVal != 0

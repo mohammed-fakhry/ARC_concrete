@@ -133,7 +133,6 @@ export class AddTaxesListComponent implements OnInit {
           taxesPayments: data[1],
         };
 
-        // console.log(result)
         this.mainData = result.addTaxes;
         this.taxesPayments = result.taxesPayments;
 
@@ -415,11 +414,9 @@ export class AddTaxesListComponent implements OnInit {
 
         /* take action */
         if (result.secSafeId != 0) {
-          // console.log(result);
           taxPayment.id = result.secSafeId;
           this.updateTaxPaymeny(taxPayment);
         } else {
-          console.log(taxPayment);
           this._taxesService
             .postTaxPayment(taxPayment)
             .subscribe(() => this.onStart());

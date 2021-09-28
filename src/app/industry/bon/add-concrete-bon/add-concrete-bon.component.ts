@@ -113,7 +113,6 @@ export class AddConcreteBonComponent implements OnInit {
 
           this.truckInfo.metrPrice = this.concreteBon.metrPrice;
 
-          console.log(this.concreteBon);
         });
     } else {
       this.concreteBon.date = this._mainService.makeDate(new Date(Date.now()));

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/app/classes/customer';
+import { MainCustomer } from 'src/app/classes/main-customer';
 import { TruckCustomer } from 'src/app/classes/truck-customer';
 import { DoneDialogComponent } from 'src/app/dialogs/done-dialog/done-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';
@@ -22,6 +23,7 @@ export class AddCustomerComponent implements OnInit {
   customer: Customer = new Customer();
   customersList: Customer[] = [];
   truckCustomerList: TruckCustomer[] = [];
+  mainCustomers: MainCustomer[] = [];
 
   inputValid = {
     customerName: { cond: true, msg: '' },
@@ -56,24 +58,28 @@ export class AddCustomerComponent implements OnInit {
   }
 
   onStart() {
-    Promise.all([this.getCustomers(), this.getTruckCustomers()]).then(
-      (data: any) => {
-        const result = {
-          customers: data[0],
-          truckcustomers: data[1],
-        };
-        this.customersList = result.customers;
-        this.truckCustomerList = result.truckcustomers;
+    Promise.all([
+      this.getCustomers(),
+      this.getTruckCustomers(),
+      this.getMainCustomers(),
+    ]).then((data: any) => {
+      const result = {
+        customers: data[0],
+        truckcustomers: data[1],
+        mainCustomers: data[2],
+      };
+      this.customersList = result.customers;
+      this.truckCustomerList = result.truckcustomers;
+      this.mainCustomers = result.mainCustomers;
 
-        if (this.id) {
-          this.getCustomer().then((data: any) => {
-            this.customer = data[0];
-          });
-          this.submitBtn.val = 'تعديل';
-        }
-        this._glopal.loading = false;
+      if (this.id) {
+        this.getCustomer().then((data: any) => {
+          this.customer = data[0];
+        });
+        this.submitBtn.val = 'تعديل';
       }
-    );
+      this._glopal.loading = false;
+    });
   }
 
   getCustomers() {
@@ -81,6 +87,14 @@ export class AddCustomerComponent implements OnInit {
       this._customerService.getCustomer().subscribe((data: Customer[]) => {
         res(data);
       });
+    });
+  }
+
+  getMainCustomers() {
+    return new Promise((res) => {
+      this._mainService
+        .mainCustomersList()
+        .subscribe((data: any[]) => res(data));
     });
   }
 
@@ -133,6 +147,33 @@ export class AddCustomerComponent implements OnInit {
     } else {
       this.customer.truckCustomerId = null;
       addCustomerForm.form.controls['truckCustomerName'].setErrors(null);
+    }
+  }
+
+  mainCustomerChanged(addCustomerForm: NgForm) {
+    if (this.customer.mainCustomerName) {
+      const mainCustomer = this.mainCustomers.find(
+        (customer: MainCustomer) =>
+          customer.fullName == this.customer.mainCustomerName
+      );
+
+      if (mainCustomer) {
+        this.customer.mainCustomerId = mainCustomer.id;
+        addCustomerForm.form.controls['mainCustomerName'].setErrors(null);
+        /* addCustomerForm.form.controls['truckCustomerName'].setErrors({
+          incorrect: true,
+        }); */
+      } else {
+        this.customer.mainCustomerId = null;
+        addCustomerForm.form.controls['mainCustomerName'].setErrors({
+          incorrect: true,
+        });
+
+        this._mainService.playshortFail();
+      }
+    } else {
+      this.customer.mainCustomerId = null;
+      addCustomerForm.form.controls['mainCustomerName'].setErrors(null);
     }
   }
 

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MainCustomer } from '../classes/main-customer';
 import { SearchInvoiceDialogComponent } from '../dialogs/search-invoice-dialog/search-invoice-dialog.component';
 import { AuthService } from './auth.service';
 import { CheckService } from './check.service';
@@ -151,6 +152,12 @@ export class MainService {
     return this.http.get(`${this.url}sqlQuery.php?query=${query}`);
   }
 
+  /* main customer requests */
+  mainCustomersList(id?: string) {
+    if (id) return this.http.get<MainCustomer[]>(`${this.url}mainCustomersList.php?id=${id}`);
+    return this.http.get<any[]>(`${this.url}mainCustomersList.php`);
+  }
+
   canUpdate = (): boolean => {
     const checkSession: any = sessionStorage.getItem('y');
     const check = JSON.parse(checkSession);
@@ -191,11 +198,9 @@ export class MainService {
 
   scrollTo(elementId: string, noBg?: boolean) {
     if (elementId == 'top') {
-      // console.log('top')
       //document.body.scrollTop = 0; // For Safari
       //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
-      // console.log('totop')
       window.scrollTo({
         top: 0,
         left: 0,

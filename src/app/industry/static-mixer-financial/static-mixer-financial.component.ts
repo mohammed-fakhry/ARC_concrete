@@ -264,7 +264,6 @@ export class StaticMixerFinancialComponent implements OnInit {
 
   search(searchFor?: string, elementId?: string, indx?: number) {
     if (searchFor) {
-      // console.log(this.productSearchBtn.length);
       if (typeof this.productSearchBtn == 'undefined') {
         this.productSearchBtn = document.querySelectorAll(
           '.productSearchBtn'

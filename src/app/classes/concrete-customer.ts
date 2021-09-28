@@ -8,4 +8,6 @@ export class ConcreteCustomer {
   notes: string = '';
   cementCustomerId: string = '1'
   cementCustomerName: string = '';
+  mainCustomerId!: string | null;
+  mainCustomerName!: string;
 }

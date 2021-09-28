@@ -42,6 +42,11 @@ export class OtherAccInformationComponent implements OnInit {
   searchDate: { from: string; to: string } = { from: '', to: '' };
   tempAccArry: any[] = [];
 
+  calcArr: {
+    arr: number[];
+    total: number;
+  } = { arr: [], total: 0 };
+
   constructor(
     public _mainService: MainService,
     public activeRoute: ActivatedRoute,
@@ -241,5 +246,45 @@ export class OtherAccInformationComponent implements OnInit {
 
   printDocument() {
     window.print();
+  }
+
+  marked: boolean = false;
+  markColor: string = '';
+
+  markToCalc = (val: number, i: number, cell: any) => {
+    const element = document.querySelector(`#${cell}${i}`) as HTMLElement;
+
+    let cond = element.classList.contains('calcMark');
+
+    /* cond is for marked */
+    if (cond) {
+      this.calcArr.arr = [...this.calcArr.arr, val * -1];
+      element.style.cursor = 'grab';
+      element.classList.remove('calcMark');
+    } else {
+      this.calcArr.arr = [...this.calcArr.arr, val];
+      element.style.cursor = 'grabbing';
+      element.classList.add('calcMark');
+    }
+
+    this.calcArr.total = this.calcArr.arr.reduce(
+      (a: number, b: number) => a + b
+    );
+
+    if (!this.marked) this.marked = true;
+  };
+
+  clearCalcArr() {
+    this.calcArr = {
+      arr: [],
+      total: 0,
+    };
+
+    const markVal = document.querySelectorAll('.markVal');
+    markVal.forEach((e: HTMLElement | any) => {
+      return e.classList.remove('calcMark');
+    });
+
+    this.marked = false;
   }
 }

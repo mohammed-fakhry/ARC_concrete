@@ -864,7 +864,6 @@ export class StockInvoiceComponent implements OnInit {
       )
       .reduce((a: any, b: any) => a + b, 0);
 
-    // console.log(discoundVal)
     this.totalBFTaxes =
       this.totalsArry.reduce((a, b) => a + b) + this.discoundVal;
     this.taxesVal = (this.stockInvoice.addtaxes * this.totalBFTaxes) / 100;
@@ -970,7 +969,6 @@ export class StockInvoiceComponent implements OnInit {
         oldData.oldNotes = resonforEdit ?? '';
       }
 
-      console.log(oldData?.oldNotes);
       if (
         !this.stockTransaction[i].info.productId &&
         this.stockTransaction[i].info.stockTransactionDetailsId

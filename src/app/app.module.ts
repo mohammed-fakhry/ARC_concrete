@@ -83,6 +83,7 @@ import { InstructionsComponent } from './instructions/instructions.component';
 import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
 import { ConcreteProfitsComponent } from './industry/concrete-profits/concrete-profits.component';
 import { StaticMixerFinancialComponent } from './industry/static-mixer-financial/static-mixer-financial.component';
+import { MainCustomersComponent } from './main-customers/main-customers.component';
 
 @NgModule({
   declarations: [
@@ -153,7 +154,8 @@ import { StaticMixerFinancialComponent } from './industry/static-mixer-financial
     InstructionsComponent,
     AddTaxesListComponent,
     ConcreteProfitsComponent,
-    StaticMixerFinancialComponent
+    StaticMixerFinancialComponent,
+    MainCustomersComponent
   ],
   imports: [
     BrowserModule,

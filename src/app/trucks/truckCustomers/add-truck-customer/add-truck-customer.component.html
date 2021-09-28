@@ -48,6 +48,26 @@
               </mat-form-field>
             </td>
           </tr>
+
+          <tr>
+            <td class="pt-3">
+              <mat-form-field class="w-100">
+                <mat-label>الشركة الام</mat-label>
+                <input matInput #mainCustomerName name="mainCustomerName" list="mainCustomersList"
+                  [(ngModel)]="customer.mainCustomerName" (change)="mainCustomerChanged(addCustomerForm)"
+                  [disabled]="!_auth?.check.prem">
+
+                <datalist id="mainCustomersList">
+                  <option *ngFor="let mainCustomer of mainCustomers" value="{{mainCustomer.fullName}}">
+                  </option>
+                </datalist>
+
+                <mat-error>
+                  هذا الاسم غير مسجل بقاعدة البيانات
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
         </table>
 
         <div class="form-inline">

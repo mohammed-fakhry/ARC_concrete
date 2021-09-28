@@ -797,8 +797,6 @@ export class TruckCustomerInformationComponent implements OnInit {
         return acc.date_time >= start && acc.date_time <= end;
       });
 
-      // console.log(this.tempAccArry)
-
       this.isFiltered = true;
       this.fillListData(newArr);
     }

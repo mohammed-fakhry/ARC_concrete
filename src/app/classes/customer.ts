@@ -14,4 +14,6 @@ export class Customer {
   lastBoughtInvoice: string = '';
   truckCustomerId!: string | null;
   truckCustomerName: string = '';
+  mainCustomerId!: string | null;
+  mainCustomerName!: string;
 }

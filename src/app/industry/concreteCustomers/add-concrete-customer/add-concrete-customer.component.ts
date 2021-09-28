@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConcreteCustomer } from 'src/app/classes/concrete-customer';
 import { Customer } from 'src/app/classes/customer';
+import { MainCustomer } from 'src/app/classes/main-customer';
 import { DoneDialogComponent } from 'src/app/dialogs/done-dialog/done-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConcreteService } from 'src/app/services/concrete.service';
@@ -23,6 +24,7 @@ export class AddConcreteCustomerComponent implements OnInit {
   customer: ConcreteCustomer = new ConcreteCustomer();
 
   cementCustomers: Customer[] = [];
+  mainCustomers: MainCustomer[] = [];
 
   oldCustomerName: string = '';
 
@@ -53,32 +55,36 @@ export class AddConcreteCustomerComponent implements OnInit {
 
   onStart() {
     this.id = this.activeRoute.snapshot.paramMap.get('id');
-    Promise.all([this.getCustomers(), this.getCementCustomers()]).then(
-      (data: any) => {
-        const result = {
-          customerList: data[0],
-          cementCustomers: data[1],
-        };
-        this.customerList = result.customerList;
-        this.cementCustomers = result.cementCustomers;
+    Promise.all([
+      this.getCustomers(),
+      this.getCementCustomers(),
+      this.getMainCustomers(),
+    ]).then((data: any) => {
+      const result = {
+        customerList: data[0],
+        cementCustomers: data[1],
+        mainCustomers: data[2],
+      };
+      this.customerList = result.customerList;
+      this.cementCustomers = result.cementCustomers;
+      this.mainCustomers = result.mainCustomers;
 
-        /* this.customer = this.id
+      /* this.customer = this.id
         ? this.customerForUpdate(data)
         : new ConcreteCustomer(); */
 
-        if (this.id) {
-          this.getCustomers(this.id).then((data: ConcreteCustomer[]) => {
-            this.customer = data[0];
-            this.oldCustomerName = this.customer.fullName;
-          });
-        } else {
-          this.customer = new ConcreteCustomer();
-          this.oldCustomerName = '';
-        }
-
-        this._glopal.loading = false;
+      if (this.id) {
+        this.getCustomers(this.id).then((data: ConcreteCustomer[]) => {
+          this.customer = data[0];
+          this.oldCustomerName = this.customer.fullName;
+        });
+      } else {
+        this.customer = new ConcreteCustomer();
+        this.oldCustomerName = '';
       }
-    );
+
+      this._glopal.loading = false;
+    });
   }
 
   /* customerForUpdate(data: ConcreteCustomer[]): ConcreteCustomer {
@@ -92,6 +98,14 @@ export class AddConcreteCustomerComponent implements OnInit {
       this._concrete
         .concreteCustomerList(id)
         .subscribe((data: ConcreteCustomer[]) => res(data));
+    });
+  }
+
+  getMainCustomers() {
+    return new Promise((res) => {
+      this._mainService
+        .mainCustomersList()
+        .subscribe((data: any[]) => res(data));
     });
   }
 
@@ -124,7 +138,7 @@ export class AddConcreteCustomerComponent implements OnInit {
       addCustomerForm.form.controls['fullName'].setErrors({
         incorrect: true,
       });
-      this._mainService.playshortFail()
+      this._mainService.playshortFail();
     } else {
       addCustomerForm.form.controls['fullName'].setErrors(null);
     }
@@ -152,10 +166,37 @@ export class AddConcreteCustomerComponent implements OnInit {
           addCustomerForm.form.controls['cementCustomerName'].setErrors({
             incorrect: true,
           });
-          this._mainService.playshortFail()
+          this._mainService.playshortFail();
           this.customer.cementCustomerId = '';
         }
       }
+    }
+  }
+
+  mainCustomerChanged(addCustomerForm: NgForm) {
+    if (this.customer.mainCustomerName) {
+      const mainCustomer = this.mainCustomers.find(
+        (customer: MainCustomer) =>
+          customer.fullName == this.customer.mainCustomerName
+      );
+
+      if (mainCustomer) {
+        this.customer.mainCustomerId = mainCustomer.id;
+        addCustomerForm.form.controls['mainCustomerName'].setErrors(null);
+        /* addCustomerForm.form.controls['truckCustomerName'].setErrors({
+          incorrect: true,
+        }); */
+      } else {
+        this.customer.mainCustomerId = null;
+        addCustomerForm.form.controls['mainCustomerName'].setErrors({
+          incorrect: true,
+        });
+
+        this._mainService.playshortFail();
+      }
+    } else {
+      this.customer.mainCustomerId = null;
+      addCustomerForm.form.controls['mainCustomerName'].setErrors(null);
     }
   }
 

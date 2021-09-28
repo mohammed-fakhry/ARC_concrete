@@ -231,9 +231,7 @@ export class AddConcreteReceiptComponent implements OnInit {
         const stockInfo = this.stockList[1];
 
         this.concreteReceipt.date_time = `${date}T23:59`;
-        /* const loader = this.loaders.find((loader: Truck) => loader.truckType == 'لودر')
 
-        console.log(loader) */
         // customerInfo
         this.concreteReceipt.concreteCustomer_name = this.customerInfo.fullName;
         this.concreteReceipt.concreteCustomer_id = this.customerInfo.id;
@@ -266,8 +264,6 @@ export class AddConcreteReceiptComponent implements OnInit {
       this.concreteReceipt.receiptDetails[
         i
       ].concreteName = `${concretNames[i]}`;
-
-      // console.log(this.concreteReceipt.receiptDetails[i]);
 
       this.productNameChanged(i);
 
@@ -649,7 +645,6 @@ export class AddConcreteReceiptComponent implements OnInit {
 
   checkIfOutsidePump(receiptDetails: ConcreteReceipDetails, i: number) {
     if (receiptDetails.concreteName.includes('استعمال مضخة')) {
-      console.log(receiptDetails.concreteName);
       if (receiptDetails.concreteId)
         this._concrete
           .getPumpList(receiptDetails.concreteId)
@@ -664,13 +659,11 @@ export class AddConcreteReceiptComponent implements OnInit {
         totalCost: cost * receiptDetails.concreteQty,
       });
 
-      // console.log(receiptDetails.pumpCost - receiptDetails.concretePrice)
     } else {
       this.trucks[i] = new Truck();
       this.concreteReceipt.receiptDetails[i].pumpCost = 0;
     }
 
-    // console.log(receiptDetails);
   }
 
   changeConcreteReceiptType(type: string) {
@@ -867,7 +860,6 @@ export class AddConcreteReceiptComponent implements OnInit {
       .filter((b: ConcreteReceipDetails) => !b.concreteName.includes('مضخ'))
       .reduce((a: any, b: any) => a + b.concreteQty, 0);
 
-    // console.log(this.totalConcreteQty);
     if (this.concreteReceipt.concreteReceiptType != 'مستخلص مضخة ثابتة') {
       const allMaterials = this.generateMaterials();
 

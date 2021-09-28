@@ -16,6 +16,10 @@
   background: $tableHeader_color;
 }
 
+.tableHeader_color {
+  background-color: rgba(0,0,0, .01);
+}
+
 #theNav {
   z-index: 2;
   position: sticky;

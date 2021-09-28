@@ -6,4 +6,6 @@ export class TruckCustomer {
   openedVal: number = 0;
   currentVal: number = 0;
   notes: string = '';
+  mainCustomerId!: string | null;
+  mainCustomerName!: string;
 }

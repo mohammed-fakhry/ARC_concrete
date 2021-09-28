@@ -38,18 +38,24 @@
   </div>
 
   <div class="pt-5" id="welcom" [class.d-none]="showReports && !privateLoading">
-    <div class="pt-5 fade-in" id="homeLogo" [class.animate-flicker]="privateLoading">
-      <img class="m-auto" src="assets/programLogo.png" alt="">
-      <div>
-        <a href="http://facebook.com/mohammed.fakhry">
-          <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">
-            Powerd by | Mohammed Fakhry
-            <i class="fa fa-facebook-square" style="color: #006699;"></i>
-          </h6>
-        </a>
-        <h6 class="mt-2 text-center" style="font-size: small; color: black;">
-          Special Edition for | Tower Ready Mix Concrete
-        </h6>
+    <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
+      <span></span>
+      <span class="d-none"></span>
+      <span></span>
+      <div class="arcPointer-content noShadow">
+        <div>
+          <div class="fade-in" id="homeLogo" [class.animate-flicker]="privateLoading">
+            <img class="m-auto" src="assets/theProgramLogo.png" alt="" style="height: 500px;">
+            <div>
+              <a href="http://facebook.com/mohammed.fakhry">
+                <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">
+                  Powerd by | Mohammed Fakhry
+                  <i class="fa fa-facebook-square" style="color: #006699;"></i>
+                </h6>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

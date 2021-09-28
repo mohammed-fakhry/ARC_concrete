@@ -286,7 +286,6 @@ export class CustomerInformationComponent implements OnInit {
         values.truck_hourly,
       ];
 
-      // console.log(values)
     }
 
     if (truckInfo.truckType == 'لودر') {
@@ -347,8 +346,6 @@ export class CustomerInformationComponent implements OnInit {
       ...new Set(tempTruckAccArry.map((truck: any) => truck.truckId)),
     ];
 
-    // console.log(trucksIds);
-
     for (let i = 0; i < trucksIds.length; i++) {
       const truckInfo = this.truckList.find(
         (truck) => truck.id == trucksIds[i]
@@ -384,8 +381,6 @@ export class CustomerInformationComponent implements OnInit {
             .map((d: any) => d.LoadTimes * d.truckCapacity)
             .reduce((a: any, b: any) => a + b, 0),
         };
-
-        // if (truckInfo.name == 'عربية 3681') console.log({truck_daily, truck_hourly, truck_meter})
 
         this.setTruckWorksByType(truckInfo, {
           truck_meter: truck_meter,
@@ -465,7 +460,6 @@ export class CustomerInformationComponent implements OnInit {
     };
 
     // this.makeTruckWorks_asProduct();
-    // console.log(tempTruckAccArry)
   }
 
   setTruckCustomer(truckCustomerId: string, customerAcc: any) {

@@ -117,7 +117,6 @@ export class TruckOrdetListComponent implements OnInit {
         } */
       });
     } else {
-      // console.log(this.truckInfo)
       this._truckService
         .all_truckOrderList()
         .subscribe((data: TruckOrder[]) => {

@@ -83,6 +83,7 @@ import { ConcfinanGGuard } from './guards/concfinan-g.guard';
 import { AddSafeGGuard } from './guards/add-safe-g.guard';
 import { SafeInvGGuard } from './guards/safe-inv-g.guard';
 import { TaxesGGuard } from './guards/taxes-g.guard';
+import { MainCustomersComponent } from './main-customers/main-customers.component';
 
 const routes: Routes = [
   // defult path
@@ -91,6 +92,7 @@ const routes: Routes = [
 
   // home
   { path: 'Home', component: HomeComponent, canActivate: [AuthGuard], },
+  { path: 'mainCompanies', component: MainCustomersComponent, canActivate: [AuthGuard], },
 
   // instructions
   { path: 'instructions/:searchFor', component: InstructionsComponent, canActivate: [AuthGuard] },

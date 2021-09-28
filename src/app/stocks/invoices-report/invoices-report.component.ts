@@ -176,8 +176,6 @@ export class InvoicesReportComponent implements OnInit {
 
     //اذن نقل اضافة
 
-    // console.log(data.length)
-
     for (let i = 0; i < data.length; i++) {
       let add =
         data[i].transactionType.includes('فاتورة شراء') ||
@@ -286,9 +284,6 @@ export class InvoicesReportComponent implements OnInit {
 
         this.cementUses.concrete.data = [...this.cementUses.concrete.data, row];
 
-        if (concreteCustomer[0].concreteCustomerName?.includes('سهمود')) console.log(concreteCustomer)
-
-        //console.log(accArr)
       }
 
       const supplierArr = this.cementUses.concrete.data.filter(

@@ -731,8 +731,8 @@
                 (click)="markToCalc(row.minVal * -1,i,'minVal')"
                 [class.borderRight-success]="(row.discound > 0 && row.minVal > 0)"
                 [ngClass]="(row.addtaxes > 0 && row.minVal > 0) ? 'borderLsecondary' : ''"
-                matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
                 [class.marked]="row.minVal.toString().includes(searchTxt) && searchTxt"
+                matTooltip="قيمة مضافة {{row.addtaxes}} %" matTooltipPosition="before" matTooltipClass="secondaryBg"
                 [matTooltipDisabled]="row.addtaxes == 0 || row.minVal < 0">
                 <i *ngIf="row.minVal > 0" class="fa fa-arrow-down textGreen"></i>
                 {{row.minVal | number:'1.0-2'}}

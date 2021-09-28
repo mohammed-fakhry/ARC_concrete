@@ -253,7 +253,6 @@ export class ConcreteCustomerInformationComponent implements OnInit {
       this.accArr = [...this.accArr, newData];
     }
 
-    // console.log(data)
     return this.accArr;
   }
 

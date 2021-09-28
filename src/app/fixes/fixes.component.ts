@@ -28,7 +28,9 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    'ALTER TABLE `customers` ADD `truckCustomerId` INT(11) NOT NULL AFTER `uncompletedCond`',
+    'ALTER TABLE `customers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `truckCustomerId`',
+    'ALTER TABLE `truckcustomers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `notes`',
+    'ALTER TABLE `concretecustomers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `cementCustomerId`'
   ];
 
   url: string | null = localStorage.getItem('tmpDB');
@@ -308,7 +310,6 @@ export class FixesComponent implements OnInit {
   }
 
   tempFix() {
-    console.log('tempFix');
     /* this.getTempData().then((data: any[]) => {
       this.loadCond = '...loading';
       this.loopDetails.length = data.length;

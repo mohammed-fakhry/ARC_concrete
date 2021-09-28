@@ -68,6 +68,7 @@
           </mat-expansion-panel-header>
           <mat-nav-list dense>
             <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check?.workers">العاملين</a>
+            <a mat-list-item routerLink="/mainCompanies" (click)="opened = !opened" *ngIf="_auth?.check?.workers">الشركات الأم</a>
           </mat-nav-list>
         </mat-expansion-panel>
 

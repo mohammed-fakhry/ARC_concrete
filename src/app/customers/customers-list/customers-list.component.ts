@@ -135,8 +135,6 @@ export class CustomersListComponent implements OnInit {
       this.fillListData(this.customerList);
       this.counts = this.generateCustomerCounts(this.customerList);
 
-      console.log(this.counts)
-
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -239,8 +237,6 @@ export class CustomersListComponent implements OnInit {
         ),
       },
     };
-
-    console.log(filterd)
 
     return {
       activeCustomers: {
@@ -353,7 +349,6 @@ export class CustomersListComponent implements OnInit {
     this.listData = new MatTableDataSource(data);
     this.listData.sort = this.sort;
     this.listData.paginator = this.paginator;
-    // console.log('filled')
   };
 
   search() {
