@@ -1,7 +1,16 @@
+@import '../../scss/varibals.scss';
+
 .tableBody {
-  td {
+  td,
+  th {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  th {
+    border-left: 1px solid rgba(0,0,0, .15);
   }
 }
 
@@ -39,23 +48,16 @@ mat-panel-description {
   top: 70px;
   left: -100%;
   bottom: 70px;
-  width: 700px;
-  transition: left 0.5s;
+  width: 800px;
+  transition: left 0.15s;
+  //background-color: $darkBg; //rgba(0,0,0, .75);
+  background: linear-gradient(
+    #e7eaf8 0 94%,
+    #a4b2f7 0 6%
+  );
 }
 
 #mainCompanies_mat_card {
   width: 100%;
-  transition: 0.5s;
+  transition: 0.15s;
 }
-
-/* #mainCustomerInfo_id .collap {
-  width: 0px;
-  right: -100%;
-  right: 15px;
-}
-
-#mainCustomerInfo_id .expand {
-  width: 100%;
-  height: 100%;
-  right: 15px;
-} */

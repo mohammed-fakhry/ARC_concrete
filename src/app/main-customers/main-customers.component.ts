@@ -58,6 +58,8 @@ export class MainCustomersComponent implements OnInit {
     totalVal: 0,
   };
 
+  sideLogo!: HTMLElement;
+
   constructor(
     public _mainService: MainService,
     public _glopal: GlobalVarsService
@@ -71,6 +73,7 @@ export class MainCustomersComponent implements OnInit {
       this._mainService.handleTableHeight();
     });
 
+    this.sideLogo = document.querySelector('.sideLogo') as HTMLElement;
     this.onStart();
   }
 
@@ -143,6 +146,9 @@ export class MainCustomersComponent implements OnInit {
   }
 
   postCustomerInfo(i: number, customerId: string) {
+
+    if (this.sideLogo) this.sideLogo.style.opacity = '.10'
+
     const mainCustomerCells = document.querySelectorAll(
       '.mainCustomerCells'
     ) as NodeListOf<Element>;
@@ -150,13 +156,6 @@ export class MainCustomersComponent implements OnInit {
     mainCustomerCells.forEach((element: any) => {
       element.classList.remove('darkBadge');
     });
-
-    /* const mainCustomerCell = document.getElementById(
-      `mainCustomerCell${i}`
-    ) as HTMLElement;
-    if (mainCustomerCell) {
-      mainCustomerCell.classList.add('darkBadge');
-    } */
 
     const mainCustomerInfo_id = document.getElementById(
       `mainCustomerInfo_id`
@@ -172,6 +171,7 @@ export class MainCustomersComponent implements OnInit {
 
     mainCustomer_tr.forEach((element: any) => {
       element.classList.remove('darkBadge');
+      element.classList.remove('noHover');
     });
 
     const mainCustomer_tr_i = document.querySelectorAll(
@@ -180,13 +180,13 @@ export class MainCustomersComponent implements OnInit {
 
     mainCustomer_tr_i.forEach((element: any) => {
       element.classList.add('darkBadge');
+      element.classList.add('noHover');
     });
 
     const mainCompanies_mat_card = document.querySelector(
       '#mainCompanies_mat_card'
     ) as HTMLElement;
-    if (mainCompanies_mat_card)
-      mainCompanies_mat_card.style.width = 'calc(100% - 400px)';
+    if (mainCompanies_mat_card) mainCompanies_mat_card.style.width = '75%';
 
     this.mainCustomerInfo =
       this.mainCustomers.find(
@@ -195,6 +195,9 @@ export class MainCustomersComponent implements OnInit {
   }
 
   hideCustomerInfo() {
+
+    if (this.sideLogo) this.sideLogo.style.opacity = '.65'
+
     const mainCustomerInfo_id = document.getElementById(
       `mainCustomerInfo_id`
     ) as HTMLElement;
@@ -205,12 +208,7 @@ export class MainCustomersComponent implements OnInit {
       const mainCompanies_mat_card = document.querySelector(
         '#mainCompanies_mat_card'
       ) as HTMLElement;
-      if (mainCompanies_mat_card)
-        mainCompanies_mat_card.style.width = '100%';
-      /* setTimeout(() => {
-        mainCustomerInfo_id.style.opacity = '0';
-      },200) */
-      // mainCustomerInfo_id.style.opacity = '0';
+      if (mainCompanies_mat_card) mainCompanies_mat_card.style.width = '100%';
     }
   }
 }

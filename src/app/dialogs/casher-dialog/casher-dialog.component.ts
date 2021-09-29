@@ -2,6 +2,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MainService } from 'src/app/services/main.service';
 
 @Component({
   selector: 'app-casher-dialog',
@@ -12,7 +13,10 @@ export class CasherDialogComponent implements OnInit {
   cashVal!: number;
   remainCash: number = 0;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: number) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: number,
+    public _mainService: MainService
+  ) {}
 
   ngOnInit(): void {
     this.calcCash();
@@ -25,6 +29,7 @@ export class CasherDialogComponent implements OnInit {
           modalForm.form.controls['cashRecived'].setErrors({
             incorrect: true,
           });
+          this._mainService.playshortFail();
         } else {
           modalForm.form.controls['cashRecived'].setErrors(null);
         }

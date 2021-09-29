@@ -7,7 +7,6 @@ import { UserData } from 'src/app/classes/user-data';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConcreteService } from 'src/app/services/concrete.service';
 import { GlobalVarsService } from 'src/app/services/global-vars.service';
-import { MainService } from 'src/app/services/main.service';
 import { SafeService } from 'src/app/services/safe.service';
 import { StockService } from 'src/app/services/stock.service';
 

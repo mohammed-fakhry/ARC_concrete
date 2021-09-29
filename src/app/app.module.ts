@@ -59,31 +59,30 @@ import { CasherDialogComponent } from './dialogs/casher-dialog/casher-dialog.com
 import { CheckListComponent } from './check/check-list/check-list.component';
 import { AddCheckComponent } from './check/add-check/add-check.component';
 import { TryDevComponent } from './other/try-dev/try-dev.component';
-import { AddTruckComponent } from './trucks/add-truck/add-truck.component';
-import { TrucksListComponent } from './trucks/trucks-list/trucks-list.component';
-import { AddtruckOrderComponent } from './trucks/addtruck-order/addtruck-order.component';
-import { TruckOrdetListComponent } from './trucks/truck-ordet-list/truck-ordet-list.component';
-import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
-import { AddConcreteComponent } from './industry/concrete/add-concrete/add-concrete.component';
-import { ConcreteListComponent } from './industry/concrete/concrete-list/concrete-list.component';
-import { AddConcreteReceiptComponent } from './industry/receipt/add-concrete-receipt/add-concrete-receipt.component';
-import { ConcreteReceiptListComponent } from './industry/receipt/concrete-receipt-list/concrete-receipt-list.component';
-import { AddConcreteCustomerComponent } from './industry/concreteCustomers/add-concrete-customer/add-concrete-customer.component';
-import { ConcreteCustomerListComponent } from './industry/concreteCustomers/concrete-customer-list/concrete-customer-list.component';
-import { ConcreteCustomerInformationComponent } from './industry/concreteCustomers/concrete-customer-information/concrete-customer-information.component';
-import { TruckCustomersListComponent } from './trucks/truckCustomers/truck-customers-list/truck-customers-list.component';
-import { AddTruckCustomerComponent } from './trucks/truckCustomers/add-truck-customer/add-truck-customer.component';
-import { TruckCustomerInformationComponent } from './trucks/truckCustomers/truck-customer-information/truck-customer-information.component';
-import { TaxesListComponent } from './taxes/taxes-list/taxes-list.component';
 import { AddConcreteBonComponent } from './industry/bon/add-concrete-bon/add-concrete-bon.component';
 import { ConcreteBonListComponent } from './industry/bon/concrete-bon-list/concrete-bon-list.component';
-import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
+import { AddConcreteComponent } from './industry/concrete/add-concrete/add-concrete.component';
+import { ConcreteListComponent } from './industry/concrete/concrete-list/concrete-list.component';
 import { ConcreteFinancialComponent } from './industry/concrete-financial/concrete-financial.component';
-import { InstructionsComponent } from './instructions/instructions.component';
-import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
 import { ConcreteProfitsComponent } from './industry/concrete-profits/concrete-profits.component';
+import { AddConcreteCustomerComponent } from './industry/concreteCustomers/add-concrete-customer/add-concrete-customer.component';
+import { ConcreteCustomerInformationComponent } from './industry/concreteCustomers/concrete-customer-information/concrete-customer-information.component';
+import { ConcreteCustomerListComponent } from './industry/concreteCustomers/concrete-customer-list/concrete-customer-list.component';
+import { AddConcreteReceiptComponent } from './industry/receipt/add-concrete-receipt/add-concrete-receipt.component';
+import { ConcreteReceiptListComponent } from './industry/receipt/concrete-receipt-list/concrete-receipt-list.component';
 import { StaticMixerFinancialComponent } from './industry/static-mixer-financial/static-mixer-financial.component';
+import { InstructionsComponent } from './instructions/instructions.component';
 import { MainCustomersComponent } from './main-customers/main-customers.component';
+import { AddTaxesListComponent } from './taxes/add-taxes-list/add-taxes-list.component';
+import { AddTruckComponent } from './trucks/add-truck/add-truck.component';
+import { AddtruckOrderComponent } from './trucks/addtruck-order/addtruck-order.component';
+import { TruckInformationComponent } from './trucks/truck-information/truck-information.component';
+import { TruckOrdetListComponent } from './trucks/truck-ordet-list/truck-ordet-list.component';
+import { AddTruckCustomerComponent } from './trucks/truckCustomers/add-truck-customer/add-truck-customer.component';
+import { TruckCustomerInformationComponent } from './trucks/truckCustomers/truck-customer-information/truck-customer-information.component';
+import { TruckCustomersListComponent } from './trucks/truckCustomers/truck-customers-list/truck-customers-list.component';
+import { TrucksListComponent } from './trucks/trucks-list/trucks-list.component';
+import { AddWorkerComponent } from './workers/add-worker/add-worker.component';
 
 @NgModule({
   declarations: [
@@ -131,31 +130,30 @@ import { MainCustomersComponent } from './main-customers/main-customers.componen
     CheckListComponent,
     AddCheckComponent,
     TryDevComponent,
-    AddTruckComponent,
-    TrucksListComponent,
-    AddtruckOrderComponent,
-    TruckOrdetListComponent,
-    TruckInformationComponent,
-    AddConcreteComponent,
-    ConcreteListComponent,
-    AddConcreteReceiptComponent,
-    ConcreteReceiptListComponent,
-    AddConcreteCustomerComponent,
-    ConcreteCustomerListComponent,
-    ConcreteCustomerInformationComponent,
-    TruckCustomersListComponent,
-    AddTruckCustomerComponent,
-    TruckCustomerInformationComponent,
-    TaxesListComponent,
     AddConcreteBonComponent,
     ConcreteBonListComponent,
-    AddWorkerComponent,
+    AddConcreteComponent,
+    ConcreteListComponent,
     ConcreteFinancialComponent,
-    InstructionsComponent,
-    AddTaxesListComponent,
     ConcreteProfitsComponent,
+    AddConcreteCustomerComponent,
+    ConcreteCustomerInformationComponent,
+    ConcreteCustomerListComponent,
+    AddConcreteReceiptComponent,
+    ConcreteReceiptListComponent,
     StaticMixerFinancialComponent,
-    MainCustomersComponent
+    InstructionsComponent,
+    MainCustomersComponent,
+    AddTaxesListComponent,
+    AddTruckComponent,
+    AddtruckOrderComponent,
+    TruckInformationComponent,
+    TruckOrdetListComponent,
+    AddTruckCustomerComponent,
+    TruckCustomerInformationComponent,
+    TruckCustomersListComponent,
+    TrucksListComponent,
+    AddWorkerComponent,
   ],
   imports: [
     BrowserModule,

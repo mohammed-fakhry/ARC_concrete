@@ -93,7 +93,7 @@ export class CheckBankList {
       widgetIconText: timing?.classes?.text ?? '',
       rowBorder:
         timing?.title === 'شيكات متأخرة'
-          ? 'borderRight-alert boxRadios px-3 mx-3'
+          ? 'borderRight-alert px-3 mx-3'
           : '',
     };
 
@@ -149,8 +149,8 @@ export class CheckBankList {
   sumTotals(array?: BankCheck[]): number {
     if (!array) return 0;
     return array
-      .map((a: BankCheck) => a.checkValue)
-      .reduce((a: number, b: number) => a + b, 0);
+      //.map((a: BankCheck) => a.checkValue)
+      .reduce((a: number, b: BankCheck) => a + b.checkValue, 0);
   }
 
   filterList(

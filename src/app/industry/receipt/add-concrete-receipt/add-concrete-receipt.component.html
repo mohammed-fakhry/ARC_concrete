@@ -220,7 +220,7 @@
                   </div> -->
 
                 <textarea [class.d-none]="concreteReceipt.totalInAr == ''" type="text" class="form-control printX"
-                  name="totalInAr" [(ngModel)]="concreteReceipt.totalInAr" cols="30" rows="2"></textarea>
+                  name="totalInAr" [(ngModel)]="concreteReceipt.totalInAr" cols="30" rows="3"></textarea>
                 <!-- <input [class.d-none]="totalInAr == ''" type="text" class="form-control printX" name="totalInAr"
                     [(ngModel)]="totalInAr"> -->
 
@@ -360,40 +360,6 @@
 
     <div class="col-md-12 col-lg-5" id="elementsExpensec">
 
-      <!-- <div class="row">
-        <div class="col-md-9">
-          <div class="p-3 mx-1 mb-1"
-            [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'dangerBadge' : 'secondaryBadge'">
-            <div class="d-flex justify-content-between">
-
-              <div class="form-inline">
-                <button mat-button color="{{concreteReceipt.receiptDirection == 'بيع' ? 'warn' : 'accent'}}"
-                  class="mx-1 pt-1" (click)="printDocument('elementsExpensec')"><i class="fa fa-print"></i></button>
-
-                <button *ngIf="concreteReceipt.stockTransactionId" mat-button color="primary"
-                  routerLink="/StockInvoice/{{concreteReceipt.stockTransactionId}}">
-                  فاتورة مخزن رقم ( {{concreteReceipt.stockTransactionId}} )
-                </button>
-              </div>
-
-              <div class="textBold my-auto">
-                {{id ? 'فاتورة خرسانة رقم ' + id : 'فاتورة جديدة'}}
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="arcPointer arcPointer-smaller"
-            [ngClass]="concreteReceipt.receiptDirection == 'بيع' ? 'arcPointer-danger' : 'arcPointer-accent'">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div> -->
-
-
       <!-- elements table -->
       <div>
 
@@ -510,10 +476,7 @@
                 <span></span>
                 <span></span>
                 <span></span>
-                <!--
 
-
-                 -->
                  <div class="arcPointer-content">
                   <h2>{{id ? id : 'جديد'}}</h2>
                 </div>

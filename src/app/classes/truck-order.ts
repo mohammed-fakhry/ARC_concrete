@@ -1,5 +1,3 @@
-import { AuthService } from '../services/auth.service';
-
 export class TruckOrder {
   orderId!: string | null;
   truckId: string = '';

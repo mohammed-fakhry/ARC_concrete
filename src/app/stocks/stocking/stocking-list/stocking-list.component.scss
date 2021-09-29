@@ -1,0 +1,10 @@
+@import "../../../../scss/varibals.scss";
+
+#stokingMatCard {
+  transition: 0.3s;
+}
+
+.productstokingDate:hover {
+  background-color: $textDarkBg;
+  color: $darkBg;
+}

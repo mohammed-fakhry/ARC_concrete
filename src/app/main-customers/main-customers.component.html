@@ -1,6 +1,56 @@
 <div class="mainContainer">
 
-  <div class="box stickyBox mb-3">
+  <div class="row stickyBox">
+
+    <div class="col-lg-4 col-md-6">
+      <mat-card class="boxShadow">
+        <mat-card-header class="d-flex justify-content-between">
+          <mat-card-title>اجماليات</mat-card-title>
+          <mat-card-subtitle>توصيف الموقف المالى للشركات الرئيسية</mat-card-subtitle>
+          <div class="form-inline">
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="w-100">
+            <tbody class="tableBody">
+              <tr class="secondaryBadge borderLsecondary noHover">
+                <th>توريدات</th>
+                <td>{{tableTotals.customerTotals | number: '1.0-2'}}</td>
+              </tr>
+              <tr class="dangerBadge borderLdanger noHover">
+                <th>خرسانة</th>
+                <td>{{tableTotals.concreteTotals | number: '1.0-2'}}</td>
+              </tr>
+              <tr class="darkBadge borderLdark noHover">
+                <th>مُعدات</th>
+                <td>{{tableTotals.trucktotals | number: '1.0-2'}}</td>
+              </tr>
+              <tr class="darkBadge borderLdark noHover">
+                <th>احلال</th>
+                <td>{{tableTotals.customer_Substitute_totals | number: '1.0-2'}}</td>
+              </tr>
+              <tr class="darkBadge borderLdark noHover">
+                <th>حفر</th>
+                <td>{{tableTotals.customer_digging_totals | number: '1.0-2'}}</td>
+              </tr>
+              <tr class="lightBg textBold noHover">
+                <th>اجمالى</th>
+                <td>{{tableTotals.totalVal | number: '1.0-2'}}</td>
+              </tr>
+            </tbody>
+            <!-- <thead>
+            </thead>
+             -->
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <img class="sideLogo" src="assets/logos/Partner-Organisation.png" style="max-height: 350px; opacity: .65;">
+    </div>
+  </div>
+
+  <div class="box stickyBox mb-3" style="background-color: transparent;">
 
     <mat-card class="borderLsecondary" id="mainCompanies_mat_card">
       <mat-card-header class="d-flex justify-content-between">
@@ -29,7 +79,7 @@
                 class="pl-2 mainCustomerCells" style="cursor: pointer;" [class.textDanger]="row.totalVal < 0">
                 {{row.fullName}}
               </td>
-              <td mat-footer-cell *matFooterCellDef> اجمالى </td>
+              <!-- <td mat-footer-cell *matFooterCellDef> اجمالى </td> -->
             </ng-container>
 
             <ng-container matColumnDef="customerTotals">
@@ -37,7 +87,7 @@
               <td mat-cell *matCellDef="let row" [class.textDanger]="row.customerTotals < 0">
                 {{row.customerTotals | number:'1.0-2'}}
               </td>
-              <td mat-footer-cell *matFooterCellDef> {{tableTotals.customerTotals | number: '1.0-2'}} </td>
+              <!--  <td mat-footer-cell *matFooterCellDef> {{tableTotals.customerTotals | number: '1.0-2'}} </td> -->
             </ng-container>
 
             <ng-container matColumnDef="concreteTotals">
@@ -45,7 +95,7 @@
               <td mat-cell *matCellDef="let row" [class.textDanger]="row.concreteTotals < 0">
                 {{row.concreteTotals | number:'1.0-2'}}
               </td>
-              <td mat-footer-cell *matFooterCellDef> {{tableTotals.concreteTotals | number: '1.0-2'}} </td>
+              <!--  <td mat-footer-cell *matFooterCellDef> {{tableTotals.concreteTotals | number: '1.0-2'}} </td> -->
             </ng-container>
 
             <ng-container matColumnDef="trucktotals">
@@ -53,7 +103,7 @@
               <td mat-cell *matCellDef="let row" [class.textDanger]="row.trucktotals < 0">
                 {{row.trucktotals | number:'1.0-2'}}
               </td>
-              <td mat-footer-cell *matFooterCellDef> {{tableTotals.trucktotals | number: '1.0-2'}} </td>
+              <!--  <td mat-footer-cell *matFooterCellDef> {{tableTotals.trucktotals | number: '1.0-2'}} </td> -->
             </ng-container>
 
             <ng-container matColumnDef="customer_Substitute_totals">
@@ -69,7 +119,7 @@
               <td mat-cell *matCellDef="let row" [class.textDanger]="row.customer_digging_totals < 0">
                 {{row.customer_digging_totals | number:'1.0-2'}}
               </td>
-              <td mat-footer-cell *matFooterCellDef> {{tableTotals.customer_digging_totals | number: '1.0-2'}} </td>
+              <!--  <td mat-footer-cell *matFooterCellDef> {{tableTotals.customer_digging_totals | number: '1.0-2'}} </td> -->
             </ng-container>
 
             <ng-container matColumnDef="totalVal">
@@ -78,9 +128,9 @@
                 [class.textDanger]="row.totalVal < 0">
                 {{row.totalVal | number:'1.0-2'}}
               </td>
-              <td mat-footer-cell *matFooterCellDef class="tdBorder">
+              <!-- <td mat-footer-cell *matFooterCellDef class="tdBorder">
                 {{tableTotals.totalVal | number: '1.0-2'}}
-              </td>
+              </td> -->
             </ng-container>
 
             <ng-container matColumnDef="notes">
@@ -97,7 +147,7 @@
               (click)="postCustomerInfo(i, row.id)" class="mainCustomer-tr{{i}} mainCustomer-tr"
               style="height: fit-content; cursor: pointer;">
             </tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="textBold tableHeader_color"></tr>
+            <!-- <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="textBold tableHeader_color"></tr> -->
           </table>
         </div>
 
@@ -107,14 +157,12 @@
         </mat-paginator>
 
       </mat-card-content>
-
     </mat-card>
-
   </div>
 
 
-  <div class="box boxRadios p-3 bigShadow collap example-container" id="mainCustomerInfo_id">
-    <mat-accordion class="example-headers-align mb-4">
+  <div class="boxRadios p-3 bigShadow  example-container" id="mainCustomerInfo_id">
+    <mat-accordion class="example-headers-align mb-4 box">
       <div class="d-flex justify-content-between">
         <div class="form-inline mb-3">
           <button mat-button color="warn" (click)="hideCustomerInfo()"><i class="fa fa-times fa-lg"></i></button>
@@ -145,14 +193,15 @@
               <thead class="tableHeader">
                 <tr>
                   <th style="flex: .5;">م</th>
-                  <th>الاسم</th>
+                  <th style="flex: 2;">الاسم</th>
                   <th>قيمة الحساب</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr *ngFor="let customer of mainCustomerInfo.customers; let i = index">
                   <td style="flex: .5;">{{i + 1}}</td>
-                  <td class="textBtn tBtn-dark pl-2" routerLink="/customerInformation/{{customer.customerId}}">
+                  <td class="textBtn tBtn-dark pl-2" style="flex: 2;"
+                    routerLink="/customerInformation/{{customer.customerId}}">
                     {{customer.customerName}}
                   </td>
                   <td>{{customer.customerRemain | number: '1.0-2'}}</td>
@@ -182,14 +231,15 @@
               <thead class="tableHeader">
                 <tr>
                   <th style="flex: .5;">م</th>
-                  <th>الاسم</th>
+                  <th style="flex: 2;">الاسم</th>
                   <th>قيمة الحساب</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr *ngFor="let customer of mainCustomerInfo.concreteCustomers; let i = index">
                   <td style="flex: .5;">{{i + 1}}</td>
-                  <td class="textBtn tBtn-dark pl-2" routerLink="/ConcreteCustomerInformation/{{customer.id}}">
+                  <td class="textBtn tBtn-dark pl-2" style="flex: 2;"
+                    routerLink="/ConcreteCustomerInformation/{{customer.id}}">
                     {{customer.fullName}}
                   </td>
                   <td>{{customer.currentVal | number: '1.0-2'}}</td>
@@ -219,14 +269,15 @@
               <thead class="tableHeader">
                 <tr>
                   <th style="flex: .5;">م</th>
-                  <th>الاسم</th>
+                  <th style="flex: 2;">الاسم</th>
                   <th>قيمة الحساب</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr *ngFor="let customer of mainCustomerInfo.truckCustomers; let i = index">
                   <td style="flex: .5;">{{i + 1}}</td>
-                  <td class="textBtn tBtn-dark pl-2" routerLink="/TruckCustomerInformation/{{customer.id}}">
+                  <td class="textBtn tBtn-dark pl-2" style="flex: 2;"
+                    routerLink="/TruckCustomerInformation/{{customer.id}}">
                     {{customer.fullName}}
                   </td>
                   <td>{{customer.currentVal | number: '1.0-2'}}</td>
@@ -256,14 +307,14 @@
               <thead class="tableHeader">
                 <tr>
                   <th style="flex: .5;">م</th>
-                  <th>الاسم</th>
+                  <th style="flex: 2;">الاسم</th>
                   <th>قيمة الحساب</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr *ngFor="let customer of mainCustomerInfo.customer_Substitute; let i = index">
                   <td style="flex: .5;">{{i + 1}}</td>
-                  <td class="textBtn tBtn-dark pl-2" routerLink="{{customer.routeTo}}">
+                  <td class="textBtn tBtn-dark pl-2" style="flex: 2;" routerLink="{{customer.routeTo}}">
                     {{customer.customerName}}
                   </td>
                   <td>{{customer.currentVal | number: '1.0-2'}}</td>
@@ -293,14 +344,14 @@
               <thead class="tableHeader">
                 <tr>
                   <th style="flex: .5;">م</th>
-                  <th>الاسم</th>
+                  <th style="flex: 2;">الاسم</th>
                   <th>قيمة الحساب</th>
                 </tr>
               </thead>
               <tbody class="tableBody">
                 <tr *ngFor="let customer of mainCustomerInfo.customer_digging; let i = index">
                   <td style="flex: .5;">{{i + 1}}</td>
-                  <td class="textBtn tBtn-dark pl-2" routerLink="{{customer.routeTo}}">
+                  <td class="textBtn tBtn-dark pl-2" style="flex: 2;" routerLink="{{customer.routeTo}}">
                     {{customer.customerName}}
                   </td>
                   <td>{{customer.currentVal | number: '1.0-2'}}</td>

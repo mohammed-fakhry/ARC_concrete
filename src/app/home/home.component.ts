@@ -12,7 +12,6 @@ import { OtherAcc } from '../classes/other-acc';
 import { MainService } from '../services/main.service';
 import { SafeData } from '../classes/safe-data';
 import { Stock } from '../classes/stock';
-import { CheckService } from '../services/check.service';
 import { TruckService } from '../services/truck.service';
 import { TruckCustomer } from '../classes/truck-customer';
 import { ConcreteCustomer } from '../classes/concrete-customer';

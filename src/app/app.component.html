@@ -67,8 +67,14 @@
             البيانات
           </mat-expansion-panel-header>
           <mat-nav-list dense>
-            <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check?.workers">العاملين</a>
-            <a mat-list-item routerLink="/mainCompanies" (click)="opened = !opened" *ngIf="_auth?.check?.workers">الشركات الأم</a>
+            <a mat-list-item routerLink="/Workers" (click)="opened = !opened" *ngIf="_auth?.check?.workers">
+              <i class="fa fa-address-book my-auto pl-2"></i>
+              العاملين
+            </a>
+            <a mat-list-item routerLink="/mainCompanies" (click)="opened = !opened" *ngIf="_auth?.check?.workers">
+              <i class="fa fa-university my-auto pl-2"></i>
+              الشركات الأم
+            </a>
           </mat-nav-list>
         </mat-expansion-panel>
 
