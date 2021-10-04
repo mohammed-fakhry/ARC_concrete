@@ -10,7 +10,8 @@ $elvationZ_big: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
 // backGround Colors
 $lightBg: rgba(195, 195, 195, 0.2);
 $primaryBg: #0049be;
-$secondaryBg: #5a73f3;
+
+$secondaryBg: rgba(90, 115, 243, 1);
 $secondryBorder_color: rgba(90, 115, 243, 0.5);
 $darkBg: #00238d;
 $infoBg: rgb(2, 107, 121);
@@ -33,7 +34,7 @@ $headerDeepBlue: rgba(54, 162, 235, 1);
 $headerDeepBlueBg: rgba(54, 162, 235, 0.35);
 
 $textPrimaryBg: #0049be36;
-$textSecondaryBg: #5a73f329;
+$textSecondaryBg: rgba(90, 115, 243, 0.1);//#5a73f329;
 $textDangerBg: #e0455f4f;
 $textDarkBg: #00238d44;
 $dangerPointer_color: #e0455f4f;

@@ -1,4 +1,17 @@
-<div class="mainContainer">
+<!-- cantFindInvoice -->
+<div *ngIf="!showInvoice && cantFindInvoice.msg" class="mt-5 container text-center bg-white p-2 boxShadow boxRadios" [class]="cantFindInvoice.class">
+  <h2 class="textBold">{{cantFindInvoice.msg}}</h2>
+  <mat-divider class="mb-5"></mat-divider>
+  <div class="mt-3 pt-3">
+    <div class="arcPointer arcPointer-lg pt-3" [ngClass]="cantFindInvoice.msg?.includes('لا توجد بيانات') ? 'arcPointer-accent' : 'arcPointer-danger'">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<div class="mainContainer" [class.d-none]="!showInvoice">
 
   <div class="row">
     <div class="col-lg-10 col-md-12">
@@ -248,9 +261,9 @@
             </div>
 
 
-            <table class="example-full-width" cellspacing="0" class="col-lg-8 col-sm-12">
+            <table class="example-full-width" cellspacing="0" class="col-lg-12 col-sm-12">
               <tr>
-                <td style="width: 30%;">
+                <td style="width: 20%;">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="قيمة الايصال" type="number" #receiptVal name="receiptVal"
                       [(ngModel)]="safeReciept.receiptVal" (ngModelChange)="receiptValChanged(addSafeReciept)" required>
@@ -262,9 +275,10 @@
                     </mat-error>
                   </mat-form-field>
                 </td>
-                <td style="width: 70%;">
+                <td>
                   <mat-form-field class="example-full-width" cellspacing="0">
-                    <input matInput placeholder="ملاحظات" id="notes" name="notes" [(ngModel)]="safeReciept.recieptNote">
+                    <textarea matInput placeholder="ملاحظات" id="notes" name="notes" [(ngModel)]="safeReciept.recieptNote"></textarea>
+                    <!-- <input matInput placeholder="ملاحظات" id="notes" name="notes" [(ngModel)]="safeReciept.recieptNote"> -->
                     <mat-hint align="end">{{safeReciept?.recieptNote?.length || 0}} / 200</mat-hint>
                   </mat-form-field>
                 </td>
@@ -272,9 +286,9 @@
             </table>
 
             <table *ngIf="safeReciept.transactionAccKind === 'حساب' && !id" class="example-full-width my-3"
-              cellspacing="0" class="col-lg-8 col-sm-12">
+              cellspacing="0" class="col-lg-12 col-sm-12">
               <tr *ngFor="let otherVals of otherRecieptVals; let i = index">
-                <td style="width: 30%;">
+                <td style="width: 20%;">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="قيمة الايصال ({{i +1}})" type="number" name="receiptVal{{i}}"
                       [(ngModel)]="otherVals.val" (ngModelChange)="otherReceiptValChanged(otherVals.val)" required>
@@ -283,9 +297,10 @@
                       </mat-error> -->
                   </mat-form-field>
                 </td>
-                <td style="width: 70%;">
+                <td>
                   <mat-form-field class="example-full-width" cellspacing="0">
-                    <input matInput placeholder="ملاحظات ({{i +1}})" name="notes{{i}}" [(ngModel)]="otherVals.note">
+                    <textarea matInput placeholder="ملاحظات ({{i +1}})" name="notes{{i}}" [(ngModel)]="otherVals.note"></textarea>
+                    <!-- <input matInput placeholder="ملاحظات ({{i +1}})" name="notes{{i}}" [(ngModel)]="otherVals.note"> -->
                     <mat-hint align="end">{{otherVals?.note?.length || 0}} / 200</mat-hint>
                   </mat-form-field>
                 </td>
@@ -343,7 +358,6 @@
                 <button mat-button>actionTwo</button>
           </mat-card-actions> -->
       </mat-card>
-
 
     </div>
 

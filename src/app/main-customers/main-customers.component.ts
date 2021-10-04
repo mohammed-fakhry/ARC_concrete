@@ -64,7 +64,7 @@ export class MainCustomersComponent implements OnInit {
     public _mainService: MainService,
     public _glopal: GlobalVarsService
   ) {
-    this._glopal.currentHeader = 'الشركات الام';
+    this._glopal.currentHeader = 'الشركات الأُم';
     this._glopal.loading = true;
   }
 

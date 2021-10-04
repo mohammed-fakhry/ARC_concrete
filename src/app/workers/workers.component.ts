@@ -38,6 +38,8 @@ export class WorkersComponent implements OnInit {
   personsList: Worker[] = [];
   searchTxt: string = '';
 
+  mainWorkersList: any[] = [];
+
   counts: { onUs: number; toUS: number } = { onUs: 0, toUS: 0 };
 
   searchDate: { from: string; to: string } = { from: '', to: '' };
@@ -90,10 +92,9 @@ export class WorkersComponent implements OnInit {
         dateNow.getMonth() + 1 < 10
           ? `0${dateNow.getMonth() + 1}`
           : dateNow.getMonth() + 1;
-      // 2021-07-06
 
-      let dateFrom = `${dateNow.getFullYear()}-${month}-01`;
-      let dateTo = `${dateNow.getFullYear()}-${month}-30`;
+      dateFrom = `${dateNow.getFullYear()}-${month}-01`;
+      dateTo = `${dateNow.getFullYear()}-${month}-30`;
 
       this.searchDate = { from: dateFrom, to: dateTo };
     }
@@ -101,8 +102,16 @@ export class WorkersComponent implements OnInit {
     this.resetSearchByDate(dateFrom && dateTo ? true : false);
 
     this.getWorkersPromise(dateFrom, dateTo).then((data: any) => {
-      this.fillListData(data);
-      this.counts = this.generateCounts(data);
+      let from = dateFrom ?? '';
+
+      this.mainWorkersList = data;
+
+      const stillWorkEmployees = data.filter(
+        (worker: any) => worker.leftWorkAt == '' || worker.leftWorkAt > from
+      );
+
+      this.fillListData(stillWorkEmployees);
+      this.counts = this.generateCounts(stillWorkEmployees);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -216,9 +225,6 @@ export class WorkersComponent implements OnInit {
     this.searchTxt = '';
 
     if (from && to) {
-      /* let start = `${from}T00:00`;
-      let end = `${to}T23:59`; */
-
       this.onStart('', from, to);
     }
   }

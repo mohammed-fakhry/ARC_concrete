@@ -123,10 +123,13 @@ export class SafeService {
     return this.http.post(`${this.url}postChangedReciept.php`, safeChanged);
   }
 
-  receiptChangesList() {
+  receiptChangesList(id?: string) {
+    if (id)
+      return this.http.get<ChangedReciepts[]>(
+        `${this.url}receiptChangesList.php?id=${id}`
+      );
     return this.http.get<ChangedReciepts[]>(
       `${this.url}receiptChangesList.php`
     );
   }
-
 }

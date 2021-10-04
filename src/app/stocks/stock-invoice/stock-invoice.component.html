@@ -1,6 +1,19 @@
+<!-- cantFindInvoice -->
+<div *ngIf="!showInvoice && cantFindInvoice.msg" class="mt-5 container text-center bg-white p-2 boxShadow boxRadios" [class]="cantFindInvoice.class">
+  <h2 class="textBold">{{cantFindInvoice.msg}}</h2>
+  <mat-divider class="mb-5"></mat-divider>
+  <div class="mt-3 pt-3">
+    <div class="arcPointer arcPointer-lg pt-3" [ngClass]="cantFindInvoice.msg?.includes('لا توجد بيانات') ? 'arcPointer-accent' : 'arcPointer-danger'">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+
 <div class="mainContainer">
 
-  <mat-card class="section p-4 box"
+  <mat-card [class.d-none]="!showInvoice" class="section p-4 box"
     [ngClass]="stockInvoice.transactionType == 'فاتورة بيع' ? 'borderRight-alert' : 'borderLsecondary'"
     [class.borderTop-primary]="stockInvoice.transactionType == 'اذن نقل'" [class.borderLeft-alert]="checkedStatue">
     <mat-card-header class="d-flex justify-content-between">
@@ -263,8 +276,8 @@
           <table class="flex-table table">
             <tbody>
               <tr class="noHover" style="border-bottom: none;">
-                <td style="flex: .25;" (click)="addRow()">
-                  <button type="button" mat-stroked-button color="accent">+</button>
+                <td style="flex: .25;">
+                  <button type="button" mat-stroked-button color="accent" (click)="addRow()">+</button>
                 </td>
                 <td style="flex: 2;"></td>
                 <td></td>

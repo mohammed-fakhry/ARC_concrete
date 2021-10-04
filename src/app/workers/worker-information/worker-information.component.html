@@ -1,10 +1,11 @@
 <div class="mainContainer">
   <div class="row">
-    <div class="col-lg-4 col-md-12 printX">
+    <div class="col-lg-4 col-md-12">
 
-      <mat-card>
+      <mat-card [class.borderLdanger]="worker.leftWorkAt" class="mb-3">
         <mat-card-header class="d-flex justify-content-between">
-          <mat-card-title class="textBold textSecondary">{{worker.workerName}}</mat-card-title>
+          <mat-card-title class="textBold" [ngClass]="worker.leftWorkAt ? 'textDanger' : 'textSecondary'">
+            {{worker.workerName}}</mat-card-title>
           <mat-card-subtitle class="pt-2">العنوان | {{worker.workerAdd}}</mat-card-subtitle>
           <button mat-stroked-button color="accent" routerLink="/UpdateWorker/{{worker.workerId}}" matTooltip="تعديل">
             <i class="fa fa-pencil underLine"></i>
@@ -12,6 +13,9 @@
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list">
+            <mat-list-item *ngIf="worker.leftWorkAt" role="listitem" class="dangerBadge borderLdanger">
+              <span class="p-2 textBold">توقف عن العمل بتاريخ | {{worker.leftWorkAt}}</span>
+            </mat-list-item>
             <mat-list-item role="listitem">الهاتف | {{worker.workerTell}}</mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item role="listitem">الادارة | {{worker.workerJopCateg}}</mat-list-item>
@@ -31,19 +35,29 @@
 
         <mat-divider></mat-divider>
 
-        <button mat-flat-button color="accent" class="mt-3" (click)="startCalcSalary()" [disabled]="showCalcSalary">
-          اضافة ايام العمل
-        </button>
-        <button mat-stroked-button color="accent" class="mt-3 mr-2" (click)="addDiscound()">صرف الراتب</button>
+        <mat-card-actions>
+          <button mat-flat-button color="accent" class="mt-3" (click)="startCalcSalary()"
+            [disabled]="showCalcSalary || worker.leftWorkAt != ''">
+            اضافة ايام العمل
+          </button>
+          <button mat-stroked-button color="accent" class="mt-3 mr-2" (click)="addDiscound()"
+            [disabled]="worker.leftWorkAt != ''">
+            صرف الراتب
+          </button>
+        </mat-card-actions>
+
+
       </mat-card>
 
-      <!--  -->
-      <div *ngIf="showCalcSalary" class="box mt-3">
+      <!-- *ngIf="showCalcSalary" -->
+      <div class="printX" id="showCalcSalary">
 
-        <mat-card class="boxShadow box">
+        <mat-card class="boxShadow boxBg" id="showCalcSalaryCard" [class.moveIn]="showCalcSalary">
           <mat-card-header class="d-flex justify-content-between">
             <!-- <div mat-card-avatar>avatar</div> -->
             <mat-card-title>حساب ايام العمل</mat-card-title>
+            <button mat-button color="warn" (click)="showCalcSalary = false"> <i class="fa fa-times fa-lg"></i></button>
+
           </mat-card-header>
           <mat-card-content>
             <form (ngSubmit)="submitSalary(addSalaryForm)" #addSalaryForm="ngForm" id="addSalaryForm">
@@ -98,9 +112,10 @@
               </table>
 
               <div class="form-inline">
-                <button mat-flat-button color="primary" type="submit" [disabled]="!addSalaryForm.valid">ترحيل</button>
+                <button mat-flat-button color="primary" type="submit"
+                  [disabled]="!addSalaryForm.valid || worker.leftWorkAt != '' || _glopal.loading || !showCalcSalary">ترحيل</button>
                 <button *ngIf="workedDayes.id" mat-stroked-button color="warn" type="button" class="mr-2"
-                  (click)="openDelDialog()">
+                  [disabled]="worker.leftWorkAt != ''" (click)="openDelDialog()">
                   حذف
                 </button>
                 <div class="darkBadge borderLdark p-2 mr-2">
@@ -145,7 +160,8 @@
                 </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز</button>
-                  <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()" style="text-align: right;">اظهار
+                  <button [disabled]="!isFiltered" mat-menu-item (click)="filterByDate()"
+                    style="text-align: right;">اظهار
                     الكل</button>
                 </mat-menu>
               </div>

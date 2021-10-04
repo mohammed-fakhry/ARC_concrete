@@ -99,7 +99,9 @@ export class WorkerInformationComponent implements OnInit {
           acc: data[1],
         };
         this.worker = result.worker;
-        this.fillListData(this.makeWorkerAcc(result.acc));
+
+        const accToFill = this.makeWorkerAcc(result.acc);
+        this.fillListData(accToFill);
 
         this._mainService.handleTableHeight();
         // this.accArr = result.acc;
@@ -306,6 +308,7 @@ export class WorkerInformationComponent implements OnInit {
   }
 
   recordWorkedDayes() {
+    this._glopal.loading = true;
     if (this.workedDayes.id) {
       /* if (
         this._mainService.dateExpired(

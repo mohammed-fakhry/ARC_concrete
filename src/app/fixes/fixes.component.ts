@@ -28,9 +28,7 @@ export class FixesComponent implements OnInit {
   };
 
   db_changes = [
-    'ALTER TABLE `customers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `truckCustomerId`',
-    'ALTER TABLE `truckcustomers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `notes`',
-    'ALTER TABLE `concretecustomers` ADD `mainCustomerId` VARCHAR(100) NOT NULL AFTER `cementCustomerId`'
+    'ALTER TABLE `employes` ADD `leftWorkAt` VARCHAR(200) NOT NULL AFTER `workerCheckOut`'
   ];
 
   url: string | null = localStorage.getItem('tmpDB');

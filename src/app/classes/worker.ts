@@ -12,4 +12,5 @@ export class Worker {
   workerCheckIN: string = '';
   workerCheckOut: string = '';
   workerCurrentVal: number = 0;
+  leftWorkAt: string = '';
 }

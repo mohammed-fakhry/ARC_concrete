@@ -32,10 +32,15 @@ import { SearchInvoiceDialogComponent } from 'src/app/dialogs/search-invoice-dia
   styleUrls: ['./add-safe-receipt.component.scss'],
 })
 export class AddSafeReceiptComponent implements OnInit {
+  showInvoice = false;
+  cantFindInvoice = {
+    msg: '',
+    class: 'textSecondary',
+  };
   id: string | null = null;
   safeList: SafeData[] = [];
   customerList: Customer[] = [];
-  filteredCustomer: Customer[] = [];
+  // filteredCustomer: Customer[] = [];
 
   mainCustomerList: Customer[] = [];
   accList: OtherAcc[] = [];
@@ -181,6 +186,11 @@ export class AddSafeReceiptComponent implements OnInit {
         (truck: Truck) => truck.owner == 'سيارة الشركة'
       );
 
+      this.cantFindInvoice = {
+        msg: '',
+        class: 'textSecondary',
+      };
+
       this.workerList = result.workers;
 
       this.id = this.activeRoute.snapshot.paramMap.get('id');
@@ -196,6 +206,7 @@ export class AddSafeReceiptComponent implements OnInit {
           .getSafesReceipt(this.id)
           .subscribe((data: SafeReceipt[]) => {
             if (data.length > 0) {
+              this.showInvoice = true;
               this.safeReciept = data[0];
               //this.safeReciept.safeName = data[0].safeName;
               this.safeChanged('first');
@@ -216,13 +227,36 @@ export class AddSafeReceiptComponent implements OnInit {
 
               if (this.safeReciept.transactionAccKind == 'عميل خرسانة')
                 this.checkforConcreteReceipt();
+
+              this._glopal.loading = false;
+            } else {
+              this.showInvoice = false;
+              if (this.id) {
+                this.receiptChangesList(this.id).then(
+                  (changedinvoicedata: ChangedReciepts[]) => {
+                    if (changedinvoicedata.length > 0) {
+                      const details = changedinvoicedata[0];
+                      this.cantFindInvoice = {
+                        msg: `تم ${details.changedType} | رقم (${details.safeReceiptId}) | بواسطة المستخدم : '${details.userRealName}' | بالتوقيت (${details.date_time})`,
+                        class: 'dangerBadge borderLdanger p-3',
+                      };
+                    } else {
+                      this.cantFindInvoice = {
+                        msg: `لا توجد بيانات لهذا الايصال`,
+                        class: 'secondaryBadge borderLsecondary p-3',
+                      };
+                    }
+                    this._glopal.loading = false;
+                  }
+                );
+              }
             }
-            this._glopal.loading = false;
           });
         this.submitBtn = 'تعديل';
       }
 
       if (!this.id) {
+        this.showInvoice = true;
         this.safeReciept.safeName = this.safeList[0].safeName;
         this.safeReciept.safeId = this.safeList[0].safeId;
         this.safeReciept.currentSafeVal = this.safeList[0].currentSafeVal;
@@ -232,6 +266,17 @@ export class AddSafeReceiptComponent implements OnInit {
       }
       this.receiptKindDom.focus();
     });
+  }
+
+  receiptChangesList(id: string): Promise<ChangedReciepts[]> {
+    return new Promise((res) => {
+      this._safeService
+        .receiptChangesList(id)
+        .subscribe((data: ChangedReciepts[]) => {
+          res(data);
+        });
+    });
+    //
   }
 
   fillOldData = (
@@ -347,6 +392,31 @@ export class AddSafeReceiptComponent implements OnInit {
     this.safeReciept.secSafeId = 1;
     this.safeReciept.customerId = 1;
   }
+
+  getSafeInfo = (safeName: string) =>
+    this.safeList.find((safe) => safe.safeName === safeName);
+
+  findCustomer_byName = (customerName: string): Customer | undefined =>
+    this.customerList.find((c) => c.customerName === customerName);
+
+  findAcc_byName = (accName: string): OtherAcc | undefined =>
+    this.accList.find((acc) => acc.AccName === accName);
+
+  findTruck_byName = (truckName: string): Truck | undefined =>
+    this.truckList.find((truck) => truck.name === truckName);
+
+  findWorker_byName = (workerName: string): Worker | undefined =>
+    this.workerList.find((worker) => worker.workerName === workerName);
+
+  findTruckCustomerByName = (fullName: string): TruckCustomer | undefined =>
+    this.truckCustomerList.find((customer) => customer.fullName === fullName);
+
+  findConcreteCustomer_byName = (
+    fullName: string
+  ): ConcreteCustomer | undefined =>
+    this.concreteCustomerList.find(
+      (customer) => customer.fullName === fullName
+    );
 
   getAccList() {
     return new Promise((res) => {
@@ -493,31 +563,6 @@ export class AddSafeReceiptComponent implements OnInit {
     this.safeReciept.currentAccVal = acc.currentAccVal;
     this.tranceAccChanged();
   }
-
-  getSafeInfo = (safeName: string) =>
-    this.safeList.find((safe) => safe.safeName === safeName);
-
-  findCustomer_byName = (customerName: string): Customer | undefined =>
-    this.customerList.find((c) => c.customerName === customerName);
-
-  findAcc_byName = (accName: string): OtherAcc | undefined =>
-    this.accList.find((acc) => acc.AccName === accName);
-
-  findTruck_byName = (truckName: string): Truck | undefined =>
-    this.truckList.find((truck) => truck.name === truckName);
-
-  findWorker_byName = (workerName: string): Worker | undefined =>
-    this.workerList.find((worker) => worker.workerName === workerName);
-
-  findTruckCustomerByName = (fullName: string): TruckCustomer | undefined =>
-    this.truckCustomerList.find((customer) => customer.fullName === fullName);
-
-  findConcreteCustomer_byName = (
-    fullName: string
-  ): ConcreteCustomer | undefined =>
-    this.concreteCustomerList.find(
-      (customer) => customer.fullName === fullName
-    );
 
   safeChanged(cond: string) {
     let safeInfo = this.getSafeInfo(this.safeReciept.safeName);
@@ -1041,7 +1086,8 @@ export class AddSafeReceiptComponent implements OnInit {
             (data: any) => {
               this.recordConcreteCash(data[0]);
 
-              if (this.otherRecieptVals.length == 0) {
+              const filteredVal = this.otherRecieptVals.filter((v) => v.val > 0);
+              if (filteredVal.length == 0) {
                 thedialog.discription = [
                   `ايصال رقم | (${data[0]})`,
                   ...thedialog.discription,
@@ -1080,28 +1126,31 @@ export class AddSafeReceiptComponent implements OnInit {
       `${safeReciept.AccName ?? safeReciept.customerName}`,
       `ايصال 1 بقيمة ${safeReciept.receiptVal} | ${safeReciept.recieptNote}`,
     ];
-    const filteredVal = this.otherRecieptVals.filter((v) => v.val);
-    for (let i = 0; i < filteredVal.length; i++) {
-      safeReciept.receiptVal = filteredVal[i].val;
-      safeReciept.recieptNote = filteredVal[i].note;
-      this.recordSafeReceipt(this.recieptData_forDb(safeReciept)).then(
-        (data: any) => {
-          discription.push(
-            `ايصال ${i + 2} بقيمة ${filteredVal[i].val} | ${
-              filteredVal[i].note
-            }`
-          );
-          if (i == filteredVal.length - 1) {
-            let thedialog = {
-              header: `تم اضافة ايصالات نقدية`,
-              info: `خزنة ${safeReciept.safeName}`,
-              discription: discription,
-            };
-            this._glopal.loading = false;
-            this.openDialog(thedialog);
+    const filteredVal = this.otherRecieptVals.filter((v) => v.val > 0);
+
+    if (filteredVal.length > 0) {
+      for (let i = 0; i < filteredVal.length; i++) {
+        safeReciept.receiptVal = filteredVal[i].val;
+        safeReciept.recieptNote = filteredVal[i].note;
+        this.recordSafeReceipt(this.recieptData_forDb(safeReciept)).then(
+          (data: any) => {
+            discription.push(
+              `ايصال ${i + 2} بقيمة ${filteredVal[i].val} | ${
+                filteredVal[i].note
+              }`
+            );
+            if (i == filteredVal.length - 1) {
+              let thedialog = {
+                header: `تم اضافة ايصالات نقدية`,
+                info: `خزنة ${safeReciept.safeName}`,
+                discription: discription,
+              };
+              this._glopal.loading = false;
+              this.openDialog(thedialog);
+            }
           }
-        }
-      );
+        );
+      }
     }
   }
 
@@ -1166,7 +1215,7 @@ export class AddSafeReceiptComponent implements OnInit {
               this.concreteReceiptCash.safeReceiptKind = 'فاتورة';
             }
           }
-          addSafeReciept.form.markAsDirty()
+          addSafeReciept.form.markAsDirty();
           this.concreteReceiptCash.concreteReceipt_id =
             result.concreteReceipt_id;
           this.concreteReciptCash_btn = `تم ربط الايصال بالفاتورة رقم (${result?.manualNum}) | ${result?.concreteReceipt_id} | تعديل`;

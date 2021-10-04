@@ -122,11 +122,11 @@
 
 .textBtn {
   cursor: pointer;
-  transition: 0.1s;
+  transition: 100ms;
 }
 
 .textBtn:active {
-  font-size: large;
+  transform: translateX(-5px);
   .iconBtn {
     font-size: larger;
   }

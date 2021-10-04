@@ -20,6 +20,8 @@ export class AddWorkerComponent implements OnInit {
   workerInfo: Worker = new Worker();
   id!: string | null;
 
+  isWorking: boolean = true;
+
   constructor(
     public _workerService: WorkerService,
     public _mainService: MainService,
@@ -46,6 +48,8 @@ export class AddWorkerComponent implements OnInit {
       if (this.id) {
         this.getWorkers(this.id).then((data: Worker[]) => {
           this.workerInfo = data[0];
+
+          this.isWorking = this.workerInfo.leftWorkAt ? false : true;
           this._glopal.loading = false;
         });
       } else {
@@ -125,6 +129,14 @@ export class AddWorkerComponent implements OnInit {
         }
       );
     }
+  }
+
+  isStillWorking() {
+    this.isWorking
+      ? (this.workerInfo.leftWorkAt = '')
+      : (this.workerInfo.leftWorkAt = this._mainService.makeDate(
+          new Date(Date.now())
+        ));
   }
 
   onSubmit(addWorkerForm: NgForm) {

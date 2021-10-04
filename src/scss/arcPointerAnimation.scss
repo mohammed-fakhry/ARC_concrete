@@ -34,6 +34,15 @@
 }
 
 /* size */
+
+.arcPointer-lg {
+  width: 500px;
+  height: 500px;
+  .arcPointer-content {
+    padding-top: 90px;
+  }
+}
+
 .arcPointer-md {
   width: 200px;
   height: 200px;

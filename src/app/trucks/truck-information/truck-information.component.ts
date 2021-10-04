@@ -74,13 +74,12 @@ export class TruckInformationComponent implements OnInit {
 
   onStart(from?: string, to?: string) {
     this.getOurtruckAcc(from, to).then((data) => {
-      const sortedData = data
-        .map((a: any) => {
-          return {
-            ...a,
-            netIncome: a.truckOrderVals - a.otherAccVals - a.cashIn,
-          };
-        })
+      const sortedData = data.map((a: any) => {
+        return {
+          ...a,
+          netIncome: a.truckOrderVals - a.otherAccVals - a.cashIn,
+        };
+      });
 
       this.fillListData(sortedData);
       this.counts = this.setCounts(data);

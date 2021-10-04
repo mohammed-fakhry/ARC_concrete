@@ -30,6 +30,11 @@ import { SearchInvoiceDialogComponent } from 'src/app/dialogs/search-invoice-dia
   styleUrls: ['./stock-invoice.component.scss'],
 })
 export class StockInvoiceComponent implements OnInit {
+  showInvoice = false;
+  cantFindInvoice = {
+    msg: '',
+    class: 'textSecondary',
+  };
   stockTransaction: { info: InvoiceInp }[] = [];
 
   stockInvoice = {
@@ -260,8 +265,15 @@ export class StockInvoiceComponent implements OnInit {
     this.dataList = [];
     this.totalsArry = [];
     this.truckList = [];
+    this.notesArr = [];
+    this.notesDetailArr = [];
 
     this.truckInfo = new Truck();
+
+    this.cantFindInvoice = {
+      msg: '',
+      class: 'textSecondary',
+    };
 
     if (!this._glopal.loading) this._glopal.loading = true;
 
@@ -293,6 +305,7 @@ export class StockInvoiceComponent implements OnInit {
         );
 
         if (!this.id) {
+          this.showInvoice = true;
           this.addfildes();
           this.fillNewInvoice();
 
@@ -364,10 +377,19 @@ export class StockInvoiceComponent implements OnInit {
       });
   }
 
+  getChangedInvoices(id: string): Promise<Changedinvoice[]> {
+    return new Promise((res) => {
+      this._stockService
+        .changedinvoiceList(id)
+        .subscribe((data: Changedinvoice[]) => res(data));
+    });
+  }
+
   prepareForEdit() {
     Promise.all([this.getStockTransAction(), this.getStockTranseDetail()]).then(
       (data: any[]) => {
         if (data[0].length > 0) {
+          this.showInvoice = true;
           this.fillToEdit(data);
           // to filterCustomers Arr
           this.stockNameChanged();
@@ -381,6 +403,27 @@ export class StockInvoiceComponent implements OnInit {
           if (custFounded) this.custInfo = custFounded;
           if (this.transactionTypeDom) this.transactionTypeDom.focus();
           this._glopal.loading = false;
+        } else {
+          this.showInvoice = false;
+          if (this.id) {
+            this.getChangedInvoices(this.id).then(
+              (changedinvoicedata: Changedinvoice[]) => {
+                if (changedinvoicedata.length > 0) {
+                  const details = changedinvoicedata[0];
+                  this.cantFindInvoice = {
+                    msg: `تم ${details.changedDisc} | رقم (${details.stockTransactionId}) | بواسطة المستخدم : '${details.realName}' | بالتوقيت (${details.date_time})`,
+                    class: 'dangerBadge borderLdanger p-3',
+                  };
+                } else {
+                  this.cantFindInvoice = {
+                    msg: `لا توجد بيانات لهذه الفاتورة`,
+                    class: 'secondaryBadge borderLsecondary p-3',
+                  };
+                }
+                this._glopal.loading = false;
+              }
+            );
+          }
         }
       }
     );

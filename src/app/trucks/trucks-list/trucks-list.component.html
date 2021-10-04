@@ -49,7 +49,9 @@
 
                 <ng-container matColumnDef="owner">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>المالك</th>
-                  <td mat-cell *matCellDef="let row">{{row.owner}}</td>
+                  <td mat-cell *matCellDef="let row" class="tdBorder">
+                    {{row.owner}}
+                  </td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
@@ -62,7 +64,7 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableHeader">
                 </tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;">
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: fit-content;" [class.dangerBadge]="row.owner == 'سيارة خارجية'">
                 </tr>
 
               </table>

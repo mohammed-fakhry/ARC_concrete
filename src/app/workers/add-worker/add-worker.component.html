@@ -51,6 +51,22 @@
               </mat-form-field>
             </td>
           </tr>
+
+          <tr>
+            <td style="height: 100px;">
+              <mat-slide-toggle name="isWorking" [(ngModel)]="isWorking" color="primary"
+                (change)="isStillWorking()">
+                <span class="pr-3">{{isWorking ? 'يعمل لدينا' : 'توقف عن العمل بتاريخ'}}</span>
+              </mat-slide-toggle>
+              <!-- {{isWorking ? 'يعمل لدينا' : 'توقف عن العمل بتاريخ'}} -->
+            </td>
+            <td>
+              <mat-form-field *ngIf="workerInfo.leftWorkAt" class="w-50">
+                <input matInput type="date" name="leftWorkAt" [(ngModel)]="workerInfo.leftWorkAt" id="leftWorkAt">
+              </mat-form-field>
+            </td>
+            <td></td>
+          </tr>
         </table>
 
         <div>

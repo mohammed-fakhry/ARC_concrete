@@ -1,0 +1,16 @@
+#showCalcSalary {
+  position: relative;
+}
+
+#showCalcSalaryCard {
+  transition: 250ms;
+  position: absolute;
+}
+
+#showCalcSalaryCard:not(.moveIn) {
+  right: -120%;
+}
+
+.moveIn {
+  right: 0;
+}

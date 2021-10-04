@@ -103,9 +103,7 @@ export class StockService {
   }
 
   productLastSoldPrice(id: string) {
-    return this.http.get<any[]>(
-      `${this.url}productLastSoldPrice.php?id=${id}`
-    );
+    return this.http.get<any[]>(`${this.url}productLastSoldPrice.php?id=${id}`);
   }
   // stockTransactionList
   getStockTransactionList(id?: string) {
@@ -154,7 +152,11 @@ export class StockService {
     return this.http.post(`${this.url}postChangedInvoice.php`, changedinvoice);
   }
 
-  changedinvoiceList() {
+  changedinvoiceList(id?: string) {
+    if (id)
+      return this.http.get<Changedinvoice[]>(
+        `${this.url}changedinvoiceList.php?id=${id}`
+      );
     return this.http.get<Changedinvoice[]>(`${this.url}changedinvoiceList.php`);
   }
 
@@ -192,11 +194,15 @@ export class StockService {
   }
 
   getLastCasherSerial(customerId: number) {
-    return this.http.get<any[]>(`${this.url}getLastCasherSerial.php?id=${customerId}`);
+    return this.http.get<any[]>(
+      `${this.url}getLastCasherSerial.php?id=${customerId}`
+    );
   }
 
   getAddQtyFromTransactionStock(id: string) {
-    return this.http.get<any[]>(`${this.url}getAddQtyFromTransactionStock.php?id=${id}`);
+    return this.http.get<any[]>(
+      `${this.url}getAddQtyFromTransactionStock.php?id=${id}`
+    );
   }
 
   getAllCementUses() {
