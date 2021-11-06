@@ -99,6 +99,7 @@ export class AddConcreteComponent implements OnInit {
       );
 
       if (concreteInfo) {
+
         for (let i = 0; i < concreteInfo.materials.length; i++) {
           this.addRow('update');
         }
@@ -216,9 +217,9 @@ export class AddConcreteComponent implements OnInit {
 
   recordMainConcrete(addConcreteForm: NgForm) {
     if (this.id) {
-      this.concrete.lastUpdated = this._mainService.makeTime_date(
+      /* this.concrete.lastUpdated = this._mainService.makeTime_date(
         new Date(Date.now())
-      );
+      ); */
 
       this._concrete.updateConcrete(this.concrete).subscribe();
       this.recordMaterials(this.concrete.id);

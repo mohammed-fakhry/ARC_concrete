@@ -72,7 +72,7 @@
                 <td style="width: 70%;">
                   <mat-form-field class="example-full-width">
                     <mat-label>استلام من خزنة</mat-label>
-                    <mat-select required #fstSafeName name="fstSafeName" [(ngModel)]="safeReciept.safeName"
+                    <mat-select required [disabled]="safeReciept.safeId == 17" #fstSafeName name="fstSafeName" [(ngModel)]="safeReciept.safeName"
                       (ngModelChange)="safeChanged('first')">
                       <mat-option *ngFor="let safe of safeList" value="{{safe.safeName}}">
                         {{safe.safeName}}

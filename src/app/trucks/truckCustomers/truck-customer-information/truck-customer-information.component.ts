@@ -612,9 +612,8 @@ export class TruckCustomerInformationComponent implements OnInit {
         });
 
         // truckworkes
-        const trucksDom = document.querySelector(`#${cond}`) as HTMLElement;
-
         const cardHeader = document.querySelectorAll('.cardHeader');
+        const trucksDom = document.querySelector(`#${cond}`) as HTMLElement;
 
         cardHeader.forEach((e: HTMLElement | any) => {
           return e.classList.add('d-none');
@@ -645,7 +644,11 @@ export class TruckCustomerInformationComponent implements OnInit {
 
       headerBox.style.display = 'block';
     } else {
+      const truckworkes = document.querySelector(`#truckworkes`) as HTMLElement;
+
+      truckworkes.classList.add('d-none')
       window.print();
+      truckworkes.classList.remove('d-none')
     }
   }
 

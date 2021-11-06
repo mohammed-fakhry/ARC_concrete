@@ -21,6 +21,7 @@
         </mat-card-header>
         <mat-card-content>
           <h3>{{customerInfo.adress}}</h3>
+          <h5 *ngIf="customerInfo?.mainCustomerName">الشركة الأم | {{customerInfo?.mainCustomerName}}</h5>
           <mat-divider></mat-divider>
         </mat-card-content>
         <mat-card-actions>

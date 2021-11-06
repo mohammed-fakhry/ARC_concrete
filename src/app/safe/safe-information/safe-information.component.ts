@@ -261,13 +261,20 @@ export class SafeInformationComponent implements OnInit {
         routeTo: `/OtherAccInformation/${data.accId}`,
         condition: () => data.AccName && data.AccName?.includes('الشيخ ايمن'),
       },
-      /* {
-        toolTip: 'مصروفات المقاولات',
+      {
+        toolTip: 'ايراد غفرات و حراسة',
         receiptDetail: data.AccName,
         routeTo: `/OtherAccInformation/${data.accId}`,
         condition: () =>
-          data.AccName && data.AccName?.includes('مصروفات المقاولات'),
-      }, */
+          data.AccName && data.AccName?.includes('ايراد غفرات و حراسة'),
+      },
+      {
+        toolTip: 'ايراد الايجارات',
+        receiptDetail: data.AccName,
+        routeTo: `/OtherAccInformation/${data.accId}`,
+        condition: () =>
+          data.AccName && data.AccName?.includes('ايراد الايجارات'),
+      },
       {
         toolTip: 'مصاريف مقاولات',
         receiptDetail: data.AccName,

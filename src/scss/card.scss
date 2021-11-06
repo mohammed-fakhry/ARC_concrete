@@ -18,6 +18,10 @@
   border-radius: $boxRadios;
 }
 
+.example-container {
+  transition: 0.3s;
+}
+
 * {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -26,13 +30,14 @@
 
 .box {
   // box-shadow: $elevationZ;
-  background-color: $boxBg;
+  // background-color: $boxBg;
+  backdrop-filter: blur(50px) !important;
   z-index: 1;
   position: relative;
   //padding-bottom: 0.5rem;
-  .form-control:not(.lightBg) {
+  /* .form-control:not(.lightBg) {
     background-color: $boxBg;
-  }
+  } */
 }
 
 .activeBox {
@@ -49,13 +54,41 @@ mat-card {
   position: relative !important;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-right: 3px solid $textSecondaryBg;
+  // box-shadow: $lightShadow;
   transition: 300ms;
+  // padding-left: 10px !important;
+  // padding-right: 10px !important;
   border-radius: $boxRadios !important;
-}
+  // background-color: rgba(255, 255, 255, 0.25) !important;
+  // backdrop-filter: blur(20px) !important;
+  background-color: white;
 
-mat-card:hover {
-  box-shadow: $elvationZ_big;
-  z-index: 1;
+  mat-card-title {
+    color: $primaryBg;
+    margin-top: 10px !important;
+    // font-weight: bold !important;
+  }
+  .mat-card-header .mat-card-subtitle:not(:first-child) {
+    margin-top: 10px !important;
+  }
+
+  &:hover {
+    box-shadow: $elvationZ_big;
+    z-index: 1;
+  }
+
+  /* &:not(.noAfter):before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient($secondaryBg, $boxBg);
+    clip-path: circle(50% at right 50%);
+    opacity: 0.025;
+    z-index: -1;
+  } */
 }
 
 .Zindex_one {
@@ -78,19 +111,6 @@ mat-card:hover {
   // padding-top: 0.5rem;
   overflow-x: visible;
 } */
-
-mat-card:not(.noAfter):before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient($secondaryBg, $boxBg);
-  clip-path: circle(50% at right 50%);
-  opacity: 0.025;
-  z-index: -1;
-}
 
 // defult box border
 /* .box:not(.borderRight-alert):not(.primaryBorder):not(.inpCard):not(.borderRight-alert-light):not(.noBorder) {
@@ -187,8 +207,8 @@ mat-card:not(.noAfter):before {
 }
 
 .homeSubtitle {
-  padding-top: 1px;
-  font-size: 1.3rem !important;
+  padding-top: 8px;
+  font-size: 1.4rem !important;
 }
 
 .stickyBox {
@@ -281,10 +301,6 @@ mat-card:not(.noAfter):before {
   border-bottom: solid 1px $primaryBg;
 }
 
-.borderTsecondary {
-  border-top: solid 2px $secondryBorder_color;
-}
-
 .borderAround {
   padding-top: 0.5rem;
   border-top: 2px solid #dee2e6;
@@ -306,15 +322,6 @@ mat-card:not(.noAfter):before {
   border-top: 2px solid $dangerBg !important;
 }
 
-mat-card-title {
-  color: $primaryBg;
-  margin-top: 10px !important;
-  // font-weight: bold !important;
-}
-
-.mat-card-header .mat-card-subtitle:not(:first-child) {
-  margin-top: 10px !important;
-}
 /*
 mat-divider {
   padding-top: 200px !important;
@@ -330,11 +337,8 @@ mat-divider {
   -ms-text-underline-position: below;
 }
 .calcMark {
-  background-color: #1d6bacb4; // #1d6cace0; //#3f51b5dc;
-  color: white;
-  .fa {
-    color: white;
-  }
+  background-color: #2482ce50; // #1d6cace0; //#3f51b5dc;
+  // color: white;
 }
 
 .sideLogo {

@@ -165,7 +165,8 @@ export class AddSafeReceiptComponent implements OnInit {
       this.getWorkers(),
     ]).then((data: any[]) => {
       const result = {
-        safes: data[0], //.filter((safe: any) => safe.safeId != 17),
+        // safe.safeId == 17 is "خزنة مصاريف من فترة"
+        safes: data[0].filter((safe: any) => safe.safeId != 17), //.filter((safe: any) => safe.safeId != 17),
         customers: data[1],
         acc: data[2],
         concreteCustomers: data[3],
@@ -573,7 +574,10 @@ export class AddSafeReceiptComponent implements OnInit {
         this.safeReciept.safeId = safeInfo.safeId;
       }
       this.setSafeRemain();
-    }
+    } /* else if (this.safeReciept.safeId == 17) {
+      this.safeReciept.safeName = "خزنة مصاريف من فترة 22-3-2020 الى فترة 1-5-2021"
+      console.log(this.safeReciept)
+    } */
   }
 
   setSafeRemain() {
@@ -1086,7 +1090,9 @@ export class AddSafeReceiptComponent implements OnInit {
             (data: any) => {
               this.recordConcreteCash(data[0]);
 
-              const filteredVal = this.otherRecieptVals.filter((v) => v.val > 0);
+              const filteredVal = this.otherRecieptVals.filter(
+                (v) => v.val > 0
+              );
               if (filteredVal.length == 0) {
                 thedialog.discription = [
                   `ايصال رقم | (${data[0]})`,

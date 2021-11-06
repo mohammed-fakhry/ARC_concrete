@@ -147,12 +147,6 @@ mat-card,
   }
 }
 
-.invoiceTable {
-  thead: {
-    border-top: solid 2px $primaryBg;
-  }
-}
-
 .tableBody::-webkit-scrollbar {
   width: $scrollBarWidth;
 }
@@ -166,22 +160,24 @@ mat-card,
   border-radius: 5px;
 }
 
-.tBtn-dark:not(:disabled):not(.disabled):not(:active):hover {
-  border-radius: 2px;
-  background-color: $headerDeepBlue; //#1d6cace0; //#1d6bacb4;
-  color: white;
-  border: none;
-}
+.tBtn-dark {
+  &:not(:disabled):not(.disabled):not(:active):hover {
+    border-radius: 2px;
+    background-color: $headerDeepBlue; //#1d6cace0; //#1d6bacb4;
+    color: white;
+    border: none;
+  }
 
-.tBtn-dark:disabled {
-  background-color: whitesmoke;
-  color: black;
-}
+  &:disabled {
+    background-color: whitesmoke;
+    color: black;
+  }
 
-.tBtn-dark:active {
-  background-color: $secondaryBg;
-  color: white;
-  // font-size: small;
+  &:active {
+    background-color: $secondaryBg;
+    color: white;
+    // font-size: small;
+  }
 }
 
 .tBtn-danger:hover {
@@ -219,8 +215,8 @@ mat-card,
   color: black;
 } */
 
-tbody:not(.inpTable) {
-  tr:not(.noHover):hover {
+tbody:not(.inpTable):not(.noHover) {
+  tr:hover {
     background-color: rgba(0, 0, 0, 0.075);
   }
 }
@@ -358,8 +354,10 @@ tr {
 }
 
 .invoiceTable {
+
   thead {
     padding-top: 0.75rem;
+    border-top: solid 2px $primaryBg;
     // padding-bottom: .75rem;
   }
 

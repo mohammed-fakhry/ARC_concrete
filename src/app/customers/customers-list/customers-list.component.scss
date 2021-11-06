@@ -1,3 +1,37 @@
+@import  '../../../scss/varibals.scss';
+
 mat-card-title {
   font-size: large !important;
+}
+
+#monthlyPaidCustomers_id {
+  position: fixed;
+  z-index: 2;
+  top: 70px;
+  left: -100%;
+  bottom: 70px;
+  width: 1200px;
+  max-width: 95%;
+  transition: left 0.25s;
+  // background-color: #f5f6fb;
+  background: $tableHeader_color;
+  overflow-y: auto;
+  /* background: linear-gradient(
+    #e7eaf8 0 94%,
+    #a4b2f7 0 6%
+  ); */
+}
+
+#monthlyPaidCustomers_id::-webkit-scrollbar {
+  width: $scrollBarWidth;
+}
+
+#monthlyPaidCustomers_id::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#monthlyPaidCustomers_id::-webkit-scrollbar-thumb {
+  background-color: $secondaryBg;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
 }

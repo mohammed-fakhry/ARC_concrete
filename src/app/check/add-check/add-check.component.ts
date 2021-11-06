@@ -83,10 +83,10 @@ export class AddCheckComponent implements OnInit {
 
   /* input changes */
 
-  bankChanged(bank: Bank) {
+  /* bankChanged(bank: Bank) {
     this.bankCheck.bankName = bank.bankName;
     this.bankCheck.bankId = bank.bankId;
-  }
+  } */
 
   openDoneDialog(dataVals: {
     header: string;
@@ -163,7 +163,7 @@ export class AddCheckComponent implements OnInit {
       info: `باسم | ${this.bankCheck.payFor}`,
       discription: [
         `بتاريخ | ${this.bankCheck.date}`,
-        `البنك  | ${this.bankCheck.bankId}`,
+        `البنك  | ${this.bankCheck.bankName}`,
         `بقيمة  | ${this.bankCheck.checkValue}`,
       ],
     });

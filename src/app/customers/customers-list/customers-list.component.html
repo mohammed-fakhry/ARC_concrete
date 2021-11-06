@@ -145,13 +145,20 @@
       </div>
 
       <div [class.d-none]="searchFor != 'gaurdsCustomers' && searchFor != 'monthlyPaidCustomers' && searchFor">
-        <div class="form-inline">
-          <h3 class="textPrimary">
+        <div class="form-inline mb-3">
+          <!-- <h3 class="textPrimary textBtn" (click)="showMonthlyPaid()">
             <span>
               <i class="fa fa-users my-auto pl-2"></i>
             </span>
             مستأجرين و حراسة
-          </h3>
+          </h3> -->
+
+          <button mat-raised-button color="accent" (click)="showMonthlyPaid()">
+            <span>
+              <i class="fa fa-users my-auto pl-2"></i>
+            </span>
+            مستأجرين و حراسة
+          </button>
         </div>
 
         <div class="row">
@@ -273,7 +280,7 @@
     </div>
 
     <div class="col-lg-8 col-md-12">
-      <div class="box stickyBox" id="customerListTable">
+      <div class="box stickyBox" id="customerListTable" style="margin-bottom: 3px;">
 
         <mat-card class="borderLsecondary">
           <mat-card-header class="d-flex justify-content-between">
@@ -287,8 +294,7 @@
                   matTooltip="اضافة مورد | مستهلك">
                   <i class="fa fa-plus fa-lg pt-1 textBold"></i>
                 </a>
-                <button mat-button color="primary" (click)="printDocument()"><i
-                    class="fa fa-print"></i></button>
+                <button mat-button color="primary" (click)="printDocument()"><i class="fa fa-print"></i></button>
               </div>
 
               <div class="mr-2">
@@ -328,9 +334,11 @@
                 <ng-container matColumnDef="customerName">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
                   <td mat-cell *matCellDef="let row" class="textBtn tBtn-dark pl-2"
-                    [class.borderAround-danger]="row.uncompletedCond > 0"
-                    routerLink="/customerInformation/{{row.customerId}}">
+                    [class.borderAround-danger]="row.uncompletedCond > 0" [matTooltip]="row.mainCustomerName"
+                    [matTooltipDisabled]="!row.mainCustomerName" matTooltipPosition="before"
+                    matTooltipClass="secondaryBg" routerLink="/customerInformation/{{row.customerId}}">
                     {{row.customerName}}
+                    <!-- <span class="textSmall" *ngIf="row.mainCustomerName"> | {{row.mainCustomerName}}</span> -->
                     <!-- <i *ngIf="row.uncompletedCond > 0" class="fa fa-lock pr-3"></i> -->
                   </td>
                 </ng-container>
@@ -342,7 +350,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="customerAdd">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="thCenter">عنوان</th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="thCenter">ملاحظات</th>
                   <td mat-cell *matCellDef="let row">
                     {{row.customerAdd}}</td>
                 </ng-container>
@@ -411,5 +419,100 @@
         </mat-card>
       </div>
     </div>
+  </div>
+
+
+  <div class="boxRadios bigShadow box fullCard" id="monthlyPaidCustomers_id">
+    <div class="d-flex justify-content-between px-2">
+      <div class="form-inline">
+        <button mat-button class="ml-2 textBold dangerBadge" (click)="closeMonthlyPaid()">X</button>
+
+        <mat-form-field style="width: 250px;" class="ml-3">
+          <input matInput type="datetime-local" name="monthlyPaid_date_time"
+            [(ngModel)]="monthlyPaid_date_time.date_time" id="monthlyPaid_date_time"
+            (ngModelChange)="date_timeChanged()">
+        </mat-form-field>
+
+        <button mat-raised-button color="warn" (click)="postMonthlyPaid_dialog()">
+          ترحيل الاستحقاقات عن شهر {{monthlyPaid_date_time.month}} لسنة {{monthlyPaid_date_time.year}}
+        </button>
+
+        <!-- <div [class.d-none]="loopDetails.length == 0" class="form-inline">
+          <div class="mr-3">{{loopDetails.length}}</div>
+          <div> | </div>
+          <div>{{loopDetails.loop}}</div>
+        </div> -->
+
+      </div>
+
+      <div class="my-3 py-2 ml-2 darkBadge borderLdark">
+        <table>
+          <tr>
+            <th>ايجارات</th>
+            <td class="pl-3">{{monthlyTotals.monthpay| number: '1.0-2'}}</td>
+          </tr>
+          <tr>
+            <th>حراسات</th>
+            <td class="pl-3">{{monthlyTotals.gaurds| number: '1.0-2'}}</td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+
+    <div *ngIf="loopDetails.length > 0" class="px-5 mb-3">
+      <div>
+        <div class="text-dark">
+          {{((loopDetails.loop / loopDetails.length) * 100) | number: '1.0-1'}}%</div>
+        <mat-progress-bar mode="determinate" [value]="(loopDetails.loop / loopDetails.length) * 100">
+        </mat-progress-bar>
+      </div>
+    </div>
+
+    <div class="panel-body panel-flex-table standTable">
+      <table class="flex-table table table-hover bg-light lightShadow">
+        <thead class="tableHeader">
+          <tr>
+            <th style="flex: .25;">م</th>
+            <th>العميل</th>
+            <th>الخدمة المُقدمة</th>
+            <th>استحقاق شهرى</th>
+            <th>حساب العميل</th>
+          </tr>
+        </thead>
+        <tbody class="tableBody">
+          <tr *ngFor="let customer of monthlyPaidCustomers; let i = index">
+            <td style="flex: .25;">{{i + 1}}</td>
+            <td class="textBtn tBtn-dark pl-2" routerLink="/customerInformation/{{customer.customerId}}">
+              {{customer.customerName}}
+            </td>
+            <td>{{customer.customerAdd}}</td>
+            <td>{{customer.monthlyPayment | number: '1.0-2'}}</td>
+            <td class="textBold textDark">
+              {{customer.customerRemain | number: '1.0-2'}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- <div class="row">
+      <div class="col-md-9">
+
+      </div>
+      <div class="col-md-3">
+        <table>
+          <tr>
+            <th>ايجار</th>
+            <td>{{monthlyTotals.monthpay| number: '1.0-2'}}</td>
+          </tr>
+          <tr>
+            <th>حراسة</th>
+            <td>{{monthlyTotals.gaurds| number: '1.0-2'}}</td>
+          </tr>
+        </table>
+      </div>
+    </div> -->
+
   </div>
 </div>

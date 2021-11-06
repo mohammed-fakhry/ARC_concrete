@@ -167,7 +167,7 @@
 
         <div class="form-inline printX mt-3">
           <button mat-raised-button color="primary"
-            [disabled]="!concreteBonForm.valid || !concreteBonForm.dirty || dateExpires || concreteBon.concreteReceipt_id > '0'" type="submit">
+            [disabled]="!concreteBonForm.valid || !concreteBonForm.dirty || dateExpires || concreteBon.concreteReceipt_id > '0' || _glopal.loading" type="submit">
             {{id ? 'تعديل' : 'تسجيل'}}
           </button>
 

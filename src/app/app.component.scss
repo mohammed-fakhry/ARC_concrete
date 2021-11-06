@@ -75,59 +75,83 @@ mat-sidenav-content {
 
 mat-sidenav-content {
   background-color: $mainBackground; // rgba(200, 200, 200, 0.8) !important;
+
+  /* &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    //background: linear-gradient($darkBg, $dangerBg);
+    background-color: #7777e9;
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 0 100%);
+    // clip-path: ellipse(130px 140px at 90% 20%);
+    opacity: 0.025;
+    z-index: 0;
+  } */
+
+  /* &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient($secondaryBg, $primaryBg);
+    clip-path: circle(15% at 1% 3%);
+    opacity: 0.1;
+    z-index: 0;
+  } */
+
+  /* &:after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: -20%;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: $tableHeader_color;
+    //opacity: .5;
+    clip-path: polygon(0 0, 100% 0, 100% 15%, 0 15%);
+  } */
+
+
+  &::-webkit-scrollbar {
+    width: $scrollBarWidth;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $secondaryBg;
+    border: 1px solid whitesmoke;
+    border-radius: 5px;
+  }
 }
 
-mat-sidenav-content::before {
-  content: "";
+#svg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient($darkBg, $dangerBg);
-  clip-path: circle(100% at right 90%);
-  opacity: 0.025;
-  z-index: 0;
-}
-
-mat-sidenav-content::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient($secondaryBg, $primaryBg);
-  clip-path: circle(15% at 1% 3%);
-  opacity: 0.1;
-  z-index: 0;
-}
-
-mat-sidenav-content::-webkit-scrollbar {
-  width: $scrollBarWidth;
-}
-
-mat-sidenav-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-mat-sidenav-content::-webkit-scrollbar-thumb {
-  background-color: $secondaryBg;
-  border: 1px solid whitesmoke;
-  border-radius: 5px;
+  bottom: 0;
+  opacity: .5;
+  transition: all 1s;
 }
 
 mat-sidenav {
   width: 350px !important;
   min-width: 50px;
   height: 100%;
-  background-color: $boxBg !important;
+  background-color: $mainBackground !important;
   box-shadow: none !important;
   border: none !important;
   .mat-expansion-panel {
     box-shadow: none !important;
-    // background-color: $mainBackground !important;
-    //border-bottom: solid 1px rgb(228, 228, 228);
+    // background-color: $boxBg !important;
+    // border-bottom: solid 1px rgb(228, 228, 228, 0.3);
     /*
     border-radius: $boxRadios; */
   }

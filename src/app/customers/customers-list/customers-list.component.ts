@@ -9,6 +9,10 @@ import { CustomerService } from 'src/app/services/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterByDateDialogComponent } from 'src/app/dialogs/filter-by-date-dialog/filter-by-date-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from 'src/app/services/auth.service';
+import { SafeReceipt } from 'src/app/classes/safe-receipt';
+import { SafeService } from 'src/app/services/safe.service';
+import { DeleteDialogComponent } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-customers-list',
@@ -28,6 +32,28 @@ export class CustomersListComponent implements OnInit {
     /* 'lastBoughtInvoice', */
     'edit',
   ];
+
+  /* monthly paid */
+  /* customers */
+  monthlyPaidCustomers: Customer[] = [];
+  /* date */
+  monthlyPaid_date_time: {
+    date_time: string;
+    month: number;
+    year: number;
+  } = { date_time: '', month: 1, year: 1 };
+  /* monthlyTotals */
+  monthlyTotals = {
+    gaurds: 0,
+    monthpay: 0,
+  };
+
+  /* add monthlyPaid */
+  loadCond: string = '';
+  loopDetails = {
+    length: 0,
+    loop: 0,
+  };
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -92,6 +118,8 @@ export class CustomersListComponent implements OnInit {
     public _customerService: CustomerService,
     public activeRoute: ActivatedRoute,
     public _router: Router,
+    public _auth: AuthService,
+    public _safeService: SafeService,
     public _dialog: MatDialog
   ) {
     this._glopal.currentHeader = 'بيانات موردين | مستهلكين';
@@ -206,6 +234,7 @@ export class CustomersListComponent implements OnInit {
         !cust.customerName.includes('راس المال') &&
         !cust.customerName.includes('بنك') &&
         !cust.customerAdd.includes('ايجار') &&
+        !cust.customerName.includes('- شريك') &&
         !cust.customerAdd.includes('حراسة وغفرات')
     );
 
@@ -421,7 +450,7 @@ export class CustomersListComponent implements OnInit {
             sales: data[0]?.outCome ?? 0,
             purchasesTitle: 'تحصيلات',
             purchases: data[1]?.inCome ?? 0,
-            trClass: 'secondaryBadge'
+            trClass: 'secondaryBadge',
           },
 
           {
@@ -429,7 +458,7 @@ export class CustomersListComponent implements OnInit {
             sales: data[0]?.inCome ?? 0,
             purchasesTitle: 'دفعات',
             purchases: data[1]?.outCome ?? 0,
-            trClass: 'tdborder_top_primary dangerBadge'
+            trClass: 'tdborder_top_primary dangerBadge',
           },
 
           {
@@ -437,7 +466,7 @@ export class CustomersListComponent implements OnInit {
             sales: data[2]?.inCome ?? 0,
             purchasesTitle: 'ايجارات',
             purchases: data[2]?.outCome ?? 0,
-            trClass: 'tdborder_top_primary lightBg'
+            trClass: 'tdborder_top_primary lightBg',
           },
         ];
         this.isFiltered = true;
@@ -453,5 +482,190 @@ export class CustomersListComponent implements OnInit {
         .getSalesAndPurshus_ByDate(from, to)
         .subscribe((data: any) => res(data));
     });
+  }
+
+  showMonthlyPaid() {
+    this.monthlyPaidCustomers = this.customerList
+      .filter(
+        (customer: Customer) =>
+          customer.customerAdd == 'حراسة وغفرات' ||
+          customer.customerAdd == 'ايجار'
+      )
+      .sort((a: Customer, b: Customer) => b.monthlyPayment - a.monthlyPayment);
+
+    this.monthlyTotals = {
+      gaurds: this.monthlyPaidCustomers
+        .filter((customer: Customer) => customer.customerAdd == 'حراسة وغفرات')
+        .reduce((a: any, b: any) => a + b.monthlyPayment, 0),
+      monthpay: this.monthlyPaidCustomers
+        .filter((customer: Customer) => customer.customerAdd == 'ايجار')
+        .reduce((a: any, b: any) => a + b.monthlyPayment, 0),
+    };
+
+    const monthlyPaidCustomers_id = document.getElementById(
+      `monthlyPaidCustomers_id`
+    ) as HTMLElement;
+
+    const DATE_NOW = new Date(Date.now());
+    const today = `${DATE_NOW.getFullYear()}-${
+      DATE_NOW.getMonth() + 1
+    }-01T00:00`; // 2021-10-09T08:05 this._mainService.makeTime_date(new Date(Date.now()));
+    const theDate = new Date(today);
+
+    this.monthlyPaid_date_time = {
+      date_time: today,
+      month: theDate.getMonth() + 1,
+      year: theDate.getFullYear(),
+    };
+
+    if (monthlyPaidCustomers_id) {
+      monthlyPaidCustomers_id.style.left = '20px';
+    }
+  }
+
+  date_timeChanged() {
+    const theDate = new Date(this.monthlyPaid_date_time.date_time);
+    this.monthlyPaid_date_time.month = theDate.getMonth() + 1;
+    this.monthlyPaid_date_time.year = theDate.getFullYear();
+  }
+
+  closeMonthlyPaid() {
+    const monthlyPaidCustomers_id = document.getElementById(
+      `monthlyPaidCustomers_id`
+    ) as HTMLElement;
+
+    if (monthlyPaidCustomers_id) {
+      monthlyPaidCustomers_id.style.left = '-100%';
+    }
+  }
+
+  recordSafeReceipt(safeReciept: SafeReceipt) {
+    return new Promise((res) => {
+      this._safeService.creatSafeReceipt(safeReciept).subscribe((data: any) => {
+        res(data);
+      });
+    });
+  }
+
+  postMonthlyPaid_dialog = () => {
+    let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      data: {
+        header: `يجب مراجعة البيانات الآتية قبل التأكيد`,
+        info: `سيتم ترحيل جميع المستحقات الشهرية عن شهر ${this.monthlyPaid_date_time.month} لسنة ${this.monthlyPaid_date_time.year}`,
+        discription: [
+          `عدد العملاء المستحقين للدفع ${
+            this.monthlyPaidCustomers.filter(
+              (customer: Customer) => customer.monthlyPayment > 0
+            ).length
+          }`,
+          `سيتم انشاء ايصالات صرف بالمستحق على العملاء لكل عميل`,
+          `سيتم ترحيل مستحقات العملاء الى حساب ايراد الايجار او الغفرات`,
+          `جميع الايصالات ستتم بخزنه الايجارات`,
+        ],
+        btn: 'تأكيد',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'true') {
+        this.postMonthlyPaid();
+      }
+    });
+  };
+
+  postMonthlyPaid() {
+    this._glopal.loading = true;
+    const processLoop = async () => {
+      const filtered = this.monthlyPaidCustomers.filter(
+        (customer: Customer) => customer.monthlyPayment > 0
+      );
+      this.loadCond = '...جارى الترحيل';
+      this.loopDetails.length = filtered.length;
+      for (let i = 0; i < filtered.length; i++) {
+        const receipt_main = {
+          AccName:
+            filtered[i].customerAdd == 'حراسة وغفرات'
+              ? 'ايراد غفرات و حراسة'
+              : 'ايراد الايجارات',
+          accId: filtered[i].customerAdd == 'حراسة وغفرات' ? '88' : '70',
+          currentSafeVal: 0,
+          customerId: filtered[i].customerId,
+          date_time: this.monthlyPaid_date_time.date_time,
+          receiptVal: filtered[i].monthlyPayment,
+          recieptNote: `مستحق ${filtered[i].customerName} عن شهر ${this.monthlyPaid_date_time.month} لسنة ${this.monthlyPaid_date_time.year}`,
+          safeId: '16',
+          safeName: 'خزنه الايجارات',
+          secSafeId: 1,
+          secSafeName: '',
+        };
+
+        const receipt_acc = this.recieptData_forDb(receipt_main, 'حساب');
+        const receipt_customer = this.recieptData_forDb(receipt_main, 'عميل');
+
+        const respon_acc = await this.recordSafeReceipt(receipt_acc);
+        const respon_customer = await this.recordSafeReceipt(receipt_customer);
+
+        this.loopDetails.loop = i + 1;
+        if (this.loopDetails.length === this.loopDetails.loop)
+          this._glopal.loading = false;
+      }
+    };
+
+    processLoop().then(() => {
+      this._mainService.openSnake('تم الترحيل');
+      setTimeout(() => this.closeMonthlyPaid(), 1000);
+    });
+  }
+
+  recieptData_forDb(receipt: any, transactionAccKind: string): SafeReceipt {
+    return {
+      safeReceiptId: receipt.safeReceiptId ? receipt.safeReceiptId : null, //
+      receiptKind:
+        transactionAccKind == 'حساب' ? 'ايصال استلام نقدية' : 'ايصال صرف نقدية', //
+      date_time: receipt.date_time, //
+      //fst safe inpts
+      safeName: receipt.safeName, //
+      currentSafeVal: receipt.currentSafeVal, //
+      safeId: receipt.safeId, //
+      // sec section
+      transactionAccKind: transactionAccKind, //
+      // acc inpts
+      accId: transactionAccKind == 'حساب' ? receipt.accId : 0, //
+      AccName: transactionAccKind == 'حساب' ? receipt.AccName : '', //
+      currentAccVal: receipt.currentAccVal ? receipt.currentAccVal : 0, //
+      //safe inpts
+      secSafeName: receipt.secSafeName ? receipt.secSafeName : '', //
+      secSafeId: receipt.secSafeId ? receipt.secSafeId : 1, //
+      current_SecSafeVal: receipt.current_SecSafeVal
+        ? receipt.current_SecSafeVal
+        : 0, //
+      // customer inpts
+      customerId: transactionAccKind == 'عميل' ? receipt.customerId : 1, //
+      customerName: receipt.customerName ? receipt.customerName : '', //
+      currentCustomerVal: receipt.currentCustomerVal
+        ? receipt.currentCustomerVal
+        : 0, //
+      // concreteCustomer inpts
+      concreteCustomer_id: '0', //
+      concreteCustomerName: '', //
+      concreteCustomerVal: 0, //
+      // truck
+      truckId: '0',
+      truckName: '',
+      truckCurrentVal: 0,
+      // truckCustomer inpts
+      truckCustomerId: '0',
+      truckCustomerName: '',
+      truckCustomerVal: 0,
+      // worker
+      workerId: '0',
+      workerName: '',
+      workerCurrentVal: 0,
+      // user inpts
+      receiptVal: receipt.receiptVal,
+      recieptNote: receipt.recieptNote ? receipt.recieptNote : '',
+      madeBy: this._auth.uName.realName,
+      isUpdated: false,
+    };
   }
 }

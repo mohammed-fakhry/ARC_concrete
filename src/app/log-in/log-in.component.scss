@@ -2,10 +2,16 @@
 @import "../../scss/varibals.scss";
 
 #updateVersion {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
   position: relative;
   width: 300px;
   height: 300px;
   text-shadow: 1px 2px 5px $secondaryBg;
+  span:nth-child(1) {
+    box-shadow: $shadow;
+  }
 }
 
 #updateVersion span:nth-child(1) {

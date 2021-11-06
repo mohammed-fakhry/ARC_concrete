@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GlobalVarsService {
-
   currentHeader: string = '';
   loading: boolean = false;
 
@@ -15,8 +14,8 @@ export class GlobalVarsService {
   // notification
   notification = {
     value: 0,
-    color: 'primary'
-  }
+    color: 'primary',
+  };
 
   // staticStrings
   colorPlate: string[] = [
@@ -85,9 +84,9 @@ export class GlobalVarsService {
     '54, 162, 235',
   ];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    this.currentHeader = 'الرئيسية'
+    this.currentHeader = 'الرئيسية';
   }
 }

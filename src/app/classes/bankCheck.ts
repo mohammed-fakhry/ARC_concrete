@@ -1,6 +1,6 @@
 export class BankCheck {
   checkId!: string;
-  bankId!: string;
+  // bankId!: string;
   bankName!: string;
   payFor!: string;
   checkValue: number = 0;

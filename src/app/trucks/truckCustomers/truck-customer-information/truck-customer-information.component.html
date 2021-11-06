@@ -24,11 +24,12 @@
           <h4 class="homeSubtitle textSecondary">
             {{customerInfo.adress}}
           </h4>
+          <h5 *ngIf="customerInfo?.mainCustomerName">الشركة الأم | {{customerInfo?.mainCustomerName}}</h5>
         </mat-card-content>
         <mat-card-actions>
           <!-- <button mat-raised-button [disabled]="showTruckWorks" color="accent" (click)="maketTruckWorks()">استهلاك
             العميل للمعدات</button> -->
-          <button mat-button routerLink="/ConcreteCustomerList">العملاء</button>
+          <button mat-button routerLink="/TruckCustomerList">عملاء المُعدات</button>
         </mat-card-actions>
       </mat-card>
     </div>

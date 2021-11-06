@@ -99,7 +99,7 @@ export class CheckListComponent implements OnInit {
         {
           title: 'شيكات متأخرة',
           elementId: 'lateChecks',
-          classes: { bg: 'dangerBadge', text: 'dangerBg' },
+          classes: { bg: 'dangerBadge', text: 'textDanger' },
         },
         {
           title: 'شيكات اليوم',

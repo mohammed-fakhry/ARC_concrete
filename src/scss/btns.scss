@@ -123,29 +123,28 @@
 .textBtn {
   cursor: pointer;
   transition: 100ms;
-}
 
-.textBtn:active {
-  transform: translateX(-5px);
-  .iconBtn {
-    font-size: larger;
+  &:active {
+    transform: scale(1.01);
+    .iconBtn {
+      font-size: larger;
+    }
+  }
+
+  &:hover {
+    .iconBtn {
+      font-size: 3rem;
+      transition: 0.1s;
+    }
+    .iconBtn:active {
+      font-size: larger;
+    }
   }
 }
 
 .iconBtn {
   cursor: pointer;
 }
-
-.textBtn:hover {
-  .iconBtn {
-    font-size: 3rem;
-    transition: 0.1s;
-  }
-  .iconBtn:active {
-    font-size: larger;
-  }
-}
-
 
 .iconBtn:focus,
 .textBtn:focus {

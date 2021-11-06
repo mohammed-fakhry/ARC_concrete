@@ -1,14 +1,14 @@
 <div class="mx-2">
   <h2 mat-dialog-title class="infoCard px-4 py-2 dangerBadge borderLdanger lightShadow">{{data.header}}</h2>
   <mat-dialog-content class="infoSection">
-      <div class="panel-body panel-flex-table standTable borderLdanger lightBg">
+      <div class="panel-body panel-flex-table standTable">
           <table class="flex-table table">
-              <tbody class="tableBody">
+              <tbody class="tableBody noHover">
                   <tr>
-                      <td>{{data.info}}</td>
+                      <td class="textBold textDanger borderLdanger">{{data.info}}</td>
                   </tr>
                   <tr *ngFor="let desc of data.discription">
-                      <td>{{desc}}</td>
+                      <td class="borderLdanger lightBg">{{desc}}</td>
                   </tr>
               </tbody>
           </table>

@@ -1,13 +1,13 @@
 $inpBg: rgb(155, 155, 155);
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 input {
   height: 1.3em;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .searchForm,
@@ -47,14 +47,21 @@ mat-error {
   .panel-body {
     background-color: $boxBg;
   }
+
+  &:not(.borderRight-alert):not(.primaryBorder) {
+    border-right: 5px solid $secondaryBg;
+    padding-right: 1rem;
+  }
 }
 
 .form-control {
   border: none;
+
+  &:disabled {
+    background-color: $lightBg !important;
+  }
 }
-.form-control:disabled {
-  background-color: $lightBg !important;
-}
+
 
 /* .form-control:focus,
 input[type="text"]:focus,
@@ -76,11 +83,6 @@ input[type="color"]:focus,
   box-shadow: 0 0 0 #0049bedc inset, 0 0 8px #5a73f3a6;
   outline: 0 none;
 } */
-
-.inpCard:not(.borderRight-alert):not(.primaryBorder) {
-  border-right: 5px solid $secondaryBg;
-  padding-right: 1rem;
-}
 
 .invoiceHeader {
   input: {

@@ -653,6 +653,7 @@ export class HomeComponent implements OnInit {
       (cust: Customer) =>
         !cust.customerName.includes('المحل') &&
         !cust.customerName.includes('راس المال') &&
+        !cust.customerName.includes('- شريك') &&
         !cust.customerName.includes('بنك')
     );
 

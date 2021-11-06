@@ -91,10 +91,19 @@
                 <i class="fa fa-filter"></i>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="openFilterDialog('filter')" style="text-align: right;">فرز
-                  بالتاريخ</button>
-                <button [disabled]="!isFiltered" mat-menu-item (click)="onStart('')" style="text-align: right;">اظهار
-                  الكل</button>
+                <button mat-menu-item class="textBold textPrimary" (click)="openFilterDialog('filter')"
+                  style="text-align: right;">
+                  فرز بالتاريخ
+                </button>
+                <button [disabled]="!isFiltered" class="textBold textPrimary" mat-menu-item (click)="onStart('')"
+                  style="text-align: right;">
+                  اظهار الكل
+                </button>
+                <mat-divider></mat-divider>
+                <button *ngFor="let section of managementSections" mat-menu-item style="text-align: right;"
+                  (click)="filterByManageMentSection(section)">
+                  {{section}}
+                </button>
               </mat-menu>
             </div>
 
@@ -109,8 +118,9 @@
             <table [dataSource]="listData" mat-table class="full-width-table" matSort aria-label="Elements">
               <ng-container matColumnDef="workerId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>م</th>
-                <td mat-cell *matCellDef="let row">
-                  {{row.workerId}}
+                <td mat-cell *matCellDef="let row; let i = index"
+                  [ngClass]="row.leftWorkAt ? 'textDanger textBold borderLdanger' : ''">
+                  {{i + 1}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef> اجمالى </td>
               </ng-container>
@@ -118,7 +128,10 @@
               <ng-container matColumnDef="workerName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم</th>
                 <td mat-cell *matCellDef="let row; let i = index" class="textBtn tBtn-dark pl-2"
-                  [class.borderLdanger]="row.leftWorkAt" routerLink="/WorkerInformation/{{row.workerId}}">
+                  matTooltip="توقف عن العمل بتاريخ {{row.leftWorkAt}}" matTooltipPosition="before"
+                  matTooltipClass="dangerBg" [matTooltipDisabled]="!row.leftWorkAt"
+                  [ngClass]="row.leftWorkAt ? 'textDanger textBold' : ''"
+                  routerLink="/WorkerInformation/{{row.workerId}}">
                   {{row.workerName}}</td>
                 <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
@@ -138,7 +151,8 @@
               <ng-container matColumnDef="workedDayes">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>ايام العمل</th>
                 <td mat-cell *matCellDef="let row" class="tdBorder_right">
-                  <i [ngClass]="row.workedDayes > 0 ? 'fa fa-arrow-left textGreen' : 'fa fa-times fa-lg textDanger'"></i>
+                  <i
+                    [ngClass]="row.workedDayes > 0 ? 'fa fa-arrow-left textGreen' : 'fa fa-times fa-lg textDanger'"></i>
                   {{row.workedDayes > 0 ? (row.workedDayes | number: '1.0-2') : ''}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef> </td>
@@ -216,10 +230,7 @@
           </mat-card-actions> -->
       </mat-card>
 
-
-
     </div>
-
 
   </div>
 

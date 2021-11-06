@@ -8,14 +8,29 @@
     </mat-card-header>
     <mat-card-content>
       <form (ngSubmit)="onSubmit(addConcreteForm)" #addConcreteForm="ngForm">
-        <mat-form-field style="width: 500px;">
-          <input matInput required placeholder="الاسم" name="concreteName" #concreteName [(ngModel)]="concrete.name"
-            (change)="concreteNameChanged(addConcreteForm)">
+        <table class="w-100">
+          <tr>
+            <td>
+              <mat-form-field style="width: 500px;">
+                <input matInput required placeholder="الاسم" name="concreteName" #concreteName
+                  [(ngModel)]="concrete.name" (change)="concreteNameChanged(addConcreteForm)">
 
-          <mat-error>
-            الاسم مسجل بالفعل
-          </mat-error>
-        </mat-form-field>
+                <mat-error>
+                  الاسم مسجل بالفعل
+                </mat-error>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="w-75">
+                <input matInput placeholder="تاريخ تعديل الخلطة" type="datetime-local" #lastUpdated
+                  name="lastUpdated" [(ngModel)]="concrete.lastUpdated">
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+
+
+
 
         <mat-divider class="my-3"></mat-divider>
 

@@ -16,4 +16,5 @@ export class Customer {
   truckCustomerName: string = '';
   mainCustomerId!: string | null;
   mainCustomerName!: string;
+  monthlyPayment: number = 0;
 }

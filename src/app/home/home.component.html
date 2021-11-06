@@ -1,5 +1,21 @@
 <div class="mainContainer">
 
+  <!-- backgroundArea -->
+  <div class="backgroundArea" *ngIf="!showReports && !privateLoading">
+    <ul class="backgroundArea-animation">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+
   <!-- header -->
   <div class="row">
     <!-- <div class="d-flex justify-content-between"> -->
@@ -12,7 +28,8 @@
 
       <button mat-button color="primary" [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('generalReport')" class="mr-3">تقرير عام</button>
-      <button mat-button color="primary" [class.d-none]="!showReports || privateLoading" (click)="_mainService.scrollTo('lastData')">اخر
+      <button mat-button color="primary" [class.d-none]="!showReports || privateLoading"
+        (click)="_mainService.scrollTo('lastData')">اخر
         بيانات</button>
       <button mat-button color="primary" [class.d-none]="!showReports || privateLoading"
         (click)="_mainService.scrollTo('activeUser')">عملاء نشطين</button>
@@ -37,8 +54,21 @@
     </div>
   </div>
 
+  <!-- standBy-logo and animation -->
   <div class="pt-5" id="welcom" [class.d-none]="showReports && !privateLoading">
-    <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
+
+    <div class="fade-in" id="homeLogo" [class.animate-flicker]="privateLoading">
+      <img class="m-auto" src="assets/theProgramLogo.png" alt="" style="height: 500px;">
+      <div>
+        <a href="http://facebook.com/mohammed.fakhry">
+          <h6 class="mt-2 text-center" style="color: #006699; font-size: small;">
+            Powerd by | Mohammed Fakhry
+            <i class="fa fa-facebook-square" style="color: #006699;"></i>
+          </h6>
+        </a>
+      </div>
+    </div>
+    <!-- <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
       <span></span>
       <span class="d-none"></span>
       <span></span>
@@ -57,7 +87,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div [class.d-none]="!showReports || privateLoading">

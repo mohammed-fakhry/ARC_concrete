@@ -16,7 +16,7 @@ export class MainService {
   example_container!: NodeListOf<Element>;
   standTable!: HTMLElement;
   tableWithHeader!: HTMLElement;
-  tableWithSearch!: HTMLElement;
+  fullCard!: HTMLElement;
   inpTableBody!: HTMLElement;
   inTab!: HTMLElement;
 
@@ -57,11 +57,9 @@ export class MainService {
       if (this.tableWithHeader)
         this.tableWithHeader.style.maxHeight = `${height - 65}px`;
 
-      this.tableWithSearch = document.querySelector(
-        '.tableWithSearch'
-      ) as HTMLElement;
-      if (this.tableWithSearch)
-        this.tableWithSearch.style.maxHeight = `${height - 30}px`;
+      this.fullCard = document.querySelector('.fullCard') as HTMLElement;
+      if (this.fullCard)
+        this.fullCard.style.maxHeight = `${window.innerHeight - 64}px`;
 
       this.inpTableBody = document.querySelector(
         '.inpTableBody'
@@ -147,6 +145,12 @@ export class MainService {
     });
   };
 
+  openSnake(message: string) {
+    this._snackBar.open(message, 'اخفاء', {
+      duration: 2500,
+    });
+  }
+
   // sqlQuery
   postSqlQuery(query: string) {
     return this.http.get(`${this.url}sqlQuery.php?query=${query}`);
@@ -154,7 +158,10 @@ export class MainService {
 
   /* main customer requests */
   mainCustomersList(id?: string) {
-    if (id) return this.http.get<MainCustomer[]>(`${this.url}mainCustomersList.php?id=${id}`);
+    if (id)
+      return this.http.get<MainCustomer[]>(
+        `${this.url}mainCustomersList.php?id=${id}`
+      );
     return this.http.get<any[]>(`${this.url}mainCustomersList.php`);
   }
 

@@ -25,7 +25,8 @@
           <h4 class="homeSubtitle textSecondary">
             {{customerInfo.customerAdd}}
           </h4>
-
+          <h4 class="textDark" *ngIf="customerInfo.monthlyPayment > 0">مستحق شهرياً | {{customerInfo?.monthlyPayment | number: '1.0-2'}}</h4>
+          <h5 *ngIf="customerInfo?.mainCustomerName">الشركة الأم | {{customerInfo?.mainCustomerName}}</h5>
           <mat-divider></mat-divider>
 
           <table class="w-100" *ngIf="truckCustomerInfo.fullName">

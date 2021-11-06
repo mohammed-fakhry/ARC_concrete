@@ -1,4 +1,21 @@
 <div class="mainContainer">
+
+  <div class="backgroundArea">
+    <ul class="backgroundArea-animation">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+
+
   <div class="row fixedRow">
     <div class="col-lg-4 col-md-6 col-sm-12" style="margin:auto">
 
@@ -20,7 +37,8 @@
             تم تحديث النظام | برجاء الضغط لتحديث الاصدار الحالى
           </button> -->
 
-          <mat-card *ngIf="!dateExpired" class="lightShadow" style="border-right: 5px solid #c7cdf5 ;" [class.borderRight-alert]="!formData.valid.cond">
+          <mat-card *ngIf="!dateExpired" class="lightShadow" style="border-right: 5px solid #c7cdf5 ;"
+            [class.borderRight-alert]="!formData.valid.cond">
             <mat-card-header class="d-flex justify-content-between">
               <!-- <div mat-card-avatar>avatar</div> -->
               <mat-card-title>تسجيل الدخول</mat-card-title>
@@ -38,8 +56,9 @@
                     [(ngModel)]="formData.val.uAuth">
                 </mat-form-field>
                 <div class="form-inline">
-                  <button [disabled]="_glopal.loading" mat-flat-button color="accent" class="my-auto" type="submit">سجل
-                    دخولك</button>
+                  <button [disabled]="_glopal.loading" mat-flat-button color="accent" class="my-auto" type="submit">
+                    سجل دخولك
+                  </button>
                   <div *ngIf="!formData.valid.cond" class="infoCard dangerBadge borderLdanger mr-3 my-auto">
                     {{formData.valid.msg}}</div>
                 </div>
@@ -60,7 +79,14 @@
     </div>
 
     <div class="col-lg-8 col-md-6 col-sm-12 m-auto">
-      <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
+
+      <div class="fade-in text-center" id="homeLogo">
+        <img src="assets/theProgramLogo.png" style="height: 500px;">
+        <h3 class="text-dark">special edition for tower ready mix</h3>
+        <h6 class="text-center" style="color: #006699; font-size: small;">Powerd by | Mohammed Fakhry</h6>
+      </div>
+
+      <!--  <div class="arcPointer arcPointer-accent" style="width: 500px; height: 500px;">
         <span></span>
         <span class="d-none"></span>
         <span></span>
@@ -73,7 +99,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

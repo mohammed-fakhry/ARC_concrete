@@ -31,11 +31,12 @@
             <td>
               <mat-form-field class="example-full-width">
                 <mat-label>البنك</mat-label>
-                <mat-select required #receiptKind name="receiptKind" [(ngModel)]="bankCheck.bankName">
-                  <mat-option *ngFor="let bank of bankList" value="{{bank.bankName}}" (click)="bankChanged(bank)">
+                  <input matInput placeholder="اسم البنك" required #receiptKind name="receiptKind" [(ngModel)]="bankCheck.bankName">
+                <!-- <mat-select required #receiptKind name="receiptKind" [(ngModel)]="bankCheck.bankName">
+                  <mat-option *ngFor="let bank of bankList" value="{{bank.bankName}}">
                     {{bank.bankName}}
                   </mat-option>
-                </mat-select>
+                </mat-select> -->
               </mat-form-field>
             </td>
           </tr>
@@ -45,9 +46,11 @@
               <mat-form-field class="example-full-width">
                 <mat-label>تاريخ الاستحقاق</mat-label>
                 <input type="date" required matInput name="date" [(ngModel)]="bankCheck.date" #date>
-                <!-- <mat-error *ngIf="!inputValid.customerName.cond">
-                              {{inputValid.customerName.msg}}
-                          </mat-error> -->
+                <!--
+                   <mat-error *ngIf="!inputValid.customerName.cond">
+                          {{inputValid.customerName.msg}}
+                   </mat-error>
+                -->
               </mat-form-field>
             </td>
             <td>

@@ -39,11 +39,14 @@ export class WorkersComponent implements OnInit {
   searchTxt: string = '';
 
   mainWorkersList: any[] = [];
+  stillWorkEmployees: any[] = [];
 
   counts: { onUs: number; toUS: number } = { onUs: 0, toUS: 0 };
 
   searchDate: { from: string; to: string } = { from: '', to: '' };
   isFiltered: boolean = false;
+
+  managementSections: any[] = [];
 
   tableTotals = {
     cashReceived: 0,
@@ -106,12 +109,13 @@ export class WorkersComponent implements OnInit {
 
       this.mainWorkersList = data;
 
-      const stillWorkEmployees = data.filter(
+      this.managementSections = [...new Set(data.map((worker: any) => worker.workerJopCateg))]
+
+      this.stillWorkEmployees = data.filter(
         (worker: any) => worker.leftWorkAt == '' || worker.leftWorkAt > from
       );
 
-      this.fillListData(stillWorkEmployees);
-      this.counts = this.generateCounts(stillWorkEmployees);
+      this.fillListData(this.stillWorkEmployees);
       this._mainService.handleTableHeight();
       this._glopal.loading = false;
     });
@@ -130,25 +134,6 @@ export class WorkersComponent implements OnInit {
   };
 
   setSalaryTotals(data: any) {
-    /*
-    cashReceived: 1450
-    discoundDayes: 0.44
-    lastWorked_date: "2021-07-07T15:02"
-    overDayes: 0.04
-    payLater: 0
-    workedDayes: 6
-    workerCheckIN: ""
-    workerCheckOut: ""
-    workerCurrentVal: 0
-    workerFbCode: ""
-    workerId: "13"
-    workerJop: "سائق وتباع حفار1"
-    workerJopCateg: "المعدات"
-    workerJopDate: ""
-    workerName: "نصر الدين شبانه انور"
-    workerSalary: "7200"
-    workerYearVacation: ""
-    */
 
     this.salaryTotals = {
       workedDays: data
@@ -192,6 +177,7 @@ export class WorkersComponent implements OnInit {
     this.setSalaryTotals(data);
 
     this.tableTotals = this.getTableTotals(data);
+    this.counts = this.generateCounts(data);
   };
 
   getTableTotals(data: any) {
@@ -227,6 +213,12 @@ export class WorkersComponent implements OnInit {
     if (from && to) {
       this.onStart('', from, to);
     }
+  }
+
+  filterByManageMentSection(section: string) {
+    const workersFiltered = this.stillWorkEmployees.filter((worker: any) => worker.workerJopCateg == section)
+    this.isFiltered = true
+    this.fillListData(workersFiltered)
   }
 
   printDocument() {
